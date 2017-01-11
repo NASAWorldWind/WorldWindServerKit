@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>gov.nasa.worldwind</groupId>
+        <artifactId>worldwind-serverkit</artifactId>
+        <version>0.1.0</version>
+    </parent>
+    <artifactId>worldwind-geoserver-dist</artifactId>
+    <packaging>pom</packaging>
+    <name>WorldWind GeoServer Distribution</name>
+    
+    <dependencies>
+        <!-- 
+        Dependencies needed for a stand-alone version of Jetty.
+        Version number must match dependecies in start.jar
+        -->
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-server</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-util</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-webapp</artifactId>
+            <version>${jetty.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-deploy</artifactId>
+            <version>${jetty.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-start</artifactId>
+            <version>${jetty.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.jetty.toolchain</groupId>
+            <artifactId>jetty-schemas</artifactId>
+            <version>3.1.M0</version>
+        </dependency>
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>3.1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>tomcat</groupId>
+            <artifactId>jasper-runtime</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>tomcat</groupId>
+            <artifactId>jasper-compiler</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>tomcat</groupId>
+            <artifactId>jasper-compiler-jdt</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>commons-el</groupId>
+            <artifactId>commons-el</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>commons-pool</groupId>
+            <artifactId>commons-pool</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.ant</groupId>
+            <artifactId>ant</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>commons-logging</groupId>
+                    <artifactId>commons-logging</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>commons-logging</groupId>
+            <artifactId>commons-logging</artifactId>
+        </dependency>
+    </dependencies>
+    
+    <properties>
+        <geoserver.dist.folder>geoserver</geoserver.dist.folder>
+        <ssgf.dist.folder>ssgf</ssgf.dist.folder>
+    </properties>
+    
+    <build>
+        <plugins>
+            
+            <!--
+            Dependency manipulation (copy, unpack) and analysis.
+            -->
+            <plugin>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <!-- 
+                    Copy all the Jetty dependencies, including transient dependencies, 
+                    to the target/dependency folder for inclusion in the distribution.
+                    -->
+                    <execution>
+                        <id>copyDependencies</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            
+            <!--
+            Run a set of ant tasks from a phase of the build.
+            -->         
+            <plugin>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <executions>                    
+                    <!-- Remove some unwanted dependencies that get pulled over by copy-dependencies above--> 
+                    <execution>
+                        <id>removeDependencies</id>
+                        <phase>package</phase>
+                        <configuration>
+                            <tasks>
+                                <delete>
+                                    <fileset dir="${project.build.directory}/dependency" includes="servlet-api-*.jar,core*.jar"/>
+                                </delete>
+                            </tasks>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>unpackJdk</id>
+                        <phase>package</phase>
+                        <configuration>
+                            <tasks>
+                                <untar src="${project.basedir}/src/main/resources/java/server-jre-8u111-linux-x64.tar.gz" dest="${project.build.directory}/java" compression="gzip"/>
+                            </tasks>                            
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+                        
+            <!--
+            Build the assembly (distribution) of sources and/or binaries.
+            -->
+            <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <phase>install</phase>
+                        <configuration>
+                            <descriptors>
+                                <!-- Binary distibution content -->
+                                <descriptor>src/assembly/bin.xml</descriptor>
+                                
+                                <descriptor>src/assembly/ssgf.xml</descriptor>
+                                
+                                <!--WAR file distibution content -->
+                                <descriptor>src/assembly/war.xml</descriptor>
+                            </descriptors>
+                            
+                            <!-- Output file and location -->
+                            <finalName>worldwind-geoserver-${project.version}</finalName>
+                            <outputDirectory>${project.build.directory}</outputDirectory>    
+                                                    
+                        </configuration>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>                        
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>
