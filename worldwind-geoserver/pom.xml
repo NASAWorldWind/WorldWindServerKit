@@ -147,6 +147,7 @@
             <version>${project.version}</version>
         </dependency>
         
+        <!-- GeoTools -->
         <dependency>
             <groupId>org.geotools.jdbc</groupId>
             <artifactId>gt-jdbc-postgis</artifactId>
@@ -165,12 +166,28 @@
         </dependency>
         <dependency>
             <groupId>org.geotools</groupId>
-            <artifactId>gt-imagemosaic</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.geotools</groupId>
             <artifactId>gt-image</artifactId>
         </dependency>
+        <!--imagemosaic datasource module-->
+        <dependency>
+            <groupId>org.geotools</groupId>
+            <artifactId>gt-imagemosaic</artifactId>
+        </dependency>
+        <!--JP2K based grid coverage readers-->   
+        <dependency>
+            <groupId>org.geotools</groupId>
+            <artifactId>gt-jp2k</artifactId>
+        </dependency>
+        <!--ImageI/O-Ext based grid coverage readers-->
+        <dependency>
+            <groupId>org.geotools</groupId>
+            <artifactId>gt-imageio-ext-gdal</artifactId>
+        </dependency>
+        <!--imagepyramid datasource module-->
+        <dependency>
+            <groupId>org.geotools</groupId>
+            <artifactId>gt-imagepyramid</artifactId>
+        </dependency>     
 
                 
                                                 
