@@ -35,7 +35,7 @@ GeoServer Application* module (*worldwind-geoserver*). Example:
 
     $ mvn jetty:run
 
-Then point your browser to http://localhost:8080/worldwind-geoserver/index.html to access the 
+Then point your browser to http://localhost:8080/wwgs/index.html to access the 
 GeoServer web admin interface.
 
 ### Option 4. Deploy a binary distribution
@@ -53,7 +53,7 @@ Linux example
 
     $ ./bin/startup.sh  
 
-Then point your browser to http://localhost:8080/wwgs/index.html to access the 
+Then point your browser to http://localhost:8080/worldwind-geoserver/index.html to access the 
 GeoServer web admin interface.  [*Note: the web context should be wwgs, not 
 worldwind-geoserver. This is subject to change.*]
 
