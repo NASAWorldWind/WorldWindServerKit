@@ -22,7 +22,7 @@
         </fileSet>
         <fileSet>
             <!-- the data directory--> 
-            <directory>../worldwind-geoserver/target/worldwind-geoserver/data</directory>
+            <directory>../data/ssgf</directory>
             <outputDirectory>${ssgf.dist.folder}/${geoserver.dist.folder}/data_dir</outputDirectory>
             <includes>
                 <include>**/*</include>
