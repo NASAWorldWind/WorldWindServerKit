@@ -72,6 +72,22 @@ Launch GeoServer example:
 Then point your browser to http://localhost:8080/wwgs/index.html to access the 
 GeoServer web admin interface.
 
+## Using the OGC GeoPackage support
+The WWSK adds support for reading OGC GeoPackages in GeoServer. WWSK manifests the 
+"GeoPackage (mosaic) [OGC Compliant]" raster data source for OGC GeoPackages.  
+
+The "GeoPackage (mosaic)" raster data source is the native GeoServer/GeoTools 
+GeoPackage which uses a tiling scheme other than the one prescribed
+in the OGC GeoPackage Encoding Standard (http://www.geopackage.org/spec/).
+
+### Reading an OGC GeoPackage
+
+
+### Writing an OGC GeoPackage
+TBD. Not tested.
+
+## GeoWebCache
+
 
 ## Bugs
 
