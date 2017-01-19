@@ -35,7 +35,7 @@ GeoServer Application* module (*worldwind-geoserver*). Example:
 
     $ mvn jetty:run
 
-Then point your browser to http://localhost:8080/wwgs/index.html to access the 
+Then point your browser to http://localhost:8080/worldwind-geoserver/index.html to access the 
 GeoServer web admin interface.
 
 ### Option 4. Deploy a binary distribution
@@ -54,7 +54,8 @@ Linux example
     $ ./bin/startup.sh  
 
 Then point your browser to http://localhost:8080/wwgs/index.html to access the 
-GeoServer web admin interface.
+GeoServer web admin interface.  [*Note: the web context should be wwgs, not 
+worldwind-geoserver. This is subject to change.*]
 
 ### Option 5. Deploy the SSGF distribution
 Copy and unzip the *ssgf* tarball distribution (found in the *worldwind-geoserver-dist/target* 
@@ -80,10 +81,24 @@ The WWSK adds support for reading OGC GeoPackages in GeoServer. WWSK manifests t
 The **GeoPackage (mosaic)** raster data source is the native GeoServer/GeoTools 
 GeoPackage extension which is not compatible with GeoPackages conforming to the 
 OGC GeoPackage Encoding Standard (http://www.geopackage.org/spec/). 
-Do not use this data source for OGC GeoPackages.
+Do not use the native data source for OGC GeoPackages.
 
 ### Reading
-TODO: Write instructions.
+Add an OGC GeoPackage layer:
+
+1. Login to the GeoServer web admin interface.
+2. Add a Workspace (if not already done)
+  1. In the left hand pane under 'Data' select the Workspaces hyperlink to navigate to the Workspaces page.
+  2. Select "Add new workspaces" under "Manage GeoServer workspaces".
+  3. Complete the workspace configuration and select 'Submit'
+3. Add a new Store
+  1. In the left hand pane under 'Data' select the Stores hyperlink to navigate to the Stores page.
+  2. Select "Add new Store" under "Manage the stores providing data to GeoServer".
+  3. Select "GeoPackage (mosaic) [OGC compliant]" under "Raster Data Sources"
+  4. Complete the store configuration and select 'Submit'
+  5. Select "Save"
+  6. Select "Publish" under the "Action" column on the "New Layer" page.
+  7. Scroll down and select "Save" at the bottom of the "Edit Layer" page.
 
 ### Writing
 TBD: Not implemented yet.
