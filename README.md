@@ -38,10 +38,12 @@ module (worldwind-geoserver). Example:
 Then point your browser to http://localhost:8080/wwgs/index.html to access the 
 GeoServer web admin interface.
 
-### Option 4. Deploy a stand-alone distribution
+### Option 4. Deploy a binary distribution
 Copy and unzip a binary distribution (found in the worldwind-geoserver-dist/target folder) to
 a folder on your target computer. Then navigate to the root of the distribution folder 
-and launch the appropriate startup script found in the bin folder.
+and launch the appropriate startup script found in the bin folder. You must establish 
+some requisite environment variables to run GeoServer. The startup script will prompt
+you to complete any missing prerequisites.
 
 Windows example:
 
@@ -52,23 +54,6 @@ Linux example
     $ ./bin/startup.sh  
 
 Then point your browser to http://localhost:8080/wwgs/index.html
-
-### Option 4. Deploy a stand-alone distribution
-Copy and unzip a binary distribution (found in the worldwind-geoserver-dist/target folder) to
-a folder on the target computer. Then navigate to the root of the distribution folder 
-and launch the appropriate startup script found in the bin folder.
-
-Windows example:
-
-    C:\...> bin\startup.bat
-
-Linux example:
-
-    $ ./bin/startup.sh  
-
-Then point your browser to http://localhost:8080/wwgs/index.html to access the 
-GeoServer web admin interface.
-
 
 ### Option 5. Deploy the SSGF distribution
 Copy and unzip the ssgf distribution (found in the worldwind-geoserver-dist/target folder) to
