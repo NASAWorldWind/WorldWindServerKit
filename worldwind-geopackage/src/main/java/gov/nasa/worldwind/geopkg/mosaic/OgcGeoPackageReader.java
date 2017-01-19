@@ -16,10 +16,12 @@
  */
 package gov.nasa.worldwind.geopkg.mosaic;
 
+import java.awt.BasicStroke;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import org.geotools.coverage.CoverageFactoryFinder;
 import org.geotools.coverage.grid.GridCoverage2D;
 import org.geotools.coverage.grid.GridGeometry2D;
 import org.geotools.coverage.grid.io.AbstractGridFormat;
@@ -30,7 +32,6 @@ import org.geotools.geopkg.Tile;
 import org.geotools.geopkg.TileEntry;
 import org.geotools.geopkg.TileMatrix;
 import org.geotools.geopkg.TileReader;
-import org.geotools.geopkg.mosaic.GeoPackageFormat;
 import org.geotools.geopkg.mosaic.GeoPackageReader;
 import org.opengis.parameter.GeneralParameterValue;
 import org.opengis.parameter.ParameterValue;
@@ -44,25 +45,10 @@ import org.opengis.referencing.crs.CoordinateReferenceSystem;
  */
 public class OgcGeoPackageReader extends GeoPackageReader {
 
-//    public OgcGeoPackageReader(Object source, Hints hints) throws IOException {
-//        super(source, hints);
-//    }
-    
     public OgcGeoPackageReader(Object source, Hints hints) throws IOException {
-        super(source,hints);
-        
-        coverageFactory = CoverageFactoryFinder.getGridCoverageFactory(this.hints);
-
-        sourceFile = GeoPackageFormat.getFileFromSource(source);
-        GeoPackage file = new GeoPackage(sourceFile);
-        try {
-            for (TileEntry tile : file.tiles()) {
-                tiles.put(tile.getTableName(), tile);
-            }
-        } finally {
-            file.close();
-        }
+        super(source, hints);
     }
+
 
     @Override
     public GridCoverage2D read(String coverageName, GeneralParameterValue[] parameters) throws IllegalArgumentException, IOException {
@@ -126,12 +112,12 @@ public class OgcGeoPackageReader extends GeoPackageReader {
 
             double resX = (crs.getCoordinateSystem().getAxis(0).getMaximumValue() - crs.getCoordinateSystem().getAxis(0).getMinimumValue()) / bestMatrix.getMatrixWidth();
             double resY = (crs.getCoordinateSystem().getAxis(1).getMaximumValue() - crs.getCoordinateSystem().getAxis(1).getMinimumValue()) / bestMatrix.getMatrixHeight();
-            double offsetX = crs.getCoordinateSystem().getAxis(0).getMinimumValue(); // left
+            double originX = crs.getCoordinateSystem().getAxis(0).getMinimumValue(); // left
             double originY = crs.getCoordinateSystem().getAxis(1).getMaximumValue(); // top
 
-            if (requestedEnvelope != null) { //crop tiles to requested envelope                   
-                leftTile = Math.max(leftTile, (int) Math.round(Math.floor((requestedEnvelope.getMinimum(0) - offsetX) / resX)));
-                rightTile = Math.max(leftTile, (int) Math.min(rightTile, Math.round(Math.floor((requestedEnvelope.getMaximum(0) - offsetX) / resX))));
+            if (requestedEnvelope != null) { // crop tiles to requested envelope                   
+                leftTile = Math.max(leftTile, (int) Math.round(Math.floor((requestedEnvelope.getMinimum(0) - originX) / resX)));
+                rightTile = Math.max(leftTile, (int) Math.min(rightTile, Math.round(Math.floor((requestedEnvelope.getMaximum(0) - originX) / resX))));
 
                 topTile = Math.max(topTile, (int) Math.round(Math.floor((originY - requestedEnvelope.getMaximum(1)) / resY)));
                 bottomTile = Math.max(topTile, (int) Math.min(bottomTile, Math.round(Math.ceil((originY - requestedEnvelope.getMinimum(1)) / resY))));
@@ -141,7 +127,7 @@ public class OgcGeoPackageReader extends GeoPackageReader {
             int height = (int) (bottomTile - topTile + 1) * DEFAULT_TILE_SIZE;
 
             //recalculate the envelope we are actually returning
-            resultEnvelope = new ReferencedEnvelope(offsetX + leftTile * resX, offsetX + (rightTile + 1) * resX, originY - topTile * resY, originY - (bottomTile + 1) * resY, crs);
+            resultEnvelope = new ReferencedEnvelope(originX + leftTile * resX, originX + (rightTile + 1) * resX, originY - topTile * resY, originY - (bottomTile + 1) * resY, crs);
 
             TileReader it;
             it = file.reader(entry, bestMatrix.getZoomLevel(), bestMatrix.getZoomLevel(), leftTile, rightTile, topTile, bottomTile);
@@ -150,16 +136,30 @@ public class OgcGeoPackageReader extends GeoPackageReader {
                 Tile tile = it.next();
 
                 BufferedImage tileImage = readImage(tile.getData());
-
+                
+                ////////////////////////////////////////////////////////////////
+                // Uncomment block to draw a border around the tiles for debugging
+//                {
+//                    Graphics2D graphics = tileImage.createGraphics();
+//                    float thickness = 2;
+//                    graphics.setStroke(new BasicStroke(thickness));
+//                    graphics.drawRect(0, 0, tileImage.getWidth(), tileImage.getHeight());
+//                }
+                ////////////////////////////////////////////////////////////////
+                
                 if (image == null) {
-                    image = getStartImage(tileImage, width, height);
+                    // Create a BufferedImage.TYPE_3BYTE_BGR image with a white background
+                    image = getStartImage(width, height);
                 }
-
-                //coordinates
+                
+                // Get the tile coordinates within the mosaic
                 int posx = (int) (tile.getColumn() - leftTile) * DEFAULT_TILE_SIZE;
                 int posy = (int) (tile.getRow() - topTile) * DEFAULT_TILE_SIZE;
 
-                image.getRaster().setRect(posx, posy, tileImage.getData());
+                // Draw the tile in the mosaic. We draw versus coping data to 
+                // accomdate different SampleModels between image tiles.
+                Graphics2D g2 = image.createGraphics();
+                g2.drawImage(tileImage, posx, posy, DEFAULT_TILE_SIZE, DEFAULT_TILE_SIZE, null);
             }
 
             it.close();
