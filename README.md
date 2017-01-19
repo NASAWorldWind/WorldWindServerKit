@@ -1,4 +1,4 @@
-# ![NASA logo](/README-nasa-logo.png) WorldWindServerKit
+# <img src="https://worldwind.arc.nasa.gov/css/images/nasa-logo.svg" height="100"/> WorldWindServerKit
 NASA World Wind map server kit
 
 The [NASA World Wind](https://worldwind.arc.nasa.gov) Server Kit is an open source Java project 
