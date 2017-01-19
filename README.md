@@ -1,8 +1,9 @@
-# ![NASA logo](/README-nasa-logo.png) WorldWindServerKit
-NASA World Wind map server kit
+<img src="https://worldwind.arc.nasa.gov/css/images/nasa-logo.svg" height="100"/> 
+# WorldWindServerKit
 
-The [NASA World Wind](https://worldwind.arc.nasa.gov) Server Kit is an open source Java project 
-that assembles [GeoServer](http://geoserver.org/) for easy distribution and implementation.
+The [NASA World Wind](https://worldwind.arc.nasa.gov) Server Kit (WWSK) is an open 
+source Java project that assembles [GeoServer](http://geoserver.org/) for easy 
+distribution and implementation.
 
 ## License
 
@@ -10,24 +11,107 @@ GeoServer is licensed under the [GPL Version 2](https://www.gnu.org/licenses/gpl
 
 ## Building
 
-The Server Kit uses [Apache Maven](http://maven.apache.org/) for a build system. To 
-build GeoServer and its dependencies run maven from the root of the repository.
+The WWSK uses [Apache Maven](http://maven.apache.org/) for a build system. To 
+build GeoServer and its dependencies run maven from the root of the WWSK repository.
+Example:
 
     $ mvn clean install
 
 ## Running
 
-* Deploy the worldwind-geoserver.war file (found in the worldwind-geoserver/target folder) to your servlet container, e.g., Apache Tomcat. 
+### Option 1. Deploy the WAR file
+Deploy the *worldwind-geoserver.war* file (found in the *worldwind-geoserver/target* folder) 
+to your preferred servlet container, e.g., Apache Tomcat. Then point your browser to the 
+*wwgs* web context on your server.
 
-* To test with a local Jetty Server, run the preconfigured jetty-maven-plugin from the root of the 
-WorldWind GeoServer Application module (worldwind-geoserver). Then point your browser to http://localhost:8080/wwgs/index.html
+### Option 2. Run in NetBeans
+Simply invoke "Run" on the *WorldWind GeoServer Application* module (*worldwind-geoserver*) 
+and NetBeans will automatically deploy the war file to your configured application server 
+and launch your browser (typically http://localhost:8084/wwgs/index.html).
+
+### Option 3. Run in Jetty
+Run the preconfigured *jetty-maven-plugin* with maven from the root of the *WorldWind 
+GeoServer Application* module (*worldwind-geoserver*). Example:
 
     $ mvn jetty:run
 
-* To run in NetBeans, simply invoke "Run" on the WorldWind GeoServer Application module (worldwind-geoserver) 
-and NetBeans will automatically deploy the war file to your configured application server and launch your browser.
+Then point your browser to http://localhost:8080/worldwind-geoserver/index.html to access the 
+GeoServer web admin interface.
+
+### Option 4. Deploy a binary distribution
+Copy and unzip a binary distribution (found in the *worldwind-geoserver-dist/target* folder)
+to a folder on your target computer. Then navigate to the root of the distribution folder 
+and launch the appropriate startup script found in the bin folder. You must establish 
+some requisite environment variables to run GeoServer. The startup script will prompt
+you to satisfy any missing prerequisites.
+
+Windows example:
+
+    C:\...> bin\startup.bat
+
+Linux example
+
+    $ ./bin/startup.sh  
+
+Then point your browser to http://localhost:8080/wwgs/index.html to access the 
+GeoServer web admin interface.  [*Note: the web context should be wwgs, not 
+worldwind-geoserver. This is subject to change.*]
+
+### Option 5. Deploy the SSGF distribution
+Copy and unzip the *ssgf* tarball distribution (found in the *worldwind-geoserver-dist/target* 
+folder) to a folder on the target Linux computer. Then navigate to the root of the 
+distribution folder and launch the setup script to install the Oracle Server JRE.  
+Afterwards, you can launch GeoServer with the run script.
+
+Install the JRE (one time), example:
+
+    $ ./setup.sh
+
+Launch GeoServer, example:
+
+    $ ./run.sh
+
+Then point your browser to http://localhost:8080/wwgs/index.html to access the 
+GeoServer web admin interface.
+
+## OGC GeoPackage
+The WWSK adds support for reading OGC GeoPackages in GeoServer. WWSK manifests the 
+**GeoPackage (mosaic) [OGC Compliant]** raster data source for OGC GeoPackages.  
+
+The **GeoPackage (mosaic)** raster data source is the native GeoServer/GeoTools 
+GeoPackage extension which is not compatible with GeoPackages conforming to the 
+OGC GeoPackage Encoding Standard (http://www.geopackage.org/spec/). 
+Do not use the native data source for OGC GeoPackages.
+
+### Reading
+Add an OGC GeoPackage layer:
+
+1. Login to the GeoServer web admin interface.
+2. Add a Workspace (if not already done)
+  1. In the left hand pane under 'Data' select the Workspaces hyperlink to navigate to the Workspaces page.
+  2. Select "Add new workspaces" under "Manage GeoServer workspaces".
+  3. Complete the workspace configuration and select 'Submit'
+3. Add a new Store
+  1. In the left hand pane under 'Data' select the Stores hyperlink to navigate to the Stores page.
+  2. Select "Add new Store" under "Manage the stores providing data to GeoServer".
+  3. Select "GeoPackage (mosaic) [OGC compliant]" under "Raster Data Sources"
+  4. Complete the store configuration and select 'Submit'
+  5. Select "Save"
+  6. Select "Publish" under the "Action" column on the "New Layer" page.
+  7. Scroll down and select "Save" at the bottom of the "Edit Layer" page.
+
+### Writing
+TBD: Not implemented yet.
+
+## GeoWebCache 
+The WWSK has integrated support the GeoWebCache (GWC) enabled by default.  Tile Caching
+options available on Layers are applicable.
+
+## SRS
+WMS supported SRS have been limited to the following EPSG codes mentioned in the NSG Profile: 
+4326, 3395, 4979, 5041, 5042, 5773, 5714, 5715
+
 
 ## Bugs
-
 NASA WorldWind uses [GitHub Issues](https://github.com/NASAWorldWind/WorldWindServerKit/issues) 
 for issue tracking.
