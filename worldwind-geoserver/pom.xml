@@ -14,6 +14,7 @@
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
+        <!--Configuration for Jetty-->
         <configId>minimal</configId>
         <configDirectory>${basedir}/../data</configDirectory>
         <webappSourceDirectory>${basedir}/src/main/webapp</webappSourceDirectory>
