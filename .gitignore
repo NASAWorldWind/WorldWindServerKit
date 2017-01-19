@@ -12,3 +12,4 @@ target
 .idea/
 nb-configuration.xml
 nbactions.xml
+/data/ssgf/coverages/
