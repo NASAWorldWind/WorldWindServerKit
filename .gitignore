@@ -1,0 +1,15 @@
+*.db
+.project
+.classpath
+.settings
+.settings/*
+target
+*.patch
+*.class
+*.pyc
+*.*~
+*.iml
+.idea/
+nb-configuration.xml
+nbactions.xml
+/data/ssgf/coverages/
