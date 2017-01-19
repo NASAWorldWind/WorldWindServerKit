@@ -72,24 +72,30 @@ Launch GeoServer example:
 Then point your browser to http://localhost:8080/wwgs/index.html to access the 
 GeoServer web admin interface.
 
-## Using the OGC GeoPackage support
+## OGC GeoPackage
 The WWSK adds support for reading OGC GeoPackages in GeoServer. WWSK manifests the 
 "GeoPackage (mosaic) [OGC Compliant]" raster data source for OGC GeoPackages.  
 
 The "GeoPackage (mosaic)" raster data source is the native GeoServer/GeoTools 
-GeoPackage which uses a tiling scheme other than the one prescribed
-in the OGC GeoPackage Encoding Standard (http://www.geopackage.org/spec/).
+GeoPackage extension which is not compatible with GeoPackages conforming to the 
+OGC GeoPackage Encoding Standard (http://www.geopackage.org/spec/). 
+Do not use this data source for OGC GeoPackages.
 
-### Reading an OGC GeoPackage
+### Reading
+TODO: Write instructions.
 
+### Writing
+TBD: Not Tested.
 
-### Writing an OGC GeoPackage
-TBD. Not tested.
+## GeoWebCache 
+The WWSK has integrated support the GeoWebCache (GWC) enabled by default.  Tile Caching
+options available on Layers are applicable.
 
-## GeoWebCache
+## SRS
+WMS supported SRS have been limited to the following EPSG codes mentioned in the NSG Profile: 
+4326, 3395, 4979, 5041, 5042, 5773, 5714, 5715
 
 
 ## Bugs
-
 NASA WorldWind uses [GitHub Issues](https://github.com/NASAWorldWind/WorldWindServerKit/issues) 
 for issue tracking.
