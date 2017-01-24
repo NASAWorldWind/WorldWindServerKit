@@ -90,7 +90,7 @@ import com.vividsolutions.jts.geom.Geometry;
  */
 public class GeoPackage {
 
-    static final Logger LOGGER = Logging.getLogger("org.geotools.geopkg");
+    static final Logger LOGGER = Logging.getLogger("gov.nasa.worldwind.geopkg");
     
     public static final String GEOPACKAGE_CONTENTS = "gpkg_contents";
 

@@ -73,7 +73,7 @@ import org.opengis.referencing.crs.CoordinateReferenceSystem;
 public class GeoPackageReader extends AbstractGridCoverage2DReader {
     
     /** The {@link Logger} for this {@link GeoPackageReader}. */
-    private final static Logger LOGGER = Logging.getLogger("org.geotools.geopkg.mosaic");
+    private final static Logger LOGGER = Logging.getLogger("gov.nasa.worldwind.geopkg.mosaic");
        
     protected final static int DEFAULT_TILE_SIZE = 256;
     
@@ -187,7 +187,7 @@ public class GeoPackageReader extends AbstractGridCoverage2DReader {
                     final ReferenceIdentifier name = param.getDescriptor().getName();
                     if (name.equals(AbstractGridFormat.READ_GRIDGEOMETRY2D.getName())) {
                         final GridGeometry2D gg = (GridGeometry2D) param.getValue();
-                        try {                        
+                        try {
                             requestedEnvelope = ReferencedEnvelope.create(gg.getEnvelope(), gg.getCoordinateReferenceSystem()).transform(crs, true);;
                         } catch (Exception e) {
                             requestedEnvelope = null;
@@ -224,55 +224,69 @@ public class GeoPackageReader extends AbstractGridCoverage2DReader {
             }
 
             //take available tiles from database
-            leftTile = file.getTileBound(entry, bestMatrix.getZoomLevel(), false, false);
+            leftTile = file.getTileBound(entry, bestMatrix.getZoomLevel(), false, false);   // booleans: isMax, isRow
             rightTile = file.getTileBound(entry, bestMatrix.getZoomLevel(), true, false);
-            bottomTile = file.getTileBound(entry, bestMatrix.getZoomLevel(), false, true);
-            topTile = file.getTileBound(entry, bestMatrix.getZoomLevel(), true, true);  
+            topTile = file.getTileBound(entry, bestMatrix.getZoomLevel(), false, true);     // min tile_row
+            bottomTile = file.getTileBound(entry, bestMatrix.getZoomLevel(), true, true);   // max tile_row
 
             double resX = (crs.getCoordinateSystem().getAxis(0).getMaximumValue() - crs.getCoordinateSystem().getAxis(0).getMinimumValue()) / bestMatrix.getMatrixWidth();
             double resY = (crs.getCoordinateSystem().getAxis(1).getMaximumValue() - crs.getCoordinateSystem().getAxis(1).getMinimumValue()) / bestMatrix.getMatrixHeight();
-            double offsetX = crs.getCoordinateSystem().getAxis(0).getMinimumValue();
-            double offsetY = crs.getCoordinateSystem().getAxis(1).getMinimumValue();
+            double originX = crs.getCoordinateSystem().getAxis(0).getMinimumValue(); // left
+            double originY = crs.getCoordinateSystem().getAxis(1).getMaximumValue(); // top
 
-            if (requestedEnvelope != null) { //crop tiles to requested envelope                   
-                leftTile = Math.max(leftTile, (int) Math.round(Math.floor((requestedEnvelope.getMinimum(0) - offsetX) / resX )));
-                bottomTile = Math.max(bottomTile, (int) Math.round(Math.floor((requestedEnvelope.getMinimum(1) - offsetY) / resY )));
-                rightTile = Math.max(leftTile, (int) Math.min(rightTile, Math.round(Math.floor((requestedEnvelope.getMaximum(0) - offsetX) / resX ))));
-                topTile = Math.max(bottomTile, (int) Math.min(topTile, Math.round(Math.floor((requestedEnvelope.getMaximum(1) - offsetY) / resY ))));
-            } 
+            if (requestedEnvelope != null) { // crop tiles to requested envelope                   
+                leftTile = Math.max(leftTile, (int) Math.round(Math.floor((requestedEnvelope.getMinimum(0) - originX) / resX)));
+                rightTile = Math.max(leftTile, (int) Math.min(rightTile, Math.round(Math.floor((requestedEnvelope.getMaximum(0) - originX) / resX))));
+
+                topTile = Math.max(topTile, (int) Math.round(Math.floor((originY - requestedEnvelope.getMaximum(1)) / resY)));
+                bottomTile = Math.max(topTile, (int) Math.min(bottomTile, Math.round(Math.ceil((originY - requestedEnvelope.getMinimum(1)) / resY))));
+            }
 
             int width = (int) (rightTile - leftTile + 1) * DEFAULT_TILE_SIZE;
-            int height = (int) (topTile - bottomTile + 1) * DEFAULT_TILE_SIZE;
+            int height = (int) (bottomTile - topTile + 1) * DEFAULT_TILE_SIZE;
 
             //recalculate the envelope we are actually returning
-            resultEnvelope = new ReferencedEnvelope(offsetX + leftTile * resX, offsetX + (rightTile+1) * resX, offsetY + bottomTile * resY, offsetY + (topTile+1) * resY, crs);
+            resultEnvelope = new ReferencedEnvelope(originX + leftTile * resX, originX + (rightTile + 1) * resX, originY - topTile * resY, originY - (bottomTile + 1) * resY, crs);
 
             TileReader it;
-            it = file.reader(entry, bestMatrix.getZoomLevel(), bestMatrix.getZoomLevel(), leftTile, rightTile, bottomTile, topTile);
+            it = file.reader(entry, bestMatrix.getZoomLevel(), bestMatrix.getZoomLevel(), leftTile, rightTile, topTile, bottomTile);
 
-            while (it.hasNext()) {                
+            while (it.hasNext()) {
                 Tile tile = it.next();
 
                 BufferedImage tileImage = readImage(tile.getData());
-
+                
+                ////////////////////////////////////////////////////////////////
+                // Uncomment block to draw a border around the tiles for debugging
+//                {
+//                    Graphics2D graphics = tileImage.createGraphics();
+//                    float thickness = 2;
+//                    graphics.setStroke(new BasicStroke(thickness));
+//                    graphics.drawRect(0, 0, tileImage.getWidth(), tileImage.getHeight());
+//                }
+                ////////////////////////////////////////////////////////////////
+                
                 if (image == null) {
-                    image = getStartImage(tileImage, width, height);
+                    // Create a BufferedImage.TYPE_3BYTE_BGR image with a white background
+                    image = getStartImage(width, height);
                 }
-
-                //coordinates
+                
+                // Get the tile coordinates within the mosaic
                 int posx = (int) (tile.getColumn() - leftTile) * DEFAULT_TILE_SIZE;
-                int posy = (int) (topTile - tile.getRow()) * DEFAULT_TILE_SIZE;
+                int posy = (int) (tile.getRow() - topTile) * DEFAULT_TILE_SIZE;
 
-                image.getRaster().setRect(posx, posy, tileImage.getData() );
+                // Draw the tile in the mosaic. We draw versus coping data to 
+                // accomdate different SampleModels between image tiles.
+                Graphics2D g2 = image.createGraphics();
+                g2.drawImage(tileImage, posx, posy, DEFAULT_TILE_SIZE, DEFAULT_TILE_SIZE, null);
             }
 
             it.close();
 
-            if (image == null){ // no tiles ??
+            if (image == null) { // no tiles ??
                 image = getStartImage(width, height);
             }
-        }
-        finally {
+        } finally {
             file.close();
         }
         return coverageFactory.create(entry.getTableName(), image, resultEnvelope);
