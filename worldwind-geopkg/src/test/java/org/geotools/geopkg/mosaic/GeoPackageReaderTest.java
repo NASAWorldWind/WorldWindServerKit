@@ -50,7 +50,6 @@ public class GeoPackageReaderTest {
             throw new RuntimeException(e);
         }
     }    
-    @Ignore
     @Test
     public void testZoomlevel2() throws IOException {
         GeoPackageReader reader = new GeoPackageReader(getClass().getResource("world_lakes.gpkg"), null);
@@ -74,7 +73,6 @@ public class GeoPackageReaderTest {
         ImageAssert.assertEquals(DataUtilities.urlToFile(getClass().getResource("world_lakes.png")), img, 250);
     }
     
-    @Ignore
     @Test
     public void testZoomlevel3() throws IOException {
         GeoPackageReader reader = new GeoPackageReader(getClass().getResource("world_lakes.gpkg"), null);
@@ -92,7 +90,6 @@ public class GeoPackageReaderTest {
         assertEquals(1024, img.getHeight());
     }
     
-    @Ignore
     @Test
     public void testZoomlevel4() throws IOException {
         GeoPackageReader reader = new GeoPackageReader(getClass().getResource("world_lakes.gpkg"), null);

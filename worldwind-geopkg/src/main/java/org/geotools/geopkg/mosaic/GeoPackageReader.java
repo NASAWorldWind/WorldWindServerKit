@@ -224,32 +224,31 @@ public class GeoPackageReader extends AbstractGridCoverage2DReader {
             }
 
             //take available tiles from database
-            leftTile = file.getTileBound(entry, bestMatrix.getZoomLevel(), false, false);   // booleans: isMax, isRow
+            leftTile = file.getTileBound(entry, bestMatrix.getZoomLevel(), false, false);
             rightTile = file.getTileBound(entry, bestMatrix.getZoomLevel(), true, false);
-            topTile = file.getTileBound(entry, bestMatrix.getZoomLevel(), false, true);     // min tile_row
-            bottomTile = file.getTileBound(entry, bestMatrix.getZoomLevel(), true, true);   // max tile_row
+            bottomTile = file.getTileBound(entry, bestMatrix.getZoomLevel(), false, true);
+            topTile = file.getTileBound(entry, bestMatrix.getZoomLevel(), true, true);  
 
             double resX = (crs.getCoordinateSystem().getAxis(0).getMaximumValue() - crs.getCoordinateSystem().getAxis(0).getMinimumValue()) / bestMatrix.getMatrixWidth();
             double resY = (crs.getCoordinateSystem().getAxis(1).getMaximumValue() - crs.getCoordinateSystem().getAxis(1).getMinimumValue()) / bestMatrix.getMatrixHeight();
-            double offsetX = crs.getCoordinateSystem().getAxis(0).getMinimumValue(); // left
-            double originY = crs.getCoordinateSystem().getAxis(1).getMaximumValue(); // top
+            double offsetX = crs.getCoordinateSystem().getAxis(0).getMinimumValue();
+            double offsetY = crs.getCoordinateSystem().getAxis(1).getMinimumValue();
 
             if (requestedEnvelope != null) { //crop tiles to requested envelope                   
                 leftTile = Math.max(leftTile, (int) Math.round(Math.floor((requestedEnvelope.getMinimum(0) - offsetX) / resX )));
+                bottomTile = Math.max(bottomTile, (int) Math.round(Math.floor((requestedEnvelope.getMinimum(1) - offsetY) / resY )));
                 rightTile = Math.max(leftTile, (int) Math.min(rightTile, Math.round(Math.floor((requestedEnvelope.getMaximum(0) - offsetX) / resX ))));
-                
-                topTile = Math.max(topTile, (int) Math.round(Math.floor((originY - requestedEnvelope.getMaximum(1)) / resY )));
-                bottomTile = Math.max(topTile, (int) Math.min(bottomTile, Math.round(Math.ceil((originY - requestedEnvelope.getMinimum(1)) / resY ))));
+                topTile = Math.max(bottomTile, (int) Math.min(topTile, Math.round(Math.floor((requestedEnvelope.getMaximum(1) - offsetY) / resY ))));
             } 
 
             int width = (int) (rightTile - leftTile + 1) * DEFAULT_TILE_SIZE;
-            int height = (int) (bottomTile - topTile + 1) * DEFAULT_TILE_SIZE;
+            int height = (int) (topTile - bottomTile + 1) * DEFAULT_TILE_SIZE;
 
             //recalculate the envelope we are actually returning
-            resultEnvelope = new ReferencedEnvelope(offsetX + leftTile * resX, offsetX + (rightTile+1) * resX, originY - topTile * resY, originY - (bottomTile+1) * resY, crs);
+            resultEnvelope = new ReferencedEnvelope(offsetX + leftTile * resX, offsetX + (rightTile+1) * resX, offsetY + bottomTile * resY, offsetY + (topTile+1) * resY, crs);
 
             TileReader it;
-            it = file.reader(entry, bestMatrix.getZoomLevel(), bestMatrix.getZoomLevel(), leftTile, rightTile, topTile, bottomTile);
+            it = file.reader(entry, bestMatrix.getZoomLevel(), bestMatrix.getZoomLevel(), leftTile, rightTile, bottomTile, topTile);
 
             while (it.hasNext()) {                
                 Tile tile = it.next();
@@ -262,7 +261,7 @@ public class GeoPackageReader extends AbstractGridCoverage2DReader {
 
                 //coordinates
                 int posx = (int) (tile.getColumn() - leftTile) * DEFAULT_TILE_SIZE;
-                int posy = (int) (tile.getRow() - topTile) * DEFAULT_TILE_SIZE;
+                int posy = (int) (topTile - tile.getRow()) * DEFAULT_TILE_SIZE;
 
                 image.getRaster().setRect(posx, posy, tileImage.getData() );
             }
