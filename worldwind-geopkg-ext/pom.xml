@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- 
+Copyright (C) 2014 - Open Source Geospatial Foundation. All rights reserved.
+This code is licensed under the GPL 2.0 license, available at the root
+application directory.
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>gov.nasa.worldwind</groupId>
+        <artifactId>worldwind-serverkit</artifactId>
+        <version>0.1.0</version>
+    </parent>
+    <groupId>gov.nasa.worldwind</groupId>
+    <artifactId>worldwind-geopkg-ext</artifactId>
+    <packaging>jar</packaging>
+    <name>WorldWind GeoPackage Extension</name>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.geoserver</groupId>
+            <artifactId>gs-main</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.geoserver</groupId>
+            <artifactId>gs-ows</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.geoserver</groupId>
+            <artifactId>gs-gwc</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.geoserver</groupId>
+            <artifactId>gs-wms</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.geoserver</groupId>
+            <artifactId>gs-wfs</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.geotools</groupId>
+            <artifactId>gt-process</artifactId>
+        </dependency>
+        <dependency> 
+            <groupId>org.geoserver.community</groupId>
+            <artifactId>gs-mbtiles</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.geotools</groupId>
+            <artifactId>gt-geopkg</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.geotools</groupId>
+            <artifactId>gt-render</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.geoserver.extension</groupId>
+            <artifactId>gs-wps-core</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.geowebcache</groupId>
+            <artifactId>gwc-core</artifactId>
+        </dependency>
+
+        <!--Test dependencies-->
+        <dependency>
+            <groupId>org.geoserver</groupId>
+            <artifactId>gs-main</artifactId>
+            <classifier>tests</classifier>
+            <scope>test</scope>
+            <version>${gs.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.geoserver</groupId>
+            <artifactId>gs-wms</artifactId>
+            <classifier>tests</classifier>
+            <scope>test</scope>
+            <version>${gs.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.geoserver</groupId>
+            <artifactId>gs-wfs</artifactId>
+            <classifier>tests</classifier>
+            <scope>test</scope>
+            <version>${gs.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.geoserver.extension</groupId>
+            <artifactId>gs-wps-core</artifactId>
+            <scope>test</scope>
+            <classifier>tests</classifier>
+            <version>${gs.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.geoserver.web</groupId>
+            <artifactId>gs-web-core</artifactId>
+            <classifier>tests</classifier>
+            <scope>test</scope>
+            <version>${gs.version}</version>
+        </dependency>    
+        <dependency>
+            <groupId>org.geoserver.web</groupId>
+            <artifactId>gs-web-demo</artifactId>
+            <scope>test</scope>
+        </dependency>   
+        <dependency>
+            <groupId>org.geotools</groupId>
+            <artifactId>gt-sample-data</artifactId>
+            <version>${gt.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.easymock</groupId>
+            <artifactId>easymockclassextension</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>xmlunit</groupId>
+            <artifactId>xmlunit</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <testResources>
+            <testResource>
+                <directory>src/test/resources</directory>
+            </testResource>
+        </testResources>
+    </build>
+    <description>A GeoServer extension providing GeoPackage support with conformance to the 
+National System for Geospatial-Intelligence (NSG) GeoPackage Encoding Standard
+ 2.0 Interoperability Standard.  NGA.STND.0051_2.0_GEOPKG 2016-09-14</description>
+</project>
