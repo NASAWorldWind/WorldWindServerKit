@@ -80,15 +80,17 @@ public class GeoPackageGetMapOutputFormat extends AbstractTilesGetMapOutputForma
 
         /**
          * Sets the metadata for this GeoPackage.
+         *
          * @param name Tile pyramid user data table name
          * @param box CRS and bounding box for all content in table_name
          * @param imageFormat Image format for tiles
          * @param srid Spatial Reference System ID
-         * @param mapLayers Provides the identifier (title) and description (abstract)
+         * @param mapLayers Provides the identifier (title) and description
+         * (abstract)
          * @param minmax Minimum and maximum zoom levels
          * @param gridSubset The tile matrix
          * @throws IOException
-         * @throws ServiceException 
+         * @throws ServiceException
          */
         @Override
         public void setMetadata(String name, ReferencedEnvelope box, String imageFormat, int srid,
@@ -195,6 +197,13 @@ public class GeoPackageGetMapOutputFormat extends AbstractTilesGetMapOutputForma
         if (formatOpts.get("flipy") == null) {
             request.getFormatOptions().put("flipy", "true");
         }
+
+        // Set the default image format to allow a mix of JPEG and PNG images
+        // depending on whether individual image tiles have transparency or not.
+        // Use the org.geoserver.wms.map.JpegOrPngChooser and JpegPngMapResponse
+//        if (formatOpts.get("format") == null) {
+//            request.getFormatOptions().put("format", "image/vnd.jpeg-png");
+//        }
 
         return super.produceMap(mapContent);
     }
