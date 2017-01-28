@@ -33,6 +33,7 @@ import org.geoserver.wms.GetMapRequest;
 import org.geoserver.wms.MapLayerInfo;
 import org.geoserver.wms.RasterCleaner;
 import org.geoserver.wms.WMS;
+import org.geoserver.wms.WMSMapContent;
 import org.geoserver.wms.WebMap;
 import org.geoserver.wms.WebMapService;
 
@@ -93,6 +94,7 @@ public class GeoPackageGetMapOutputFormat extends AbstractTilesGetMapOutputForma
                 }
             }
             e.setBounds(box);
+
             e.setSrid(srid);
 
             GridSet gridSet = gridSubset.getGridSet();
@@ -148,8 +150,36 @@ public class GeoPackageGetMapOutputFormat extends AbstractTilesGetMapOutputForma
     }
 
     /**
+     * Asks this map producer to create a map image for the passed
+     * {@linkPlain WMSMapContext}, which contains enough information for doing
+     * such a process. Typically invoked by WMS GetMap.
+     *
+     * @param mapContent
+     * @return
+     *
+     * @throws ServiceException
+     * @throws IOException
+     */
+    @Override
+    public WebMap produceMap(WMSMapContent mapContent) throws ServiceException, IOException {
+        GetMapRequest request = mapContent.getRequest();
+        Map formatOpts = request.getFormatOptions();
+
+        // Per the OGC GeoPackage Encoding Standard, the tile coordinate (0,0) 
+        // always refers to the tile in the upper left corner of the tile matrix 
+        // at any zoom level, regardless of the actual availability of that tile.
+        // Enabling the "flipy" format option will cause the base class to invert
+        // the row ordering such that this requirement is satisfied.
+        if (formatOpts.get("flipy") == null) {
+            request.getFormatOptions().put("flipy", "true");
+        }
+
+        return super.produceMap(mapContent);
+    }
+
+    /**
      * Add tiles to an existing GeoPackage
-     * 
+     *
      * @param geopkg
      * @param map
      * @throws IOException
