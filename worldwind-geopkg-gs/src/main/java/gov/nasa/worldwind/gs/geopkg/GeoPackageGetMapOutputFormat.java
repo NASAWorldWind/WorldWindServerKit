@@ -78,6 +78,18 @@ public class GeoPackageGetMapOutputFormat extends AbstractTilesGetMapOutputForma
             geopkg.init();
         }
 
+        /**
+         * 
+         * @param name
+         * @param box
+         * @param imageFormat
+         * @param srid
+         * @param mapLayers
+         * @param minmax
+         * @param gridSubset
+         * @throws IOException
+         * @throws ServiceException 
+         */
         @Override
         public void setMetadata(String name, ReferencedEnvelope box, String imageFormat, int srid,
                 List<MapLayerInfo> mapLayers, int[] minmax, GridSubset gridSubset)
@@ -96,6 +108,16 @@ public class GeoPackageGetMapOutputFormat extends AbstractTilesGetMapOutputForma
             e.setBounds(box);
 
             e.setSrid(srid);
+
+            // Per the OGC GeoPackage Encoding Standard (2.2.6. Tile Matrix Set),
+            // define the maximum bounding box (min_x, min_y, max_x, max_y) 
+            // for all possible tiles in a tile pyramid user data table.
+            CoordinateReferenceSystem crs = box.getCoordinateReferenceSystem();
+            double minx = crs.getCoordinateSystem().getAxis(0).getMinimumValue();
+            double miny = crs.getCoordinateSystem().getAxis(1).getMinimumValue();
+            double maxx = crs.getCoordinateSystem().getAxis(0).getMaximumValue();
+            double maxy = crs.getCoordinateSystem().getAxis(1).getMaximumValue();
+            e.setTileMatrixSetBounds(new Envelope(minx, maxx, miny, maxy));
 
             GridSet gridSet = gridSubset.getGridSet();
             for (int z = minmax[0]; z < minmax[1]; z++) {
