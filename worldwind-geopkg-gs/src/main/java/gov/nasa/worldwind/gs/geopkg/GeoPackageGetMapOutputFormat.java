@@ -79,14 +79,14 @@ public class GeoPackageGetMapOutputFormat extends AbstractTilesGetMapOutputForma
         }
 
         /**
-         * 
-         * @param name
-         * @param box
-         * @param imageFormat
-         * @param srid
-         * @param mapLayers
-         * @param minmax
-         * @param gridSubset
+         * Sets the metadata for this GeoPackage.
+         * @param name Tile pyramid user data table name
+         * @param box CRS and bounding box for all content in table_name
+         * @param imageFormat Image format for tiles
+         * @param srid Spatial Reference System ID
+         * @param mapLayers Provides the identifier (title) and description (abstract)
+         * @param minmax Minimum and maximum zoom levels
+         * @param gridSubset The tile matrix
          * @throws IOException
          * @throws ServiceException 
          */
