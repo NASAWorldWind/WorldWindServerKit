@@ -134,14 +134,14 @@
         <!--WorldWind GeoServer GeoPackage extension -->
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>worldwind-geopkg-gs</artifactId>
+            <artifactId>worldwind-gs-geopkg</artifactId>
             <version>${project.version}</version>
         </dependency>
 
         <!--WorldWind GeoTools GeoPackage module-->
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>worldwind-geopkg-gt</artifactId>
+            <artifactId>worldwind-gt-geopkg</artifactId>
             <version>${project.version}</version>
         </dependency>
 

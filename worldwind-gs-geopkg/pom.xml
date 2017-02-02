@@ -13,7 +13,7 @@ application directory.
     </parent>
 
     <groupId>gov.nasa.worldwind</groupId>
-    <artifactId>worldwind-geopkg-gs</artifactId>
+    <artifactId>worldwind-gs-geopkg</artifactId>
     <packaging>jar</packaging>
 
     <name>WorldWind GeoPackage Extension</name>
@@ -66,7 +66,7 @@ application directory.
             <artifactId>gs-gwc</artifactId>
         </dependency>
         
-        <!--Module Dependencies--> 
+        <!-- WorldWind Server Kit Module Dependencies--> 
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>worldwind-gs-wms</artifactId>
@@ -75,10 +75,11 @@ application directory.
         
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>worldwind-geopkg-gt</artifactId>
+            <artifactId>worldwind-gt-geopkg</artifactId>
             <version>${project.version}</version>
         </dependency>
 
+        <!--Module Dependencies--> 
         <dependency>
             <groupId>org.geoserver</groupId>
             <artifactId>gs-main</artifactId>

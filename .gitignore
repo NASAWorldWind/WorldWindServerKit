@@ -13,3 +13,11 @@ target
 nb-configuration.xml
 nbactions.xml
 /data/ssgf/coverages/
+/worldwind-gt-geopkg/nbproject/
+/worldwind-gs-geopkg/nbproject/
+/worldwind-gs-wms/nbproject/
+/worldwind-gt-geopkg/src/test/resources/gov/nasa/worldwind/geopkg/mosaic/ERDC_Whitehorse_GeoPackage.gpkg
+/worldwind-gs-geopkg/src/test/resources/gov/nasa/worldwind/gs/geopkg/agc-JOG(1).jpg
+/worldwind-gs-geopkg/src/test/resources/gov/nasa/worldwind/gs/geopkg/jog.gpkg
+/worldwind-gs-geopkg/src/test/resources/gov/nasa/worldwind/gs/geopkg/agc-JOG.jpg
+/worldwind-gs-geopkg/src/test/resources/gov/nasa/worldwind/gs/geopkg/jog.png

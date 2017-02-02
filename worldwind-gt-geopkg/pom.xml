@@ -22,7 +22,7 @@
     <!--     Module Description                                      -->
     <!-- =========================================================== -->
     <groupId>gov.nasa.worldwind</groupId>
-    <artifactId>worldwind-geopkg-gt</artifactId>
+    <artifactId>worldwind-gt-geopkg</artifactId>
     <packaging>jar</packaging>
     <name>WorldWind GeoPackage Module</name>
 
