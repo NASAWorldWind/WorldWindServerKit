@@ -39,6 +39,12 @@ import javax.imageio.ImageReadParam;
 import javax.imageio.ImageReader;
 import javax.imageio.stream.ImageInputStream;
 
+import gov.nasa.worldwind.geopkg.GeoPackage;
+import gov.nasa.worldwind.geopkg.Tile;
+import gov.nasa.worldwind.geopkg.TileEntry;
+import gov.nasa.worldwind.geopkg.TileMatrix;
+import gov.nasa.worldwind.geopkg.TileReader;
+
 import org.geotools.coverage.CoverageFactoryFinder;
 import org.geotools.coverage.grid.GridCoverage2D;
 import org.geotools.coverage.grid.GridCoverageFactory;
@@ -49,11 +55,6 @@ import org.geotools.coverage.grid.io.AbstractGridFormat;
 import org.geotools.factory.Hints;
 import org.geotools.geometry.GeneralEnvelope;
 import org.geotools.geometry.jts.ReferencedEnvelope;
-import gov.nasa.worldwind.geopkg.GeoPackage;
-import gov.nasa.worldwind.geopkg.Tile;
-import gov.nasa.worldwind.geopkg.TileEntry;
-import gov.nasa.worldwind.geopkg.TileMatrix;
-import gov.nasa.worldwind.geopkg.TileReader;
 import org.geotools.referencing.CRS;
 import org.geotools.util.Utilities;
 import org.geotools.util.logging.Logging;
@@ -65,85 +66,92 @@ import org.opengis.referencing.ReferenceIdentifier;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 /**
- * GeoPackage Grid Reader (supports the GP mosaic datastore).
- * 
+ * GeoPackage reader for OGC GeoPackage Tile Encoding.
+ *
  * @author Justin Deoliveira
  * @author Niels Charlier
+ * @author Bruce Schubert
  */
 public class GeoPackageReader extends AbstractGridCoverage2DReader {
-    
-    /** The {@link Logger} for this {@link GeoPackageReader}. */
+
+    /**
+     * The {@link Logger} for this {@link GeoPackageReader}.
+     */
     private final static Logger LOGGER = Logging.getLogger("gov.nasa.worldwind.geopkg.mosaic");
-       
+
     protected final static int DEFAULT_TILE_SIZE = 256;
-    
+
     protected final static int ZOOM_LEVEL_BASE = 2;
-        
+
     protected GridCoverageFactory coverageFactory;
-        
+
     protected File sourceFile;
-                
+
     protected Map<String, TileEntry> tiles = new HashMap<String, TileEntry>();
-    
+
     public GeoPackageReader(Object source, Hints hints) throws IOException {
-       coverageFactory = CoverageFactoryFinder.getGridCoverageFactory(this.hints);
-       
-       sourceFile = GeoPackageFormat.getFileFromSource(source);
-       GeoPackage file = new GeoPackage(sourceFile);
-       try {
-            for (TileEntry tile : file.tiles()){
+        coverageFactory = CoverageFactoryFinder.getGridCoverageFactory(this.hints);
+        sourceFile = GeoPackageFormat.getFileFromSource(source);
+        GeoPackage file = new GeoPackage(sourceFile);
+
+        try {
+            // Set the coverage name to the name of the the first raster tileset.
+            coverageName = null;   // default value was "geotools_coverage"
+            for (TileEntry tile : file.tiles()) {
                 tiles.put(tile.getTableName(), tile);
+                if (coverageName == null) {
+                    coverageName = tile.getTableName();
+                }
             }
-       } finally {
-           file.close();
-       }
+        } finally {
+            file.close();
+        }
     }
 
     @Override
     public Format getFormat() {
         return new GeoPackageFormat();
     }
-    
+
     @Override
     protected boolean checkName(String coverageName) {
         Utilities.ensureNonNull("coverageName", coverageName);
         return tiles.keySet().contains(coverageName);
     }
-    
+
     @Override
-    public GeneralEnvelope getOriginalEnvelope(String coverageName){
+    public GeneralEnvelope getOriginalEnvelope(String coverageName) {
         if (!checkName(coverageName)) {
-            throw new IllegalArgumentException("The specified coverageName " + coverageName
-                    + "is not supported");
+            throw new IllegalArgumentException(
+                    "The specified coverageName " + coverageName + "is not supported");
         }
-        
         return new GeneralEnvelope(tiles.get(coverageName).getBounds());
     }
-    
+
     @Override
-    protected double[] getHighestRes(String coverageName){
+    protected double[] getHighestRes(String coverageName) {
         if (!checkName(coverageName)) {
             throw new IllegalArgumentException("The specified coverageName " + coverageName
                     + "is not supported");
         }
-        
+
         List<TileMatrix> matrices = tiles.get(coverageName).getTileMatricies();
-        TileMatrix matrix = matrices.get(matrices.size()-1);
-        return new double[] {matrix.getXPixelSize(), matrix.getYPixelSize()};
+        TileMatrix matrix = matrices.get(matrices.size() - 1);
+        return new double[]{matrix.getXPixelSize(), matrix.getYPixelSize()};
     }
-    
+
     @Override
-    public GridEnvelope getOriginalGridRange(String coverageName){
+    public GridEnvelope getOriginalGridRange(String coverageName) {
         if (!checkName(coverageName)) {
             throw new IllegalArgumentException("The specified coverageName " + coverageName
                     + "is not supported");
         }
-        
+
         List<TileMatrix> matrices = tiles.get(coverageName).getTileMatricies();
-        TileMatrix matrix = matrices.get(matrices.size()-1);
+        TileMatrix matrix = matrices.get(matrices.size() - 1);
         return new GridEnvelope2D(new Rectangle(matrix.getMatrixWidth() * matrix.getTileWidth(), matrix.getMatrixHeight() * matrix.getTileHeight()));
     }
-    
+
     @Override
     public CoordinateReferenceSystem getCoordinateReferenceSystem(String coverageName) {
         if (!checkName(coverageName)) {
@@ -158,17 +166,47 @@ public class GeoPackageReader extends AbstractGridCoverage2DReader {
             return null;
         }
     }
-    
+
     @Override
     public String[] getGridCoverageNames() {
         return tiles.keySet().toArray(new String[tiles.size()]);
     }
-    
+
     @Override
     public int getGridCoverageCount() {
         return tiles.size();
     }
-    
+
+    /**
+     * Reads from the first raster coverage in the GeoPackage.
+     *
+     * @param parameters Array containing the requested grid geometry as a
+     * {@code Parameter<GridGeometry2D>} descriptor-value pair with a
+     * {@code AbstractGridFormat.READ_GRIDGEOMETRY2D} descriptor
+     *
+     * @return A grid coverage that contains the supplied grid geometry
+     *
+     * @throws IllegalArgumentException
+     * @throws IOException
+     */
+    @Override
+    public GridCoverage2D read(GeneralParameterValue[] parameters) throws IllegalArgumentException, IOException {
+        return read(coverageName, parameters);
+    }
+
+    /**
+     * Reads from the named raster coverage.
+     *
+     * @param coverageName The name of the coverage to be read
+     * @param parameters Array containing the requested grid geometry as a
+     * {@code Parameter<GridGeometry2D>} descriptor-value pair with a
+     * {@code AbstractGridFormat.READ_GRIDGEOMETRY2D} descriptor
+     *
+     * @return A grid coverage that contains the supplied grid geometry
+     *
+     * @throws IllegalArgumentException
+     * @throws IOException
+     */
     @Override
     public GridCoverage2D read(String coverageName, GeneralParameterValue[] parameters) throws IllegalArgumentException, IOException {
         TileEntry entry = tiles.get(coverageName);
@@ -181,6 +219,8 @@ public class GeoPackageReader extends AbstractGridCoverage2DReader {
             ReferencedEnvelope requestedEnvelope = null;
             Rectangle dim = null;
 
+            // Extract the GridGeometry2D from the parameters and set the
+            // requested evelope and dimensions.
             if (parameters != null) {
                 for (int i = 0; i < parameters.length; i++) {
                     final ParameterValue param = (ParameterValue) parameters[i];
@@ -192,7 +232,6 @@ public class GeoPackageReader extends AbstractGridCoverage2DReader {
                         } catch (Exception e) {
                             requestedEnvelope = null;
                         }
-
                         dim = gg.getGridRange2D().getBounds();
                         continue;
                     }
@@ -234,7 +273,7 @@ public class GeoPackageReader extends AbstractGridCoverage2DReader {
             double originX = crs.getCoordinateSystem().getAxis(0).getMinimumValue(); // left
             double originY = crs.getCoordinateSystem().getAxis(1).getMaximumValue(); // top
 
-            if (requestedEnvelope != null) { // crop tiles to requested envelope                   
+            if (requestedEnvelope != null) { // crop tile set to requested envelope                   
                 leftTile = Math.max(leftTile, (int) Math.round(Math.floor((requestedEnvelope.getMinimum(0) - originX) / resX)));
                 rightTile = Math.max(leftTile, (int) Math.min(rightTile, Math.round(Math.floor((requestedEnvelope.getMaximum(0) - originX) / resX))));
 
@@ -255,7 +294,7 @@ public class GeoPackageReader extends AbstractGridCoverage2DReader {
                 Tile tile = it.next();
 
                 BufferedImage tileImage = readImage(tile.getData());
-                
+
                 ////////////////////////////////////////////////////////////////
                 // Uncomment block to draw a border around the tiles for debugging
 //                {
@@ -265,18 +304,18 @@ public class GeoPackageReader extends AbstractGridCoverage2DReader {
 //                    graphics.drawRect(0, 0, tileImage.getWidth(), tileImage.getHeight());
 //                }
                 ////////////////////////////////////////////////////////////////
-                
                 if (image == null) {
                     // Create a BufferedImage.TYPE_3BYTE_BGR image with a white background
                     image = getStartImage(width, height);
                 }
-                
+
                 // Get the tile coordinates within the mosaic
                 int posx = (int) (tile.getColumn() - leftTile) * DEFAULT_TILE_SIZE;
                 int posy = (int) (tile.getRow() - topTile) * DEFAULT_TILE_SIZE;
 
-                // Draw the tile in the mosaic. We draw versus coping data to 
-                // accomdate different SampleModels between image tiles.
+                // Draw the tile in the mosaic. We 'draw' versus 'copy data' to 
+                // accomdate potentially different SampleModels between image tiles,
+                // e.g., when there's a mix of PNG and JPEG image types in the table.
                 Graphics2D g2 = image.createGraphics();
                 g2.drawImage(tileImage, posx, posy, DEFAULT_TILE_SIZE, DEFAULT_TILE_SIZE, null);
             }
@@ -291,19 +330,19 @@ public class GeoPackageReader extends AbstractGridCoverage2DReader {
         }
         return coverageFactory.create(entry.getTableName(), image, resultEnvelope);
     }
-    
+
     protected static BufferedImage readImage(byte[] data) throws IOException {
         ByteArrayInputStream bis = new ByteArrayInputStream(data);
-        Object source = bis; 
-        ImageInputStream iis = ImageIO.createImageInputStream(source); 
+        Object source = bis;
+        ImageInputStream iis = ImageIO.createImageInputStream(source);
         Iterator<?> readers = ImageIO.getImageReaders(iis);
         ImageReader reader = (ImageReader) readers.next();
         reader.setInput(iis, true);
         ImageReadParam param = reader.getDefaultReadParam();
- 
+
         return reader.read(0, param);
     }
-    
+
     protected BufferedImage getStartImage(BufferedImage copyFrom, int width, int height) {
         Map<String, Object> properties = null;
 
@@ -329,10 +368,11 @@ public class GeoPackageReader extends AbstractGridCoverage2DReader {
 
         return image;
     }
-    
+
     protected BufferedImage getStartImage(int imageType, int width, int height) {
-        if (imageType == BufferedImage.TYPE_CUSTOM)
-                imageType = BufferedImage.TYPE_3BYTE_BGR;
+        if (imageType == BufferedImage.TYPE_CUSTOM) {
+            imageType = BufferedImage.TYPE_3BYTE_BGR;
+        }
 
         BufferedImage image = new BufferedImage(width, height, imageType);
 
@@ -345,15 +385,8 @@ public class GeoPackageReader extends AbstractGridCoverage2DReader {
 
         return image;
     }
-    
+
     protected BufferedImage getStartImage(int width, int height) {
         return getStartImage(BufferedImage.TYPE_CUSTOM, width, height);
     }
-
-    @Override
-    public GridCoverage2D read(GeneralParameterValue[] parameters) throws IllegalArgumentException,
-            IOException {
-        throw new IllegalArgumentException("No layer specified!");
-    }
-
 }
