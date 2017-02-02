@@ -26,12 +26,11 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.vividsolutions.jts.geom.Envelope;
-import org.junit.Ignore;
 
 /**
- * 
+ *
  * Test For WMS GetMap Output Format for GeoPackage
- * 
+ *
  * @author Justin Deoliveira, Boundless
  *
  */
@@ -39,11 +38,24 @@ public class GeoPackageGetMapOutputFormatTest extends WMSTestSupport {
 
     GeoPackageGetMapOutputFormat format;
 
+    /**
+     * Setup a GeoPackageGetMapOutputFormat for each test using WMSTestSupport.
+     */
     @Before
-    public void setUpFormat() {
+    public void setUpFormat() throws IOException {
+        //  getWebMapService() - The global web map service singleton from the application context.
+        //  getWMS() - The global wms singleton from the application context.
+        //  GWC.get() - Spring bean acting as a mediator between GeoWebCache and GeoServer
         format = new GeoPackageGetMapOutputFormat(getWebMapService(), getWMS(), GWC.get());
+
     }
 
+    /**
+     * Adds default set of raster layers to the test data.
+     *
+     * @param testData
+     * @throws Exception
+     */
     @Override
     protected void setUpTestData(SystemTestData testData) throws Exception {
         super.setUpTestData(testData);
@@ -54,10 +66,10 @@ public class GeoPackageGetMapOutputFormatTest extends WMSTestSupport {
     public void testTileEntries() throws Exception {
         WMSMapContent mapContent = createMapContent(WORLD, LAKES);
         mapContent.getRequest().setBbox(
-            new Envelope(-0.17578125, -0.087890625, 0.17578125, 0.087890625));
+                new Envelope(-0.17578125, -0.087890625, 0.17578125, 0.087890625));
         mapContent.getRequest().getFormatOptions().put("min_zoom", "10");
         mapContent.getRequest().getFormatOptions().put("max_zoom", "11");
-        
+
         WebMap map = format.produceMap(mapContent);
         GeoPackage geopkg = createGeoPackage(map);
 
@@ -73,9 +85,9 @@ public class GeoPackageGetMapOutputFormatTest extends WMSTestSupport {
         File f = File.createTempFile("temp", ".gpkg", new File("target"));
         FileOutputStream fout = new FileOutputStream(f);
         rawMap.writeTo(fout);
-        fout.flush(); 
+        fout.flush();
         fout.close();
-        
+
         return new GeoPackage(f);
 //        File f = File.createTempFile("geopkg", "zip", new File("target"));
 //        FileOutputStream fout = new FileOutputStream(f);
@@ -98,7 +110,7 @@ public class GeoPackageGetMapOutputFormatTest extends WMSTestSupport {
 
     protected GetMapRequest createGetMapRequest(QName[] layerNames) {
         GetMapRequest request = super.createGetMapRequest(layerNames);
-        request.setBbox(new Envelope(-180,180,-90,90));
+        request.setBbox(new Envelope(-180, 180, -90, 90));
         return request;
     };
     
