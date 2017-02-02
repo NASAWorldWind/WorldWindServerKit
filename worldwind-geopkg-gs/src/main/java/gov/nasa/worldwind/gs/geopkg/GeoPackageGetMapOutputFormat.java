@@ -40,6 +40,7 @@ import org.geoserver.wms.WebMapService;
 import org.geotools.geometry.jts.ReferencedEnvelope;
 import org.geotools.referencing.CRS;
 import org.geotools.util.logging.Logging;
+import org.geowebcache.grid.BoundingBox;
 
 import org.geowebcache.grid.Grid;
 import org.geowebcache.grid.GridSet;
@@ -52,6 +53,7 @@ import org.opengis.referencing.crs.CoordinateReferenceSystem;
  * WMS GetMap Output Format for GeoPackage
  *
  * @author Justin Deoliveira, Boundless
+ * @author Bruce Schubert, NASA
  *
  */
 public class GeoPackageGetMapOutputFormat extends AbstractTilesGetMapOutputFormat {
@@ -201,9 +203,12 @@ public class GeoPackageGetMapOutputFormat extends AbstractTilesGetMapOutputForma
         // Set the default image format to allow a mix of JPEG and PNG images
         // depending on whether individual image tiles have transparency or not.
         // Use the org.geoserver.wms.map.JpegOrPngChooser and JpegPngMapResponse
-//        if (formatOpts.get("format") == null) {
-//            request.getFormatOptions().put("format", "image/vnd.jpeg-png");
-//        }
+        if (formatOpts.get("format") == null) {
+            request.getFormatOptions().put("format", "image/vnd.jpeg-png");
+            request.getFormatOptions().put("tiled", "true");
+            BoundingBox bbox = this.bbox(request);
+            request.getFormatOptions().put("tilesOrigin", bbox.getMinX() + "," + bbox.getMinY());
+        }
 
         return super.produceMap(mapContent);
     }
