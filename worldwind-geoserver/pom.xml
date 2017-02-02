@@ -90,10 +90,6 @@
         </dependency>
         <dependency>
             <groupId>org.geoserver</groupId>
-            <artifactId>gs-wms</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.geoserver</groupId>
             <artifactId>gs-kml</artifactId>
         </dependency>
         <dependency>
@@ -117,7 +113,6 @@
             <artifactId>gs-sec-ldap</artifactId>
         </dependency>
         
-        
         <!--Web Processing Service extension-->
         <dependency>
             <groupId>org.geoserver.extension</groupId>
@@ -129,10 +124,10 @@
             <version>${gs.version}</version>
         </dependency>
 
-        <!--WorldWind GeoTools GeoPackage module-->
+        <!--WorldWind GeoServer WMS module-->
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>worldwind-geopkg-gt</artifactId>
+            <artifactId>worldwind-gs-wms</artifactId>
             <version>${project.version}</version>
         </dependency>
         
@@ -143,22 +138,14 @@
             <version>${project.version}</version>
         </dependency>
 
+        <!--WorldWind GeoTools GeoPackage module-->
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>worldwind-geopkg-gt</artifactId>
+            <version>${project.version}</version>
+        </dependency>
 
 
-        <!--GeoServer GeoPackage community plugin-->
-<!--        <dependency>
-            <groupId>org.geoserver.community</groupId>
-            <artifactId>gs-geopkg</artifactId>
-            <version>${gs.version}</version>
-        </dependency>-->
-
-        <!--GeoTools GeoPackage module-->
-<!--        <dependency>
-            <groupId>org.geotools</groupId>
-            <artifactId>gt-geopkg</artifactId>
-        </dependency>-->
-        
-        
         <!-- GeoTools -->
         <dependency>
             <groupId>org.geotools.jdbc</groupId>
