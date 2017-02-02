@@ -4,7 +4,7 @@
     <parent>
         <groupId>gov.nasa.worldwind</groupId>
         <artifactId>worldwind-serverkit</artifactId>
-        <version>0.1.0-SNAPSHOT</version>
+        <version>0.1.0-RC</version>
     </parent>
     
     <artifactId>worldwind-geoserver</artifactId>
@@ -14,13 +14,19 @@
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
+        
         <!--Configuration for Jetty-->
-        <configId>minimal</configId>
-        <configDirectory>${basedir}/../data</configDirectory>
         <webappSourceDirectory>${basedir}/src/main/webapp</webappSourceDirectory>
         <sde.version>9.3</sde.version>
         <jetty.port>8080</jetty.port>
-        <jetty.run.daemon>false</jetty.run.daemon>    
+        <jetty.run.daemon>false</jetty.run.daemon>            
+        <!-- configId : typically "minimal"
+        configId defines the data folder template. It should match a subfolder
+        under the parent folder's data folder.  Its contents will be copied into
+        the war file. 
+        -->
+        <configId>ssgf</configId>
+        <configDirectory>${basedir}/../data</configDirectory>
     </properties>    
     
     <dependencies>
