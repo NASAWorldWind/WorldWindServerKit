@@ -33,88 +33,53 @@ import org.geotools.geometry.jts.ReferencedEnvelope;
 import org.geotools.image.test.ImageAssert;
 import org.geotools.parameter.Parameter;
 import org.geotools.referencing.CRS;
-import static org.junit.Assert.fail;
+import org.geotools.referencing.crs.DefaultGeographicCRS;
 import static org.junit.Assume.assumeNotNull;
-import static org.junit.Assume.assumeTrue;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.opengis.parameter.GeneralParameterValue;
-import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 //@Ignore ("Must convert to OGC")
 public class GeoPackageReaderTest {
 
-    private final CoordinateReferenceSystem WGS_84;
+    private final static String GEOPACKAGE = "GeoPackageTutorial.gpkg";
+    private final static String COVERAGE_NAME = "GeoPackageTutorial";
+//    private final static ReferencedEnvelope BOUNDS = new ReferencedEnvelope(
+//            -76.06555938720703, -75.99964141845703, 
+//            36.7966890335083, 36.831278800964355, 
+//            DefaultGeographicCRS.WGS84);
+    private final static ReferencedEnvelope BBOX = new ReferencedEnvelope(
+            -76.0693359375,
+            -75.9814453125,
+            36.7822265625,
+            36.8701171875,
+            DefaultGeographicCRS.WGS84
+    );
 
-    public GeoPackageReaderTest() {
-        try {
-            WGS_84 = CRS.decode("EPSG:4326", true);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-    
     @Test
-    public void testZoomlevel2() throws IOException {
-        URL testGeoPkg = getClass().getResource("jogl.gpkg");
-        assumeNotNull(testGeoPkg);  // Skip test if not found
-        
-        GeoPackageReader reader = new GeoPackageReader(testGeoPkg, null);
+    public void testZoomLevel_12() throws IOException {
+        URL gpkg = getClass().getResource(GEOPACKAGE);
+        assumeNotNull(gpkg);  // Skip test if not found
+
+        // Get an image from the coverage containing, but not cropped to, the bounding box 
+        GeoPackageReader reader = new GeoPackageReader(gpkg, null);
         GeneralParameterValue[] parameters = new GeneralParameterValue[1];
-        GridGeometry2D gg = new GridGeometry2D(new GridEnvelope2D(new Rectangle(500, 500)), new ReferencedEnvelope(0, 180.0, -85.0, 0, WGS_84));
+        GridGeometry2D gg = new GridGeometry2D(new GridEnvelope2D(new Rectangle(500, 500)), BBOX);
         parameters[0] = new Parameter<GridGeometry2D>(AbstractGridFormat.READ_GRIDGEOMETRY2D, gg);
-        GridCoverage2D gc = reader.read("World_Lakes", parameters);
+        GridCoverage2D gc = reader.read(COVERAGE_NAME, parameters);
         RenderedImage img = gc.getRenderedImage();
-        assertEquals(0, gc.getEnvelope().getMinimum(0), 0.01);
-        assertEquals(-90, gc.getEnvelope().getMinimum(1), 0.01);
-        assertEquals(180, gc.getEnvelope().getMaximum(0), 0.01);
-        assertEquals(0, gc.getEnvelope().getMaximum(1), 0.01);
-        assertEquals(1024, img.getWidth());
+
+        assertEquals(BBOX.getMinX(), gc.getEnvelope().getMinimum(0), 0.01);
+        assertEquals(BBOX.getMinY(), gc.getEnvelope().getMinimum(1), 0.01);
+        assertEquals(BBOX.getMaxX(), gc.getEnvelope().getMaximum(0), 0.01);
+        assertEquals(BBOX.getMaxY(), gc.getEnvelope().getMaximum(1), 0.01);
+        assertEquals(512, img.getWidth());
         assertEquals(512, img.getHeight());
 
-        //test CRS is consistent now
         assertTrue(CRS.equalsIgnoreMetadata(gc.getCoordinateReferenceSystem(), gc.getEnvelope().getCoordinateReferenceSystem()));
 
-        //ImageIO.write(img, "png", DataUtilities.urlToFile(getClass().getResource("world_lakes.png")));
-        ImageAssert.assertEquals(DataUtilities.urlToFile(getClass().getResource("world_lakes.png")), img, 250);
-    }
+        //ImageIO.write(img, "png", DataUtilities.urlToFile(getClass().getResource("GeoPackageTutorial.png")));
+        ImageAssert.assertEquals(DataUtilities.urlToFile(getClass().getResource("GeoPackageTutorial.png")), img, 250);
 
-    @Test
-    public void testZoomlevel3() throws IOException {
-        URL testGeoPkg = getClass().getResource("jogl.gpkg");
-        assumeNotNull(testGeoPkg);  // Skip test if not found
-        
-        GeoPackageReader reader = new GeoPackageReader(testGeoPkg, null);
-        GeneralParameterValue[] parameters = new GeneralParameterValue[1];
-        GridGeometry2D gg = new GridGeometry2D(new GridEnvelope2D(new Rectangle(500, 500)), new ReferencedEnvelope(0, 45.0, -85.0, 0, WGS_84));
-        parameters[0] = new Parameter<GridGeometry2D>(AbstractGridFormat.READ_GRIDGEOMETRY2D, gg);
-        GridCoverage2D gc = reader.read("World_Lakes", parameters);
-        RenderedImage img = gc.getRenderedImage();
-        assertEquals(0, gc.getEnvelope().getMinimum(0), 0.01);
-        assertEquals(-90, gc.getEnvelope().getMinimum(1), 0.01);
-        assertEquals(67.5, gc.getEnvelope().getMaximum(0), 0.01);
-        assertEquals(0, gc.getEnvelope().getMaximum(1), 0.01);
-        assertEquals(768, img.getWidth());
-        assertEquals(1024, img.getHeight());
-    }
-
-    @Test
-    public void testZoomlevel4() throws IOException {
-        URL testGeoPkg = getClass().getResource("jogl.gpkg");
-        assumeNotNull(testGeoPkg);  // Skip test if not found
-        
-        GeoPackageReader reader = new GeoPackageReader(testGeoPkg, null);
-        GeneralParameterValue[] parameters = new GeneralParameterValue[1];
-        GridGeometry2D gg = new GridGeometry2D(new GridEnvelope2D(new Rectangle(500, 500)), new ReferencedEnvelope(0, 22.0, -85.0, 0, WGS_84));
-        parameters[0] = new Parameter<GridGeometry2D>(AbstractGridFormat.READ_GRIDGEOMETRY2D, gg);
-        GridCoverage2D gc = reader.read("World_Lakes", parameters);
-        RenderedImage img = gc.getRenderedImage();
-        assertEquals(0, gc.getEnvelope().getMinimum(0), 0.01);
-        assertEquals(-90, gc.getEnvelope().getMinimum(1), 0.01);
-        assertEquals(22.5, gc.getEnvelope().getMaximum(0), 0.01);
-        assertEquals(0, gc.getEnvelope().getMaximum(1), 0.01);
-        assertEquals(512, img.getWidth());
-        assertEquals(2048, img.getHeight());
     }
 
 }
