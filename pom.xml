@@ -1272,6 +1272,7 @@
         <module>worldwind-geopkg-gs</module>
         <module>worldwind-geoserver</module>
         <module>worldwind-geoserver-dist</module>
+        <module>worldwind-gs-wms</module>
     </modules>
 
     <properties>
