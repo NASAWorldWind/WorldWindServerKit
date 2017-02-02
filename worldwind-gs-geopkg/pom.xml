@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- 
+Copyright (C) 2014 - Open Source Geospatial Foundation. All rights reserved.
+This code is licensed under the GPL 2.0 license, available at the root
+application directory.
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>gov.nasa.worldwind</groupId>
+        <artifactId>worldwind-serverkit</artifactId>
+        <version>0.1.0-SNAPSHOT</version>
+    </parent>
+
+    <groupId>gov.nasa.worldwind</groupId>
+    <artifactId>worldwind-gs-geopkg</artifactId>
+    <packaging>jar</packaging>
+
+    <name>WorldWind GeoPackage Extension</name>
+
+    <description>A GeoServer extension providing GeoPackage support with conformance to the 
+        National System for Geospatial-Intelligence (NSG) GeoPackage Encoding Standard
+        2.0 Interoperability Standard.  NGA.STND.0051_2.0_GEOPKG 2016-09-14
+    </description>
+
+    <dependencies>
+
+        <!--Dependencies common the GeoServer modules-->
+        <dependency>
+            <groupId>org.geotools</groupId>
+            <artifactId>gt-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.geotools</groupId>
+            <artifactId>gt-main</artifactId>
+        </dependency>        
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-beans</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-webmvc</artifactId>
+        </dependency>
+        
+        <!--Dependencies common to GeoServer Community modules-->
+        <dependency>
+            <groupId>org.geoserver</groupId>
+            <artifactId>gs-platform</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.geoserver</groupId>
+            <artifactId>gs-gwc</artifactId>
+        </dependency>
+        
+        <!-- WorldWind Server Kit Module Dependencies--> 
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>worldwind-gs-wms</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>worldwind-gt-geopkg</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <!--Module Dependencies--> 
+        <dependency>
+            <groupId>org.geoserver</groupId>
+            <artifactId>gs-main</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.geoserver</groupId>
+            <artifactId>gs-ows</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.geoserver</groupId>
+            <artifactId>gs-wfs</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.geotools</groupId>
+            <artifactId>gt-process</artifactId>
+        </dependency>
+        <dependency> 
+            <groupId>org.geoserver.community</groupId>
+            <artifactId>gs-mbtiles</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.geotools</groupId>
+            <artifactId>gt-render</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.geoserver.extension</groupId>
+            <artifactId>gs-wps-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>xmlunit</groupId>
+            <artifactId>xmlunit</artifactId>
+        </dependency>
+
+        
+        <!--Test dependencies-->
+        <dependency>
+            <groupId>org.geoserver</groupId>
+            <artifactId>gs-main</artifactId>
+            <classifier>tests</classifier>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.geoserver</groupId>
+            <artifactId>gs-wms</artifactId>
+            <classifier>tests</classifier>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.geoserver</groupId>
+            <artifactId>gs-wfs</artifactId>
+            <classifier>tests</classifier>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.geoserver.extension</groupId>
+            <artifactId>gs-wps-core</artifactId>
+            <scope>test</scope>
+            <classifier>tests</classifier>
+        </dependency>
+        <dependency>
+            <groupId>org.geoserver.web</groupId>
+            <artifactId>gs-web-core</artifactId>
+            <classifier>tests</classifier>
+            <scope>test</scope>
+        </dependency>    
+        <dependency>
+            <groupId>org.geoserver.web</groupId>
+            <artifactId>gs-web-demo</artifactId>
+            <scope>test</scope>
+        </dependency>   
+        <dependency>
+            <groupId>org.geotools</groupId>
+            <artifactId>gt-sample-data</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.easymock</groupId>
+            <artifactId>easymockclassextension</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+    
+    
+    <build>
+        <resources>
+            <resource>
+                <directory>${basedir}/src/main/java</directory>
+                <includes>
+                    <!--Spring bean factory configuration-->
+                    <include>applicationContext.xml</include>
+                </includes>
+            </resource>
+            <resource>
+                <directory>${basedir}/src/main/resources</directory>
+                <includes>
+                    <include>**/*</include>
+                </includes>
+            </resource>
+        </resources>
+    </build>
+</project>

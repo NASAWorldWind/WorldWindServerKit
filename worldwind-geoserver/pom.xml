@@ -4,7 +4,7 @@
     <parent>
         <groupId>gov.nasa.worldwind</groupId>
         <artifactId>worldwind-serverkit</artifactId>
-        <version>0.1.0</version>
+        <version>0.1.0-SNAPSHOT</version>
     </parent>
     
     <artifactId>worldwind-geoserver</artifactId>
@@ -90,10 +90,6 @@
         </dependency>
         <dependency>
             <groupId>org.geoserver</groupId>
-            <artifactId>gs-wms</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.geoserver</groupId>
             <artifactId>gs-kml</artifactId>
         </dependency>
         <dependency>
@@ -117,37 +113,39 @@
             <artifactId>gs-sec-ldap</artifactId>
         </dependency>
         
-        
         <!--Web Processing Service extension-->
         <dependency>
             <groupId>org.geoserver.extension</groupId>
             <artifactId>gs-wps-core</artifactId>
-            <version>${gs.version}</version>
         </dependency>
         <dependency>
             <groupId>org.geoserver.extension</groupId>
             <artifactId>gs-web-wps</artifactId>
             <version>${gs.version}</version>
         </dependency>
-        
-        <!--GeoServer GeoPackage community plugin-->
-        <dependency>
-            <groupId>org.geoserver.community</groupId>
-            <artifactId>gs-geopkg</artifactId>
-            <version>${gs.version}</version>
-        </dependency>
-        <!--GeoTools GeoPackage module-->
-        <dependency>
-            <groupId>org.geotools</groupId>
-            <artifactId>gt-geopkg</artifactId>
-        </dependency>
-        <!--WorldWind OGC compliant GeoPackage module-->
+
+        <!--WorldWind GeoServer WMS module-->
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>worldwind-geopackage</artifactId>
+            <artifactId>worldwind-gs-wms</artifactId>
             <version>${project.version}</version>
         </dependency>
         
+        <!--WorldWind GeoServer GeoPackage extension -->
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>worldwind-gs-geopkg</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <!--WorldWind GeoTools GeoPackage module-->
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>worldwind-gt-geopkg</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+
         <!-- GeoTools -->
         <dependency>
             <groupId>org.geotools.jdbc</groupId>
@@ -190,8 +188,6 @@
             <artifactId>gt-imagepyramid</artifactId>
         </dependency>     
 
-                
-                                                
         <dependency>
             <groupId>org.eclipse.jetty</groupId>
             <artifactId>jetty-server</artifactId>
@@ -229,11 +225,9 @@
             <scope>test</scope>
         </dependency>
         
-        <!--SQLLite explicit version resolves issue opening GeoPackages-->
         <dependency>
             <groupId>org.xerial</groupId>
             <artifactId>sqlite-jdbc</artifactId>
-            <version>3.14.2.1</version>
         </dependency>
     </dependencies>
     
