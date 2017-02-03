@@ -262,7 +262,7 @@ public class GeoPackageReader extends AbstractGridCoverage2DReader {
                 bestMatrix = entry.getTileMatricies().get(0);
             }
 
-            //take available tiles from database
+            // Get the range of available tiles from database
             leftTile = file.getTileBound(entry, bestMatrix.getZoomLevel(), false, false);   // booleans: isMax, isRow
             rightTile = file.getTileBound(entry, bestMatrix.getZoomLevel(), true, false);
             topTile = file.getTileBound(entry, bestMatrix.getZoomLevel(), false, true);     // min tile_row
@@ -272,17 +272,32 @@ public class GeoPackageReader extends AbstractGridCoverage2DReader {
             double resY = (crs.getCoordinateSystem().getAxis(1).getMaximumValue() - crs.getCoordinateSystem().getAxis(1).getMinimumValue()) / bestMatrix.getMatrixHeight();
             double originX = crs.getCoordinateSystem().getAxis(0).getMinimumValue(); // left
             double originY = crs.getCoordinateSystem().getAxis(1).getMaximumValue(); // top
+            int tileWidth = bestMatrix.getTileWidth();
+            int tileHeight = bestMatrix.getTileHeight();
+            double pixSizeX = bestMatrix.getXPixelSize();
+            double pixSizeY = bestMatrix.getYPixelSize();
 
-            if (requestedEnvelope != null) { // crop tile set to requested envelope                   
-                leftTile = Math.max(leftTile, (int) Math.round(Math.floor((requestedEnvelope.getMinimum(0) - originX) / resX)));
-                rightTile = Math.max(leftTile, (int) Math.min(rightTile, Math.round(Math.floor((requestedEnvelope.getMaximum(0) - originX) / resX))));
+            if (requestedEnvelope != null) { // crop tile set to requested envelope       
 
-                topTile = Math.max(topTile, (int) Math.round(Math.floor((originY - requestedEnvelope.getMaximum(1)) / resY)));
-                bottomTile = Math.max(topTile, (int) Math.min(bottomTile, Math.round(Math.ceil((originY - requestedEnvelope.getMinimum(1)) / resY))));
+                // Test if the requested envelope aligns with tile matrix boundaries
+                double remX = (requestedEnvelope.getMinimum(0) - originX) % resX;
+                double remY = (originY - requestedEnvelope.getMaximum(1)) % resY;
+                if (dim.getWidth() == tileWidth && dim.getHeight() == tileHeight && remX < pixSizeX && remY < pixSizeY) {
+                    leftTile = Math.max(leftTile, (int) Math.round((requestedEnvelope.getMinimum(0) - originX) / resX));
+                    topTile = Math.max(topTile, (int) Math.round((originY - requestedEnvelope.getMaximum(1)) / resY));
+                    rightTile = leftTile;
+                    bottomTile = topTile;
+                } else {
+                    leftTile = Math.max(leftTile, (int) Math.round(Math.floor((requestedEnvelope.getMinimum(0) - originX) / resX)));
+                    rightTile = Math.max(leftTile, (int) Math.min(rightTile, Math.round(Math.floor((requestedEnvelope.getMaximum(0) - originX) / resX))));
+                    topTile = Math.max(topTile, (int) Math.round(Math.floor((originY - requestedEnvelope.getMaximum(1)) / resY)));
+                    bottomTile = Math.max(topTile, (int) Math.min(bottomTile, Math.round(Math.floor((originY - requestedEnvelope.getMinimum(1)) / resY))));
+                }
             }
+            boolean isSingleTileRequest = leftTile == rightTile && topTile == bottomTile;
 
-            int width = (int) (rightTile - leftTile + 1) * DEFAULT_TILE_SIZE;
-            int height = (int) (bottomTile - topTile + 1) * DEFAULT_TILE_SIZE;
+            int width = (int) (rightTile - leftTile + 1) * tileWidth;
+            int height = (int) (bottomTile - topTile + 1) * tileHeight;
 
             //recalculate the envelope we are actually returning
             resultEnvelope = new ReferencedEnvelope(originX + leftTile * resX, originX + (rightTile + 1) * resX, originY - topTile * resY, originY - (bottomTile + 1) * resY, crs);
@@ -360,29 +375,28 @@ public class GeoPackageReader extends AbstractGridCoverage2DReader {
                 copyFrom.isAlphaPremultiplied(), (Hashtable<?, ?>) properties);
 
         //white background
-        Graphics2D g2D = (Graphics2D) image.getGraphics();
-        Color save = g2D.getColor();
-        g2D.setColor(Color.WHITE);
-        g2D.fillRect(0, 0, image.getWidth(), image.getHeight());
-        g2D.setColor(save);
-
+        //Graphics2D g2D = (Graphics2D) image.getGraphics();
+        //Color save = g2D.getColor();
+        //g2D.setColor(Color.WHITE);
+        //g2D.fillRect(0, 0, image.getWidth(), image.getHeight());
+        //g2D.setColor(save);
         return image;
     }
 
     protected BufferedImage getStartImage(int imageType, int width, int height) {
         if (imageType == BufferedImage.TYPE_CUSTOM) {
-            imageType = BufferedImage.TYPE_3BYTE_BGR;
+//            imageType = BufferedImage.TYPE_3BYTE_BGR;
+            imageType = BufferedImage.TYPE_INT_ARGB;
         }
 
         BufferedImage image = new BufferedImage(width, height, imageType);
 
         //white background
-        Graphics2D g2D = (Graphics2D) image.getGraphics();
-        Color save = g2D.getColor();
-        g2D.setColor(Color.WHITE);
-        g2D.fillRect(0, 0, image.getWidth(), image.getHeight());
-        g2D.setColor(save);
-
+        //Graphics2D g2D = (Graphics2D) image.getGraphics();
+        //Color save = g2D.getColor();
+        //g2D.setColor(Color.WHITE);
+        //g2D.fillRect(0, 0, image.getWidth(), image.getHeight());
+        //g2D.setColor(save);
         return image;
     }
 
