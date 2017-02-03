@@ -14,6 +14,9 @@ import gov.nasa.worldwind.geopkg.TileEntry;
 import gov.nasa.worldwind.geopkg.TileMatrix;
 
 import static gov.nasa.worldwind.gs.geopkg.GeoPkg.*;
+import gov.nasa.worldwind.gs.wms.map.CustomJpegPngMapResponse;
+import java.awt.image.RenderedImage;
+import java.io.ByteArrayOutputStream;
 
 import java.io.File;
 import java.io.IOException;
@@ -36,6 +39,13 @@ import org.geoserver.wms.WMS;
 import org.geoserver.wms.WMSMapContent;
 import org.geoserver.wms.WebMap;
 import org.geoserver.wms.WebMapService;
+import org.geoserver.wms.map.JPEGMapResponse;
+import org.geoserver.wms.map.JpegOrPngChooser;
+import org.geoserver.wms.map.JpegPngMapResponse;
+import org.geoserver.wms.map.PNGMapResponse;
+import org.geoserver.wms.map.RawMap;
+import org.geoserver.wms.map.RenderedImageMap;
+import org.geoserver.wms.map.RenderedImageMapResponse;
 
 import org.geotools.geometry.jts.ReferencedEnvelope;
 import org.geotools.referencing.CRS;
@@ -202,12 +212,8 @@ public class GeoPackageGetMapOutputFormat extends AbstractTilesGetMapOutputForma
 
         // Set the default image format to allow a mix of JPEG and PNG images
         // depending on whether individual image tiles have transparency or not.
-        // Use the org.geoserver.wms.map.JpegOrPngChooser and JpegPngMapResponse
         if (formatOpts.get("format") == null) {
-            request.getFormatOptions().put("format", "image/vnd.jpeg-png");
-            request.getFormatOptions().put("tiled", "true");
-            BoundingBox bbox = this.bbox(request);
-            request.getFormatOptions().put("tilesOrigin", bbox.getMinX() + "," + bbox.getMinY());
+            request.getFormatOptions().put("format", CustomJpegPngMapResponse.MIME);
         }
 
         return super.produceMap(mapContent);
@@ -222,6 +228,39 @@ public class GeoPackageGetMapOutputFormat extends AbstractTilesGetMapOutputForma
      */
     public void addTiles(GeoPackage geopkg, TileEntry e, GetMapRequest req, String name) throws IOException {
         addTiles(new GeopackageWrapper(geopkg, e), req, name);
+    }
+
+    /**
+     * 
+     * @param map
+     * @return
+     * @throws IOException 
+     */
+    @Override
+    protected byte[] toBytes(WebMap map) throws IOException {
+        ByteArrayOutputStream bout = new ByteArrayOutputStream();
+
+        if (map instanceof RenderedImageMap) {
+            RenderedImageMapResponse response;
+            switch (map.getMimeType()) {
+                case JpegPngMapResponse.MIME:
+                    response = new CustomJpegPngMapResponse(wms, new JPEGMapResponse(wms), new PNGMapResponse(wms));
+                    break;
+                case JPEG_MIME_TYPE:
+                    response = new JPEGMapResponse(wms);
+                    break;
+                case PNG_MIME_TYPE:
+                    response = new PNGMapResponse(wms);
+                    break;
+                default:
+                    response = new JPEGMapResponse(wms);
+            }
+            response.write(map, bout, null);
+        } else if (map instanceof RawMap) {
+            ((RawMap) map).writeTo(bout);
+        }
+        bout.flush();
+        return bout.toByteArray();
     }
 
     /**
