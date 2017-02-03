@@ -25,7 +25,8 @@
         under the parent folder's data folder.  Its contents will be copied into
         the war file. 
         -->
-        <configId>ssgf</configId>
+        <configId>minimal</configId>
+        <!--<configId>ssgf</configId>-->
         <configDirectory>${basedir}/../data</configDirectory>
     </properties>    
     
