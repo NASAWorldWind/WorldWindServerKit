@@ -23,23 +23,5 @@ application directory.
         </property>
         <property name="extension" value="jpg"/>
     </bean>
-    
-<!--    <bean id="JpegPngMapProducer" class="gov.nasa.worldwind.gs.wms.map.RenderedImageMapOutputFormat">
-        <constructor-arg>
-            <description>The prescribed output format MIME-Type, same as declared in the getcaps document</description>
-            <value>image/vnd.jpeg-png</value>
-        </constructor-arg>
-        <constructor-arg ref="wms" />
-        <property name="transparencySupported">
-            <description>JPEG-PNG does support transparency</description>
-            <value>true</value>
-        </property>
-        <property name="paletteSupported">
-            <description>JPEG-PNG does support 8-bit indexed color maps</description>
-            <value>true</value>
-        </property>
-         The extension is actually dynamically determined 
-        <property name="extension" value="jpg-png"/>
-    </bean>-->
-      
+          
 </beans>
