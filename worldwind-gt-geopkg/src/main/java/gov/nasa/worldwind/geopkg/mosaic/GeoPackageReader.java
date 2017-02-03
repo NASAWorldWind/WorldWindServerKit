@@ -320,19 +320,28 @@ public class GeoPackageReader extends AbstractGridCoverage2DReader {
 //                }
                 ////////////////////////////////////////////////////////////////
                 if (image == null) {
-                    // Create a BufferedImage.TYPE_3BYTE_BGR image with a white background
-                    image = getStartImage(width, height);
+                    if (isSingleTileRequest) {
+                        // Copy the source image type
+                        image = getStartImage(tileImage, width, height);
+                    } else {
+                        image = getStartImage(width, height);
+                    }
                 }
 
                 // Get the tile coordinates within the mosaic
-                int posx = (int) (tile.getColumn() - leftTile) * DEFAULT_TILE_SIZE;
-                int posy = (int) (tile.getRow() - topTile) * DEFAULT_TILE_SIZE;
+                int posx = (int) (tile.getColumn() - leftTile) * tileWidth;
+                int posy = (int) (tile.getRow() - topTile) * tileHeight;
 
-                // Draw the tile in the mosaic. We 'draw' versus 'copy data' to 
-                // accomdate potentially different SampleModels between image tiles,
-                // e.g., when there's a mix of PNG and JPEG image types in the table.
-                Graphics2D g2 = image.createGraphics();
-                g2.drawImage(tileImage, posx, posy, DEFAULT_TILE_SIZE, DEFAULT_TILE_SIZE, null);
+                if (isSingleTileRequest) {
+                    // Copy the source image data
+                    image.getRaster().setRect(posx, posy, tileImage.getData());
+                } else {
+                    // Draw the tile in the mosaic. We 'draw' versus 'copy data' to 
+                    // accomdate potentially different SampleModels between image tiles,
+                    // e.g., when there's a mix of PNG and JPEG image types in the table.
+                    Graphics2D g2 = image.createGraphics();
+                    g2.drawImage(tileImage, posx, posy, tileWidth, tileHeight, null);
+                }
             }
 
             it.close();
@@ -375,28 +384,28 @@ public class GeoPackageReader extends AbstractGridCoverage2DReader {
                 copyFrom.isAlphaPremultiplied(), (Hashtable<?, ?>) properties);
 
         //white background
-        //Graphics2D g2D = (Graphics2D) image.getGraphics();
-        //Color save = g2D.getColor();
-        //g2D.setColor(Color.WHITE);
-        //g2D.fillRect(0, 0, image.getWidth(), image.getHeight());
-        //g2D.setColor(save);
+//        Graphics2D g2D = (Graphics2D) image.getGraphics();
+//        Color save = g2D.getColor();
+//        g2D.setColor(Color.WHITE);
+//        g2D.fillRect(0, 0, image.getWidth(), image.getHeight());
+//        g2D.setColor(save);
         return image;
     }
 
     protected BufferedImage getStartImage(int imageType, int width, int height) {
         if (imageType == BufferedImage.TYPE_CUSTOM) {
-//            imageType = BufferedImage.TYPE_3BYTE_BGR;
-            imageType = BufferedImage.TYPE_INT_ARGB;
+            imageType = BufferedImage.TYPE_3BYTE_BGR;
+//            imageType = BufferedImage.TYPE_INT_ARGB;
         }
 
         BufferedImage image = new BufferedImage(width, height, imageType);
 
         //white background
-        //Graphics2D g2D = (Graphics2D) image.getGraphics();
-        //Color save = g2D.getColor();
-        //g2D.setColor(Color.WHITE);
-        //g2D.fillRect(0, 0, image.getWidth(), image.getHeight());
-        //g2D.setColor(save);
+//        Graphics2D g2D = (Graphics2D) image.getGraphics();
+//        Color save = g2D.getColor();
+//        g2D.setColor(Color.WHITE);
+//        g2D.fillRect(0, 0, image.getWidth(), image.getHeight());
+//        g2D.setColor(save);
         return image;
     }
 
