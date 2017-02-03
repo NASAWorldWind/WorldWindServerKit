@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+Copyright (C) 2014 - Open Source Geospatial Foundation. All rights reserved.
+This code is licensed under the GPL 2.0 license, available at the root
+application directory.
+-->
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans>
+    
+    <bean id="GeoPackageGetMapOutputFormat" class="gov.nasa.worldwind.gs.geopkg.GeoPackageGetMapOutputFormat">
+        <constructor-arg ref="webMapService" />
+        <constructor-arg ref="wms" />
+        <constructor-arg ref="gwcFacade" />
+    </bean>
+    
+    <bean id="GeoPackageGetFeatureOutputFormat" class="gov.nasa.worldwind.gs.geopkg.GeoPackageGetFeatureOutputFormat">
+        <constructor-arg ref="geoServer" />
+    </bean>
+    
+    <bean id="GeoPackageProcess" class="gov.nasa.worldwind.gs.geopkg.wps.GeoPackageProcess">
+        <constructor-arg index="0" ref="geoServer"/>
+        <constructor-arg index="1" ref="GeoPackageGetMapOutputFormat" />
+        <constructor-arg index="2" ref="wpsResourceManager"/>
+        <constructor-arg index="3" ref="filterFactory"/>
+    </bean>
+    
+    <bean id="GeoPackageProcessRequestPPIO" class="gov.nasa.worldwind.gs.geopkg.wps.GeoPackageProcessRequestPPIO" >
+        <constructor-arg ref="entityResolverProvider"/>
+    </bean>
+    
+    <bean id="GeoPackageDataStoreFactoryInitializer" class="gov.nasa.worldwind.gs.geopkg.GeoPkgDataStoreFactoryInitializer">
+        <property name="resourceLoader" ref="resourceLoader"/>
+    </bean>
+</beans>

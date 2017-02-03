@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>gov.nasa.worldwind</groupId>
     <artifactId>worldwind-serverkit</artifactId>
-    <version>0.1.0</version> 
+    <version>0.1.0-RC</version> 
     <packaging>pom</packaging>
 
     <name>WorldWind Server Kit</name>
@@ -130,6 +130,12 @@
             </dependency>
             <dependency>
                 <groupId>org.geoserver</groupId>
+                <artifactId>gs-wfs</artifactId>
+                <version>${gs.version}</version>
+                <classifier>tests</classifier>
+            </dependency>
+            <dependency>
+                <groupId>org.geoserver</groupId>
                 <artifactId>gs-wms</artifactId>
                 <version>${gs.version}</version>
             </dependency>
@@ -158,6 +164,12 @@
                 <groupId>org.geoserver.web</groupId>
                 <artifactId>gs-web-core</artifactId>
                 <version>${gs.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.geoserver.web</groupId>
+                <artifactId>gs-web-core</artifactId>
+                <version>${gs.version}</version>
+                <classifier>tests</classifier>
             </dependency>
             
             
@@ -1214,11 +1226,51 @@
                 <artifactId>imageio-ext-turbojpeg</artifactId>
                 <version>${imageio-ext.version}</version>
             </dependency>
+            
+            <dependency>
+                <groupId>org.geoserver.extension</groupId>
+                <artifactId>gs-wps-core</artifactId>
+                <version>${gs.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.geoserver.extension</groupId>
+                <artifactId>gs-wps-core</artifactId>
+                <version>${gs.version}</version>
+                <classifier>tests</classifier>
+            </dependency>
+            <dependency>
+                <groupId>org.geoserver.community</groupId>
+                <artifactId>gs-mbtiles</artifactId>
+                <version>${gs.version}</version>
+            </dependency>               
+
+            <dependency>
+                <groupId>simple-jndi</groupId>
+                <artifactId>simple-jndi</artifactId>
+                <version>0.11.4.1</version>
+            </dependency>
+            
+            <dependency>
+                <groupId>org.xerial</groupId>
+                <artifactId>sqlite-jdbc</artifactId>
+                <version>3.16.1</version>
+            </dependency>            
+            
         </dependencies>
     </dependencyManagement>
     
+    <dependencies>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency> 
+    </dependencies>
+    
     <modules>
-        <module>worldwind-geopackage</module>
+        <module>worldwind-gt-geopkg</module>
+        <module>worldwind-gs-geopkg</module>
+        <module>worldwind-gs-wms</module>
         <module>worldwind-geoserver</module>
         <module>worldwind-geoserver-dist</module>
     </modules>
