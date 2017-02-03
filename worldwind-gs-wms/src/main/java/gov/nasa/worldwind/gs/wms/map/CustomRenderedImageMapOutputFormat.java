@@ -20,8 +20,8 @@ import org.geoserver.wms.map.RenderedImageMapOutputFormat;
  * rendered image is compatible for content in an HttpServletResponse.
  *
  * This Spring bean is used by the MapPreviewPage.getAvailableWMSFormats() which
- * callsGeoServerApplication.getBeansOfType(GetMapOutputFormat.class) to
- * discover the output format for the image/jpeg mime type.
+ * calls GeoServerApplication.getBeansOfType(GetMapOutputFormat.class) to
+ * discover the registered output format for the image/jpeg mime type.
  *
  * See applicationContext.xml.
  *
