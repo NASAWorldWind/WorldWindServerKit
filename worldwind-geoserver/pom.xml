@@ -4,7 +4,7 @@
     <parent>
         <groupId>gov.nasa.worldwind</groupId>
         <artifactId>worldwind-serverkit</artifactId>
-        <version>0.1.0-RC</version>
+        <version>0.1.0</version>
     </parent>
     
     <artifactId>worldwind-geoserver</artifactId>
