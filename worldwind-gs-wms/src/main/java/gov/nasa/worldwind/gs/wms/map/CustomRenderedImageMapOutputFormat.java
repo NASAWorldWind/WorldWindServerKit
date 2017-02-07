@@ -15,13 +15,13 @@ import org.geoserver.wms.map.RenderedImageMap;
 import org.geoserver.wms.map.RenderedImageMapOutputFormat;
 
 /**
- * CustomRenderedImageMapOutputFormat is a customized
- * RenderedImageMapOutputFormat for the image/jpeg mime type. It ensures the
+ * CustomRenderedImageMapOutputFormat is a customized 
+ * RenderedImageMapOutputFormat Spring bean. It ensures the
  * rendered image is compatible for content in an HttpServletResponse.
  *
  * This Spring bean is used by the MapPreviewPage.getAvailableWMSFormats() which
  * calls GeoServerApplication.getBeansOfType(GetMapOutputFormat.class) to
- * discover the registered output format for the image/jpeg mime type.
+ * discover the registered output format the specified mime type.
  *
  * See applicationContext.xml.
  *
