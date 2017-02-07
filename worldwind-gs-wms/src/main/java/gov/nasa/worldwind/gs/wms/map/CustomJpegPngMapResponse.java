@@ -17,13 +17,10 @@
  */
 package gov.nasa.worldwind.gs.wms.map;
 
-import java.awt.RenderingHints;
 import java.awt.image.IndexColorModel;
 import java.awt.image.RenderedImage;
 import java.io.IOException;
 import java.io.OutputStream;
-import javax.media.jai.RenderedOp;
-import javax.media.jai.operator.ExtremaDescriptor;
 import org.geoserver.platform.Operation;
 import org.geoserver.platform.ServiceException;
 import org.geoserver.wms.WMS;
@@ -32,7 +29,6 @@ import org.geoserver.wms.map.JPEGMapResponse;
 import org.geoserver.wms.map.JpegPngMapResponse;
 import org.geoserver.wms.map.PNGMapResponse;
 import org.geoserver.wms.map.RenderedImageMap;
-import org.geotools.resources.image.ImageUtilities;
 
 /**
  * A customized JpegPngMapResponse that uses specialized logic to determine the
@@ -45,22 +41,35 @@ import org.geotools.resources.image.ImageUtilities;
  */
 public class CustomJpegPngMapResponse extends JpegPngMapResponse {
 
-    private final PNGMapResponse pngResponse;
-    private final JPEGMapResponse jpegResponse;
+    private final MapResponseOutputStreamAdaptor pngResponse;
+    private final MapResponseOutputStreamAdaptor jpegResponse;
     private Boolean jpegPreferred;
 
     public CustomJpegPngMapResponse(WMS wms, JPEGMapResponse jpegResponse, PNGMapResponse pngResponse) {
         super(wms, jpegResponse, pngResponse);
-        this.jpegResponse = jpegResponse;
-        this.pngResponse = pngResponse;
+        this.jpegResponse = new MapResponseOutputStreamAdaptor("image/jpeg", wms, jpegResponse);
+        this.pngResponse =  new MapResponseOutputStreamAdaptor("image/png", wms, pngResponse);
     }
 
+    /**
+     * Returns the mime type for the map.
+     * @param value a WebMap instance of type RenderedImageMap
+     * @param operation ignored.
+     * @return Mime type of the supplied RenderedImageMap
+     * @throws ServiceException 
+     */
     @Override
     public String getMimeType(Object value, Operation operation) throws ServiceException {
         RenderedImage image = ((RenderedImageMap) value).getImage();
         return isBestFormatJpeg(image) ? "image/jpeg" : "image/png";
     }
 
+    /**
+     * Returns the filename and extension for the map.
+     * @param value a WebMap instance of type RenderedImageMap
+     * @param operation ignored.
+     * @return A filename and extension
+     */
     @Override
     public String getPreferredDisposition(Object value, Operation operation) {
         RenderedImageMap map = ((RenderedImageMap) value);
