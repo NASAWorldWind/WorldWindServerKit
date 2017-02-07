@@ -15,6 +15,7 @@ import gov.nasa.worldwind.geopkg.TileMatrix;
 
 import static gov.nasa.worldwind.gs.geopkg.GeoPkg.*;
 import gov.nasa.worldwind.gs.wms.map.CustomJpegPngMapResponse;
+import gov.nasa.worldwind.gs.wms.map.MapResponseOutputStreamAdaptor;
 import java.awt.image.RenderedImage;
 import java.io.ByteArrayOutputStream;
 
@@ -231,10 +232,10 @@ public class GeoPackageGetMapOutputFormat extends AbstractTilesGetMapOutputForma
     }
 
     /**
-     * 
+     *
      * @param map
      * @return
-     * @throws IOException 
+     * @throws IOException
      */
     @Override
     protected byte[] toBytes(WebMap map) throws IOException {
@@ -247,13 +248,13 @@ public class GeoPackageGetMapOutputFormat extends AbstractTilesGetMapOutputForma
                     response = new CustomJpegPngMapResponse(wms, new JPEGMapResponse(wms), new PNGMapResponse(wms));
                     break;
                 case JPEG_MIME_TYPE:
-                    response = new JPEGMapResponse(wms);
+                    response = new MapResponseOutputStreamAdaptor("image/jpeg", wms, new JPEGMapResponse(wms));
                     break;
                 case PNG_MIME_TYPE:
-                    response = new PNGMapResponse(wms);
+                    response = new MapResponseOutputStreamAdaptor("image/png", wms, new PNGMapResponse(wms));
                     break;
                 default:
-                    response = new JPEGMapResponse(wms);
+                    response = new MapResponseOutputStreamAdaptor("image/jpeg", wms, new JPEGMapResponse(wms));
             }
             response.write(map, bout, null);
         } else if (map instanceof RawMap) {
