@@ -9,6 +9,7 @@ package gov.nasa.worldwind.gs.wms.map;
 import java.awt.image.BufferedImage;
 import java.awt.image.RenderedImage;
 import java.awt.image.WritableRaster;
+import javax.media.jai.RenderedOp;
 import org.geoserver.wms.WMS;
 import org.geoserver.wms.WMSMapContent;
 import org.geoserver.wms.map.RenderedImageMap;
@@ -67,7 +68,7 @@ public class CustomRenderedImageMapOutputFormat extends RenderedImageMapOutputFo
         // image compatible with the ImageIO.read() method used to process the 
         // "image" content returned in a HttpServletResponse.
         //
-        if ((image.getTileGridXOffset() != 0 || image.getTileGridYOffset() != 0)) {
+        if (image instanceof RenderedOp && (image.getTileGridXOffset() != 0 || image.getTileGridYOffset() != 0)) {
             // The following code to create the finalImage was copied from the
             // GeoTools ImageWorker.writeJPEG() method.
             final BufferedImage finalImage = new BufferedImage(

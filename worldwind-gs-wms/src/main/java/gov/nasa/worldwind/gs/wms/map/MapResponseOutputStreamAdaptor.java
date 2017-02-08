@@ -23,6 +23,7 @@ import java.awt.image.RenderedImage;
 import java.awt.image.WritableRaster;
 import java.io.IOException;
 import java.io.OutputStream;
+import javax.media.jai.RenderedOp;
 import org.geoserver.platform.ServiceException;
 import org.geoserver.wms.MapProducerCapabilities;
 import org.geoserver.wms.WMS;
@@ -69,7 +70,7 @@ public class MapResponseOutputStreamAdaptor extends RenderedImageMapResponse {
     @Override
     public void formatImageOutputStream(RenderedImage image, OutputStream outStream, WMSMapContent mapContent) throws ServiceException, IOException {
         // Convert TranslateIntOpImage types to BufferedImages
-        if ((image.getTileGridXOffset() != 0 || image.getTileGridYOffset() != 0)) {
+        if (image instanceof RenderedOp && (image.getTileGridXOffset() != 0 || image.getTileGridYOffset() != 0)) {
             // The following code to create the finalImage was copied from the
             // GeoTools ImageWorker.writeJPEG() method.
             final BufferedImage finalImage = new BufferedImage(
