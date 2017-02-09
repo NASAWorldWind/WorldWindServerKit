@@ -13,10 +13,7 @@ import gov.nasa.worldwind.geopkg.Tile;
 import gov.nasa.worldwind.geopkg.TileEntry;
 import gov.nasa.worldwind.geopkg.TileMatrix;
 
-import static gov.nasa.worldwind.gs.geopkg.GeoPkg.*;
-import gov.nasa.worldwind.gs.wms.map.CustomJpegPngMapResponse;
 import gov.nasa.worldwind.gs.wms.map.MapResponseOutputStreamAdaptor;
-import java.awt.image.RenderedImage;
 import java.io.ByteArrayOutputStream;
 
 import java.io.File;
@@ -41,7 +38,6 @@ import org.geoserver.wms.WMSMapContent;
 import org.geoserver.wms.WebMap;
 import org.geoserver.wms.WebMapService;
 import org.geoserver.wms.map.JPEGMapResponse;
-import org.geoserver.wms.map.JpegOrPngChooser;
 import org.geoserver.wms.map.JpegPngMapResponse;
 import org.geoserver.wms.map.PNGMapResponse;
 import org.geoserver.wms.map.RawMap;
@@ -51,7 +47,6 @@ import org.geoserver.wms.map.RenderedImageMapResponse;
 import org.geotools.geometry.jts.ReferencedEnvelope;
 import org.geotools.referencing.CRS;
 import org.geotools.util.logging.Logging;
-import org.geowebcache.grid.BoundingBox;
 
 import org.geowebcache.grid.Grid;
 import org.geowebcache.grid.GridSet;
@@ -71,8 +66,10 @@ public class GeoPackageGetMapOutputFormat extends AbstractTilesGetMapOutputForma
 
     static Logger LOGGER = Logging.getLogger("org.geoserver.geopkg");
 
+    protected static final String JPEG_PNG_MIME_TYPE = "image/vnd.jpeg-png";
+
     public GeoPackageGetMapOutputFormat(WebMapService webMapService, WMS wms, GWC gwc) {
-        super(MIME_TYPE, "." + EXTENSION, Sets.newHashSet(NAMES), webMapService, wms, gwc);
+        super(GeoPkg.MIME_TYPE, "." + GeoPkg.EXTENSION, Sets.newHashSet(GeoPkg.NAMES), webMapService, wms, gwc);
     }
 
     private static class GeopackageWrapper implements TilesFile {
@@ -199,7 +196,12 @@ public class GeoPackageGetMapOutputFormat extends AbstractTilesGetMapOutputForma
      */
     @Override
     public WebMap produceMap(WMSMapContent mapContent) throws ServiceException, IOException {
+
+        // Get the map request that we'll modify before calling super.produceMap
         GetMapRequest request = mapContent.getRequest();
+
+        // See http://docs.geoserver.org/latest/en/user/services/wms/vendor.html
+        // for a comprehensive (but not complete) list of format options.
         Map formatOpts = request.getFormatOptions();
 
         // Per the OGC GeoPackage Encoding Standard, the tile coordinate (0,0) 
@@ -214,8 +216,22 @@ public class GeoPackageGetMapOutputFormat extends AbstractTilesGetMapOutputForma
         // Set the default image format to allow a mix of JPEG and PNG images
         // depending on whether individual image tiles have transparency or not.
         if (formatOpts.get("format") == null) {
-            request.getFormatOptions().put("format", CustomJpegPngMapResponse.MIME);
+            // For production, use image/vnd.jpeg-png to select the best
+            // format for individual tiles.
+            request.getFormatOptions().put("format", JPEG_PNG_MIME_TYPE);
+
+            // For debugging, you can use image/png for viewing gpkg contents with DB Browser for SQLite
+            //request.getFormatOptions().put("format", PNG_MIME_TYPE);
         }
+
+        // Enable transparent tiles if applicable for the mime-type
+        String format = (String) formatOpts.get("format");
+        if (PNG_MIME_TYPE.equals(format) || JPEG_PNG_MIME_TYPE.equals(format)) {
+            request.setTransparent(true);
+        }
+
+        // The default interpolation method is established in server's WMS Settings
+
 
         return super.produceMap(mapContent);
     }
@@ -232,6 +248,8 @@ public class GeoPackageGetMapOutputFormat extends AbstractTilesGetMapOutputForma
     }
 
     /**
+     * Writes out the map's image to a byte array that is compatible with
+     * ImageIO.read
      *
      * @param map
      * @return
@@ -244,17 +262,19 @@ public class GeoPackageGetMapOutputFormat extends AbstractTilesGetMapOutputForma
         if (map instanceof RenderedImageMap) {
             RenderedImageMapResponse response;
             switch (map.getMimeType()) {
-                case JpegPngMapResponse.MIME:
-                    response = new CustomJpegPngMapResponse(wms, new JPEGMapResponse(wms), new PNGMapResponse(wms));
+                case JPEG_PNG_MIME_TYPE:
+//                    JpegPngMapResponse mapResponse = new CustomJpegPngMapResponse(wms, new JPEGMapResponse(wms), new PNGMapResponse(wms));
+                    JpegPngMapResponse mapResponse = new JpegPngMapResponse(wms, new JPEGMapResponse(wms), new PNGMapResponse(wms));
+                    response = new MapResponseOutputStreamAdaptor(JPEG_PNG_MIME_TYPE, wms, mapResponse);
                     break;
                 case JPEG_MIME_TYPE:
-                    response = new MapResponseOutputStreamAdaptor("image/jpeg", wms, new JPEGMapResponse(wms));
+                    response = new MapResponseOutputStreamAdaptor(JPEG_MIME_TYPE, wms, new JPEGMapResponse(wms));
                     break;
                 case PNG_MIME_TYPE:
-                    response = new MapResponseOutputStreamAdaptor("image/png", wms, new PNGMapResponse(wms));
+                    response = new MapResponseOutputStreamAdaptor(PNG_MIME_TYPE, wms, new PNGMapResponse(wms));
                     break;
                 default:
-                    response = new MapResponseOutputStreamAdaptor("image/jpeg", wms, new JPEGMapResponse(wms));
+                    response = new MapResponseOutputStreamAdaptor(JPEG_MIME_TYPE, wms, new JPEGMapResponse(wms));
             }
             response.write(map, bout, null);
         } else if (map instanceof RawMap) {
@@ -309,7 +329,7 @@ public class GeoPackageGetMapOutputFormat extends AbstractTilesGetMapOutputForma
 
         // HACK: force the GeoPackage to flip the y-axis row numbers
         formatOpts.put("flipy", "true");
-        formatOpts.put("format", "image/png");
+        formatOpts.put("format", JPEG_PNG_MIME_TYPE);
 
         Integer minZoom = null;
         if (formatOpts.containsKey("min_zoom")) {
@@ -397,5 +417,4 @@ public class GeoPackageGetMapOutputFormat extends AbstractTilesGetMapOutputForma
             }
         }
     }
-
 }
