@@ -17,10 +17,13 @@
  */
 package gov.nasa.worldwind.gs.wms.map;
 
+import java.awt.RenderingHints;
 import java.awt.image.IndexColorModel;
 import java.awt.image.RenderedImage;
 import java.io.IOException;
 import java.io.OutputStream;
+import javax.media.jai.RenderedOp;
+import javax.media.jai.operator.ExtremaDescriptor;
 import org.geoserver.platform.Operation;
 import org.geoserver.platform.ServiceException;
 import org.geoserver.wms.WMS;
@@ -29,6 +32,7 @@ import org.geoserver.wms.map.JPEGMapResponse;
 import org.geoserver.wms.map.JpegPngMapResponse;
 import org.geoserver.wms.map.PNGMapResponse;
 import org.geoserver.wms.map.RenderedImageMap;
+import org.geotools.resources.image.ImageUtilities;
 
 /**
  * A customized JpegPngMapResponse that uses specialized logic to determine the
@@ -41,22 +45,23 @@ import org.geoserver.wms.map.RenderedImageMap;
  */
 public class CustomJpegPngMapResponse extends JpegPngMapResponse {
 
-    private final MapResponseOutputStreamAdaptor pngResponse;
-    private final MapResponseOutputStreamAdaptor jpegResponse;
+    private final JPEGMapResponse jpegResponse;
+    private final PNGMapResponse pngResponse;
     private Boolean jpegPreferred;
 
     public CustomJpegPngMapResponse(WMS wms, JPEGMapResponse jpegResponse, PNGMapResponse pngResponse) {
         super(wms, jpegResponse, pngResponse);
-        this.jpegResponse = new MapResponseOutputStreamAdaptor("image/jpeg", wms, jpegResponse);
-        this.pngResponse =  new MapResponseOutputStreamAdaptor("image/png", wms, pngResponse);
+        this.jpegResponse = jpegResponse;
+        this.pngResponse = pngResponse;
     }
 
     /**
      * Returns the mime type for the map.
+     *
      * @param value a WebMap instance of type RenderedImageMap
      * @param operation ignored.
      * @return Mime type of the supplied RenderedImageMap
-     * @throws ServiceException 
+     * @throws ServiceException
      */
     @Override
     public String getMimeType(Object value, Operation operation) throws ServiceException {
@@ -66,6 +71,7 @@ public class CustomJpegPngMapResponse extends JpegPngMapResponse {
 
     /**
      * Returns the filename and extension for the map.
+     *
      * @param value a WebMap instance of type RenderedImageMap
      * @param operation ignored.
      * @return A filename and extension
@@ -107,14 +113,14 @@ public class CustomJpegPngMapResponse extends JpegPngMapResponse {
 
 // TODO: Research what block does.
 // BDS: this block was not setting AGC or GDAL produced tiles with transparency as PNGs
-//            if (numBands == 4 || numBands == 2) {
-//                RenderingHints renderingHints = ImageUtilities.getRenderingHints(renderedImage);
-//                RenderedOp extremaOp = ExtremaDescriptor.create(renderedImage, null, 1, 1, false, 1, renderingHints);
-//                double[][] extrema = (double[][]) extremaOp.getProperty("Extrema");
-//                double[] mins = extrema[0];
-//
-//                this.jpegPreferred = mins[mins.length - 1] == 255; // fully opaque
-//            } else 
+            if (numBands == 4 || numBands == 2) {
+                RenderingHints renderingHints = ImageUtilities.getRenderingHints(renderedImage);
+                RenderedOp extremaOp = ExtremaDescriptor.create(renderedImage, null, 1, 1, false, 1, renderingHints);
+                double[][] extrema = (double[][]) extremaOp.getProperty("Extrema");
+                double[] mins = extrema[0];
+
+                this.jpegPreferred = mins[mins.length - 1] == 255; // fully opaque
+            } else 
             if (renderedImage.getColorModel() instanceof IndexColorModel) {
                 // JPEG would still compress a bit better, but in order to figure out
                 // if the image has transparency we'd have to expand to RGB or roll
