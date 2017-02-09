@@ -52,7 +52,6 @@ public class GeoPackageReaderTest {
             DefaultGeographicCRS.WGS84
     );
 
-    @Ignore ("TODO: resolve white/black background colors")
     @Test
     public void testZoomLevel_12() throws IOException {
         URL gpkg = getClass().getResource(GEOPACKAGE);
