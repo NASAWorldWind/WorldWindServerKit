@@ -26,8 +26,9 @@
         the war file. 
         -->
         <configId>minimal</configId>
+        <!--<configId>nasa</configId>-->
         <!--<configId>ssgf</configId>-->
-        <configDirectory>${basedir}/../data</configDirectory>
+        <configDirectory>${basedir}/../data_config</configDirectory>
     </properties>    
     
     <dependencies>
@@ -130,6 +131,12 @@
             <artifactId>gs-web-wps</artifactId>
             <version>${gs.version}</version>
         </dependency>
+        
+        <!--GDAL extension-->
+        <dependency>
+            <groupId>org.geoserver.extension</groupId>
+            <artifactId>gs-gdal</artifactId>
+        </dependency>
 
         <!--WorldWind GeoServer WMS module-->
         <dependency>
@@ -193,7 +200,12 @@
         <dependency>
             <groupId>org.geotools</groupId>
             <artifactId>gt-imagepyramid</artifactId>
-        </dependency>     
+        </dependency>    
+         <!--WPS--> 
+        <dependency>
+            <groupId>org.geotools</groupId>
+            <artifactId>gt-process-geometry</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>org.eclipse.jetty</groupId>
