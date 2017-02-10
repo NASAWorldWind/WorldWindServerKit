@@ -18,6 +18,7 @@ import java.io.ByteArrayOutputStream;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.SortedMap;
@@ -67,6 +68,8 @@ public class GeoPackageGetMapOutputFormat extends AbstractTilesGetMapOutputForma
     static Logger LOGGER = Logging.getLogger("org.geoserver.geopkg");
 
     protected static final String JPEG_PNG_MIME_TYPE = "image/vnd.jpeg-png";
+
+    protected static final int TILESET_NAME_MAX_LEN = 30;   // an arbitrary value 
 
     public GeoPackageGetMapOutputFormat(WebMapService webMapService, WMS wms, GWC gwc) {
         super(GeoPkg.MIME_TYPE, "." + GeoPkg.EXTENSION, Sets.newHashSet(GeoPkg.NAMES), webMapService, wms, gwc);
@@ -230,10 +233,61 @@ public class GeoPackageGetMapOutputFormat extends AbstractTilesGetMapOutputForma
             request.setTransparent(true);
         }
 
+        // Set the tileset name to a valid SQLite table identifier. By default,
+        // the superclass uses the layer name(s) which may not be valid SQL.
+        // Here we inject our own tileset name to override the default behavior.
+        String tilesetName = (String) formatOpts.get("tileset_name");
+        if (tilesetName == null || !SQLiteUtils.isValidIdentifier(tilesetName)) {
+            request.getFormatOptions().put("tileset_name", getValidTableName(mapContent));
+        }
+
         // The default interpolation method is established in server's WMS Settings
-
-
         return super.produceMap(mapContent);
+    }
+
+    /**
+     * Gets a tile set name in the form of a valid SQLite table name from the
+     * map layers.
+     *
+     * @param mapContent Contains the request with the layer names
+     * @return A valid SQLite table name
+     */
+    protected String getValidTableName(WMSMapContent mapContent) {
+        List<MapLayerInfo> mapLayers = mapContent.getRequest().getLayers();
+        Iterator<MapLayerInfo> it = mapLayers.iterator();
+
+        // Concatenate layer name(s) ...
+        String name = "";
+        while (it.hasNext()) {
+            name += it.next().getLayerInfo().getName() + "_";
+        }
+        // ... and remove the trailing underscore
+        name = name.substring(0, name.length() - 1);
+
+        // Names starting with numbers are not valid
+        if (Character.isDigit(name.charAt(0))) {
+            name = "num_" + name;
+        }
+        // Simplify the name. Quoting the name to make it valid SQL is not permitted 
+        // as the GeoPackage module embeds the name-string into other identifiers
+        // and thus it must be simple valid SQL free of quote characters.
+        name = name.replaceAll("[^a-zA-Z0-9_]", "_");
+
+        // Check for reserved names 
+        if (SQLiteUtils.isKeyword(name)) {
+            // Ensure the resulting name is not a keyword by appending some text
+            name = name + "_tiles";
+        } else if (name.startsWith("sqlite_") || name.startsWith("gpkg_")) {
+            // Ensure there are no name collisions with gpkg or sqlite tables by prepending some text
+            name = "my_" + name;
+        }
+
+        // Truncate excessively long names
+        if (name.length() > TILESET_NAME_MAX_LEN) {
+            name = name.substring(0, TILESET_NAME_MAX_LEN);
+        }
+
+        return name;
     }
 
     /**
@@ -263,7 +317,6 @@ public class GeoPackageGetMapOutputFormat extends AbstractTilesGetMapOutputForma
             RenderedImageMapResponse response;
             switch (map.getMimeType()) {
                 case JPEG_PNG_MIME_TYPE:
-//                    JpegPngMapResponse mapResponse = new CustomJpegPngMapResponse(wms, new JPEGMapResponse(wms), new PNGMapResponse(wms));
                     JpegPngMapResponse mapResponse = new JpegPngMapResponse(wms, new JPEGMapResponse(wms), new PNGMapResponse(wms));
                     response = new MapResponseOutputStreamAdaptor(JPEG_PNG_MIME_TYPE, wms, mapResponse);
                     break;
@@ -306,10 +359,12 @@ public class GeoPackageGetMapOutputFormat extends AbstractTilesGetMapOutputForma
 
         if (mapLayers.isEmpty()) {
             return;
+
         }
 
         // Get the RasterCleaner object
-        RasterCleaner cleaner = GeoServerExtensions.bean(RasterCleaner.class);
+        RasterCleaner cleaner = GeoServerExtensions.bean(RasterCleaner.class
+        );
 
         // figure out the actual bounds of the tiles to be renderered
         ReferencedEnvelope bbox = bounds(request);
@@ -323,7 +378,9 @@ public class GeoPackageGetMapOutputFormat extends AbstractTilesGetMapOutputForma
         geopkg.create(e);
 
         GetMapRequest req = new GetMapRequest();
-        OwsUtils.copy(request, req, GetMapRequest.class);
+        OwsUtils
+                .copy(request, req, GetMapRequest.class
+                );
         req.setLayers(mapLayers);
         Map formatOpts = req.getFormatOptions();
 
