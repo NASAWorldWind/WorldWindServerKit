@@ -220,7 +220,7 @@ public class GeoPackageReader extends AbstractGridCoverage2DReader {
             Rectangle dim = null;
 
             // Extract the GridGeometry2D from the parameters and set the
-            // requested evelope and dimensions.
+            // requested envelope and dimensions.
             if (parameters != null) {
                 for (int i = 0; i < parameters.length; i++) {
                     final ParameterValue param = (ParameterValue) parameters[i];
@@ -228,12 +228,11 @@ public class GeoPackageReader extends AbstractGridCoverage2DReader {
                     if (name.equals(AbstractGridFormat.READ_GRIDGEOMETRY2D.getName())) {
                         final GridGeometry2D gg = (GridGeometry2D) param.getValue();
                         try {
-                            requestedEnvelope = ReferencedEnvelope.create(gg.getEnvelope(), gg.getCoordinateReferenceSystem()).transform(crs, true);;
+                            requestedEnvelope = ReferencedEnvelope.create(gg.getEnvelope(), gg.getCoordinateReferenceSystem()).transform(crs, true);
                         } catch (Exception e) {
                             requestedEnvelope = null;
                         }
                         dim = gg.getGridRange2D().getBounds();
-                        continue;
                     }
                 }
             }
@@ -278,11 +277,12 @@ public class GeoPackageReader extends AbstractGridCoverage2DReader {
             double pixSizeY = bestMatrix.getYPixelSize();
 
             if (requestedEnvelope != null) { // crop tile set to requested envelope       
-
                 // Test if the requested envelope aligns with tile matrix boundaries
                 double remX = (requestedEnvelope.getMinimum(0) - originX) % resX;
                 double remY = (originY - requestedEnvelope.getMaximum(1)) % resY;
-                if (dim.getWidth() == tileWidth && dim.getHeight() == tileHeight && remX < pixSizeX && remY < pixSizeY) {
+                boolean extentsWithinAPixel = (remX < pixSizeX) && (remY < pixSizeY);
+                boolean identicalTileSize = (dim != null && dim.getWidth() == tileWidth && dim.getHeight() == tileHeight);
+                if (identicalTileSize && extentsWithinAPixel) {
                     leftTile = Math.max(leftTile, (int) Math.round((requestedEnvelope.getMinimum(0) - originX) / resX));
                     topTile = Math.max(topTile, (int) Math.round((originY - requestedEnvelope.getMaximum(1)) / resY));
                     rightTile = leftTile;
@@ -294,7 +294,6 @@ public class GeoPackageReader extends AbstractGridCoverage2DReader {
                     bottomTile = Math.max(topTile, (int) Math.min(bottomTile, Math.round(Math.floor((originY - requestedEnvelope.getMinimum(1)) / resY))));
                 }
             }
-            boolean isSingleTileRequest = leftTile == rightTile && topTile == bottomTile;
 
             int width = (int) (rightTile - leftTile + 1) * tileWidth;
             int height = (int) (bottomTile - topTile + 1) * tileHeight;
@@ -319,29 +318,20 @@ public class GeoPackageReader extends AbstractGridCoverage2DReader {
 //                    graphics.drawRect(0, 0, tileImage.getWidth(), tileImage.getHeight());
 //                }
                 ////////////////////////////////////////////////////////////////
+                
                 if (image == null) {
-                    if (isSingleTileRequest) {
-                        // Copy the source image type
-                        image = getStartImage(tileImage, width, height);
-                    } else {
-                        image = getStartImage(width, height);
-                    }
+                    image = getStartImage(width, height);
                 }
 
                 // Get the tile coordinates within the mosaic
                 int posx = (int) (tile.getColumn() - leftTile) * tileWidth;
                 int posy = (int) (tile.getRow() - topTile) * tileHeight;
 
-                if (isSingleTileRequest) {
-                    // Copy the source image data
-                    image.getRaster().setRect(posx, posy, tileImage.getData());
-                } else {
-                    // Draw the tile in the mosaic. We 'draw' versus 'copy data' to 
-                    // accomdate potentially different SampleModels between image tiles,
-                    // e.g., when there's a mix of PNG and JPEG image types in the table.
-                    Graphics2D g2 = image.createGraphics();
-                    g2.drawImage(tileImage, posx, posy, tileWidth, tileHeight, null);
-                }
+                // Draw the tile. We 'draw' versus using 'copy data' to 
+                // accomdate potentially different SampleModels between image tiles,
+                // e.g., when there's a mix of PNG and JPEG image types in the table.
+                Graphics2D g2 = image.createGraphics();
+                g2.drawImage(tileImage, posx, posy, tileWidth, tileHeight, null);
             }
 
             it.close();
@@ -355,6 +345,13 @@ public class GeoPackageReader extends AbstractGridCoverage2DReader {
         return coverageFactory.create(entry.getTableName(), image, resultEnvelope);
     }
 
+    /**
+     * Creates a BufferedImage from the supplied image data. 
+     * 
+     * @param data A byte array containing image data
+     * @return A new BufferedImage
+     * @throws IOException 
+     */
     protected static BufferedImage readImage(byte[] data) throws IOException {
         ByteArrayInputStream bis = new ByteArrayInputStream(data);
         Object source = bis;
@@ -367,6 +364,36 @@ public class GeoPackageReader extends AbstractGridCoverage2DReader {
         return reader.read(0, param);
     }
 
+    /**
+     * Creates a transparent image suitable for rendering tiles into.
+     *
+     * @param width The width of the new image
+     * @param height The height of the new image
+     * @return A new BufferedImage with transparent fill.
+     */
+    protected BufferedImage getStartImage(int width, int height) {
+        int imageType = BufferedImage.TYPE_INT_ARGB;
+
+        BufferedImage image = new BufferedImage(width, height, imageType);
+
+        // Fill with white transparent background
+        Graphics2D g2D = (Graphics2D) image.getGraphics();
+        Color save = g2D.getColor();
+        g2D.setColor(new Color(255, 255, 255, 0));
+        g2D.fillRect(0, 0, image.getWidth(), image.getHeight());
+        g2D.setColor(save);
+        return image;
+    }
+
+    /**
+     * Creates an image matching a source image's color model and properties.
+     *
+     * @param copyFrom The source image
+     * @param width The width of the new image
+     * @param height The height of the new image
+     * @return A new BufferedImage matching the source image's color model and
+     * properties
+     */
     protected BufferedImage getStartImage(BufferedImage copyFrom, int width, int height) {
         Map<String, Object> properties = null;
 
@@ -383,33 +410,6 @@ public class GeoPackageReader extends AbstractGridCoverage2DReader {
         BufferedImage image = new BufferedImage(copyFrom.getColorModel(), raster,
                 copyFrom.isAlphaPremultiplied(), (Hashtable<?, ?>) properties);
 
-        //white background
-//        Graphics2D g2D = (Graphics2D) image.getGraphics();
-//        Color save = g2D.getColor();
-//        g2D.setColor(Color.WHITE);
-//        g2D.fillRect(0, 0, image.getWidth(), image.getHeight());
-//        g2D.setColor(save);
         return image;
-    }
-
-    protected BufferedImage getStartImage(int imageType, int width, int height) {
-        if (imageType == BufferedImage.TYPE_CUSTOM) {
-            imageType = BufferedImage.TYPE_3BYTE_BGR;
-//            imageType = BufferedImage.TYPE_INT_ARGB;
-        }
-
-        BufferedImage image = new BufferedImage(width, height, imageType);
-
-        //white background
-//        Graphics2D g2D = (Graphics2D) image.getGraphics();
-//        Color save = g2D.getColor();
-//        g2D.setColor(Color.WHITE);
-//        g2D.fillRect(0, 0, image.getWidth(), image.getHeight());
-//        g2D.setColor(save);
-        return image;
-    }
-
-    protected BufferedImage getStartImage(int width, int height) {
-        return getStartImage(BufferedImage.TYPE_CUSTOM, width, height);
     }
 }

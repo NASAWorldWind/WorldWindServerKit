@@ -9,19 +9,20 @@ package gov.nasa.worldwind.gs.wms.map;
 import java.awt.image.BufferedImage;
 import java.awt.image.RenderedImage;
 import java.awt.image.WritableRaster;
+import javax.media.jai.RenderedOp;
 import org.geoserver.wms.WMS;
 import org.geoserver.wms.WMSMapContent;
 import org.geoserver.wms.map.RenderedImageMap;
 import org.geoserver.wms.map.RenderedImageMapOutputFormat;
 
 /**
- * CustomRenderedImageMapOutputFormat is a customized
- * RenderedImageMapOutputFormat for the image/jpeg mime type. It ensures the
+ * CustomRenderedImageMapOutputFormat is a customized 
+ * RenderedImageMapOutputFormat Spring bean. It ensures the
  * rendered image is compatible for content in an HttpServletResponse.
  *
  * This Spring bean is used by the MapPreviewPage.getAvailableWMSFormats() which
  * calls GeoServerApplication.getBeansOfType(GetMapOutputFormat.class) to
- * discover the registered output format for the image/jpeg mime type.
+ * discover the registered output format the specified mime type.
  *
  * See applicationContext.xml.
  *
@@ -67,7 +68,7 @@ public class CustomRenderedImageMapOutputFormat extends RenderedImageMapOutputFo
         // image compatible with the ImageIO.read() method used to process the 
         // "image" content returned in a HttpServletResponse.
         //
-        if ((image.getTileGridXOffset() != 0 || image.getTileGridYOffset() != 0)) {
+        if (image instanceof RenderedOp && (image.getTileGridXOffset() != 0 || image.getTileGridYOffset() != 0)) {
             // The following code to create the finalImage was copied from the
             // GeoTools ImageWorker.writeJPEG() method.
             final BufferedImage finalImage = new BufferedImage(

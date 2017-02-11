@@ -13,13 +13,12 @@ import gov.nasa.worldwind.geopkg.Tile;
 import gov.nasa.worldwind.geopkg.TileEntry;
 import gov.nasa.worldwind.geopkg.TileMatrix;
 
-import static gov.nasa.worldwind.gs.geopkg.GeoPkg.*;
-import gov.nasa.worldwind.gs.wms.map.CustomJpegPngMapResponse;
-import java.awt.image.RenderedImage;
+import gov.nasa.worldwind.gs.wms.map.MapResponseOutputStreamAdaptor;
 import java.io.ByteArrayOutputStream;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.SortedMap;
@@ -40,7 +39,6 @@ import org.geoserver.wms.WMSMapContent;
 import org.geoserver.wms.WebMap;
 import org.geoserver.wms.WebMapService;
 import org.geoserver.wms.map.JPEGMapResponse;
-import org.geoserver.wms.map.JpegOrPngChooser;
 import org.geoserver.wms.map.JpegPngMapResponse;
 import org.geoserver.wms.map.PNGMapResponse;
 import org.geoserver.wms.map.RawMap;
@@ -50,7 +48,6 @@ import org.geoserver.wms.map.RenderedImageMapResponse;
 import org.geotools.geometry.jts.ReferencedEnvelope;
 import org.geotools.referencing.CRS;
 import org.geotools.util.logging.Logging;
-import org.geowebcache.grid.BoundingBox;
 
 import org.geowebcache.grid.Grid;
 import org.geowebcache.grid.GridSet;
@@ -70,8 +67,12 @@ public class GeoPackageGetMapOutputFormat extends AbstractTilesGetMapOutputForma
 
     static Logger LOGGER = Logging.getLogger("org.geoserver.geopkg");
 
+    protected static final String JPEG_PNG_MIME_TYPE = "image/vnd.jpeg-png";
+
+    protected static final int TILESET_NAME_MAX_LEN = 30;   // an arbitrary value 
+
     public GeoPackageGetMapOutputFormat(WebMapService webMapService, WMS wms, GWC gwc) {
-        super(MIME_TYPE, "." + EXTENSION, Sets.newHashSet(NAMES), webMapService, wms, gwc);
+        super(GeoPkg.MIME_TYPE, "." + GeoPkg.EXTENSION, Sets.newHashSet(GeoPkg.NAMES), webMapService, wms, gwc);
     }
 
     private static class GeopackageWrapper implements TilesFile {
@@ -198,7 +199,12 @@ public class GeoPackageGetMapOutputFormat extends AbstractTilesGetMapOutputForma
      */
     @Override
     public WebMap produceMap(WMSMapContent mapContent) throws ServiceException, IOException {
+
+        // Get the map request that we'll modify before calling super.produceMap
         GetMapRequest request = mapContent.getRequest();
+
+        // See http://docs.geoserver.org/latest/en/user/services/wms/vendor.html
+        // for a comprehensive (but not complete) list of format options.
         Map formatOpts = request.getFormatOptions();
 
         // Per the OGC GeoPackage Encoding Standard, the tile coordinate (0,0) 
@@ -213,10 +219,75 @@ public class GeoPackageGetMapOutputFormat extends AbstractTilesGetMapOutputForma
         // Set the default image format to allow a mix of JPEG and PNG images
         // depending on whether individual image tiles have transparency or not.
         if (formatOpts.get("format") == null) {
-            request.getFormatOptions().put("format", CustomJpegPngMapResponse.MIME);
+            // For production, use image/vnd.jpeg-png to select the best
+            // format for individual tiles.
+            request.getFormatOptions().put("format", JPEG_PNG_MIME_TYPE);
+
+            // For debugging, you can use image/png for viewing gpkg contents with DB Browser for SQLite
+            //request.getFormatOptions().put("format", PNG_MIME_TYPE);
         }
 
+        // Enable transparent tiles if applicable for the mime-type
+        String format = (String) formatOpts.get("format");
+        if (PNG_MIME_TYPE.equals(format) || JPEG_PNG_MIME_TYPE.equals(format)) {
+            request.setTransparent(true);
+        }
+
+        // Set the tileset name to a valid SQLite table identifier. By default,
+        // the superclass uses the layer name(s) which may not be valid SQL.
+        // Here we inject our own tileset name to override the default behavior.
+        String tilesetName = (String) formatOpts.get("tileset_name");
+        if (tilesetName == null || !SQLiteUtils.isValidIdentifier(tilesetName)) {
+            request.getFormatOptions().put("tileset_name", getValidTableName(mapContent));
+        }
+
+        // The default interpolation method is established in server's WMS Settings
         return super.produceMap(mapContent);
+    }
+
+    /**
+     * Gets a tile set name in the form of a valid SQLite table name from the
+     * map layers.
+     *
+     * @param mapContent Contains the request with the layer names
+     * @return A valid SQLite table name
+     */
+    protected String getValidTableName(WMSMapContent mapContent) {
+        List<MapLayerInfo> mapLayers = mapContent.getRequest().getLayers();
+        Iterator<MapLayerInfo> it = mapLayers.iterator();
+
+        // Concatenate layer name(s) ...
+        String name = "";
+        while (it.hasNext()) {
+            name += it.next().getLayerInfo().getName() + "_";
+        }
+        // ... and remove the trailing underscore
+        name = name.substring(0, name.length() - 1);
+
+        // Names starting with numbers are not valid
+        if (Character.isDigit(name.charAt(0))) {
+            name = "num_" + name;
+        }
+        // Simplify the name. Quoting the name to make it valid SQL is not permitted 
+        // as the GeoPackage module embeds the name-string into other identifiers
+        // and thus it must be simple valid SQL free of quote characters.
+        name = name.replaceAll("[^a-zA-Z0-9_]", "_");
+
+        // Check for reserved names 
+        if (SQLiteUtils.isKeyword(name)) {
+            // Ensure the resulting name is not a keyword by appending some text
+            name = name + "_tiles";
+        } else if (name.startsWith("sqlite_") || name.startsWith("gpkg_")) {
+            // Ensure there are no name collisions with gpkg or sqlite tables by prepending some text
+            name = "my_" + name;
+        }
+
+        // Truncate excessively long names
+        if (name.length() > TILESET_NAME_MAX_LEN) {
+            name = name.substring(0, TILESET_NAME_MAX_LEN);
+        }
+
+        return name;
     }
 
     /**
@@ -231,10 +302,12 @@ public class GeoPackageGetMapOutputFormat extends AbstractTilesGetMapOutputForma
     }
 
     /**
-     * 
+     * Writes out the map's image to a byte array that is compatible with
+     * ImageIO.read
+     *
      * @param map
      * @return
-     * @throws IOException 
+     * @throws IOException
      */
     @Override
     protected byte[] toBytes(WebMap map) throws IOException {
@@ -243,17 +316,18 @@ public class GeoPackageGetMapOutputFormat extends AbstractTilesGetMapOutputForma
         if (map instanceof RenderedImageMap) {
             RenderedImageMapResponse response;
             switch (map.getMimeType()) {
-                case JpegPngMapResponse.MIME:
-                    response = new CustomJpegPngMapResponse(wms, new JPEGMapResponse(wms), new PNGMapResponse(wms));
+                case JPEG_PNG_MIME_TYPE:
+                    JpegPngMapResponse mapResponse = new JpegPngMapResponse(wms, new JPEGMapResponse(wms), new PNGMapResponse(wms));
+                    response = new MapResponseOutputStreamAdaptor(JPEG_PNG_MIME_TYPE, wms, mapResponse);
                     break;
                 case JPEG_MIME_TYPE:
-                    response = new JPEGMapResponse(wms);
+                    response = new MapResponseOutputStreamAdaptor(JPEG_MIME_TYPE, wms, new JPEGMapResponse(wms));
                     break;
                 case PNG_MIME_TYPE:
-                    response = new PNGMapResponse(wms);
+                    response = new MapResponseOutputStreamAdaptor(PNG_MIME_TYPE, wms, new PNGMapResponse(wms));
                     break;
                 default:
-                    response = new JPEGMapResponse(wms);
+                    response = new MapResponseOutputStreamAdaptor(JPEG_MIME_TYPE, wms, new JPEGMapResponse(wms));
             }
             response.write(map, bout, null);
         } else if (map instanceof RawMap) {
@@ -285,10 +359,12 @@ public class GeoPackageGetMapOutputFormat extends AbstractTilesGetMapOutputForma
 
         if (mapLayers.isEmpty()) {
             return;
+
         }
 
         // Get the RasterCleaner object
-        RasterCleaner cleaner = GeoServerExtensions.bean(RasterCleaner.class);
+        RasterCleaner cleaner = GeoServerExtensions.bean(RasterCleaner.class
+        );
 
         // figure out the actual bounds of the tiles to be renderered
         ReferencedEnvelope bbox = bounds(request);
@@ -302,13 +378,15 @@ public class GeoPackageGetMapOutputFormat extends AbstractTilesGetMapOutputForma
         geopkg.create(e);
 
         GetMapRequest req = new GetMapRequest();
-        OwsUtils.copy(request, req, GetMapRequest.class);
+        OwsUtils
+                .copy(request, req, GetMapRequest.class
+                );
         req.setLayers(mapLayers);
         Map formatOpts = req.getFormatOptions();
 
         // HACK: force the GeoPackage to flip the y-axis row numbers
         formatOpts.put("flipy", "true");
-        formatOpts.put("format", "image/png");
+        formatOpts.put("format", JPEG_PNG_MIME_TYPE);
 
         Integer minZoom = null;
         if (formatOpts.containsKey("min_zoom")) {
@@ -396,5 +474,4 @@ public class GeoPackageGetMapOutputFormat extends AbstractTilesGetMapOutputForma
             }
         }
     }
-
 }
