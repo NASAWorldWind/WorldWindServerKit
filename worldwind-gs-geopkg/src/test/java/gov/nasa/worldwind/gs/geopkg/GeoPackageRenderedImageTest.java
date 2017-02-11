@@ -129,7 +129,6 @@ public class GeoPackageRenderedImageTest extends WMSTestSupport {
         ImageAssert.assertEquals(mapImage1, mapImage2, /*differing pixels threshold*/ 250);
     }
 
-    @Ignore ("TODO: resolve issue with background/border color")
     @Test
     public void testGetMap_1To1M() throws Exception {
         URL gpkg = getClass().getResource(GEOPACKAGE);
@@ -152,7 +151,6 @@ public class GeoPackageRenderedImageTest extends WMSTestSupport {
         ImageAssert.assertEquals(DataUtilities.urlToFile(getClass().getResource("agc-JOG(1).jpg")), img, 250);
     }
 
-    @Ignore ("TODO: resolve issue with background/border color")
     @Test
     public void testProduceMap_1To1M() throws Exception {
         URL gpkg = getClass().getResource(GEOPACKAGE);
