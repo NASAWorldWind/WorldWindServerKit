@@ -137,6 +137,8 @@
                             <goal>run</goal>
                         </goals>
                     </execution>
+                    
+                    <!-- Unzip the Java Server JRE --> 
                     <execution>
                         <id>unpackJdk</id>
                         <phase>package</phase>
@@ -149,11 +151,28 @@
                             <goal>run</goal>
                         </goals>
                     </execution>
+                    
+                    <!-- Unzip the GDAL natives and data --> 
+                    <execution>
+                        <id>unpackGDAL</id>
+                        <phase>package</phase>
+                        <configuration>
+                            <tasks>
+                                <untar src="${project.basedir}/src/main/resources/gdal/gdal192-Ubuntu12-gcc4.6.3-x86_64.tar.gz" dest="${project.build.directory}/gdal/ubuntu64" compression="gzip"/>
+                                <unzip src="${project.basedir}/src/main/resources/gdal/gdal-1.9.2-MSVC2010-x64.zip" dest="${project.build.directory}/gdal/win64"/>
+                                <unzip src="${project.basedir}/src/main/resources/gdal/gdal-data.zip" dest="${project.build.directory}/gdal"/>
+                            </tasks>                            
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
                 </executions>
             </plugin>
                         
             <!--
             Build the assembly (distribution) of sources and/or binaries.
+            See: https://maven.apache.org/plugins-archives/maven-assembly-plugin-2.2.2/index.html
             -->
             <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
@@ -163,12 +182,17 @@
                         <configuration>
                             <descriptors>
                                 <!-- Binary distibution content -->
-                                <descriptor>src/assembly/bin.xml</descriptor>
+                                <descriptor>src/assembly/bin-assembly.xml</descriptor>
                                 
-                                <descriptor>src/assembly/ssgf.xml</descriptor>
+                                <descriptor>src/assembly/win64-assembly.xml</descriptor>
+                                
+                                <descriptor>src/assembly/linux64-assembly.xml</descriptor>
+                                
+                                <descriptor>src/assembly/hybrid_os-assembly.xml</descriptor>
                                 
                                 <!--WAR file distibution content -->
                                 <descriptor>src/assembly/war.xml</descriptor>
+                                
                             </descriptors>
                             
                             <!-- Output file and location -->
