@@ -8,6 +8,12 @@ echo Welcome to GeoServer!
 echo.
 set error=0
 
+
+rem GDAL_DATA not defined
+if "%GDAL_DATA%" == "" goto trySystemJava
+set GDAL_DATA% _DATA%JAVA=%JAVA_HOME%\bin\java
+
+
 rem JAVA_HOME not defined
 if "%JAVA_HOME%" == "" goto trySystemJava
 

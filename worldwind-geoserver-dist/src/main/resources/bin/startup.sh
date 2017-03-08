@@ -69,9 +69,28 @@ if [ -z $GEOSERVER_DATA_DIR ]; then
     fi
 fi
 
+
+#Add the local GDAL distribution to the path
+if [ -r "$GEOSERVER_HOME"/gdal/lib ]; then
+    export LD_LIBRARY_PATH="$GEOSERVER_HOME"/gdal/lib
+fi
+
+#Set the GDAL data directory: GDAL_DATA
+if [ -z $GDAL_DATA ]; then
+    if [ -r "$GEOSERVER_HOME"/gdal/data ]; then
+        export GDAL_DATA="$GEOSERVER_HOME"/gdal/data
+    else
+        echo "No GDAL_DATA found, using GDAL defaults"
+	      GDAL_DATA=""
+    fi
+fi
+
 cd "$GEOSERVER_HOME"
 
 echo "GEOSERVER DATA DIR is $GEOSERVER_DATA_DIR"
+echo "GDAL LIBRARY PATH is $LD_LIBRARY_PATH"
+echo "GDAL DATA DIR is $GDAL_DATA"
+
 #added headless to true by default, if this messes anyone up let the list
 #know and we can change it back, but it seems like it won't hurt -ch
 exec "$_RUNJAVA" $JAVA_OPTS -DGEOSERVER_DATA_DIR="$GEOSERVER_DATA_DIR" -Djava.awt.headless=true -DSTOP.PORT=8079 -DSTOP.KEY=geoserver -jar start.jar 
