@@ -1,0 +1,24 @@
+<assembly>
+    <id>win64</id>
+    <formats>
+        <format>zip</format>
+    </formats>
+    <includeBaseDirectory>false</includeBaseDirectory>
+    <componentDescriptors>
+        <componentDescriptor>src/assembly/geoserver.xml</componentDescriptor>
+        <componentDescriptor>src/assembly/jetty.xml</componentDescriptor>
+        <componentDescriptor>src/assembly/gdal-win64.xml</componentDescriptor>
+        <componentDescriptor>src/assembly/data-nasa.xml</componentDescriptor>
+    </componentDescriptors>    
+    <fileSets>
+        <fileSet>
+            <!--windows batch files--> 
+            <directory>src/main/resources/bin</directory>
+            <lineEnding>keep</lineEnding>
+            <outputDirectory>worldwind-geoserver-${project.version}/bin</outputDirectory>
+            <includes>
+                <include>*.bat</include>
+            </includes>
+        </fileSet>
+    </fileSets>
+</assembly>

@@ -1,0 +1,20 @@
+<component>
+    <fileSets>
+        <fileSet>
+            <!-- GDAL data  --> 
+            <directory>target/gdal/gdal-data</directory>
+            <outputDirectory>worldwind-geoserver-${project.version}/gdal/data</outputDirectory>
+            <includes>
+                <include>**/*</include>
+            </includes>
+        </fileSet>
+        <fileSet>
+            <!-- GDAL natives --> 
+            <directory>target/gdal/win64</directory>
+            <outputDirectory>worldwind-geoserver-${project.version}/gdal/lib</outputDirectory>
+            <includes>
+                <include>**/*</include>
+            </includes>
+        </fileSet>
+    </fileSets>
+</component>

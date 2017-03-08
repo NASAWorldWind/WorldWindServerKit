@@ -1,0 +1,18 @@
+<!--The GDAL 1.9.2 native binaries and data for the hybrid OS.-->
+<component>
+    <fileSets>
+        <fileSet>
+            <directory>src/main/resources/gdal</directory>
+            <outputDirectory>worldwind-geoserver-${project.version}</outputDirectory>
+            <includes>
+                
+                <!--This file is to be extracted to gdal/lib by the setup script-->
+                <include>gdal192-CentOS5.8-gcc4.1.2-x86_64.tar.gz</include>
+                
+                <!--This file is to be extracted to gdal/data by the setup script-->
+                <include>gdal-data.zip</include>
+                
+            </includes>            
+        </fileSet>
+    </fileSets>
+</component>

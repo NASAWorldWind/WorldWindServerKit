@@ -1,0 +1,58 @@
+<!--See: http://maven.apache.org/plugins/maven-assembly-plugin/assembly.html-->
+<assembly>
+    <id>linux64</id>
+    <formats>
+        <format>zip</format>
+        <format>tgz</format>
+    </formats>
+    <includeBaseDirectory>false</includeBaseDirectory>
+    <componentDescriptors>
+        <componentDescriptor>src/assembly/geoserver.xml</componentDescriptor>
+        <componentDescriptor>src/assembly/jetty.xml</componentDescriptor>
+        <componentDescriptor>src/assembly/gdal-ubuntu64.xml</componentDescriptor>
+        <componentDescriptor>src/assembly/data-nasa.xml</componentDescriptor>
+    </componentDescriptors>    
+    <fileSets>
+        <fileSet>
+            <!-- the Java Server JRE distribution(s); to be unzipped on the target device -->
+            <directory>src/main/resources/java</directory>
+            <outputDirectory>worldwind-geoserver-${project.version}</outputDirectory>
+        </fileSet>
+        
+        <fileSet>
+            <!-- the GDAL native binaries distribution; to be unzipped on the target device -->
+            <directory>src/main/resources/gdal</directory>
+            <outputDirectory>worldwind-geoserver-${project.version}</outputDirectory>
+            <includes>
+                <!--This file should be extracted to gdal/lib-->
+                <include>gdal192-Ubuntu12-gcc4.6.3-x86_64.tar.gz</include>
+                <!--This file should be extracted to gdal/data-->
+                <include>gdal-data.zip</include>
+            </includes>            
+        </fileSet>
+        
+        <fileSet>
+            <!--unix shell geoserver scripts--> 
+            <directory>src/main/resources/bin</directory>
+            <lineEnding>unix</lineEnding>
+            <outputDirectory>worldwind-geoserver-${project.version}/bin</outputDirectory>
+            <fileMode>0755</fileMode>
+            <directoryMode>0755</directoryMode>
+            <includes>
+                <include>*.sh</include>
+            </includes>
+        </fileSet>
+
+        <fileSet>
+            <!-- the configuration and statup scripts -->
+            <directory>src/main/resources/linux</directory>
+            <outputDirectory>worldwind-geoserver-${project.version}</outputDirectory>
+            <lineEnding>unix</lineEnding>
+            <fileMode>0755</fileMode>
+            <directoryMode>0755</directoryMode>
+            <includes>
+                <include>*.sh</include>
+            </includes>       
+        </fileSet>
+    </fileSets>
+</assembly>

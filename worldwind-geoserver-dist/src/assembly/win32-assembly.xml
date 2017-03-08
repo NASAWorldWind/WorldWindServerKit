@@ -1,7 +1,6 @@
 <assembly>
-    <id>ssgf</id>
+    <id>win32</id>
     <formats>
-        <format>tgz</format>
         <format>zip</format>
     </formats>
     <includeBaseDirectory>false</includeBaseDirectory>
@@ -9,7 +8,7 @@
         <fileSet>
             <!-- the main webapp -->
             <directory>../worldwind-geoserver/target/worldwind-geoserver</directory>
-            <outputDirectory>${ssgf.dist.folder}/${geoserver.dist.folder}/webapps/worldwind-geoserver</outputDirectory>
+            <outputDirectory>worldwind-geoserver-${project.version}/webapps/worldwind-geoserver</outputDirectory>
             <includes>
                 <include>**/*</include>
             </includes>
@@ -21,17 +20,17 @@
             </excludes>
         </fileSet>
         <fileSet>
-            <!-- the data directory--> 
-            <directory>../data_config/ssgf</directory>
-            <outputDirectory>${ssgf.dist.folder}/${geoserver.dist.folder}/data_dir</outputDirectory>
+             <!-- the data directory--> 
+            <directory>../worldwind-geoserver/target/worldwind-geoserver/minimal</directory>
+            <outputDirectory>worldwind-geoserver-${project.version}/data_dir</outputDirectory>
             <includes>
                 <include>**/*</include>
             </includes>
         </fileSet>
         <fileSet>
-            <!--the libs needed to run jetty--> 
+             <!--the libs needed to run jetty--> 
             <directory>target/dependency</directory>
-            <outputDirectory>${ssgf.dist.folder}/${geoserver.dist.folder}/lib</outputDirectory>
+            <outputDirectory>worldwind-geoserver-${project.version}/lib</outputDirectory>
             <includes>
                 <include>ant-*.jar</include>
                 <include>commons-el-*.jar</include>
@@ -51,17 +50,26 @@
             </excludes>
         </fileSet>
         <fileSet>
-            <!--unix shell scripts--> 
+             <!--windows batch files--> 
+            <directory>src/main/resources/bin</directory>
+            <lineEnding>keep</lineEnding>
+            <outputDirectory>worldwind-geoserver-${project.version}/bin</outputDirectory>
+            <includes>
+                <include>*.bat</include>
+            </includes>
+        </fileSet>
+        <fileSet>
+             <!--unix shell scripts--> 
             <directory>src/main/resources/bin</directory>
             <lineEnding>unix</lineEnding>
-            <outputDirectory>${ssgf.dist.folder}/${geoserver.dist.folder}/bin</outputDirectory>
+            <outputDirectory>worldwind-geoserver-${project.version}/bin</outputDirectory>
             <fileMode>0755</fileMode>
             <directoryMode>0755</directoryMode>
             <includes>
                 <include>*.sh</include>
             </includes>
         </fileSet>
-        <!--        <fileSet>
+<!--        <fileSet>
              the README and other text files 
             <directory>release</directory>
             <outputDirectory>geoserver-2.10.0</outputDirectory>
@@ -73,7 +81,7 @@
                 <include>RELEASE_NOTES.txt</include>
             </includes>
         </fileSet>-->
-        <!--        <fileSet>
+<!--        <fileSet>
             <directory>target</directory>
             <outputDirectory>geoserver-2.10.0</outputDirectory>
             <includes>
@@ -81,44 +89,17 @@
             </includes>
         </fileSet>-->
         <fileSet>
-            <!--jetty configuration--> 
+             <!--jetty configuration--> 
             <directory>src/main/resources/jetty</directory>
-            <outputDirectory>${ssgf.dist.folder}/${geoserver.dist.folder}</outputDirectory>
+            <outputDirectory>worldwind-geoserver-${project.version}</outputDirectory>
             <includes>
                 <include>**/*</include>
             </includes>
         </fileSet>
         <fileSet>
-            <!--empty log directory--> 
+             <!--empty log directory--> 
             <directory>src/main/resources/logs</directory>
-            <outputDirectory>${ssgf.dist.folder}/${geoserver.dist.folder}</outputDirectory>
-        </fileSet>
-        
-        <fileSet>
-            <!-- the Java distribution(s) -->
-            <directory>src/main/resources/java</directory>
-            <outputDirectory>${ssgf.dist.folder}</outputDirectory>
-        </fileSet>
-        
-        <fileSet>
-            <!-- the SSGF scripts -->
-            <directory>src/main/resources/ssgf</directory>
-            <outputDirectory>${ssgf.dist.folder}</outputDirectory>
-            <lineEnding>unix</lineEnding>
-            <fileMode>0755</fileMode>
-            <directoryMode>0755</directoryMode>
-            <includes>
-                <include>*.sh</include>
-            </includes>       
-        </fileSet>
-        <fileSet>
-            <!-- the SSGF service -->
-            <directory>src/main/resources/ssgf</directory>
-            <outputDirectory>${ssgf.dist.folder}</outputDirectory>
-            <lineEnding>unix</lineEnding>
-            <includes>
-                <include>ssgf.service</include>
-            </includes>       
+            <outputDirectory>worldwind-geoserver-${project.version}</outputDirectory>
         </fileSet>
     </fileSets>
 </assembly>
