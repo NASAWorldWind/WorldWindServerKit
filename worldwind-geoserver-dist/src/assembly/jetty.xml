@@ -1,0 +1,39 @@
+<component>
+    <fileSets>
+        <fileSet>
+            <!--the libs needed to run jetty--> 
+            <directory>target/dependency</directory>
+            <outputDirectory>worldwind-geoserver-${project.version}/lib</outputDirectory>
+            <includes>
+                <include>ant-*.jar</include>
+                <include>commons-el-*.jar</include>
+                <include>commons-logging-*.jar</include>
+                <include>log4j-*.jar</include>
+                <include>jasper-compiler-*.jar</include>
+                <include>jasper-compiler-jdt-*.jar</include>
+                <include>jasper-runtime-*.jar</include>
+                <include>jetty-*.jar</include>
+                <include>jetty-util-*.jar</include>
+                <include>jsp-api-*.jar</include>
+                <include>javax.servlet-api-*.jar</include>
+                <include>xmlParserAPIs-*.jar</include>
+            </includes>
+            <excludes>
+                <exclude>log4j-over-slf4j-*.jar</exclude>
+            </excludes>
+        </fileSet>
+        <fileSet>
+            <!--jetty configuration--> 
+            <directory>src/main/resources/jetty</directory>
+            <outputDirectory>worldwind-geoserver-${project.version}</outputDirectory>
+            <includes>
+                <include>**/*</include>
+            </includes>
+        </fileSet>
+        <fileSet>
+            <!--empty log directory--> 
+            <directory>src/main/resources/logs</directory>
+            <outputDirectory>worldwind-geoserver-${project.version}</outputDirectory>
+        </fileSet>
+    </fileSets>
+</component>
