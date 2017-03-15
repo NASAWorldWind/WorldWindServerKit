@@ -3,7 +3,7 @@
         <fileSet>
             <!-- The main webapp -->
             <directory>../worldwind-geoserver/target/worldwind-geoserver</directory>
-            <outputDirectory>worldwind-geoserver-${project.version}/webapps/worldwind-geoserver</outputDirectory>
+            <outputDirectory>worldwind-geoserver-${project.version}/webapps/geoserver</outputDirectory>
             <includes>
                 <include>**/*</include>
             </includes>
