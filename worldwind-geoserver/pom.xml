@@ -362,7 +362,7 @@
             The Jetty Maven plugin is useful for rapid development and testing.
             To start Jetty and serve up your project execute: 
                 mvn jetty:run
-            Then point your browser to on http://localhost:8080/wwgs/web/
+            Then point your browser to on http://localhost:8080/geoserver/web/
             --> 
             <plugin>
                 <groupId>org.eclipse.jetty</groupId>
@@ -373,7 +373,7 @@
                 -->
                 <configuration>
                     <webApp>
-                        <contextPath>/wwgs</contextPath>
+                        <contextPath>/geoserver</contextPath>
                     </webApp>
                     <connectors>
                         <connector implementation="org.mortbay.jetty.nio.SelectChannelConnector">
@@ -388,7 +388,7 @@
                     <systemProperties> 
                         <systemProperty> 
                             <name>GEOSERVER_DATA_DIR</name>
-                            <value>target/worldwind-geoserver/data</value> 
+                            <value>target/geoserver/data</value> 
                         </systemProperty> 
                     </systemProperties>
                     
