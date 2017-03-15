@@ -1,19 +1,28 @@
 <component>
     <fileSets>
         <fileSet>
-            <!-- GDAL data  --> 
-            <directory>target/gdal/gdal-data</directory>
+            <!-- GDAL data (unzipped) --> 
+            <directory>target/gdal/data</directory>
             <outputDirectory>worldwind-geoserver-${project.version}/gdal/data</outputDirectory>
             <includes>
                 <include>**/*</include>
             </includes>
         </fileSet>
         <fileSet>
-            <!-- GDAL natives --> 
+            <!-- GDAL natives (unzipped) --> 
             <directory>target/gdal/win64</directory>
             <outputDirectory>worldwind-geoserver-${project.version}/gdal/lib</outputDirectory>
             <includes>
                 <include>**/*</include>
+            </includes>
+        </fileSet>
+        <fileSet>
+            <!-- ECW and MrSID plugin installers --> 
+            <directory>src/main/resources/gdal</directory>
+            <outputDirectory>worldwind-geoserver-${project.version}/gdal</outputDirectory>
+            <includes>
+                <include>gdal-19-1600-x64-ecw.msi</include>
+                <include>gdal-19-1600-x64-mrsid.msi</include>
             </includes>
         </fileSet>
     </fileSets>

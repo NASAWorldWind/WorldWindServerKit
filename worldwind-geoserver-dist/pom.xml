@@ -138,13 +138,17 @@
                         </goals>
                     </execution>
                     
-                    <!-- Unzip the Java Server JRE --> 
+                    <!--                    
+                    Unzip the Windows Java Server JRE
+                    There's no guarantee that a command line unzip tool is available in Windows,
+                    so we unzip the JRE here and include the unzipped files in an assembly component.
+                    -->
                     <execution>
                         <id>unpackJdk</id>
                         <phase>package</phase>
                         <configuration>
                             <tasks>
-                                <untar src="${project.basedir}/src/main/resources/java/server-jre-8u111-linux-x64.tar.gz" dest="${project.build.directory}/java" compression="gzip"/>
+                                <untar src="${project.basedir}/src/main/resources/java/server-jre-8u121-windows-x64.tar.gz" dest="${project.build.directory}/java-win64" compression="gzip"/>
                             </tasks>                            
                         </configuration>
                         <goals>
@@ -152,15 +156,18 @@
                         </goals>
                     </execution>
                     
-                    <!-- Unzip the GDAL natives and data --> 
+                    <!--                    
+                    Unzip the GDAL natives and data
+                    There's no guarantee that a command line unzip tool is available in Windows,
+                    so we unzip the GDAL here and include the unzipped files in an assembly component.
+                    -->
                     <execution>
                         <id>unpackGDAL</id>
                         <phase>package</phase>
                         <configuration>
                             <tasks>
-                                <untar src="${project.basedir}/src/main/resources/gdal/gdal192-Ubuntu12-gcc4.6.3-x86_64.tar.gz" dest="${project.build.directory}/gdal/ubuntu64" compression="gzip"/>
                                 <unzip src="${project.basedir}/src/main/resources/gdal/gdal-1.9.2-MSVC2010-x64.zip" dest="${project.build.directory}/gdal/win64"/>
-                                <unzip src="${project.basedir}/src/main/resources/gdal/gdal-data.zip" dest="${project.build.directory}/gdal"/>
+                                <unzip src="${project.basedir}/src/main/resources/gdal/gdal-data.zip" dest="${project.build.directory}/gdal/data"/>
                             </tasks>                            
                         </configuration>
                         <goals>
