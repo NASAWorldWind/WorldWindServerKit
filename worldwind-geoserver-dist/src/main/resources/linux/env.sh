@@ -57,3 +57,25 @@ if [ -d "${GEOSERVER_HOME}"/gdal ]; then
         echo "GDAL_LIB prepened to LD_LIBRARY_PATH"
     fi
 fi
+
+# -----------------------------------------------------------------------------
+# HACK for JP2ECW crash.
+#
+# The GDAL ECW library has a "w_char" bug that can crash Geoserver with:
+# > terminate called after throwing an instance of 'srd::length_error'
+# >   what(): basic_string::S_create
+# > Aborted (core dumped) 
+# See http://gis.stackexchange.com/questions/158828/geoserver-ecw-plugin-problem
+#
+# Setting the NCS_USER_PREFS environment variable to any value will cause the 
+# code to skip the offending branch. This hack sets the variable to the same
+# value that the offending branch was attempting to do. See this patch:
+# https://github.com/makinacorpus/libecw/blob/master/Source/C/NCSUtil/NCSPrefsXML.cpp.rej
+# -----------------------------------------------------------------------------
+if [ -z "${NCS_USER_PREFS}" ]; then
+    if [ -z "${HOME}" ]; then
+        export NCS_USER_PREFS=${HOME}/.erm/ncsuserprefs.xml
+    else
+        export NCS_USER_PREFS=/etc/erm/ncsuserprefs.xml
+    fi
+fi
