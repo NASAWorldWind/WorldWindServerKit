@@ -1,6 +1,6 @@
 #!/bin/sh 
 ##
-## Copy distribution to /opt/maps/ssgf destination and run setup.sh
+## Copy distribution to /opt/maps/wwsk destination and run setup.sh
 ## FN1
 ## login: root
 ## # mount /dev/sdb1 /media
@@ -9,7 +9,7 @@
 ## # cd worldwind-geoserver-<version>
 ## # ./setup.sh
 ##
-## run this script from the container to install the ssgf service
+## run this script from the container to install the wwsk service
 ## # virsh -c lxc:// lxc-enter-namespace tmis /bin/sh
 ## cd /opt/maps/worldwind-geoserver-<version>
 ## ./install.sh

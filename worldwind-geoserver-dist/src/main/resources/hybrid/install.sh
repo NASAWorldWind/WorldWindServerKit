@@ -1,7 +1,7 @@
 #!/bin/sh 
 
 ##
-## Copy distribution to /opt/maps/ssgf destination
+## Copy distribution to /opt/maps/wwsk destination
 ## FN1
 ## login: root
 ## # mount /dev/sdb1 /media
@@ -10,12 +10,12 @@
 ## 
 ## run this script from the container
 ## # virsh -c lxc:// lxc-enter-namespace tmis /bin/sh
-## cd /opt/maps/ssgf
+## cd /opt/maps/wwsk
 ## ./install.sh
 
-cp ssgf.service /etc/systemd/system/
-systemctl enable /etc/systemd/system/ssgf.service
-systemctl start ssgf.service
+cp wwsk.service /etc/systemd/system/
+systemctl enable /etc/systemd/system/wwsk.service
+systemctl start wwsk.service
 
 ## FN8
 ## launch browser
