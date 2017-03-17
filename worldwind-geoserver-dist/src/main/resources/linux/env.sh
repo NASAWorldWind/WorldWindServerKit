@@ -73,7 +73,7 @@ fi
 # https://github.com/makinacorpus/libecw/blob/master/Source/C/NCSUtil/NCSPrefsXML.cpp.rej
 # -----------------------------------------------------------------------------
 if [ -z "${NCS_USER_PREFS}" ]; then
-    if [ -z "${HOME}" ]; then
+    if [ ! -z "${HOME}" ]; then
         export NCS_USER_PREFS=${HOME}/.erm/ncsuserprefs.xml
     else
         export NCS_USER_PREFS=/etc/erm/ncsuserprefs.xml
