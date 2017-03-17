@@ -1,4 +1,4 @@
-<!--See: http://maven.apache.org/plugins/maven-assembly-plugin/assembly.html-->
+<!--See: http://maven.apache.org/plugins/maven-assembly-plugin/assembly.html -->
 <assembly>
     <id>hybrid_os</id>
     <formats>
@@ -9,17 +9,13 @@
     <componentDescriptors>
         <componentDescriptor>src/assembly/geoserver.xml</componentDescriptor>
         <componentDescriptor>src/assembly/jetty.xml</componentDescriptor>
+        <componentDescriptor>src/assembly/java-linux64.xml</componentDescriptor>
         <componentDescriptor>src/assembly/gdal-centos64.xml</componentDescriptor>
-        <componentDescriptor>src/assembly/data-nasa.xml</componentDescriptor>
         <!--<componentDescriptor>src/assembly/data-ssgf.xml</componentDescriptor>-->
+        <componentDescriptor>src/assembly/data-nasa.xml</componentDescriptor>
     </componentDescriptors>    
     <fileSets>
-        <fileSet>
-            <!-- the Java Server JRE distribution(s); to be unzipped on the target device -->
-            <directory>src/main/resources/java</directory>
-            <outputDirectory>worldwind-geoserver-${project.version}</outputDirectory>
-        </fileSet>
-        
+
         <fileSet>
             <!--unix shell geoserver scripts--> 
             <directory>src/main/resources/bin</directory>
@@ -34,13 +30,13 @@
 
         <fileSet>
             <!-- the setup and run scripts -->
-            <directory>src/main/resources/ssgf</directory>
+            <directory>src/main/resources/hybrid</directory>
             <outputDirectory>worldwind-geoserver-${project.version}</outputDirectory>
             <lineEnding>unix</lineEnding>
             <fileMode>0755</fileMode>
             <directoryMode>0755</directoryMode>
             <includes>
-                <include>*.sh</include>
+                <include>*.*</include>
             </includes>       
         </fileSet>
     </fileSets>
