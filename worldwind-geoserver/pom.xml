@@ -259,7 +259,9 @@
             <plugin>
                 <artifactId>maven-antrun-plugin</artifactId>
                 <executions>                    
-                    <!-- Builds a valid data directory into the web app -->
+                    <!-- Builds a valid "data" directory into the web app -->
+                    <!-- In a Linux/Tomcat war file, the default embedded GeoServer 
+                    data directory location is "<web application root>/data" -->
                     <execution>
                         <id>configPackage</id>
                         <phase>package</phase>
@@ -384,11 +386,11 @@
                     <stopPort>${jetty.stopPort}</stopPort>
                     <stopKey>GEOSERVER_JETTY_STOPKEY</stopKey>
                     <daemon>false</daemon>
-                    <!-- Set the GEOSERVER_DATA_DIR -->
+                    <!-- Set the GEOSERVER_DATA_DIR for the Jetty run -->
                     <systemProperties> 
                         <systemProperty> 
                             <name>GEOSERVER_DATA_DIR</name>
-                            <value>target/geoserver/data</value> 
+                            <value>${project.build.directory}/worldwind-geoserver/data</value> 
                         </systemProperty> 
                     </systemProperties>
                     
