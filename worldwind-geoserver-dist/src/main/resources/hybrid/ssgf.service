@@ -1,0 +1,12 @@
+[Unit]
+Description=SSGF GeoServer
+
+[Service]
+ExecStart=/opt/maps/ssgf/run.sh
+ExecStop=ls
+WorkingDirectory=/opt/maps/ssgf
+
+[Install]
+WantedBy=multi-user.target
+
+
