@@ -25,8 +25,8 @@
         under the parent folder's data folder.  Its contents will be copied into
         the war file. 
         -->
-        <configId>minimal</configId>
-        <!--<configId>nasa</configId>-->
+        <!--<configId>minimal</configId>-->
+        <configId>nasa</configId>
         <!--<configId>ssgf</configId>-->
         <configDirectory>${basedir}/../data_config</configDirectory>
     </properties>    
@@ -259,7 +259,9 @@
             <plugin>
                 <artifactId>maven-antrun-plugin</artifactId>
                 <executions>                    
-                    <!-- Builds a valid data directory into the web app -->
+                    <!-- Builds a valid "data" directory into the web app -->
+                    <!-- In a Linux/Tomcat war file, the default embedded GeoServer 
+                    data directory location is "<web application root>/data" -->
                     <execution>
                         <id>configPackage</id>
                         <phase>package</phase>
@@ -362,7 +364,7 @@
             The Jetty Maven plugin is useful for rapid development and testing.
             To start Jetty and serve up your project execute: 
                 mvn jetty:run
-            Then point your browser to on http://localhost:8080/wwgs/web/
+            Then point your browser to on http://localhost:8080/geoserver/web/
             --> 
             <plugin>
                 <groupId>org.eclipse.jetty</groupId>
@@ -373,7 +375,7 @@
                 -->
                 <configuration>
                     <webApp>
-                        <contextPath>/wwgs</contextPath>
+                        <contextPath>/geoserver</contextPath>
                     </webApp>
                     <connectors>
                         <connector implementation="org.mortbay.jetty.nio.SelectChannelConnector">
@@ -384,11 +386,11 @@
                     <stopPort>${jetty.stopPort}</stopPort>
                     <stopKey>GEOSERVER_JETTY_STOPKEY</stopKey>
                     <daemon>false</daemon>
-                    <!-- Set the GEOSERVER_DATA_DIR -->
+                    <!-- Set the GEOSERVER_DATA_DIR for the Jetty run -->
                     <systemProperties> 
                         <systemProperty> 
                             <name>GEOSERVER_DATA_DIR</name>
-                            <value>target/worldwind-geoserver/data</value> 
+                            <value>${project.build.directory}/worldwind-geoserver/data</value> 
                         </systemProperty> 
                     </systemProperties>
                     

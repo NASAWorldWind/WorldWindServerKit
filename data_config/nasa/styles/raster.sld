@@ -19,6 +19,8 @@
           <Name>rule1</Name>
           <Title>Opaque Raster</Title>
           <Abstract>A raster with 100% opacity</Abstract>
+          <!-- MinScaleDenominator:1000 corresponds to ~0.27 meters/pixel, or 18 levels -->
+          <!--<MinScaleDenominator>1000</MinScaleDenominator>-->
           <RasterSymbolizer>
             <Opacity>1.0</Opacity>
           </RasterSymbolizer>

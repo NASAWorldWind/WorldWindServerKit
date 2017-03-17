@@ -22,12 +22,12 @@ Example:
 ### Option 1. Deploy the WAR file
 Deploy the *worldwind-geoserver.war* file (found in the *worldwind-geoserver/target* folder) 
 to your preferred servlet container, e.g., Apache Tomcat. Then point your browser to the 
-*wwgs* web context on your server.
+*geoserver* web context on your server.
 
 ### Option 2. Run in NetBeans
 Simply invoke "Run" on the *WorldWind GeoServer Application* module (*worldwind-geoserver*) 
 and NetBeans will automatically deploy the war file to your configured application server 
-and launch your browser (typically http://localhost:8084/wwgs/index.html).
+and launch your browser (typically http://localhost:8084/geoserver/index.html).
 
 ### Option 3. Run in Jetty
 Run the preconfigured *jetty-maven-plugin* with maven from the root of the *WorldWind 
@@ -35,7 +35,7 @@ GeoServer Application* module (*worldwind-geoserver*). Example:
 
     $ mvn jetty:run
 
-Then point your browser to http://localhost:8080/wwgs/index.html to access the 
+Then point your browser to http://localhost:8080/geoserver/index.html to access the 
 GeoServer web admin interface.
 
 ### Option 4. Deploy a binary distribution
@@ -53,9 +53,8 @@ Linux example
 
     $ ./bin/startup.sh  
 
-Then point your browser to http://localhost:8080/worldwind-geoserver/index.html to access the 
-GeoServer web admin interface.  [*Note: the web context should be wwgs, not 
-worldwind-geoserver. This is subject to change.*]
+Then point your browser to http://localhost:8080/geoserver/index.html to access the 
+GeoServer web admin interface.
 
 ### Option 5. Deploy the SSGF distribution
 Copy and unzip the *ssgf* tarball distribution (found in the *worldwind-geoserver-dist/target* 
@@ -71,7 +70,7 @@ Launch GeoServer, example:
 
     $ ./run.sh
 
-Then point your browser to http://localhost:8080/wwgs/index.html to access the 
+Then point your browser to http://localhost:8080/geoserver/index.html to access the 
 GeoServer web admin interface.
 
 ## OGC GeoPackage

@@ -1,0 +1,42 @@
+<!--See: http://maven.apache.org/plugins/maven-assembly-plugin/assembly.html-->
+<assembly>
+    <id>linux64</id>
+    <formats>
+        <format>zip</format>
+        <format>tgz</format>
+    </formats>
+    <includeBaseDirectory>false</includeBaseDirectory>
+    <componentDescriptors>
+        <componentDescriptor>src/assembly/geoserver.xml</componentDescriptor>
+        <componentDescriptor>src/assembly/jetty.xml</componentDescriptor>
+        <componentDescriptor>src/assembly/java-linux64.xml</componentDescriptor>
+        <componentDescriptor>src/assembly/gdal-ubuntu64.xml</componentDescriptor>
+        <componentDescriptor>src/assembly/data-nasa.xml</componentDescriptor>
+        <!--<componentDescriptor>src/assembly/data-ssgf.xml</componentDescriptor>-->
+    </componentDescriptors>    
+    <fileSets>                
+        <fileSet>
+            <!-- the Unix shell GeoServer scripts--> 
+            <directory>src/main/resources/bin</directory>
+            <lineEnding>unix</lineEnding>
+            <outputDirectory>worldwind-geoserver-${project.version}/bin</outputDirectory>
+            <fileMode>0755</fileMode>
+            <directoryMode>0755</directoryMode>
+            <includes>
+                <include>*.sh</include>
+            </includes>
+        </fileSet>
+
+        <fileSet>
+            <!-- the Linux setup and run scripts -->
+            <directory>src/main/resources/linux</directory>
+            <outputDirectory>worldwind-geoserver-${project.version}</outputDirectory>
+            <lineEnding>unix</lineEnding>
+            <fileMode>0755</fileMode>
+            <directoryMode>0755</directoryMode>
+            <includes>
+                <include>*.sh</include>
+            </includes>       
+        </fileSet>
+    </fileSets>
+</assembly>
