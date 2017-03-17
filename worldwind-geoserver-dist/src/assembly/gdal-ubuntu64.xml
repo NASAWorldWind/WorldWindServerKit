@@ -13,6 +13,7 @@
                 <include>gdal-data.tar.gz</include>
             
                 <!-- ECW and MrSID license notes -->
+                <include>ECWEULA.txt</include>
                 <include>linux_notes_on_ECW_and_JP2ECW.txt</include>
                 <include>readme.txt</include>
 
