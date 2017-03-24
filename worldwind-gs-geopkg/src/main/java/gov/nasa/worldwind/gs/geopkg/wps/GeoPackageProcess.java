@@ -62,8 +62,8 @@ import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import org.opengis.referencing.crs.GeographicCRS;
 
 /**
- *
- * @author Bruce Schubert
+ * GeoPackageProcess is responsible for processing a GeoPackageProcessRequest.
+ * GeoPackageProcess is registered as a Spring bean.
  */
 @DescribeProcess(title = "GeoPackage", description = "Geopackage Process")
 public class GeoPackageProcess implements GSProcess {
@@ -79,6 +79,7 @@ public class GeoPackageProcess implements GSProcess {
     private FilterFactory2 filterFactory;
 
     /**
+     * Constructor, registered in the Spring application context.
      *
      * @param geoServer
      * @param mapOutput
@@ -90,13 +91,19 @@ public class GeoPackageProcess implements GSProcess {
         this.resources = resources;
         this.mapOutput = mapOutput;
         this.filterFactory = filterFactory;
-        catalog = geoServer.getCatalog();
-        getFeatureDelegate = new GetFeature(geoServer.getService(WFSInfo.class), catalog);
-        getFeatureDelegate.setFilterFactory(filterFactory);
+        this.catalog = geoServer.getCatalog();
+        this.getFeatureDelegate = new GetFeature(geoServer.getService(WFSInfo.class), this.catalog);
+        this.getFeatureDelegate.setFilterFactory(filterFactory);
     }
 
     private static final int TEMP_DIR_ATTEMPTS = 10000;
 
+    /**
+     * Creates a folder with a arbitrary name under the given parent folder.
+     *
+     * @param baseDir parent folder
+     * @return a new folder
+     */
     public static File createTempDir(File baseDir) {
         String baseName = System.currentTimeMillis() + "-";
 
@@ -112,11 +119,16 @@ public class GeoPackageProcess implements GSProcess {
     }
 
     /**
-     * Executes a request to generate a GeoPackage from the contents of a WPS
-     * gs:geopackage request.
+     * Executes a request to generate a GeoPackage via a WPS request.
      *
-     * @param contents The WPS gs:GeoPackage request contents 
-     * @return A link to the generated GeoPackage
+     * GeoServer WPS Demo can generate a request using the gs:GeoPackage
+     * selection.
+     *
+     * @param contents The parsed
+     * {@code <geopackage xmlns="http://www.opengis.net/gpkg" />} contents
+     * @return A link to the generated GeoPackage, e.g.,
+     * {@code  http://host:port/geoserver/ows?service=WPS&version=1.0.0&request=GetExecutionResult&executionId=<xxx>&outputId=<outputName>&mimetype=application/x-gpkg}
+     *
      * @throws IOException
      */
     @DescribeResult(name = "geopackage", description = "Link to Compiled Geopackage File")
@@ -327,7 +339,9 @@ public class GeoPackageProcess implements GSProcess {
                 }
                 request.setFormat("none");
 
+                // Establish the format options for the GeoPackage
                 Map formatOptions = new HashMap();
+
                 // Per the OGC GeoPackage Encoding Standard, the tile coordinate (0,0) 
                 // always refers to the tile in the upper left corner of the tile matrix 
                 // at any zoom level, regardless of the actual availability of that tile.
@@ -336,7 +350,13 @@ public class GeoPackageProcess implements GSProcess {
                 // that this requirement is satisfied.                
                 formatOptions.put("flipy", "true");
 
-                formatOptions.put("format", tiles.getFormat());
+                // Set the image format for the tiles; if not set, the GeoPackage will
+                // try to determine the best format. The value cannot be null.
+                String tileFormat = tiles.getFormat();
+                if (tileFormat != null) {
+                    formatOptions.put("format", tileFormat);
+                }
+
                 if (tiles.getCoverage() != null) {
                     if (tiles.getCoverage().getMinZoom() != null) {
                         formatOptions.put("min_zoom", tiles.getCoverage().getMinZoom());
@@ -357,6 +377,7 @@ public class GeoPackageProcess implements GSProcess {
                         formatOptions.put("max_row", tiles.getCoverage().getMaxRow());
                     }
                 }
+
                 if (tiles.getGridSetName() != null) {
                     formatOptions.put("gridset", tiles.getGridSetName());
                 }
@@ -374,6 +395,7 @@ public class GeoPackageProcess implements GSProcess {
         }
 
         gpkg.close();
+
         // Add to storage only if it is a temporary file
         if (path != null && !remove) {
             return path;
