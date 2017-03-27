@@ -7,32 +7,23 @@
  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <!-- a Named Layer is the basic building block of an SLD document -->
   <NamedLayer>
-    <Name>default_point</Name>
+    <Name>default_raster</Name>
     <UserStyle>
     <!-- Styles can have names, titles and abstracts -->
-      <Title>Default Point</Title>
-      <Abstract>A sample style that draws a point</Abstract>
+      <Title>Default Raster</Title>
+      <Abstract>A sample style that draws a raster, good for displaying imagery</Abstract>
       <!-- FeatureTypeStyles describe how to render different features -->
-      <!-- A FeatureTypeStyle for rendering points -->
+      <!-- A FeatureTypeStyle for rendering rasters -->
       <FeatureTypeStyle>
         <Rule>
           <Name>rule1</Name>
-          <Title>Red Square</Title>
-          <Abstract>A 6 pixel square with a red fill and no stroke</Abstract>
-            <PointSymbolizer>
-              <Graphic>
-                <Mark>
-                  <WellKnownName>square</WellKnownName>
-                  <Fill>
-                    <CssParameter name="fill">#FF0000</CssParameter>
-                  </Fill>
-                </Mark>
-              <Size>6</Size>
-            </Graphic>
-          </PointSymbolizer>
+          <Title>Opaque Raster</Title>
+          <Abstract>A raster with 100% opacity</Abstract>
+          <RasterSymbolizer>
+            <Opacity>1.0</Opacity>
+          </RasterSymbolizer>
         </Rule>
       </FeatureTypeStyle>
     </UserStyle>
   </NamedLayer>
 </StyledLayerDescriptor>
-

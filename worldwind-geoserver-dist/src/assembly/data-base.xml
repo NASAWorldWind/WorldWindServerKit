@@ -1,0 +1,12 @@
+<component>
+    <fileSets>
+        <fileSet>
+             <!-- the data directory--> 
+            <directory>../data_config/base</directory>
+            <outputDirectory>worldwind-geoserver-${project.version}/data_dir</outputDirectory>
+            <includes>
+                <include>**/*</include>
+            </includes>
+        </fileSet>
+    </fileSets>
+</component>

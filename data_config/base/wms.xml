@@ -1,11 +1,11 @@
 <wms>
     <id>wms</id>
     <enabled>true</enabled>
-    <name>WorldWind GeoServer WMS</name>
-    <title>WorldWind GeoServer WMS</title>
+    <name>WWSK GeoServer WMS</name>
+    <title>WWSK GeoServer WMS</title>
     <maintainer>http://geoserver.org/comm</maintainer>
     <abstrct>
-        This is a description of your Web Map Server.
+        This is a description of the NASA World Wind Server Kit (WWSK) Web Map Server.
     </abstrct>
     <accessConstraints>NONE</accessConstraints>
     <fees>NONE</fees>
@@ -45,7 +45,7 @@
         <position>BOT_RIGHT</position>
         <transparency>0</transparency>
     </watermark>
-    <interpolation>Bilinear</interpolation>
+    <interpolation>Bicubic</interpolation>
     <maxBuffer>25</maxBuffer>
     <maxRequestMemory>0</maxRequestMemory>
     <maxRenderingTime>0</maxRenderingTime>
