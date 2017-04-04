@@ -195,6 +195,17 @@
         <dependency>
             <groupId>org.geotools</groupId>
             <artifactId>gt-imageio-ext-gdal</artifactId>
+            <!--Exclude proprietary licensed ECW support-->
+            <exclusions>
+                <exclusion>
+                    <groupId>it.geosolutions.imageio-ext</groupId>
+                    <artifactId>imageio-ext-gdalecw</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>it.geosolutions.imageio-ext</groupId>
+                    <artifactId>imageio-ext-gdalecwjp2</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <!--imagepyramid datasource module-->
         <dependency>
