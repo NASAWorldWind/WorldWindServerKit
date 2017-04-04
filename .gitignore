@@ -43,3 +43,7 @@ nbactions.xml
 /data_config/ssgf/workspaces/agc/layergroups/
 /data_config/ssgf/coverages/
 /data_config/ssgf/data/agc/
+/worldwind-gs-example/
+/wps_request.xml
+/wcs_request.txt
+/wps_output.txt
