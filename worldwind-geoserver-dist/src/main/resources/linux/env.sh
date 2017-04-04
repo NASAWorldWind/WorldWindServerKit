@@ -11,6 +11,7 @@ export GEOSERVER_DATA_DIR=${GEOSERVER_HOME}/data_dir
 # -----------------------------------------------------------------------------
 # Set how much heap memory to allocate to GeoServer (min and max)
 # The max size of the "older generation" heap is controlled by the -Xms parameter.
+# Leave blank to auto-select 25% of system memory
 HEAP="-Xms2048m -Xmx2048m"
 
 # Set how much memory to set aside for new objects.
@@ -18,8 +19,8 @@ HEAP="-Xms2048m -Xmx2048m"
 NEW="-XX:NewSize=256m -XX:MaxNewSize=256m -XX:SurvivorRatio=2"
 
 # Enable either the Low Pause or Throughput garbage collectors, e.g.,
-# "-XX:+UseParNewGC +UseConcMarkSweepGC" or "-XX:+UseParallelGC" respectively.
-GC="-XX:+UseParallelGC"
+# "-XX:+UseParNewGC -XX:+UseConcMarkSweepGC" or "-XX:+UseParallelGC" respectively.
+GC="-XX:+UseParNewGC -XX:+UseConcMarkSweepGC"
 
 # Add some debug tracing: report each GC event.
 DEBUG="-verbose:gc -XX:+PrintTenuringDistribution"
