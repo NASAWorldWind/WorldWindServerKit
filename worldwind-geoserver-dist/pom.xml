@@ -188,17 +188,20 @@
                         <phase>install</phase>
                         <configuration>
                             <descriptors>
-                                <!-- Binary distibution content -->
+                                <!--Binary distibution content-->
                                 <descriptor>src/assembly/bin-assembly.xml</descriptor>
                                 
+                                <!--Windows x64 distribution-->
                                 <descriptor>src/assembly/win64-assembly.xml</descriptor>
                                 
+                                <!--Linux x64 distirbution-->
                                 <descriptor>src/assembly/linux64-assembly.xml</descriptor>
                                 
+                                <!--Hybrid OS (linux-based x64) distribution-->
                                 <descriptor>src/assembly/hybrid_os-assembly.xml</descriptor>
                                 
                                 <!--WAR file distibution content -->
-                                <descriptor>src/assembly/war.xml</descriptor>
+                                <descriptor>src/assembly/war-assembly.xml</descriptor>
                                 
                             </descriptors>
                             
