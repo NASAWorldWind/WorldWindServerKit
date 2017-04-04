@@ -1,0 +1,3 @@
+Label,# Samples,Average,Min,Max,Std. Dev.,Error %,Throughput,Received KB/sec,Sent KB/sec,Avg. Bytes
+GetMap HTTP Request,13922,53,0,1191,82.06,0.101%,13.20245,344.20,3.69,26697.0
+TOTAL,13922,53,0,1191,82.06,0.101%,13.20245,344.20,3.69,26697.0
