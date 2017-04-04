@@ -13,7 +13,6 @@
         <componentDescriptor>src/assembly/gdal-ubuntu64.xml</componentDescriptor>
         <componentDescriptor>src/assembly/data-base.xml</componentDescriptor>
         <componentDescriptor>src/assembly/data-nasa.xml</componentDescriptor>
-        <!--<componentDescriptor>src/assembly/data-ssgf.xml</componentDescriptor>-->
     </componentDescriptors>    
     <fileSets>                
         <fileSet>
