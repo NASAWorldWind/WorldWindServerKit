@@ -1,5 +1,5 @@
 <img src="https://worldwind.arc.nasa.gov/css/images/nasa-logo.svg" height="100"/> 
-# WorldWindServerKit
+# WorldWind Server Kit
 
 The [NASA World Wind](https://worldwind.arc.nasa.gov) Server Kit (WWSK) is an open 
 source Java project that assembles [GeoServer](http://geoserver.org/) for easy 
