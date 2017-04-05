@@ -1,72 +1,72 @@
 <?xml version="1.0" encoding="utf-8"?>
 <gwcConfiguration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://geowebcache.org/schema/1.10.0 http://geowebcache.org/schema/1.10.0/geowebcache.xsd" xmlns="http://geowebcache.org/schema/1.10.0">
-    <version>1.10.0</version>
-    <backendTimeout>120</backendTimeout>
-    <blobStores/>
-    <gridSets>
-        <gridSet>
-            <name>WW Imagery</name>
-            <description>World Wind Imagery</description>
-            <srs>
-                <number>4326</number>
-            </srs>
-            <extent>
-                <coords>
-                    <double>-180.0</double>
-                    <double>-90.0</double>
-                    <double>180.0</double>
-                    <double>90.0</double>
-                </coords>
-            </extent>
-            <alignTopLeft>false</alignTopLeft>
-            <resolutions>
-                <double>0.0703125</double>
-                <double>0.03515625</double>
-                <double>0.017578125</double>
-                <double>0.0087890625</double>
-                <double>0.00439453125</double>
-                <double>0.002197265625</double>
-                <double>0.0010986328125</double>
-                <double>5.4931640625E-4</double>
-                <double>2.74658203125E-4</double>
-                <double>1.373291015625E-4</double>
-                <double>6.86645507812E-5</double>
-                <double>3.43322753906E-5</double>
-                <double>1.71661376953E-5</double>
-                <double>8.5830688477E-6</double>
-                <double>4.2915344238E-6</double>
-                <double>2.1457672119E-6</double>
-                <double>1.072883606E-6</double>
-                <double>5.36441803E-7</double>
-                <double>2.682209015E-7</double>
-            </resolutions>
-            <metersPerUnit>111319.49079327358</metersPerUnit>
-            <pixelSize>2.8E-4</pixelSize>
-            <scaleNames>
-                <string>WW Imagery:0</string>
-                <string>WW Imagery:1</string>
-                <string>WW Imagery:2</string>
-                <string>WW Imagery:3</string>
-                <string>WW Imagery:4</string>
-                <string>WW Imagery:5</string>
-                <string>WW Imagery:6</string>
-                <string>WW Imagery:7</string>
-                <string>WW Imagery:8</string>
-                <string>WW Imagery:9</string>
-                <string>WW Imagery:10</string>
-                <string>WW Imagery:11</string>
-                <string>WW Imagery:12</string>
-                <string>WW Imagery:13</string>
-                <string>WW Imagery:14</string>
-                <string>WW Imagery:15</string>
-                <string>WW Imagery:16</string>
-                <string>WW Imagery:17</string>
-                <string>WW Imagery:18</string>
-            </scaleNames>
-            <tileHeight>512</tileHeight>
-            <tileWidth>512</tileWidth>
-            <yCoordinateFirst>false</yCoordinateFirst>
-        </gridSet>
-    </gridSets>
-    <layers/>
+  <version>1.10.0</version>
+  <backendTimeout>120</backendTimeout>
+  <blobStores/>
+  <gridSets>
+    <gridSet>
+      <name>WWJ Imagery</name>
+      <description>Imagery accessed by World Wind Java SDK clients</description>
+      <srs>
+        <number>4326</number>
+      </srs>
+      <extent>
+        <coords>
+          <double>-180.0</double>
+          <double>-90.0</double>
+          <double>180.0</double>
+          <double>90.0</double>
+        </coords>
+      </extent>
+      <alignTopLeft>false</alignTopLeft>
+      <resolutions>
+        <double>0.0703125</double>
+        <double>0.03515625</double>
+        <double>0.017578125</double>
+        <double>0.0087890625</double>
+        <double>0.00439453125</double>
+        <double>0.002197265625</double>
+        <double>0.0010986328125</double>
+        <double>5.4931640625E-4</double>
+        <double>2.74658203125E-4</double>
+        <double>1.373291015625E-4</double>
+        <double>6.86645507812E-5</double>
+        <double>3.43322753906E-5</double>
+        <double>1.71661376953E-5</double>
+        <double>8.5830688477E-6</double>
+        <double>4.2915344238E-6</double>
+        <double>2.1457672119E-6</double>
+        <double>1.072883606E-6</double>
+        <double>5.36441803E-7</double>
+        <double>2.682209015E-7</double>
+      </resolutions>
+      <metersPerUnit>111319.49079327358</metersPerUnit>
+      <pixelSize>2.8E-4</pixelSize>
+      <scaleNames>
+        <string>WW Imagery:0</string>
+        <string>WW Imagery:1</string>
+        <string>WW Imagery:2</string>
+        <string>WW Imagery:3</string>
+        <string>WW Imagery:4</string>
+        <string>WW Imagery:5</string>
+        <string>WW Imagery:6</string>
+        <string>WW Imagery:7</string>
+        <string>WW Imagery:8</string>
+        <string>WW Imagery:9</string>
+        <string>WW Imagery:10</string>
+        <string>WW Imagery:11</string>
+        <string>WW Imagery:12</string>
+        <string>WW Imagery:13</string>
+        <string>WW Imagery:14</string>
+        <string>WW Imagery:15</string>
+        <string>WW Imagery:16</string>
+        <string>WW Imagery:17</string>
+        <string>WW Imagery:18</string>
+      </scaleNames>
+      <tileHeight>512</tileHeight>
+      <tileWidth>512</tileWidth>
+      <yCoordinateFirst>false</yCoordinateFirst>
+    </gridSet>
+  </gridSets>
+  <layers/>
 </gwcConfiguration>
