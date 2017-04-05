@@ -30,10 +30,10 @@ if [ ! -d gdal/lib ]; then
 fi
 
 ## Install the GDAL data to the gdal/data folder
-if [ ! -d gdal/lib ]; then
+if [ ! -d gdal/data ]; then
     echo "Installing the GDAL data"
     mkdir gdal/data
-    tar -xzf gdal/gdal-data.tar.gz gdal-data/* -C gdal/data
+    tar -xzf gdal/gdal-data.tar.gz -C gdal/data
 fi
 
 
