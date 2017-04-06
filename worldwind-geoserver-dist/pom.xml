@@ -4,7 +4,7 @@
     <parent>
         <groupId>gov.nasa.worldwind</groupId>
         <artifactId>worldwind-serverkit</artifactId>
-        <version>0.1.0</version>
+        <version>0.2.0-RC</version>
     </parent>
     <artifactId>worldwind-geoserver-dist</artifactId>
     <packaging>pom</packaging>
@@ -137,12 +137,37 @@
                             <goal>run</goal>
                         </goals>
                     </execution>
+                    
+                    <!--                    
+                    Unzip the Windows Java Server JRE
+                    There's no guarantee that a command line unzip tool is available in Windows,
+                    so we unzip the JRE here and include the unzipped files in an assembly component.
+                    -->
                     <execution>
                         <id>unpackJdk</id>
                         <phase>package</phase>
                         <configuration>
                             <tasks>
-                                <untar src="${project.basedir}/src/main/resources/java/server-jre-8u111-linux-x64.tar.gz" dest="${project.build.directory}/java" compression="gzip"/>
+                                <untar src="${project.basedir}/src/main/resources/java/server-jre-8u121-windows-x64.tar.gz" dest="${project.build.directory}/java-win64" compression="gzip"/>
+                            </tasks>                            
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                    
+                    <!--                    
+                    Unzip the GDAL natives and data
+                    There's no guarantee that a command line unzip tool is available in Windows,
+                    so we unzip the GDAL here and include the unzipped files in an assembly component.
+                    -->
+                    <execution>
+                        <id>unpackGDAL</id>
+                        <phase>package</phase>
+                        <configuration>
+                            <tasks>
+                                <unzip src="${project.basedir}/src/main/resources/gdal/gdal-1.9.2-MSVC2010-x64.zip" dest="${project.build.directory}/gdal/win64"/>
+                                <unzip src="${project.basedir}/src/main/resources/gdal/gdal-data.zip" dest="${project.build.directory}/gdal/data"/>
                             </tasks>                            
                         </configuration>
                         <goals>
@@ -154,6 +179,7 @@
                         
             <!--
             Build the assembly (distribution) of sources and/or binaries.
+            See: https://maven.apache.org/plugins-archives/maven-assembly-plugin-2.2.2/index.html
             -->
             <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
@@ -162,13 +188,21 @@
                         <phase>install</phase>
                         <configuration>
                             <descriptors>
-                                <!-- Binary distibution content -->
-                                <descriptor>src/assembly/bin.xml</descriptor>
+                                <!--Binary distibution content-->
+                                <descriptor>src/assembly/bin-assembly.xml</descriptor>
                                 
-                                <descriptor>src/assembly/ssgf.xml</descriptor>
+                                <!--Windows x64 distribution-->
+                                <descriptor>src/assembly/win64-assembly.xml</descriptor>
+                                
+                                <!--Linux x64 distirbution-->
+                                <descriptor>src/assembly/linux64-assembly.xml</descriptor>
+                                
+                                <!--Hybrid OS (linux-based x64) distribution-->
+                                <descriptor>src/assembly/hybrid_os-assembly.xml</descriptor>
                                 
                                 <!--WAR file distibution content -->
-                                <descriptor>src/assembly/war.xml</descriptor>
+                                <descriptor>src/assembly/war-assembly.xml</descriptor>
+                                
                             </descriptors>
                             
                             <!-- Output file and location -->

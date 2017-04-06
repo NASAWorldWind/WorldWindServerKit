@@ -1,0 +1,12 @@
+<component>
+    <fileSets>
+        <fileSet>
+            <!-- Java Server JRE (unzipped by a maven ant task) --> 
+            <directory>target/java-win64/jdk1.8.0_121/jre</directory>
+            <outputDirectory>worldwind-geoserver-${project.version}/java</outputDirectory>
+            <includes>
+                <include>**/*</include>
+            </includes>
+        </fileSet>
+    </fileSets>
+</component>

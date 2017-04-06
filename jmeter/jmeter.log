@@ -1,0 +1,1305 @@
+2017/03/29 15:25:21 INFO  - jmeter.util.JMeterUtils: Setting Locale to en_US 
+2017/03/29 15:25:21 INFO  - jmeter.JMeter: Loading user properties from: /opt/apache-jmeter-3.1/bin/user.properties 
+2017/03/29 15:25:21 INFO  - jmeter.JMeter: Loading system properties from: /opt/apache-jmeter-3.1/bin/system.properties 
+2017/03/29 15:25:21 INFO  - jmeter.JMeter: Copyright (c) 1998-2016 The Apache Software Foundation 
+2017/03/29 15:25:21 INFO  - jmeter.JMeter: Version 3.1 r1770033 
+2017/03/29 15:25:21 INFO  - jmeter.JMeter: java.version=1.8.0_121 
+2017/03/29 15:25:21 INFO  - jmeter.JMeter: java.vm.name=OpenJDK 64-Bit Server VM 
+2017/03/29 15:25:21 INFO  - jmeter.JMeter: os.name=Linux 
+2017/03/29 15:25:21 INFO  - jmeter.JMeter: os.arch=amd64 
+2017/03/29 15:25:21 INFO  - jmeter.JMeter: os.version=4.8.0-36-generic 
+2017/03/29 15:25:21 INFO  - jmeter.JMeter: file.encoding=UTF-8 
+2017/03/29 15:25:21 INFO  - jmeter.JMeter: Max memory     =3726639104 
+2017/03/29 15:25:21 INFO  - jmeter.JMeter: Available Processors =8 
+2017/03/29 15:25:21 INFO  - jmeter.JMeter: Default Locale=English (United States) 
+2017/03/29 15:25:21 INFO  - jmeter.JMeter: JMeter  Locale=English (United States) 
+2017/03/29 15:25:21 INFO  - jmeter.JMeter: JMeterHome=/opt/apache-jmeter-3.1 
+2017/03/29 15:25:21 INFO  - jmeter.JMeter: user.dir  =/home/bruce/Documents/wwsk_stress_test 
+2017/03/29 15:25:21 INFO  - jmeter.JMeter: PWD       =/home/bruce/Documents/wwsk_stress_test 
+2017/03/29 15:25:21 INFO  - jmeter.JMeter: IP: 127.0.1.1 Name: cobra FullName: cobra 
+2017/03/29 15:25:21 INFO  - jmeter.gui.action.LookAndFeelCommand: Using look and feel: javax.swing.plaf.metal.MetalLookAndFeel [Metal, CrossPlatform] 
+2017/03/29 15:25:21 INFO  - jmeter.JMeter: Loaded icon properties from org/apache/jmeter/images/icon.properties 
+2017/03/29 15:25:22 INFO  - jmeter.engine.util.CompoundVariable: Note: Function class names must contain the string: '.functions.' 
+2017/03/29 15:25:22 INFO  - jmeter.engine.util.CompoundVariable: Note: Function class names must not contain the string: '.gui.' 
+2017/03/29 15:25:23 INFO  - jmeter.gui.util.MenuFactory: Skipping org.apache.jmeter.assertions.BSFAssertion 
+2017/03/29 15:25:23 INFO  - jmeter.gui.util.MenuFactory: Skipping org.apache.jmeter.extractor.BSFPostProcessor 
+2017/03/29 15:25:23 INFO  - jmeter.gui.util.MenuFactory: Skipping org.apache.jmeter.modifiers.BSFPreProcessor 
+2017/03/29 15:25:23 INFO  - jmeter.protocol.http.sampler.HTTPSamplerBase: Parser for text/html is org.apache.jmeter.protocol.http.parser.LagartoBasedHtmlParser 
+2017/03/29 15:25:23 INFO  - jmeter.protocol.http.sampler.HTTPSamplerBase: Parser for application/xhtml+xml is org.apache.jmeter.protocol.http.parser.LagartoBasedHtmlParser 
+2017/03/29 15:25:23 INFO  - jmeter.protocol.http.sampler.HTTPSamplerBase: Parser for application/xml is org.apache.jmeter.protocol.http.parser.LagartoBasedHtmlParser 
+2017/03/29 15:25:23 INFO  - jmeter.protocol.http.sampler.HTTPSamplerBase: Parser for text/xml is org.apache.jmeter.protocol.http.parser.LagartoBasedHtmlParser 
+2017/03/29 15:25:23 INFO  - jmeter.protocol.http.sampler.HTTPSamplerBase: Parser for text/vnd.wap.wml is org.apache.jmeter.protocol.http.parser.RegexpHTMLParser 
+2017/03/29 15:25:23 INFO  - jmeter.protocol.http.sampler.HTTPSamplerBase: Parser for text/css is org.apache.jmeter.protocol.http.parser.CssParser 
+2017/03/29 15:25:24 INFO  - jorphan.exec.KeyToolUtils: keytool found at 'keytool' 
+2017/03/29 15:25:24 INFO  - jmeter.protocol.http.proxy.ProxyControl: HTTP(S) Test Script Recorder SSL Proxy will use keys that support embedded 3rd party resources in file /opt/apache-jmeter-3.1/bin/proxyserver.jks 
+2017/03/29 15:25:24 INFO  - jmeter.gui.util.MenuFactory: Skipping org.apache.jmeter.protocol.java.sampler.BSFSampler 
+2017/03/29 15:25:24 INFO  - jmeter.gui.util.MenuFactory: Skipping org.apache.jmeter.protocol.mongodb.config.MongoSourceElement 
+2017/03/29 15:25:24 INFO  - jmeter.gui.util.MenuFactory: Skipping org.apache.jmeter.protocol.mongodb.sampler.MongoScriptSampler 
+2017/03/29 15:25:24 INFO  - jmeter.gui.util.MenuFactory: Skipping org.apache.jmeter.timers.BSFTimer 
+2017/03/29 15:25:24 INFO  - jmeter.gui.util.MenuFactory: Skipping org.apache.jmeter.visualizers.BSFListener 
+2017/03/29 15:25:24 INFO  - jmeter.gui.util.MenuFactory: Skipping org.apache.jmeter.visualizers.MonitorHealthVisualizer 
+2017/03/29 15:25:24 INFO  - jmeter.samplers.SampleResult: Note: Sample TimeStamps are START times 
+2017/03/29 15:25:24 INFO  - jmeter.samplers.SampleResult: sampleresult.default.encoding is set to ISO-8859-1 
+2017/03/29 15:25:24 INFO  - jmeter.samplers.SampleResult: sampleresult.useNanoTime=true 
+2017/03/29 15:25:24 INFO  - jmeter.samplers.SampleResult: sampleresult.nanoThreadSleep=5000 
+2017/03/30 08:23:10 INFO  - jmeter.services.FileServer: Default base='/home/bruce/Documents/wwsk_stress_test' 
+2017/03/30 08:23:10 INFO  - jmeter.services.FileServer: Set new base='/home/bruce/Documents/wwsk_stress_test' 
+2017/03/30 08:23:10 INFO  - jmeter.save.SaveService: Testplan (JMX) version: 2.2. Testlog (JTL) version: 2.2 
+2017/03/30 08:23:10 INFO  - jmeter.save.SaveService: Using SaveService properties file encoding UTF-8 
+2017/03/30 08:23:10 INFO  - jmeter.save.SaveService: Using SaveService properties version 3.1 
+2017/03/30 08:23:10 INFO  - jmeter.save.SaveService: All converter versions present and correct 
+2017/03/30 08:32:38 INFO  - jmeter.engine.StandardJMeterEngine: Running the test! 
+2017/03/30 08:32:38 INFO  - jmeter.samplers.SampleEvent: List of sample_variables: [] 
+2017/03/30 08:32:38 INFO  - jmeter.samplers.SampleEvent: List of sample_variables: [] 
+2017/03/30 08:32:38 INFO  - jmeter.gui.util.JMeterMenuBar: setRunning(true,*local*) 
+2017/03/30 08:32:38 INFO  - jmeter.engine.StandardJMeterEngine: Starting ThreadGroup: 1 : Web Map Requests 
+2017/03/30 08:32:38 INFO  - jmeter.engine.StandardJMeterEngine: Starting 30 threads for group Web Map Requests. 
+2017/03/30 08:32:38 INFO  - jmeter.engine.StandardJMeterEngine: Thread will continue on error 
+2017/03/30 08:32:38 INFO  - jmeter.threads.ThreadGroup: Starting thread group number 1 threads 30 ramp-up 300 perThread 10000.0 delayedStart=false 
+2017/03/30 08:32:38 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-1 
+2017/03/30 08:32:38 INFO  - jmeter.services.FileServer: Stored: global.csv 
+2017/03/30 08:32:38 INFO  - jmeter.threads.ThreadGroup: Started thread group number 1 
+2017/03/30 08:32:38 INFO  - jmeter.engine.StandardJMeterEngine: All thread groups have been started 
+2017/03/30 08:32:39 INFO  - jmeter.protocol.http.sampler.HTTPHCAbstractImpl: Local host = cobra 
+2017/03/30 08:32:40 INFO  - jmeter.protocol.http.sampler.HTTPHC4Impl: HTTP request retry count = 0 
+2017/03/30 08:32:48 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-2 
+2017/03/30 08:32:58 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-3 
+2017/03/30 08:33:00 INFO  - jmeter.reporters.Summariser: Generate Summary Results +     32 in 00:00:21 =    1.5/s Avg:     9 Min:     0 Max:   172 Err:     1 (3.12%) Active: 3 Started: 3 Finished: 0 
+2017/03/30 08:33:08 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-4 
+2017/03/30 08:33:18 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-5 
+2017/03/30 08:33:28 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-6 
+2017/03/30 08:33:30 INFO  - jmeter.reporters.Summariser: Generate Summary Results +    120 in 00:00:30 =    4.0/s Avg:     4 Min:     3 Max:    41 Err:     0 (0.00%) Active: 6 Started: 6 Finished: 0 
+2017/03/30 08:33:30 INFO  - jmeter.reporters.Summariser: Generate Summary Results =    152 in 00:00:51 =    3.0/s Avg:     5 Min:     0 Max:   172 Err:     1 (0.66%) 
+2017/03/30 08:33:38 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-7 
+2017/03/30 08:33:48 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-8 
+2017/03/30 08:33:58 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-9 
+2017/03/30 08:34:00 INFO  - jmeter.reporters.Summariser: Generate Summary Results +    210 in 00:00:30 =    7.0/s Avg:     7 Min:     2 Max:   216 Err:     0 (0.00%) Active: 9 Started: 9 Finished: 0 
+2017/03/30 08:34:00 INFO  - jmeter.reporters.Summariser: Generate Summary Results =    362 in 00:01:21 =    4.5/s Avg:     6 Min:     0 Max:   216 Err:     1 (0.28%) 
+2017/03/30 08:34:08 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-10 
+2017/03/30 08:34:18 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-11 
+2017/03/30 08:34:28 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-12 
+2017/03/30 08:34:30 INFO  - jmeter.reporters.Summariser: Generate Summary Results +    300 in 00:00:30 =   10.0/s Avg:     5 Min:     2 Max:    29 Err:     0 (0.00%) Active: 12 Started: 12 Finished: 0 
+2017/03/30 08:34:30 INFO  - jmeter.reporters.Summariser: Generate Summary Results =    662 in 00:01:51 =    6.0/s Avg:     6 Min:     0 Max:   216 Err:     1 (0.15%) 
+2017/03/30 08:34:38 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-13 
+2017/03/30 08:34:48 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-14 
+2017/03/30 08:34:55 INFO  - jmeter.gui.action.Start: Stopping test 
+2017/03/30 08:34:55 INFO  - jmeter.threads.JMeterThread: Stopping: Web Map Requests 1-15 
+2017/03/30 08:34:55 INFO  - jmeter.threads.JMeterThread: Stopping: Web Map Requests 1-17 
+2017/03/30 08:34:55 INFO  - jmeter.threads.JMeterThread: Stopping: Web Map Requests 1-23 
+2017/03/30 08:34:55 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-15 
+2017/03/30 08:34:55 INFO  - jmeter.threads.JMeterThread: Stopping: Web Map Requests 1-4 
+2017/03/30 08:34:55 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-17 
+2017/03/30 08:34:55 INFO  - jmeter.threads.JMeterThread: Stopping: Web Map Requests 1-10 
+2017/03/30 08:34:55 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-15 
+2017/03/30 08:34:55 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-23 
+2017/03/30 08:34:55 WARN  - jmeter.threads.JMeterThread: The delay timer was interrupted - probably did not wait as long as intended. 
+2017/03/30 08:34:55 INFO  - jmeter.threads.JMeterThread: Stopping: Web Map Requests 1-22 
+2017/03/30 08:34:55 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-17 
+2017/03/30 08:34:55 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-22 
+2017/03/30 08:34:55 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-22 
+2017/03/30 08:34:55 WARN  - jmeter.threads.JMeterThread: The delay timer was interrupted - probably did not wait as long as intended. 
+2017/03/30 08:34:55 INFO  - jmeter.threads.JMeterThread: Stopping: Web Map Requests 1-26 
+2017/03/30 08:34:55 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-23 
+2017/03/30 08:34:55 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-26 
+2017/03/30 08:34:55 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-26 
+2017/03/30 08:34:55 INFO  - jmeter.threads.JMeterThread: Stopping: Web Map Requests 1-16 
+2017/03/30 08:34:55 INFO  - jmeter.threads.JMeterThread: Stopping: Web Map Requests 1-13 
+2017/03/30 08:34:55 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-16 
+2017/03/30 08:34:55 INFO  - jmeter.threads.JMeterThread: Stopping: Web Map Requests 1-28 
+2017/03/30 08:34:55 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-16 
+2017/03/30 08:34:55 INFO  - jmeter.threads.JMeterThread: Stopping: Web Map Requests 1-12 
+2017/03/30 08:34:55 INFO  - jmeter.threads.JMeterThread: Stopping: Web Map Requests 1-24 
+2017/03/30 08:34:55 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-28 
+2017/03/30 08:34:55 INFO  - jmeter.threads.JMeterThread: Stopping: Web Map Requests 1-11 
+2017/03/30 08:34:55 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-24 
+2017/03/30 08:34:55 WARN  - jmeter.threads.JMeterThread: The delay timer was interrupted - probably did not wait as long as intended. 
+2017/03/30 08:34:55 WARN  - jmeter.threads.JMeterThread: The delay timer was interrupted - probably did not wait as long as intended. 
+2017/03/30 08:34:55 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-28 
+2017/03/30 08:34:55 INFO  - jmeter.threads.JMeterThread: Stopping: Web Map Requests 1-1 
+2017/03/30 08:34:55 INFO  - jmeter.threads.JMeterThread: Stopping: Web Map Requests 1-30 
+2017/03/30 08:34:55 INFO  - jmeter.threads.JMeterThread: Stopping: Web Map Requests 1-5 
+2017/03/30 08:34:55 INFO  - jmeter.threads.JMeterThread: Stopping: Web Map Requests 1-29 
+2017/03/30 08:34:55 INFO  - jmeter.threads.JMeterThread: Stopping: Web Map Requests 1-7 
+2017/03/30 08:34:55 INFO  - jmeter.threads.JMeterThread: Stopping: Web Map Requests 1-9 
+2017/03/30 08:34:55 WARN  - jmeter.threads.JMeterThread: The delay timer was interrupted - probably did not wait as long as intended. 
+2017/03/30 08:34:55 WARN  - jmeter.threads.JMeterThread: The delay timer was interrupted - probably did not wait as long as intended. 
+2017/03/30 08:34:55 INFO  - jmeter.threads.JMeterThread: Stopping: Web Map Requests 1-27 
+2017/03/30 08:34:55 WARN  - jmeter.threads.JMeterThread: The delay timer was interrupted - probably did not wait as long as intended. 
+2017/03/30 08:34:55 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-29 
+2017/03/30 08:34:55 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-29 
+2017/03/30 08:34:55 WARN  - jmeter.threads.JMeterThread: The delay timer was interrupted - probably did not wait as long as intended. 
+2017/03/30 08:34:55 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-30 
+2017/03/30 08:34:55 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-30 
+2017/03/30 08:34:55 WARN  - jmeter.threads.JMeterThread: The delay timer was interrupted - probably did not wait as long as intended. 
+2017/03/30 08:34:55 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-24 
+2017/03/30 08:34:55 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-27 
+2017/03/30 08:34:55 INFO  - jmeter.threads.JMeterThread: Stopping: Web Map Requests 1-3 
+2017/03/30 08:34:55 INFO  - jmeter.threads.JMeterThread: Stopping: Web Map Requests 1-18 
+2017/03/30 08:34:55 WARN  - jmeter.threads.JMeterThread: The delay timer was interrupted - probably did not wait as long as intended. 
+2017/03/30 08:34:55 INFO  - jmeter.threads.JMeterThread: Stopping: Web Map Requests 1-25 
+2017/03/30 08:34:55 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-18 
+2017/03/30 08:34:55 INFO  - jmeter.threads.JMeterThread: Stopping: Web Map Requests 1-6 
+2017/03/30 08:34:55 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-18 
+2017/03/30 08:34:55 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-25 
+2017/03/30 08:34:55 WARN  - jmeter.threads.JMeterThread: The delay timer was interrupted - probably did not wait as long as intended. 
+2017/03/30 08:34:55 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-27 
+2017/03/30 08:34:55 INFO  - jmeter.threads.JMeterThread: Stopping: Web Map Requests 1-21 
+2017/03/30 08:34:55 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-25 
+2017/03/30 08:34:55 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-21 
+2017/03/30 08:34:55 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-21 
+2017/03/30 08:34:55 INFO  - jmeter.threads.JMeterThread: Stopping: Web Map Requests 1-19 
+2017/03/30 08:34:55 INFO  - jmeter.threads.JMeterThread: Stopping: Web Map Requests 1-8 
+2017/03/30 08:34:55 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-19 
+2017/03/30 08:34:55 WARN  - jmeter.threads.JMeterThread: The delay timer was interrupted - probably did not wait as long as intended. 
+2017/03/30 08:34:55 INFO  - jmeter.threads.JMeterThread: Stopping: Web Map Requests 1-2 
+2017/03/30 08:34:55 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-19 
+2017/03/30 08:34:55 WARN  - jmeter.threads.JMeterThread: The delay timer was interrupted - probably did not wait as long as intended. 
+2017/03/30 08:34:55 INFO  - jmeter.threads.JMeterThread: Stopping: Web Map Requests 1-20 
+2017/03/30 08:34:55 INFO  - jmeter.threads.JMeterThread: Stopping: Web Map Requests 1-14 
+2017/03/30 08:34:55 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-20 
+2017/03/30 08:34:55 WARN  - jmeter.threads.JMeterThread: The delay timer was interrupted - probably did not wait as long as intended. 
+2017/03/30 08:34:55 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-20 
+2017/03/30 08:34:55 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-10 
+2017/03/30 08:34:55 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-11 
+2017/03/30 08:34:55 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-5 
+2017/03/30 08:34:55 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-4 
+2017/03/30 08:34:55 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-3 
+2017/03/30 08:34:55 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-6 
+2017/03/30 08:34:55 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-2 
+2017/03/30 08:34:55 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-14 
+2017/03/30 08:34:55 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-1 
+2017/03/30 08:34:55 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-7 
+2017/03/30 08:34:55 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-9 
+2017/03/30 08:34:55 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-13 
+2017/03/30 08:34:55 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-12 
+2017/03/30 08:34:55 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-8 
+2017/03/30 08:34:55 INFO  - jmeter.engine.StandardJMeterEngine: Notifying test listeners of end of test 
+2017/03/30 08:34:55 INFO  - jmeter.services.FileServer: Close: global.csv 
+2017/03/30 08:34:55 INFO  - jmeter.reporters.Summariser: Generate Summary Results +    335 in 00:00:25 =   13.3/s Avg:     6 Min:     2 Max:    73 Err:     0 (0.00%) Active: 0 Started: 30 Finished: 30 
+2017/03/30 08:34:55 INFO  - jmeter.reporters.Summariser: Generate Summary Results =    997 in 00:02:16 =    7.3/s Avg:     6 Min:     0 Max:   216 Err:     1 (0.10%) 
+2017/03/30 08:34:55 INFO  - jmeter.gui.util.JMeterMenuBar: setRunning(false,*local*) 
+2017/03/30 08:40:14 INFO  - jmeter.engine.StandardJMeterEngine: Running the test! 
+2017/03/30 08:40:14 INFO  - jmeter.samplers.SampleEvent: List of sample_variables: [] 
+2017/03/30 08:40:14 INFO  - jmeter.gui.util.JMeterMenuBar: setRunning(true,*local*) 
+2017/03/30 08:40:14 INFO  - jmeter.engine.StandardJMeterEngine: Starting ThreadGroup: 1 : Web Map Requests 
+2017/03/30 08:40:14 INFO  - jmeter.engine.StandardJMeterEngine: Starting 30 threads for group Web Map Requests. 
+2017/03/30 08:40:14 INFO  - jmeter.engine.StandardJMeterEngine: Thread will continue on error 
+2017/03/30 08:40:14 INFO  - jmeter.threads.ThreadGroup: Starting thread group number 1 threads 30 ramp-up 300 perThread 10000.0 delayedStart=false 
+2017/03/30 08:40:14 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-1 
+2017/03/30 08:40:14 INFO  - jmeter.services.FileServer: Stored: global.csv 
+2017/03/30 08:40:14 INFO  - jmeter.threads.ThreadGroup: Started thread group number 1 
+2017/03/30 08:40:14 INFO  - jmeter.engine.StandardJMeterEngine: All thread groups have been started 
+2017/03/30 08:40:24 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-2 
+2017/03/30 08:40:30 INFO  - jmeter.reporters.Summariser: Generate Summary Results +     20 in 00:00:16 =    1.2/s Avg:    58 Min:     0 Max:   197 Err:     1 (5.00%) Active: 2 Started: 2 Finished: 0 
+2017/03/30 08:40:34 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-3 
+2017/03/30 08:40:44 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-4 
+2017/03/30 08:40:54 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-5 
+2017/03/30 08:41:00 INFO  - jmeter.reporters.Summariser: Generate Summary Results +    102 in 00:00:30 =    3.4/s Avg:    49 Min:    11 Max:   135 Err:     0 (0.00%) Active: 5 Started: 5 Finished: 0 
+2017/03/30 08:41:00 INFO  - jmeter.reporters.Summariser: Generate Summary Results =    122 in 00:00:46 =    2.6/s Avg:    50 Min:     0 Max:   197 Err:     1 (0.82%) 
+2017/03/30 08:41:04 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-6 
+2017/03/30 08:41:14 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-7 
+2017/03/30 08:41:24 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-8 
+2017/03/30 08:41:30 INFO  - jmeter.reporters.Summariser: Generate Summary Results +    187 in 00:00:30 =    6.3/s Avg:    47 Min:     9 Max:   146 Err:     0 (0.00%) Active: 8 Started: 8 Finished: 0 
+2017/03/30 08:41:30 INFO  - jmeter.reporters.Summariser: Generate Summary Results =    309 in 00:01:16 =    4.1/s Avg:    48 Min:     0 Max:   197 Err:     1 (0.32%) 
+2017/03/30 08:41:34 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-9 
+2017/03/30 08:41:44 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-10 
+2017/03/30 08:41:54 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-11 
+2017/03/30 08:42:00 INFO  - jmeter.reporters.Summariser: Generate Summary Results +    271 in 00:00:30 =    9.1/s Avg:    43 Min:     9 Max:   172 Err:     0 (0.00%) Active: 11 Started: 11 Finished: 0 
+2017/03/30 08:42:00 INFO  - jmeter.reporters.Summariser: Generate Summary Results =    580 in 00:01:46 =    5.5/s Avg:    46 Min:     0 Max:   197 Err:     1 (0.17%) 
+2017/03/30 08:42:04 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-12 
+2017/03/30 08:42:14 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-13 
+2017/03/30 08:42:24 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-14 
+2017/03/30 08:42:30 INFO  - jmeter.reporters.Summariser: Generate Summary Results +    360 in 00:00:30 =   12.1/s Avg:    43 Min:     8 Max:   136 Err:     0 (0.00%) Active: 14 Started: 14 Finished: 0 
+2017/03/30 08:42:30 INFO  - jmeter.reporters.Summariser: Generate Summary Results =    940 in 00:02:16 =    6.9/s Avg:    45 Min:     0 Max:   197 Err:     1 (0.11%) 
+2017/03/30 08:42:34 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-15 
+2017/03/30 08:42:44 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-16 
+2017/03/30 08:42:54 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-17 
+2017/03/30 08:43:00 INFO  - jmeter.reporters.Summariser: Generate Summary Results +    447 in 00:00:30 =   14.7/s Avg:    45 Min:     0 Max:   136 Err:     1 (0.22%) Active: 17 Started: 17 Finished: 0 
+2017/03/30 08:43:00 INFO  - jmeter.reporters.Summariser: Generate Summary Results =   1387 in 00:02:46 =    8.3/s Avg:    45 Min:     0 Max:   197 Err:     2 (0.14%) 
+2017/03/30 08:43:04 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-18 
+2017/03/30 08:43:14 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-19 
+2017/03/30 08:43:24 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-20 
+2017/03/30 08:43:30 INFO  - jmeter.reporters.Summariser: Generate Summary Results +    537 in 00:00:30 =   17.8/s Avg:    40 Min:     7 Max:   167 Err:     0 (0.00%) Active: 20 Started: 20 Finished: 0 
+2017/03/30 08:43:30 INFO  - jmeter.reporters.Summariser: Generate Summary Results =   1924 in 00:03:16 =    9.8/s Avg:    43 Min:     0 Max:   197 Err:     2 (0.10%) 
+2017/03/30 08:43:34 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-21 
+2017/03/30 08:43:44 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-22 
+2017/03/30 08:43:54 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-23 
+2017/03/30 08:44:00 INFO  - jmeter.reporters.Summariser: Generate Summary Results +    622 in 00:00:30 =   21.0/s Avg:    39 Min:     0 Max:   163 Err:     1 (0.16%) Active: 23 Started: 23 Finished: 0 
+2017/03/30 08:44:00 INFO  - jmeter.reporters.Summariser: Generate Summary Results =   2546 in 00:03:46 =   11.3/s Avg:    42 Min:     0 Max:   197 Err:     3 (0.12%) 
+2017/03/30 08:44:04 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-24 
+2017/03/30 08:44:14 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-25 
+2017/03/30 08:44:24 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-26 
+2017/03/30 08:44:30 INFO  - jmeter.reporters.Summariser: Generate Summary Results +    698 in 00:00:30 =   23.3/s Avg:    40 Min:     0 Max:   133 Err:     1 (0.14%) Active: 26 Started: 26 Finished: 0 
+2017/03/30 08:44:30 INFO  - jmeter.reporters.Summariser: Generate Summary Results =   3244 in 00:04:16 =   12.7/s Avg:    42 Min:     0 Max:   197 Err:     4 (0.12%) 
+2017/03/30 08:44:34 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-27 
+2017/03/30 08:44:44 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-28 
+2017/03/30 08:44:54 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-29 
+2017/03/30 08:45:00 INFO  - jmeter.reporters.Summariser: Generate Summary Results +    789 in 00:00:30 =   26.3/s Avg:    39 Min:     0 Max:   153 Err:     1 (0.13%) Active: 29 Started: 29 Finished: 0 
+2017/03/30 08:45:00 INFO  - jmeter.reporters.Summariser: Generate Summary Results =   4033 in 00:04:46 =   14.1/s Avg:    41 Min:     0 Max:   197 Err:     5 (0.12%) 
+2017/03/30 08:45:04 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-30 
+2017/03/30 08:45:30 INFO  - jmeter.reporters.Summariser: Generate Summary Results +    864 in 00:00:30 =   28.6/s Avg:    48 Min:     7 Max:   157 Err:     0 (0.00%) Active: 30 Started: 30 Finished: 0 
+2017/03/30 08:45:30 INFO  - jmeter.reporters.Summariser: Generate Summary Results =   4897 in 00:05:16 =   15.5/s Avg:    43 Min:     0 Max:   197 Err:     5 (0.10%) 
+2017/03/30 08:46:00 INFO  - jmeter.reporters.Summariser: Generate Summary Results +    861 in 00:00:30 =   28.9/s Avg:    46 Min:     0 Max:   172 Err:     1 (0.12%) Active: 30 Started: 30 Finished: 0 
+2017/03/30 08:46:00 INFO  - jmeter.reporters.Summariser: Generate Summary Results =   5758 in 00:05:46 =   16.6/s Avg:    43 Min:     0 Max:   197 Err:     6 (0.10%) 
+2017/03/30 08:46:30 INFO  - jmeter.reporters.Summariser: Generate Summary Results +    849 in 00:00:30 =   28.2/s Avg:    46 Min:     0 Max:   152 Err:     1 (0.12%) Active: 30 Started: 30 Finished: 0 
+2017/03/30 08:46:30 INFO  - jmeter.reporters.Summariser: Generate Summary Results =   6607 in 00:06:16 =   17.6/s Avg:    43 Min:     0 Max:   197 Err:     7 (0.11%) 
+2017/03/30 08:47:00 INFO  - jmeter.reporters.Summariser: Generate Summary Results +    848 in 00:00:31 =   27.8/s Avg:    79 Min:     0 Max:  1191 Err:     1 (0.12%) Active: 30 Started: 30 Finished: 0 
+2017/03/30 08:47:00 INFO  - jmeter.reporters.Summariser: Generate Summary Results =   7455 in 00:06:47 =   18.3/s Avg:    47 Min:     0 Max:  1191 Err:     8 (0.11%) 
+2017/03/30 08:47:30 INFO  - jmeter.reporters.Summariser: Generate Summary Results +    840 in 00:00:29 =   28.5/s Avg:    54 Min:     0 Max:   186 Err:     1 (0.12%) Active: 30 Started: 30 Finished: 0 
+2017/03/30 08:47:30 INFO  - jmeter.reporters.Summariser: Generate Summary Results =   8295 in 00:07:16 =   19.0/s Avg:    48 Min:     0 Max:  1191 Err:     9 (0.11%) 
+2017/03/30 08:48:00 INFO  - jmeter.reporters.Summariser: Generate Summary Results +    852 in 00:00:30 =   28.1/s Avg:    67 Min:     0 Max:   940 Err:     1 (0.12%) Active: 30 Started: 30 Finished: 0 
+2017/03/30 08:48:00 INFO  - jmeter.reporters.Summariser: Generate Summary Results =   9147 in 00:07:46 =   19.6/s Avg:    50 Min:     0 Max:  1191 Err:    10 (0.11%) 
+2017/03/30 08:48:30 INFO  - jmeter.reporters.Summariser: Generate Summary Results +    830 in 00:00:30 =   28.1/s Avg:    62 Min:     7 Max:   982 Err:     0 (0.00%) Active: 30 Started: 30 Finished: 0 
+2017/03/30 08:48:30 INFO  - jmeter.reporters.Summariser: Generate Summary Results =   9977 in 00:08:16 =   20.1/s Avg:    51 Min:     0 Max:  1191 Err:    10 (0.10%) 
+2017/03/30 08:49:00 INFO  - jmeter.reporters.Summariser: Generate Summary Results +    835 in 00:00:30 =   27.4/s Avg:   100 Min:     0 Max:  1030 Err:     1 (0.12%) Active: 30 Started: 30 Finished: 0 
+2017/03/30 08:49:00 INFO  - jmeter.reporters.Summariser: Generate Summary Results =  10812 in 00:08:46 =   20.5/s Avg:    55 Min:     0 Max:  1191 Err:    11 (0.10%) 
+2017/03/30 08:49:30 INFO  - jmeter.reporters.Summariser: Generate Summary Results +    831 in 00:00:30 =   27.4/s Avg:    90 Min:     0 Max:  1034 Err:     1 (0.12%) Active: 30 Started: 30 Finished: 0 
+2017/03/30 08:49:30 INFO  - jmeter.reporters.Summariser: Generate Summary Results =  11643 in 00:09:17 =   20.9/s Avg:    57 Min:     0 Max:  1191 Err:    12 (0.10%) 
+2017/03/30 08:50:00 INFO  - jmeter.reporters.Summariser: Generate Summary Results +    840 in 00:00:29 =   28.6/s Avg:    53 Min:     0 Max:   210 Err:     1 (0.12%) Active: 30 Started: 30 Finished: 0 
+2017/03/30 08:50:00 INFO  - jmeter.reporters.Summariser: Generate Summary Results =  12483 in 00:09:46 =   21.3/s Avg:    57 Min:     0 Max:  1191 Err:    13 (0.10%) 
+2017/03/30 08:50:14 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-6 
+2017/03/30 08:50:14 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-6 
+2017/03/30 08:50:14 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-5 
+2017/03/30 08:50:14 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-5 
+2017/03/30 08:50:14 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-9 
+2017/03/30 08:50:14 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-9 
+2017/03/30 08:50:14 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-29 
+2017/03/30 08:50:14 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-29 
+2017/03/30 08:50:14 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-4 
+2017/03/30 08:50:14 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-4 
+2017/03/30 08:50:14 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-10 
+2017/03/30 08:50:14 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-10 
+2017/03/30 08:50:14 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-8 
+2017/03/30 08:50:14 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-8 
+2017/03/30 08:50:14 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-21 
+2017/03/30 08:50:14 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-21 
+2017/03/30 08:50:14 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-30 
+2017/03/30 08:50:14 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-30 
+2017/03/30 08:50:14 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-14 
+2017/03/30 08:50:14 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-14 
+2017/03/30 08:50:14 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-18 
+2017/03/30 08:50:14 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-18 
+2017/03/30 08:50:14 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-28 
+2017/03/30 08:50:14 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-28 
+2017/03/30 08:50:14 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-16 
+2017/03/30 08:50:14 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-16 
+2017/03/30 08:50:14 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-7 
+2017/03/30 08:50:14 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-17 
+2017/03/30 08:50:14 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-7 
+2017/03/30 08:50:14 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-17 
+2017/03/30 08:50:14 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-11 
+2017/03/30 08:50:14 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-11 
+2017/03/30 08:50:14 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-25 
+2017/03/30 08:50:14 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-25 
+2017/03/30 08:50:14 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-20 
+2017/03/30 08:50:14 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-20 
+2017/03/30 08:50:14 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-3 
+2017/03/30 08:50:14 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-3 
+2017/03/30 08:50:14 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-19 
+2017/03/30 08:50:14 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-19 
+2017/03/30 08:50:14 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-15 
+2017/03/30 08:50:14 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-15 
+2017/03/30 08:50:14 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-12 
+2017/03/30 08:50:14 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-12 
+2017/03/30 08:50:14 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-24 
+2017/03/30 08:50:14 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-24 
+2017/03/30 08:50:14 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-2 
+2017/03/30 08:50:14 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-1 
+2017/03/30 08:50:14 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-2 
+2017/03/30 08:50:14 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-1 
+2017/03/30 08:50:14 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-13 
+2017/03/30 08:50:14 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-23 
+2017/03/30 08:50:14 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-13 
+2017/03/30 08:50:14 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-23 
+2017/03/30 08:50:14 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-22 
+2017/03/30 08:50:14 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-22 
+2017/03/30 08:50:14 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-26 
+2017/03/30 08:50:14 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-26 
+2017/03/30 08:50:14 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-27 
+2017/03/30 08:50:14 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-27 
+2017/03/30 08:50:14 INFO  - jmeter.engine.StandardJMeterEngine: Notifying test listeners of end of test 
+2017/03/30 08:50:14 INFO  - jmeter.services.FileServer: Close: global.csv 
+2017/03/30 08:50:14 INFO  - jmeter.reporters.Summariser: Generate Summary Results +    442 in 00:00:14 =   30.6/s Avg:    64 Min:     7 Max:   324 Err:     0 (0.00%) Active: 0 Started: 30 Finished: 30 
+2017/03/30 08:50:14 INFO  - jmeter.reporters.Summariser: Generate Summary Results =  12925 in 00:10:00 =   21.5/s Avg:    57 Min:     0 Max:  1191 Err:    13 (0.10%) 
+2017/03/30 08:50:14 INFO  - jmeter.gui.util.JMeterMenuBar: setRunning(false,*local*) 
+2017/03/30 09:20:42 INFO  - jmeter.engine.StandardJMeterEngine: Running the test! 
+2017/03/30 09:20:42 INFO  - jmeter.samplers.SampleEvent: List of sample_variables: [] 
+2017/03/30 09:20:42 INFO  - jmeter.gui.util.JMeterMenuBar: setRunning(true,*local*) 
+2017/03/30 09:20:42 INFO  - jmeter.engine.StandardJMeterEngine: Starting ThreadGroup: 1 : Web Map Requests 
+2017/03/30 09:20:42 INFO  - jmeter.engine.StandardJMeterEngine: Starting 30 threads for group Web Map Requests. 
+2017/03/30 09:20:42 INFO  - jmeter.engine.StandardJMeterEngine: Thread will continue on error 
+2017/03/30 09:20:42 INFO  - jmeter.threads.ThreadGroup: Starting thread group number 1 threads 30 ramp-up 300 perThread 10000.0 delayedStart=false 
+2017/03/30 09:20:42 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-1 
+2017/03/30 09:20:42 INFO  - jmeter.services.FileServer: Stored: global.csv 
+2017/03/30 09:20:42 INFO  - jmeter.threads.ThreadGroup: Started thread group number 1 
+2017/03/30 09:20:42 INFO  - jmeter.engine.StandardJMeterEngine: All thread groups have been started 
+2017/03/30 09:20:52 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-2 
+2017/03/30 09:21:00 INFO  - jmeter.reporters.Summariser: Generate Summary Results +     24 in 00:00:18 =    1.3/s Avg:    56 Min:     0 Max:   157 Err:     1 (4.17%) Active: 2 Started: 2 Finished: 0 
+2017/03/30 09:21:02 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-3 
+2017/03/30 09:21:12 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-4 
+2017/03/30 09:21:22 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-5 
+2017/03/30 09:21:30 INFO  - jmeter.reporters.Summariser: Generate Summary Results +    106 in 00:00:30 =    3.5/s Avg:    49 Min:     8 Max:   106 Err:     0 (0.00%) Active: 5 Started: 5 Finished: 0 
+2017/03/30 09:21:30 INFO  - jmeter.reporters.Summariser: Generate Summary Results =    130 in 00:00:48 =    2.7/s Avg:    51 Min:     0 Max:   157 Err:     1 (0.77%) 
+2017/03/30 09:21:32 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-6 
+2017/03/30 09:21:42 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-7 
+2017/03/30 09:21:52 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-8 
+2017/03/30 09:22:00 INFO  - jmeter.reporters.Summariser: Generate Summary Results +    194 in 00:00:30 =    6.5/s Avg:    42 Min:     8 Max:   101 Err:     0 (0.00%) Active: 8 Started: 8 Finished: 0 
+2017/03/30 09:22:00 INFO  - jmeter.reporters.Summariser: Generate Summary Results =    324 in 00:01:18 =    4.2/s Avg:    46 Min:     0 Max:   157 Err:     1 (0.31%) 
+2017/03/30 09:22:02 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-9 
+2017/03/30 09:22:12 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-10 
+2017/03/30 09:22:22 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-11 
+2017/03/30 09:22:30 INFO  - jmeter.reporters.Summariser: Generate Summary Results +    281 in 00:00:30 =    9.4/s Avg:    42 Min:     7 Max:   112 Err:     0 (0.00%) Active: 11 Started: 11 Finished: 0 
+2017/03/30 09:22:30 INFO  - jmeter.reporters.Summariser: Generate Summary Results =    605 in 00:01:48 =    5.6/s Avg:    44 Min:     0 Max:   157 Err:     1 (0.17%) 
+2017/03/30 09:22:32 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-12 
+2017/03/30 09:22:42 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-13 
+2017/03/30 09:22:52 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-14 
+2017/03/30 09:23:00 INFO  - jmeter.reporters.Summariser: Generate Summary Results +    362 in 00:00:30 =   12.1/s Avg:    43 Min:     7 Max:   145 Err:     0 (0.00%) Active: 14 Started: 14 Finished: 0 
+2017/03/30 09:23:00 INFO  - jmeter.reporters.Summariser: Generate Summary Results =    967 in 00:02:18 =    7.0/s Avg:    44 Min:     0 Max:   157 Err:     1 (0.10%) 
+2017/03/30 09:23:02 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-15 
+2017/03/30 09:23:12 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-16 
+2017/03/30 09:23:22 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-17 
+2017/03/30 09:23:30 INFO  - jmeter.reporters.Summariser: Generate Summary Results +    454 in 00:00:30 =   14.9/s Avg:    46 Min:     0 Max:   144 Err:     1 (0.22%) Active: 17 Started: 17 Finished: 0 
+2017/03/30 09:23:30 INFO  - jmeter.reporters.Summariser: Generate Summary Results =   1421 in 00:02:48 =    8.4/s Avg:    44 Min:     0 Max:   157 Err:     2 (0.14%) 
+2017/03/30 09:23:32 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-18 
+2017/03/30 09:23:42 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-19 
+2017/03/30 09:23:52 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-20 
+2017/03/30 09:24:00 INFO  - jmeter.reporters.Summariser: Generate Summary Results +    542 in 00:00:30 =   18.3/s Avg:    42 Min:     8 Max:   191 Err:     0 (0.00%) Active: 20 Started: 20 Finished: 0 
+2017/03/30 09:24:00 INFO  - jmeter.reporters.Summariser: Generate Summary Results =   1963 in 00:03:18 =    9.9/s Avg:    44 Min:     0 Max:   191 Err:     2 (0.10%) 
+2017/03/30 09:24:02 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-21 
+2017/03/30 09:24:12 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-22 
+2017/03/30 09:24:22 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-23 
+2017/03/30 09:24:30 INFO  - jmeter.reporters.Summariser: Generate Summary Results +    610 in 00:00:30 =   20.3/s Avg:    48 Min:     0 Max:   172 Err:     1 (0.16%) Active: 23 Started: 23 Finished: 0 
+2017/03/30 09:24:30 INFO  - jmeter.reporters.Summariser: Generate Summary Results =   2573 in 00:03:48 =   11.3/s Avg:    45 Min:     0 Max:   191 Err:     3 (0.12%) 
+2017/03/30 09:24:32 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-24 
+2017/03/30 09:24:42 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-25 
+2017/03/30 09:24:52 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-26 
+2017/03/30 09:25:00 INFO  - jmeter.reporters.Summariser: Generate Summary Results +    713 in 00:00:30 =   23.8/s Avg:    47 Min:     0 Max:   175 Err:     1 (0.14%) Active: 26 Started: 26 Finished: 0 
+2017/03/30 09:25:00 INFO  - jmeter.reporters.Summariser: Generate Summary Results =   3286 in 00:04:18 =   12.7/s Avg:    45 Min:     0 Max:   191 Err:     4 (0.12%) 
+2017/03/30 09:25:02 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-27 
+2017/03/30 09:25:12 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-28 
+2017/03/30 09:25:22 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-29 
+2017/03/30 09:25:30 INFO  - jmeter.reporters.Summariser: Generate Summary Results +    802 in 00:00:30 =   26.8/s Avg:    46 Min:     0 Max:   156 Err:     1 (0.12%) Active: 29 Started: 29 Finished: 0 
+2017/03/30 09:25:30 INFO  - jmeter.reporters.Summariser: Generate Summary Results =   4088 in 00:04:48 =   14.2/s Avg:    45 Min:     0 Max:   191 Err:     5 (0.12%) 
+2017/03/30 09:25:32 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-30 
+2017/03/30 09:26:00 INFO  - jmeter.reporters.Summariser: Generate Summary Results +    846 in 00:00:30 =   27.9/s Avg:    52 Min:     7 Max:   244 Err:     0 (0.00%) Active: 30 Started: 30 Finished: 0 
+2017/03/30 09:26:00 INFO  - jmeter.reporters.Summariser: Generate Summary Results =   4934 in 00:05:18 =   15.5/s Avg:    47 Min:     0 Max:   244 Err:     5 (0.10%) 
+2017/03/30 09:26:30 INFO  - jmeter.reporters.Summariser: Generate Summary Results +    858 in 00:00:30 =   28.9/s Avg:    50 Min:     0 Max:   170 Err:     1 (0.12%) Active: 30 Started: 30 Finished: 0 
+2017/03/30 09:26:30 INFO  - jmeter.reporters.Summariser: Generate Summary Results =   5792 in 00:05:48 =   16.6/s Avg:    47 Min:     0 Max:   244 Err:     6 (0.10%) 
+2017/03/30 09:27:00 INFO  - jmeter.reporters.Summariser: Generate Summary Results +    852 in 00:00:30 =   28.4/s Avg:    45 Min:     0 Max:   168 Err:     1 (0.12%) Active: 30 Started: 30 Finished: 0 
+2017/03/30 09:27:00 INFO  - jmeter.reporters.Summariser: Generate Summary Results =   6644 in 00:06:18 =   17.6/s Avg:    47 Min:     0 Max:   244 Err:     7 (0.11%) 
+2017/03/30 09:27:30 INFO  - jmeter.reporters.Summariser: Generate Summary Results +    864 in 00:00:30 =   28.6/s Avg:    45 Min:     0 Max:   183 Err:     1 (0.12%) Active: 30 Started: 30 Finished: 0 
+2017/03/30 09:27:30 INFO  - jmeter.reporters.Summariser: Generate Summary Results =   7508 in 00:06:48 =   18.4/s Avg:    47 Min:     0 Max:   244 Err:     8 (0.11%) 
+2017/03/30 09:28:00 INFO  - jmeter.reporters.Summariser: Generate Summary Results +    840 in 00:00:30 =   27.7/s Avg:    82 Min:     0 Max:  1057 Err:     1 (0.12%) Active: 30 Started: 30 Finished: 0 
+2017/03/30 09:28:00 INFO  - jmeter.reporters.Summariser: Generate Summary Results =   8348 in 00:07:19 =   19.0/s Avg:    50 Min:     0 Max:  1057 Err:     9 (0.11%) 
+2017/03/30 09:28:30 INFO  - jmeter.reporters.Summariser: Generate Summary Results +    825 in 00:00:29 =   28.0/s Avg:    74 Min:     0 Max:   865 Err:     1 (0.12%) Active: 30 Started: 30 Finished: 0 
+2017/03/30 09:28:30 INFO  - jmeter.reporters.Summariser: Generate Summary Results =   9173 in 00:07:48 =   19.6/s Avg:    52 Min:     0 Max:  1057 Err:    10 (0.11%) 
+2017/03/30 09:29:00 INFO  - jmeter.reporters.Summariser: Generate Summary Results +    848 in 00:00:30 =   28.4/s Avg:    66 Min:     0 Max:   927 Err:     1 (0.12%) Active: 30 Started: 30 Finished: 0 
+2017/03/30 09:29:00 INFO  - jmeter.reporters.Summariser: Generate Summary Results =  10021 in 00:08:18 =   20.1/s Avg:    53 Min:     0 Max:  1057 Err:    11 (0.11%) 
+2017/03/30 09:29:30 INFO  - jmeter.reporters.Summariser: Generate Summary Results +    827 in 00:00:30 =   27.5/s Avg:    82 Min:     7 Max:  1003 Err:     0 (0.00%) Active: 30 Started: 30 Finished: 0 
+2017/03/30 09:29:30 INFO  - jmeter.reporters.Summariser: Generate Summary Results =  10848 in 00:08:48 =   20.5/s Avg:    56 Min:     0 Max:  1057 Err:    11 (0.10%) 
+2017/03/30 09:30:00 INFO  - jmeter.reporters.Summariser: Generate Summary Results +    794 in 00:00:30 =   26.3/s Avg:   138 Min:     0 Max:  1502 Err:     1 (0.13%) Active: 30 Started: 30 Finished: 0 
+2017/03/30 09:30:00 INFO  - jmeter.reporters.Summariser: Generate Summary Results =  11642 in 00:09:18 =   20.9/s Avg:    61 Min:     0 Max:  1502 Err:    12 (0.10%) 
+2017/03/30 09:30:03 INFO  - jmeter.gui.action.Start: Stopping test 
+2017/03/30 09:30:03 INFO  - jmeter.threads.JMeterThread: Stopping: Web Map Requests 1-29 
+2017/03/30 09:30:03 INFO  - jmeter.threads.JMeterThread: Stopping: Web Map Requests 1-22 
+2017/03/30 09:30:03 WARN  - jmeter.threads.JMeterThread: The delay timer was interrupted - probably did not wait as long as intended. 
+2017/03/30 09:30:03 WARN  - jmeter.threads.JMeterThread: The delay timer was interrupted - probably did not wait as long as intended. 
+2017/03/30 09:30:03 INFO  - jmeter.threads.JMeterThread: Stopping: Web Map Requests 1-7 
+2017/03/30 09:30:03 INFO  - jmeter.threads.JMeterThread: Stopping: Web Map Requests 1-12 
+2017/03/30 09:30:03 WARN  - jmeter.threads.JMeterThread: The delay timer was interrupted - probably did not wait as long as intended. 
+2017/03/30 09:30:03 INFO  - jmeter.threads.JMeterThread: Stopping: Web Map Requests 1-26 
+2017/03/30 09:30:03 WARN  - jmeter.threads.JMeterThread: The delay timer was interrupted - probably did not wait as long as intended. 
+2017/03/30 09:30:03 INFO  - jmeter.threads.JMeterThread: Stopping: Web Map Requests 1-11 
+2017/03/30 09:30:03 INFO  - jmeter.threads.JMeterThread: Stopping: Web Map Requests 1-20 
+2017/03/30 09:30:03 INFO  - jmeter.threads.JMeterThread: Stopping: Web Map Requests 1-19 
+2017/03/30 09:30:03 WARN  - jmeter.threads.JMeterThread: The delay timer was interrupted - probably did not wait as long as intended. 
+2017/03/30 09:30:03 INFO  - jmeter.threads.JMeterThread: Stopping: Web Map Requests 1-23 
+2017/03/30 09:30:03 WARN  - jmeter.threads.JMeterThread: The delay timer was interrupted - probably did not wait as long as intended. 
+2017/03/30 09:30:03 INFO  - jmeter.threads.JMeterThread: Stopping: Web Map Requests 1-10 
+2017/03/30 09:30:03 INFO  - jmeter.threads.JMeterThread: Stopping: Web Map Requests 1-17 
+2017/03/30 09:30:03 WARN  - jmeter.threads.JMeterThread: The delay timer was interrupted - probably did not wait as long as intended. 
+2017/03/30 09:30:03 WARN  - jmeter.threads.JMeterThread: The delay timer was interrupted - probably did not wait as long as intended. 
+2017/03/30 09:30:03 WARN  - jmeter.threads.JMeterThread: The delay timer was interrupted - probably did not wait as long as intended. 
+2017/03/30 09:30:03 INFO  - jmeter.threads.JMeterThread: Stopping: Web Map Requests 1-14 
+2017/03/30 09:30:03 WARN  - jmeter.threads.JMeterThread: The delay timer was interrupted - probably did not wait as long as intended. 
+2017/03/30 09:30:03 INFO  - jmeter.threads.JMeterThread: Stopping: Web Map Requests 1-4 
+2017/03/30 09:30:03 WARN  - jmeter.threads.JMeterThread: The delay timer was interrupted - probably did not wait as long as intended. 
+2017/03/30 09:30:03 INFO  - jmeter.threads.JMeterThread: Stopping: Web Map Requests 1-13 
+2017/03/30 09:30:03 WARN  - jmeter.threads.JMeterThread: The delay timer was interrupted - probably did not wait as long as intended. 
+2017/03/30 09:30:03 INFO  - jmeter.threads.JMeterThread: Stopping: Web Map Requests 1-16 
+2017/03/30 09:30:03 WARN  - jmeter.threads.JMeterThread: The delay timer was interrupted - probably did not wait as long as intended. 
+2017/03/30 09:30:03 INFO  - jmeter.threads.JMeterThread: Stopping: Web Map Requests 1-24 
+2017/03/30 09:30:03 INFO  - jmeter.threads.JMeterThread: Stopping: Web Map Requests 1-8 
+2017/03/30 09:30:03 WARN  - jmeter.threads.JMeterThread: The delay timer was interrupted - probably did not wait as long as intended. 
+2017/03/30 09:30:03 INFO  - jmeter.threads.JMeterThread: Stopping: Web Map Requests 1-5 
+2017/03/30 09:30:03 WARN  - jmeter.threads.JMeterThread: The delay timer was interrupted - probably did not wait as long as intended. 
+2017/03/30 09:30:03 WARN  - jmeter.threads.JMeterThread: Interrupting: Web Map Requests 1-5 sampler: GetMap HTTP Request 
+2017/03/30 09:30:03 WARN  - jmeter.threads.JMeterThread: The delay timer was interrupted - probably did not wait as long as intended. 
+2017/03/30 09:30:03 WARN  - jmeter.threads.JMeterThread: The delay timer was interrupted - probably did not wait as long as intended. 
+2017/03/30 09:30:03 INFO  - jmeter.threads.JMeterThread: Stopping: Web Map Requests 1-3 
+2017/03/30 09:30:03 INFO  - jmeter.threads.JMeterThread: Stopping: Web Map Requests 1-18 
+2017/03/30 09:30:03 INFO  - jmeter.threads.JMeterThread: Stopping: Web Map Requests 1-28 
+2017/03/30 09:30:03 WARN  - jmeter.threads.JMeterThread: The delay timer was interrupted - probably did not wait as long as intended. 
+2017/03/30 09:30:03 INFO  - jmeter.threads.JMeterThread: Stopping: Web Map Requests 1-1 
+2017/03/30 09:30:03 WARN  - jmeter.threads.JMeterThread: The delay timer was interrupted - probably did not wait as long as intended. 
+2017/03/30 09:30:03 INFO  - jmeter.threads.JMeterThread: Stopping: Web Map Requests 1-25 
+2017/03/30 09:30:03 INFO  - jmeter.threads.JMeterThread: Stopping: Web Map Requests 1-30 
+2017/03/30 09:30:03 WARN  - jmeter.threads.JMeterThread: The delay timer was interrupted - probably did not wait as long as intended. 
+2017/03/30 09:30:03 WARN  - jmeter.threads.JMeterThread: The delay timer was interrupted - probably did not wait as long as intended. 
+2017/03/30 09:30:03 INFO  - jmeter.threads.JMeterThread: Stopping: Web Map Requests 1-6 
+2017/03/30 09:30:03 INFO  - jmeter.threads.JMeterThread: Stopping: Web Map Requests 1-27 
+2017/03/30 09:30:03 INFO  - jmeter.threads.JMeterThread: Stopping: Web Map Requests 1-9 
+2017/03/30 09:30:03 WARN  - jmeter.threads.JMeterThread: The delay timer was interrupted - probably did not wait as long as intended. 
+2017/03/30 09:30:03 WARN  - jmeter.threads.JMeterThread: The delay timer was interrupted - probably did not wait as long as intended. 
+2017/03/30 09:30:03 WARN  - jmeter.threads.JMeterThread: The delay timer was interrupted - probably did not wait as long as intended. 
+2017/03/30 09:30:03 WARN  - jmeter.threads.JMeterThread: The delay timer was interrupted - probably did not wait as long as intended. 
+2017/03/30 09:30:03 INFO  - jmeter.threads.JMeterThread: Stopping: Web Map Requests 1-15 
+2017/03/30 09:30:03 INFO  - jmeter.threads.JMeterThread: Stopping: Web Map Requests 1-21 
+2017/03/30 09:30:03 INFO  - jmeter.threads.JMeterThread: Stopping: Web Map Requests 1-2 
+2017/03/30 09:30:03 WARN  - jmeter.threads.JMeterThread: The delay timer was interrupted - probably did not wait as long as intended. 
+2017/03/30 09:30:03 WARN  - jmeter.threads.JMeterThread: The delay timer was interrupted - probably did not wait as long as intended. 
+2017/03/30 09:30:03 WARN  - jmeter.threads.JMeterThread: The delay timer was interrupted - probably did not wait as long as intended. 
+2017/03/30 09:30:03 WARN  - jmeter.threads.JMeterThread: The delay timer was interrupted - probably did not wait as long as intended. 
+2017/03/30 09:30:03 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-5 
+2017/03/30 09:30:03 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-4 
+2017/03/30 09:30:03 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-20 
+2017/03/30 09:30:03 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-22 
+2017/03/30 09:30:03 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-24 
+2017/03/30 09:30:03 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-19 
+2017/03/30 09:30:03 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-11 
+2017/03/30 09:30:03 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-29 
+2017/03/30 09:30:03 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-26 
+2017/03/30 09:30:03 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-7 
+2017/03/30 09:30:03 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-23 
+2017/03/30 09:30:03 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-6 
+2017/03/30 09:30:03 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-17 
+2017/03/30 09:30:03 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-3 
+2017/03/30 09:30:03 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-8 
+2017/03/30 09:30:03 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-2 
+2017/03/30 09:30:03 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-18 
+2017/03/30 09:30:03 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-21 
+2017/03/30 09:30:03 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-12 
+2017/03/30 09:30:03 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-13 
+2017/03/30 09:30:03 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-28 
+2017/03/30 09:30:03 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-9 
+2017/03/30 09:30:03 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-14 
+2017/03/30 09:30:03 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-27 
+2017/03/30 09:30:03 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-10 
+2017/03/30 09:30:03 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-16 
+2017/03/30 09:30:03 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-15 
+2017/03/30 09:30:03 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-25 
+2017/03/30 09:30:03 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-1 
+2017/03/30 09:30:03 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-30 
+2017/03/30 09:30:03 INFO  - jmeter.engine.StandardJMeterEngine: Notifying test listeners of end of test 
+2017/03/30 09:30:03 INFO  - jmeter.services.FileServer: Close: global.csv 
+2017/03/30 09:30:03 INFO  - jmeter.reporters.Summariser: Generate Summary Results +    144 in 00:00:04 =   39.1/s Avg:    82 Min:     8 Max:   268 Err:     1 (0.69%) Active: 0 Started: 30 Finished: 30 
+2017/03/30 09:30:03 INFO  - jmeter.reporters.Summariser: Generate Summary Results =  11786 in 00:09:22 =   21.0/s Avg:    61 Min:     0 Max:  1502 Err:    13 (0.11%) 
+2017/03/30 09:30:03 INFO  - jmeter.gui.util.JMeterMenuBar: setRunning(false,*local*) 
+2017/03/30 09:30:44 INFO  - jmeter.engine.StandardJMeterEngine: Running the test! 
+2017/03/30 09:30:44 INFO  - jmeter.samplers.SampleEvent: List of sample_variables: [] 
+2017/03/30 09:30:44 INFO  - jmeter.gui.util.JMeterMenuBar: setRunning(true,*local*) 
+2017/03/30 09:30:44 INFO  - jmeter.engine.StandardJMeterEngine: Starting ThreadGroup: 1 : Web Map Requests 
+2017/03/30 09:30:44 INFO  - jmeter.engine.StandardJMeterEngine: Starting 30 threads for group Web Map Requests. 
+2017/03/30 09:30:44 INFO  - jmeter.engine.StandardJMeterEngine: Thread will continue on error 
+2017/03/30 09:30:44 INFO  - jmeter.threads.ThreadGroup: Starting thread group number 1 threads 30 ramp-up 300 perThread 10000.0 delayedStart=false 
+2017/03/30 09:30:44 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-1 
+2017/03/30 09:30:44 INFO  - jmeter.services.FileServer: Stored: global.csv 
+2017/03/30 09:30:44 INFO  - jmeter.threads.ThreadGroup: Started thread group number 1 
+2017/03/30 09:30:44 INFO  - jmeter.engine.StandardJMeterEngine: All thread groups have been started 
+2017/03/30 09:30:54 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-2 
+2017/03/30 09:31:00 INFO  - jmeter.reporters.Summariser: Generate Summary Results +     18 in 00:00:16 =    1.1/s Avg:   121 Min:     0 Max:   383 Err:     1 (5.56%) Active: 2 Started: 2 Finished: 0 
+2017/03/30 09:31:04 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-3 
+2017/03/30 09:31:14 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-4 
+2017/03/30 09:31:24 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-5 
+2017/03/30 09:31:30 INFO  - jmeter.reporters.Summariser: Generate Summary Results +     93 in 00:00:30 =    3.1/s Avg:   116 Min:     2 Max:   357 Err:     0 (0.00%) Active: 5 Started: 5 Finished: 0 
+2017/03/30 09:31:30 INFO  - jmeter.reporters.Summariser: Generate Summary Results =    111 in 00:00:46 =    2.4/s Avg:   117 Min:     0 Max:   383 Err:     1 (0.90%) 
+2017/03/30 09:31:34 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-6 
+2017/03/30 09:31:44 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-7 
+2017/03/30 09:31:54 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-8 
+2017/03/30 09:32:00 INFO  - jmeter.reporters.Summariser: Generate Summary Results +    178 in 00:00:30 =    6.0/s Avg:    93 Min:     2 Max:   277 Err:     0 (0.00%) Active: 8 Started: 8 Finished: 0 
+2017/03/30 09:32:00 INFO  - jmeter.reporters.Summariser: Generate Summary Results =    289 in 00:01:16 =    3.8/s Avg:   102 Min:     0 Max:   383 Err:     1 (0.35%) 
+2017/03/30 09:32:04 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-9 
+2017/03/30 09:32:14 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-10 
+2017/03/30 09:32:24 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-11 
+2017/03/30 09:32:30 INFO  - jmeter.reporters.Summariser: Generate Summary Results +    259 in 00:00:30 =    8.6/s Avg:    98 Min:     2 Max:   798 Err:     0 (0.00%) Active: 11 Started: 11 Finished: 0 
+2017/03/30 09:32:30 INFO  - jmeter.reporters.Summariser: Generate Summary Results =    548 in 00:01:46 =    5.2/s Avg:   100 Min:     0 Max:   798 Err:     1 (0.18%) 
+2017/03/30 09:32:34 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-12 
+2017/03/30 09:32:44 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-13 
+2017/03/30 09:32:54 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-14 
+2017/03/30 09:33:00 INFO  - jmeter.reporters.Summariser: Generate Summary Results +    350 in 00:00:30 =   11.7/s Avg:    67 Min:     2 Max:   271 Err:     0 (0.00%) Active: 14 Started: 14 Finished: 0 
+2017/03/30 09:33:00 INFO  - jmeter.reporters.Summariser: Generate Summary Results =    898 in 00:02:16 =    6.6/s Avg:    87 Min:     0 Max:   798 Err:     1 (0.11%) 
+2017/03/30 09:33:01 INFO  - jmeter.gui.action.Start: Stopping test 
+2017/03/30 09:33:01 INFO  - jmeter.threads.JMeterThread: Stopping: Web Map Requests 1-9 
+2017/03/30 09:33:01 INFO  - jmeter.threads.JMeterThread: Stopping: Web Map Requests 1-6 
+2017/03/30 09:33:01 INFO  - jmeter.threads.JMeterThread: Stopping: Web Map Requests 1-17 
+2017/03/30 09:33:01 WARN  - jmeter.threads.JMeterThread: The delay timer was interrupted - probably did not wait as long as intended. 
+2017/03/30 09:33:01 WARN  - jmeter.threads.JMeterThread: The delay timer was interrupted - probably did not wait as long as intended. 
+2017/03/30 09:33:01 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-17 
+2017/03/30 09:33:01 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-17 
+2017/03/30 09:33:01 INFO  - jmeter.threads.JMeterThread: Stopping: Web Map Requests 1-22 
+2017/03/30 09:33:01 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-22 
+2017/03/30 09:33:01 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-22 
+2017/03/30 09:33:01 INFO  - jmeter.threads.JMeterThread: Stopping: Web Map Requests 1-21 
+2017/03/30 09:33:01 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-21 
+2017/03/30 09:33:01 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-21 
+2017/03/30 09:33:01 INFO  - jmeter.threads.JMeterThread: Stopping: Web Map Requests 1-15 
+2017/03/30 09:33:01 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-15 
+2017/03/30 09:33:01 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-15 
+2017/03/30 09:33:01 INFO  - jmeter.threads.JMeterThread: Stopping: Web Map Requests 1-25 
+2017/03/30 09:33:01 INFO  - jmeter.threads.JMeterThread: Stopping: Web Map Requests 1-12 
+2017/03/30 09:33:01 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-25 
+2017/03/30 09:33:01 INFO  - jmeter.threads.JMeterThread: Stopping: Web Map Requests 1-14 
+2017/03/30 09:33:01 WARN  - jmeter.threads.JMeterThread: The delay timer was interrupted - probably did not wait as long as intended. 
+2017/03/30 09:33:01 INFO  - jmeter.threads.JMeterThread: Stopping: Web Map Requests 1-16 
+2017/03/30 09:33:01 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-25 
+2017/03/30 09:33:01 WARN  - jmeter.threads.JMeterThread: The delay timer was interrupted - probably did not wait as long as intended. 
+2017/03/30 09:33:01 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-16 
+2017/03/30 09:33:01 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-16 
+2017/03/30 09:33:01 INFO  - jmeter.threads.JMeterThread: Stopping: Web Map Requests 1-28 
+2017/03/30 09:33:01 INFO  - jmeter.threads.JMeterThread: Stopping: Web Map Requests 1-18 
+2017/03/30 09:33:01 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-28 
+2017/03/30 09:33:01 INFO  - jmeter.threads.JMeterThread: Stopping: Web Map Requests 1-30 
+2017/03/30 09:33:01 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-18 
+2017/03/30 09:33:01 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-18 
+2017/03/30 09:33:01 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-30 
+2017/03/30 09:33:01 INFO  - jmeter.threads.JMeterThread: Stopping: Web Map Requests 1-27 
+2017/03/30 09:33:01 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-28 
+2017/03/30 09:33:01 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-27 
+2017/03/30 09:33:01 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-27 
+2017/03/30 09:33:01 INFO  - jmeter.threads.JMeterThread: Stopping: Web Map Requests 1-29 
+2017/03/30 09:33:01 INFO  - jmeter.threads.JMeterThread: Stopping: Web Map Requests 1-19 
+2017/03/30 09:33:01 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-30 
+2017/03/30 09:33:01 INFO  - jmeter.threads.JMeterThread: Stopping: Web Map Requests 1-4 
+2017/03/30 09:33:01 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-19 
+2017/03/30 09:33:01 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-19 
+2017/03/30 09:33:01 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-29 
+2017/03/30 09:33:01 WARN  - jmeter.threads.JMeterThread: The delay timer was interrupted - probably did not wait as long as intended. 
+2017/03/30 09:33:01 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-29 
+2017/03/30 09:33:01 INFO  - jmeter.threads.JMeterThread: Stopping: Web Map Requests 1-20 
+2017/03/30 09:33:01 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-12 
+2017/03/30 09:33:01 INFO  - jmeter.threads.JMeterThread: Stopping: Web Map Requests 1-23 
+2017/03/30 09:33:01 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-20 
+2017/03/30 09:33:01 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-23 
+2017/03/30 09:33:01 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-20 
+2017/03/30 09:33:01 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-14 
+2017/03/30 09:33:01 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-23 
+2017/03/30 09:33:01 INFO  - jmeter.threads.JMeterThread: Stopping: Web Map Requests 1-11 
+2017/03/30 09:33:01 INFO  - jmeter.threads.JMeterThread: Stopping: Web Map Requests 1-3 
+2017/03/30 09:33:01 WARN  - jmeter.threads.JMeterThread: The delay timer was interrupted - probably did not wait as long as intended. 
+2017/03/30 09:33:01 INFO  - jmeter.threads.JMeterThread: Stopping: Web Map Requests 1-2 
+2017/03/30 09:33:01 INFO  - jmeter.threads.JMeterThread: Stopping: Web Map Requests 1-26 
+2017/03/30 09:33:01 WARN  - jmeter.threads.JMeterThread: The delay timer was interrupted - probably did not wait as long as intended. 
+2017/03/30 09:33:01 INFO  - jmeter.threads.JMeterThread: Stopping: Web Map Requests 1-8 
+2017/03/30 09:33:01 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-26 
+2017/03/30 09:33:01 WARN  - jmeter.threads.JMeterThread: The delay timer was interrupted - probably did not wait as long as intended. 
+2017/03/30 09:33:01 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-26 
+2017/03/30 09:33:01 INFO  - jmeter.threads.JMeterThread: Stopping: Web Map Requests 1-10 
+2017/03/30 09:33:01 WARN  - jmeter.threads.JMeterThread: The delay timer was interrupted - probably did not wait as long as intended. 
+2017/03/30 09:33:02 INFO  - jmeter.threads.JMeterThread: Stopping: Web Map Requests 1-13 
+2017/03/30 09:33:02 WARN  - jmeter.threads.JMeterThread: Interrupting: Web Map Requests 1-13 sampler: GetMap HTTP Request 
+2017/03/30 09:33:02 WARN  - jmeter.threads.JMeterThread: The delay timer was interrupted - probably did not wait as long as intended. 
+2017/03/30 09:33:02 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-9 
+2017/03/30 09:33:02 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-4 
+2017/03/30 09:33:02 INFO  - jmeter.threads.JMeterThread: Stopping: Web Map Requests 1-7 
+2017/03/30 09:33:02 WARN  - jmeter.threads.JMeterThread: The delay timer was interrupted - probably did not wait as long as intended. 
+2017/03/30 09:33:02 INFO  - jmeter.threads.JMeterThread: Stopping: Web Map Requests 1-5 
+2017/03/30 09:33:02 INFO  - jmeter.threads.JMeterThread: Stopping: Web Map Requests 1-1 
+2017/03/30 09:33:02 INFO  - jmeter.threads.JMeterThread: Stopping: Web Map Requests 1-24 
+2017/03/30 09:33:02 WARN  - jmeter.threads.JMeterThread: The delay timer was interrupted - probably did not wait as long as intended. 
+2017/03/30 09:33:02 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-11 
+2017/03/30 09:33:02 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-24 
+2017/03/30 09:33:02 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-13 
+2017/03/30 09:33:02 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-24 
+2017/03/30 09:33:02 WARN  - jmeter.threads.JMeterThread: The delay timer was interrupted - probably did not wait as long as intended. 
+2017/03/30 09:33:02 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-8 
+2017/03/30 09:33:02 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-10 
+2017/03/30 09:33:02 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-1 
+2017/03/30 09:33:02 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-7 
+2017/03/30 09:33:02 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-6 
+2017/03/30 09:33:02 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-2 
+2017/03/30 09:33:02 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-5 
+2017/03/30 09:33:02 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-3 
+2017/03/30 09:33:02 INFO  - jmeter.engine.StandardJMeterEngine: Notifying test listeners of end of test 
+2017/03/30 09:33:02 INFO  - jmeter.services.FileServer: Close: global.csv 
+2017/03/30 09:33:02 INFO  - jmeter.reporters.Summariser: Generate Summary Results +     40 in 00:00:02 =   19.1/s Avg:    74 Min:     2 Max:   205 Err:     1 (2.50%) Active: 0 Started: 30 Finished: 30 
+2017/03/30 09:33:02 INFO  - jmeter.reporters.Summariser: Generate Summary Results =    938 in 00:02:18 =    6.8/s Avg:    87 Min:     0 Max:   798 Err:     2 (0.21%) 
+2017/03/30 09:33:02 INFO  - jmeter.gui.util.JMeterMenuBar: setRunning(false,*local*) 
+2017/03/30 09:39:47 INFO  - jmeter.engine.StandardJMeterEngine: Running the test! 
+2017/03/30 09:39:47 INFO  - jmeter.samplers.SampleEvent: List of sample_variables: [] 
+2017/03/30 09:39:47 INFO  - jmeter.gui.util.JMeterMenuBar: setRunning(true,*local*) 
+2017/03/30 09:39:47 INFO  - jmeter.engine.StandardJMeterEngine: Starting ThreadGroup: 1 : Web Map Requests 
+2017/03/30 09:39:47 INFO  - jmeter.engine.StandardJMeterEngine: Starting 30 threads for group Web Map Requests. 
+2017/03/30 09:39:47 INFO  - jmeter.engine.StandardJMeterEngine: Thread will continue on error 
+2017/03/30 09:39:47 INFO  - jmeter.threads.ThreadGroup: Starting thread group number 1 threads 30 ramp-up 30 perThread 1000.0 delayedStart=false 
+2017/03/30 09:39:47 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-1 
+2017/03/30 09:39:47 INFO  - jmeter.services.FileServer: Stored: global_0-4.csv 
+2017/03/30 09:39:47 INFO  - jmeter.threads.ThreadGroup: Started thread group number 1 
+2017/03/30 09:39:47 INFO  - jmeter.engine.StandardJMeterEngine: All thread groups have been started 
+2017/03/30 09:39:48 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-2 
+2017/03/30 09:39:49 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-3 
+2017/03/30 09:39:50 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-4 
+2017/03/30 09:39:51 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-5 
+2017/03/30 09:39:52 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-6 
+2017/03/30 09:39:53 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-7 
+2017/03/30 09:39:54 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-8 
+2017/03/30 09:39:55 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-9 
+2017/03/30 09:39:56 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-10 
+2017/03/30 09:39:57 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-11 
+2017/03/30 09:39:58 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-12 
+2017/03/30 09:39:59 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-13 
+2017/03/30 09:40:00 INFO  - jmeter.reporters.Summariser: Generate Summary Results +    321 in 00:00:13 =   25.5/s Avg:     6 Min:     0 Max:   187 Err:     4 (1.25%) Active: 13 Started: 13 Finished: 0 
+2017/03/30 09:40:00 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-14 
+2017/03/30 09:40:01 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-15 
+2017/03/30 09:40:02 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-16 
+2017/03/30 09:40:03 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-17 
+2017/03/30 09:40:04 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-18 
+2017/03/30 09:40:05 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-19 
+2017/03/30 09:40:06 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-20 
+2017/03/30 09:40:07 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-21 
+2017/03/30 09:40:08 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-22 
+2017/03/30 09:40:09 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-23 
+2017/03/30 09:40:10 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-24 
+2017/03/30 09:40:11 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-25 
+2017/03/30 09:40:12 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-26 
+2017/03/30 09:40:13 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-27 
+2017/03/30 09:40:14 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-28 
+2017/03/30 09:40:15 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-29 
+2017/03/30 09:40:16 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-30 
+2017/03/30 09:40:30 INFO  - jmeter.reporters.Summariser: Generate Summary Results +   2950 in 00:00:30 =   98.3/s Avg:     4 Min:     0 Max:    46 Err:    29 (0.98%) Active: 30 Started: 30 Finished: 0 
+2017/03/30 09:40:30 INFO  - jmeter.reporters.Summariser: Generate Summary Results =   3271 in 00:00:43 =   76.8/s Avg:     4 Min:     0 Max:   187 Err:    33 (1.01%) 
+2017/03/30 09:41:00 INFO  - jmeter.reporters.Summariser: Generate Summary Results +   3526 in 00:00:30 =  117.4/s Avg:     5 Min:     0 Max:    45 Err:    35 (0.99%) Active: 30 Started: 30 Finished: 0 
+2017/03/30 09:41:00 INFO  - jmeter.reporters.Summariser: Generate Summary Results =   6797 in 00:01:13 =   93.6/s Avg:     5 Min:     0 Max:   187 Err:    68 (1.00%) 
+2017/03/30 09:41:30 INFO  - jmeter.reporters.Summariser: Generate Summary Results +   3510 in 00:00:30 =  117.1/s Avg:     5 Min:     0 Max:    57 Err:    36 (1.03%) Active: 30 Started: 30 Finished: 0 
+2017/03/30 09:41:30 INFO  - jmeter.reporters.Summariser: Generate Summary Results =  10307 in 00:01:43 =  100.5/s Avg:     5 Min:     0 Max:   187 Err:   104 (1.01%) 
+2017/03/30 09:41:47 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-5 
+2017/03/30 09:41:47 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-5 
+2017/03/30 09:41:47 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-2 
+2017/03/30 09:41:47 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-2 
+2017/03/30 09:41:47 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-18 
+2017/03/30 09:41:47 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-18 
+2017/03/30 09:41:47 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-10 
+2017/03/30 09:41:47 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-10 
+2017/03/30 09:41:47 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-14 
+2017/03/30 09:41:47 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-14 
+2017/03/30 09:41:47 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-27 
+2017/03/30 09:41:47 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-27 
+2017/03/30 09:41:47 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-17 
+2017/03/30 09:41:47 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-17 
+2017/03/30 09:41:47 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-3 
+2017/03/30 09:41:47 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-3 
+2017/03/30 09:41:47 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-23 
+2017/03/30 09:41:47 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-23 
+2017/03/30 09:41:47 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-1 
+2017/03/30 09:41:47 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-1 
+2017/03/30 09:41:47 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-6 
+2017/03/30 09:41:47 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-6 
+2017/03/30 09:41:47 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-15 
+2017/03/30 09:41:47 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-15 
+2017/03/30 09:41:47 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-26 
+2017/03/30 09:41:47 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-26 
+2017/03/30 09:41:47 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-9 
+2017/03/30 09:41:47 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-9 
+2017/03/30 09:41:47 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-19 
+2017/03/30 09:41:47 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-19 
+2017/03/30 09:41:47 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-16 
+2017/03/30 09:41:47 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-16 
+2017/03/30 09:41:47 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-11 
+2017/03/30 09:41:47 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-11 
+2017/03/30 09:41:47 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-29 
+2017/03/30 09:41:47 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-29 
+2017/03/30 09:41:47 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-4 
+2017/03/30 09:41:47 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-4 
+2017/03/30 09:41:47 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-13 
+2017/03/30 09:41:47 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-7 
+2017/03/30 09:41:47 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-13 
+2017/03/30 09:41:47 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-7 
+2017/03/30 09:41:47 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-20 
+2017/03/30 09:41:47 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-20 
+2017/03/30 09:41:47 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-25 
+2017/03/30 09:41:47 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-30 
+2017/03/30 09:41:47 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-25 
+2017/03/30 09:41:47 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-30 
+2017/03/30 09:41:47 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-21 
+2017/03/30 09:41:47 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-21 
+2017/03/30 09:41:47 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-28 
+2017/03/30 09:41:47 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-28 
+2017/03/30 09:41:47 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-24 
+2017/03/30 09:41:47 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-24 
+2017/03/30 09:41:47 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-12 
+2017/03/30 09:41:47 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-12 
+2017/03/30 09:41:47 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-8 
+2017/03/30 09:41:47 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-8 
+2017/03/30 09:41:47 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-22 
+2017/03/30 09:41:47 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-22 
+2017/03/30 09:41:47 INFO  - jmeter.engine.StandardJMeterEngine: Notifying test listeners of end of test 
+2017/03/30 09:41:47 INFO  - jmeter.services.FileServer: Close: global_0-4.csv 
+2017/03/30 09:41:47 INFO  - jmeter.reporters.Summariser: Generate Summary Results +   2094 in 00:00:18 =  119.0/s Avg:     5 Min:     0 Max:    52 Err:    21 (1.00%) Active: 0 Started: 30 Finished: 30 
+2017/03/30 09:41:47 INFO  - jmeter.reporters.Summariser: Generate Summary Results =  12401 in 00:02:00 =  103.2/s Avg:     5 Min:     0 Max:   187 Err:   125 (1.01%) 
+2017/03/30 09:41:47 INFO  - jmeter.gui.util.JMeterMenuBar: setRunning(false,*local*) 
+2017/03/30 09:49:40 INFO  - jmeter.engine.StandardJMeterEngine: Running the test! 
+2017/03/30 09:49:40 INFO  - jmeter.samplers.SampleEvent: List of sample_variables: [] 
+2017/03/30 09:49:40 INFO  - jmeter.gui.util.JMeterMenuBar: setRunning(true,*local*) 
+2017/03/30 09:49:40 INFO  - jmeter.engine.StandardJMeterEngine: Starting ThreadGroup: 1 : Web Map Requests 
+2017/03/30 09:49:40 INFO  - jmeter.engine.StandardJMeterEngine: Starting 30 threads for group Web Map Requests. 
+2017/03/30 09:49:40 INFO  - jmeter.engine.StandardJMeterEngine: Thread will continue on error 
+2017/03/30 09:49:40 INFO  - jmeter.threads.ThreadGroup: Starting thread group number 1 threads 30 ramp-up 30 perThread 1000.0 delayedStart=false 
+2017/03/30 09:49:40 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-1 
+2017/03/30 09:49:40 INFO  - jmeter.services.FileServer: Stored: global_0-4.csv 
+2017/03/30 09:49:40 INFO  - jmeter.threads.ThreadGroup: Started thread group number 1 
+2017/03/30 09:49:40 INFO  - jmeter.engine.StandardJMeterEngine: All thread groups have been started 
+2017/03/30 09:49:41 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-2 
+2017/03/30 09:49:42 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-3 
+2017/03/30 09:49:43 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-4 
+2017/03/30 09:49:44 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-5 
+2017/03/30 09:49:45 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-6 
+2017/03/30 09:49:46 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-7 
+2017/03/30 09:49:47 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-8 
+2017/03/30 09:49:48 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-9 
+2017/03/30 09:49:49 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-10 
+2017/03/30 09:49:50 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-11 
+2017/03/30 09:49:51 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-12 
+2017/03/30 09:49:52 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-13 
+2017/03/30 09:49:53 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-14 
+2017/03/30 09:49:54 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-15 
+2017/03/30 09:49:55 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-16 
+2017/03/30 09:49:56 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-17 
+2017/03/30 09:49:57 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-18 
+2017/03/30 09:49:58 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-19 
+2017/03/30 09:49:59 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-20 
+2017/03/30 09:50:00 INFO  - jmeter.reporters.Summariser: Generate Summary Results +    781 in 00:00:20 =   39.8/s Avg:     1 Min:     0 Max:    32 Err:     8 (1.02%) Active: 20 Started: 20 Finished: 0 
+2017/03/30 09:50:00 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-21 
+2017/03/30 09:50:01 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-22 
+2017/03/30 09:50:02 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-23 
+2017/03/30 09:50:03 INFO  - jmeter.gui.action.Start: Shutting test down 
+2017/03/30 09:50:03 INFO  - jmeter.threads.JMeterThread: Stopping: Web Map Requests 1-21 
+2017/03/30 09:50:03 INFO  - jmeter.threads.JMeterThread: Stopping: Web Map Requests 1-25 
+2017/03/30 09:50:03 INFO  - jmeter.threads.JMeterThread: Stopping: Web Map Requests 1-29 
+2017/03/30 09:50:03 INFO  - jmeter.threads.JMeterThread: Stopping: Web Map Requests 1-10 
+2017/03/30 09:50:03 INFO  - jmeter.threads.JMeterThread: Stopping: Web Map Requests 1-30 
+2017/03/30 09:50:03 INFO  - jmeter.threads.JMeterThread: Stopping: Web Map Requests 1-22 
+2017/03/30 09:50:03 INFO  - jmeter.threads.JMeterThread: Stopping: Web Map Requests 1-2 
+2017/03/30 09:50:03 INFO  - jmeter.threads.JMeterThread: Stopping: Web Map Requests 1-13 
+2017/03/30 09:50:03 INFO  - jmeter.threads.JMeterThread: Stopping: Web Map Requests 1-23 
+2017/03/30 09:50:03 INFO  - jmeter.threads.JMeterThread: Stopping: Web Map Requests 1-19 
+2017/03/30 09:50:03 INFO  - jmeter.threads.JMeterThread: Stopping: Web Map Requests 1-28 
+2017/03/30 09:50:03 INFO  - jmeter.threads.JMeterThread: Stopping: Web Map Requests 1-7 
+2017/03/30 09:50:03 INFO  - jmeter.threads.JMeterThread: Stopping: Web Map Requests 1-17 
+2017/03/30 09:50:03 INFO  - jmeter.threads.JMeterThread: Stopping: Web Map Requests 1-16 
+2017/03/30 09:50:03 INFO  - jmeter.threads.JMeterThread: Stopping: Web Map Requests 1-15 
+2017/03/30 09:50:03 INFO  - jmeter.threads.JMeterThread: Stopping: Web Map Requests 1-12 
+2017/03/30 09:50:03 INFO  - jmeter.threads.JMeterThread: Stopping: Web Map Requests 1-1 
+2017/03/30 09:50:03 INFO  - jmeter.threads.JMeterThread: Stopping: Web Map Requests 1-26 
+2017/03/30 09:50:03 INFO  - jmeter.threads.JMeterThread: Stopping: Web Map Requests 1-14 
+2017/03/30 09:50:03 INFO  - jmeter.threads.JMeterThread: Stopping: Web Map Requests 1-27 
+2017/03/30 09:50:03 INFO  - jmeter.threads.JMeterThread: Stopping: Web Map Requests 1-4 
+2017/03/30 09:50:03 INFO  - jmeter.threads.JMeterThread: Stopping: Web Map Requests 1-24 
+2017/03/30 09:50:03 INFO  - jmeter.threads.JMeterThread: Stopping: Web Map Requests 1-8 
+2017/03/30 09:50:03 INFO  - jmeter.threads.JMeterThread: Stopping: Web Map Requests 1-9 
+2017/03/30 09:50:03 INFO  - jmeter.threads.JMeterThread: Stopping: Web Map Requests 1-3 
+2017/03/30 09:50:03 INFO  - jmeter.threads.JMeterThread: Stopping: Web Map Requests 1-11 
+2017/03/30 09:50:03 INFO  - jmeter.threads.JMeterThread: Stopping: Web Map Requests 1-18 
+2017/03/30 09:50:03 INFO  - jmeter.threads.JMeterThread: Stopping: Web Map Requests 1-6 
+2017/03/30 09:50:03 INFO  - jmeter.threads.JMeterThread: Stopping: Web Map Requests 1-20 
+2017/03/30 09:50:03 INFO  - jmeter.threads.JMeterThread: Stopping: Web Map Requests 1-5 
+2017/03/30 09:50:03 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-15 
+2017/03/30 09:50:03 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-14 
+2017/03/30 09:50:03 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-13 
+2017/03/30 09:50:03 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-11 
+2017/03/30 09:50:03 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-5 
+2017/03/30 09:50:03 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-10 
+2017/03/30 09:50:03 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-7 
+2017/03/30 09:50:03 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-8 
+2017/03/30 09:50:03 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-9 
+2017/03/30 09:50:03 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-6 
+2017/03/30 09:50:03 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-4 
+2017/03/30 09:50:03 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-3 
+2017/03/30 09:50:03 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-1 
+2017/03/30 09:50:03 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-2 
+2017/03/30 09:50:03 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-24 
+2017/03/30 09:50:03 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-24 
+2017/03/30 09:50:03 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-27 
+2017/03/30 09:50:03 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-26 
+2017/03/30 09:50:03 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-25 
+2017/03/30 09:50:03 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-26 
+2017/03/30 09:50:03 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-28 
+2017/03/30 09:50:03 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-25 
+2017/03/30 09:50:03 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-27 
+2017/03/30 09:50:03 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-28 
+2017/03/30 09:50:03 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-30 
+2017/03/30 09:50:03 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-30 
+2017/03/30 09:50:03 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-29 
+2017/03/30 09:50:03 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-29 
+2017/03/30 09:50:03 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-23 
+2017/03/30 09:50:03 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-22 
+2017/03/30 09:50:03 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-21 
+2017/03/30 09:50:03 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-20 
+2017/03/30 09:50:03 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-19 
+2017/03/30 09:50:03 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-18 
+2017/03/30 09:50:03 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-17 
+2017/03/30 09:50:03 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-16 
+2017/03/30 09:50:03 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-12 
+2017/03/30 09:50:03 INFO  - jmeter.engine.StandardJMeterEngine: Notifying test listeners of end of test 
+2017/03/30 09:50:03 INFO  - jmeter.services.FileServer: Close: global_0-4.csv 
+2017/03/30 09:50:03 INFO  - jmeter.reporters.Summariser: Generate Summary Results +    309 in 00:00:04 =   86.4/s Avg:     1 Min:     0 Max:    22 Err:     3 (0.97%) Active: 0 Started: 30 Finished: 30 
+2017/03/30 09:50:03 INFO  - jmeter.reporters.Summariser: Generate Summary Results =   1090 in 00:00:23 =   47.0/s Avg:     1 Min:     0 Max:    32 Err:    11 (1.01%) 
+2017/03/30 09:50:03 INFO  - jmeter.gui.util.JMeterMenuBar: setRunning(false,*local*) 
+2017/03/30 09:50:29 INFO  - jmeter.engine.StandardJMeterEngine: Running the test! 
+2017/03/30 09:50:29 INFO  - jmeter.samplers.SampleEvent: List of sample_variables: [] 
+2017/03/30 09:50:29 INFO  - jmeter.gui.util.JMeterMenuBar: setRunning(true,*local*) 
+2017/03/30 09:50:29 INFO  - jmeter.engine.StandardJMeterEngine: Starting ThreadGroup: 1 : Web Map Requests 
+2017/03/30 09:50:29 INFO  - jmeter.engine.StandardJMeterEngine: Starting 30 threads for group Web Map Requests. 
+2017/03/30 09:50:29 INFO  - jmeter.engine.StandardJMeterEngine: Thread will continue on error 
+2017/03/30 09:50:29 INFO  - jmeter.threads.ThreadGroup: Starting thread group number 1 threads 30 ramp-up 30 perThread 1000.0 delayedStart=false 
+2017/03/30 09:50:29 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-1 
+2017/03/30 09:50:29 INFO  - jmeter.services.FileServer: Stored: global_0-4.csv 
+2017/03/30 09:50:29 INFO  - jmeter.threads.ThreadGroup: Started thread group number 1 
+2017/03/30 09:50:29 INFO  - jmeter.engine.StandardJMeterEngine: All thread groups have been started 
+2017/03/30 09:50:30 INFO  - jmeter.reporters.Summariser: Generate Summary Results +      1 in 00:00:00 =    3.1/s Avg:     0 Min:     0 Max:     0 Err:     1 (100.00%) Active: 1 Started: 1 Finished: 0 
+2017/03/30 09:50:30 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-2 
+2017/03/30 09:50:31 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-3 
+2017/03/30 09:50:32 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-4 
+2017/03/30 09:50:33 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-5 
+2017/03/30 09:50:34 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-6 
+2017/03/30 09:50:35 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-7 
+2017/03/30 09:50:36 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-8 
+2017/03/30 09:50:37 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-9 
+2017/03/30 09:50:38 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-10 
+2017/03/30 09:50:39 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-11 
+2017/03/30 09:50:40 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-12 
+2017/03/30 09:50:41 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-13 
+2017/03/30 09:50:42 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-14 
+2017/03/30 09:50:43 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-15 
+2017/03/30 09:50:44 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-16 
+2017/03/30 09:50:45 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-17 
+2017/03/30 09:50:46 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-18 
+2017/03/30 09:50:47 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-19 
+2017/03/30 09:50:48 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-20 
+2017/03/30 09:50:49 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-21 
+2017/03/30 09:50:50 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-22 
+2017/03/30 09:50:51 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-23 
+2017/03/30 09:50:52 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-24 
+2017/03/30 09:50:53 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-25 
+2017/03/30 09:50:54 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-26 
+2017/03/30 09:50:55 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-27 
+2017/03/30 09:50:56 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-28 
+2017/03/30 09:50:57 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-29 
+2017/03/30 09:50:58 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-30 
+2017/03/30 09:51:00 INFO  - jmeter.reporters.Summariser: Generate Summary Results +   1806 in 00:00:30 =   60.4/s Avg:     7 Min:     0 Max:   309 Err:    18 (1.00%) Active: 30 Started: 30 Finished: 0 
+2017/03/30 09:51:00 INFO  - jmeter.reporters.Summariser: Generate Summary Results =   1807 in 00:00:30 =   59.8/s Avg:     7 Min:     0 Max:   309 Err:    19 (1.05%) 
+2017/03/30 09:51:30 INFO  - jmeter.reporters.Summariser: Generate Summary Results +   3491 in 00:00:30 =  116.4/s Avg:     7 Min:     0 Max:   279 Err:    34 (0.97%) Active: 30 Started: 30 Finished: 0 
+2017/03/30 09:51:30 INFO  - jmeter.reporters.Summariser: Generate Summary Results =   5298 in 00:01:00 =   88.0/s Avg:     7 Min:     0 Max:   309 Err:    53 (1.00%) 
+2017/03/30 09:52:00 INFO  - jmeter.reporters.Summariser: Generate Summary Results +   3399 in 00:00:30 =  113.3/s Avg:    14 Min:     0 Max:   304 Err:    35 (1.03%) Active: 30 Started: 30 Finished: 0 
+2017/03/30 09:52:00 INFO  - jmeter.reporters.Summariser: Generate Summary Results =   8697 in 00:01:30 =   96.4/s Avg:    10 Min:     0 Max:   309 Err:    88 (1.01%) 
+2017/03/30 09:52:29 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-20 
+2017/03/30 09:52:29 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-20 
+2017/03/30 09:52:29 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-3 
+2017/03/30 09:52:29 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-3 
+2017/03/30 09:52:29 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-28 
+2017/03/30 09:52:29 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-28 
+2017/03/30 09:52:29 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-24 
+2017/03/30 09:52:29 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-16 
+2017/03/30 09:52:29 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-24 
+2017/03/30 09:52:29 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-16 
+2017/03/30 09:52:29 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-15 
+2017/03/30 09:52:29 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-15 
+2017/03/30 09:52:29 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-25 
+2017/03/30 09:52:29 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-19 
+2017/03/30 09:52:29 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-25 
+2017/03/30 09:52:29 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-19 
+2017/03/30 09:52:29 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-6 
+2017/03/30 09:52:29 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-6 
+2017/03/30 09:52:29 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-11 
+2017/03/30 09:52:29 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-2 
+2017/03/30 09:52:29 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-11 
+2017/03/30 09:52:29 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-2 
+2017/03/30 09:52:29 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-13 
+2017/03/30 09:52:29 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-13 
+2017/03/30 09:52:29 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-21 
+2017/03/30 09:52:29 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-21 
+2017/03/30 09:52:29 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-1 
+2017/03/30 09:52:29 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-1 
+2017/03/30 09:52:29 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-18 
+2017/03/30 09:52:29 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-18 
+2017/03/30 09:52:29 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-22 
+2017/03/30 09:52:29 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-8 
+2017/03/30 09:52:29 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-22 
+2017/03/30 09:52:29 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-8 
+2017/03/30 09:52:29 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-4 
+2017/03/30 09:52:29 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-4 
+2017/03/30 09:52:29 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-30 
+2017/03/30 09:52:29 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-30 
+2017/03/30 09:52:29 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-12 
+2017/03/30 09:52:29 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-12 
+2017/03/30 09:52:29 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-9 
+2017/03/30 09:52:29 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-9 
+2017/03/30 09:52:29 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-29 
+2017/03/30 09:52:29 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-29 
+2017/03/30 09:52:29 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-5 
+2017/03/30 09:52:29 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-10 
+2017/03/30 09:52:29 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-5 
+2017/03/30 09:52:29 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-10 
+2017/03/30 09:52:29 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-17 
+2017/03/30 09:52:29 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-17 
+2017/03/30 09:52:29 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-7 
+2017/03/30 09:52:29 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-7 
+2017/03/30 09:52:29 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-27 
+2017/03/30 09:52:29 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-27 
+2017/03/30 09:52:29 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-14 
+2017/03/30 09:52:29 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-14 
+2017/03/30 09:52:29 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-23 
+2017/03/30 09:52:29 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-23 
+2017/03/30 09:52:29 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-26 
+2017/03/30 09:52:29 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-26 
+2017/03/30 09:52:29 INFO  - jmeter.engine.StandardJMeterEngine: Notifying test listeners of end of test 
+2017/03/30 09:52:29 INFO  - jmeter.services.FileServer: Close: global_0-4.csv 
+2017/03/30 09:52:29 INFO  - jmeter.reporters.Summariser: Generate Summary Results +   3529 in 00:00:30 =  117.9/s Avg:     6 Min:     0 Max:    72 Err:    35 (0.99%) Active: 0 Started: 30 Finished: 30 
+2017/03/30 09:52:29 INFO  - jmeter.reporters.Summariser: Generate Summary Results =  12226 in 00:02:00 =  101.8/s Avg:     9 Min:     0 Max:   309 Err:   123 (1.01%) 
+2017/03/30 09:52:29 INFO  - jmeter.gui.util.JMeterMenuBar: setRunning(false,*local*) 
+2017/03/30 09:53:31 INFO  - jmeter.engine.StandardJMeterEngine: Running the test! 
+2017/03/30 09:53:31 INFO  - jmeter.samplers.SampleEvent: List of sample_variables: [] 
+2017/03/30 09:53:31 INFO  - jmeter.gui.util.JMeterMenuBar: setRunning(true,*local*) 
+2017/03/30 09:53:31 INFO  - jmeter.engine.StandardJMeterEngine: Starting ThreadGroup: 1 : Web Map Requests 
+2017/03/30 09:53:31 INFO  - jmeter.engine.StandardJMeterEngine: Starting 30 threads for group Web Map Requests. 
+2017/03/30 09:53:31 INFO  - jmeter.engine.StandardJMeterEngine: Thread will continue on error 
+2017/03/30 09:53:31 INFO  - jmeter.threads.ThreadGroup: Starting thread group number 1 threads 30 ramp-up 30 perThread 1000.0 delayedStart=false 
+2017/03/30 09:53:31 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-1 
+2017/03/30 09:53:31 INFO  - jmeter.services.FileServer: Stored: global_0-4.csv 
+2017/03/30 09:53:31 INFO  - jmeter.threads.ThreadGroup: Started thread group number 1 
+2017/03/30 09:53:31 INFO  - jmeter.engine.StandardJMeterEngine: All thread groups have been started 
+2017/03/30 09:53:31 INFO  - jmeter.reporters.Summariser: Generate Summary Results +      1 in 00:00:00 =    3.1/s Avg:     0 Min:     0 Max:     0 Err:     1 (100.00%) Active: 1 Started: 1 Finished: 0 
+2017/03/30 09:53:32 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-2 
+2017/03/30 09:53:33 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-3 
+2017/03/30 09:53:34 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-4 
+2017/03/30 09:53:35 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-5 
+2017/03/30 09:53:36 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-6 
+2017/03/30 09:53:37 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-7 
+2017/03/30 09:53:38 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-8 
+2017/03/30 09:53:39 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-9 
+2017/03/30 09:53:40 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-10 
+2017/03/30 09:53:41 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-11 
+2017/03/30 09:53:42 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-12 
+2017/03/30 09:53:43 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-13 
+2017/03/30 09:53:44 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-14 
+2017/03/30 09:53:45 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-15 
+2017/03/30 09:53:46 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-16 
+2017/03/30 09:53:47 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-17 
+2017/03/30 09:53:48 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-18 
+2017/03/30 09:53:49 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-19 
+2017/03/30 09:53:50 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-20 
+2017/03/30 09:53:51 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-21 
+2017/03/30 09:53:52 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-22 
+2017/03/30 09:53:53 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-23 
+2017/03/30 09:53:54 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-24 
+2017/03/30 09:53:55 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-25 
+2017/03/30 09:53:56 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-26 
+2017/03/30 09:53:57 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-27 
+2017/03/30 09:53:58 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-28 
+2017/03/30 09:53:59 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-29 
+2017/03/30 09:54:00 INFO  - jmeter.reporters.Summariser: Generate Summary Results +   1429 in 00:00:29 =   50.1/s Avg:    46 Min:     0 Max:   496 Err:    14 (0.98%) Active: 29 Started: 29 Finished: 0 
+2017/03/30 09:54:00 INFO  - jmeter.reporters.Summariser: Generate Summary Results =   1430 in 00:00:29 =   49.6/s Avg:    46 Min:     0 Max:   496 Err:    15 (1.05%) 
+2017/03/30 09:54:00 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-30 
+2017/03/30 09:54:30 INFO  - jmeter.reporters.Summariser: Generate Summary Results +   3025 in 00:00:30 =  100.9/s Avg:    46 Min:     0 Max:   463 Err:    30 (0.99%) Active: 30 Started: 30 Finished: 0 
+2017/03/30 09:54:30 INFO  - jmeter.reporters.Summariser: Generate Summary Results =   4455 in 00:00:59 =   75.7/s Avg:    46 Min:     0 Max:   496 Err:    45 (1.01%) 
+2017/03/30 09:55:00 INFO  - jmeter.reporters.Summariser: Generate Summary Results +   2911 in 00:00:30 =   97.0/s Avg:    59 Min:     0 Max:   870 Err:    29 (1.00%) Active: 30 Started: 30 Finished: 0 
+2017/03/30 09:55:00 INFO  - jmeter.reporters.Summariser: Generate Summary Results =   7366 in 00:01:29 =   82.9/s Avg:    51 Min:     0 Max:   870 Err:    74 (1.00%) 
+2017/03/30 09:55:30 INFO  - jmeter.reporters.Summariser: Generate Summary Results +   1235 in 00:00:31 =   40.2/s Avg:   462 Min:     0 Max:  4570 Err:    13 (1.05%) Active: 30 Started: 30 Finished: 0 
+2017/03/30 09:55:30 INFO  - jmeter.reporters.Summariser: Generate Summary Results =   8601 in 00:02:00 =   71.9/s Avg:   110 Min:     0 Max:  4570 Err:    87 (1.01%) 
+2017/03/30 09:55:31 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-2 
+2017/03/30 09:55:31 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-2 
+2017/03/30 09:55:31 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-21 
+2017/03/30 09:55:31 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-21 
+2017/03/30 09:55:31 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-7 
+2017/03/30 09:55:31 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-7 
+2017/03/30 09:55:31 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-10 
+2017/03/30 09:55:31 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-10 
+2017/03/30 09:55:31 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-3 
+2017/03/30 09:55:31 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-3 
+2017/03/30 09:55:31 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-25 
+2017/03/30 09:55:31 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-25 
+2017/03/30 09:55:31 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-18 
+2017/03/30 09:55:31 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-18 
+2017/03/30 09:55:31 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-5 
+2017/03/30 09:55:31 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-5 
+2017/03/30 09:55:31 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-4 
+2017/03/30 09:55:31 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-4 
+2017/03/30 09:55:31 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-8 
+2017/03/30 09:55:31 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-8 
+2017/03/30 09:55:31 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-14 
+2017/03/30 09:55:31 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-14 
+2017/03/30 09:55:31 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-16 
+2017/03/30 09:55:31 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-16 
+2017/03/30 09:55:31 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-17 
+2017/03/30 09:55:31 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-17 
+2017/03/30 09:55:31 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-27 
+2017/03/30 09:55:31 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-27 
+2017/03/30 09:55:31 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-20 
+2017/03/30 09:55:31 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-20 
+2017/03/30 09:55:31 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-12 
+2017/03/30 09:55:31 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-12 
+2017/03/30 09:55:31 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-23 
+2017/03/30 09:55:31 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-23 
+2017/03/30 09:55:31 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-9 
+2017/03/30 09:55:31 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-9 
+2017/03/30 09:55:31 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-19 
+2017/03/30 09:55:31 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-19 
+2017/03/30 09:55:31 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-11 
+2017/03/30 09:55:31 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-11 
+2017/03/30 09:55:31 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-22 
+2017/03/30 09:55:31 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-22 
+2017/03/30 09:55:31 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-15 
+2017/03/30 09:55:31 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-15 
+2017/03/30 09:55:31 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-28 
+2017/03/30 09:55:31 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-28 
+2017/03/30 09:55:31 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-6 
+2017/03/30 09:55:31 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-6 
+2017/03/30 09:55:31 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-29 
+2017/03/30 09:55:31 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-29 
+2017/03/30 09:55:31 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-24 
+2017/03/30 09:55:31 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-24 
+2017/03/30 09:55:31 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-26 
+2017/03/30 09:55:31 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-26 
+2017/03/30 09:55:31 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-13 
+2017/03/30 09:55:31 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-13 
+2017/03/30 09:55:31 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-30 
+2017/03/30 09:55:31 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-30 
+2017/03/30 09:55:31 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-1 
+2017/03/30 09:55:31 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-1 
+2017/03/30 09:55:31 INFO  - jmeter.engine.StandardJMeterEngine: Notifying test listeners of end of test 
+2017/03/30 09:55:31 INFO  - jmeter.services.FileServer: Close: global_0-4.csv 
+2017/03/30 09:55:31 INFO  - jmeter.reporters.Summariser: Generate Summary Results +     65 in 00:00:01 =   75.1/s Avg:   785 Min:    15 Max:  3521 Err:     0 (0.00%) Active: 0 Started: 30 Finished: 30 
+2017/03/30 09:55:31 INFO  - jmeter.reporters.Summariser: Generate Summary Results =   8666 in 00:02:00 =   72.0/s Avg:   115 Min:     0 Max:  4570 Err:    87 (1.00%) 
+2017/03/30 09:55:31 INFO  - jmeter.gui.util.JMeterMenuBar: setRunning(false,*local*) 
+2017/03/30 10:45:30 INFO  - jmeter.engine.StandardJMeterEngine: Running the test! 
+2017/03/30 10:45:30 INFO  - jmeter.samplers.SampleEvent: List of sample_variables: [] 
+2017/03/30 10:45:30 INFO  - jmeter.gui.util.JMeterMenuBar: setRunning(true,*local*) 
+2017/03/30 10:45:31 INFO  - jmeter.engine.StandardJMeterEngine: Starting ThreadGroup: 1 : Web Map Requests 
+2017/03/30 10:45:31 INFO  - jmeter.engine.StandardJMeterEngine: Starting 30 threads for group Web Map Requests. 
+2017/03/30 10:45:31 INFO  - jmeter.engine.StandardJMeterEngine: Thread will continue on error 
+2017/03/30 10:45:31 INFO  - jmeter.threads.ThreadGroup: Starting thread group number 1 threads 30 ramp-up 10 perThread 333.33334 delayedStart=false 
+2017/03/30 10:45:31 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-1 
+2017/03/30 10:45:31 INFO  - jmeter.services.FileServer: Stored: global_0-4.csv 
+2017/03/30 10:45:31 INFO  - jmeter.threads.ThreadGroup: Started thread group number 1 
+2017/03/30 10:45:31 INFO  - jmeter.engine.StandardJMeterEngine: All thread groups have been started 
+2017/03/30 10:45:31 INFO  - jmeter.reporters.Summariser: Generate Summary Results +      1 in 00:00:00 =    2.8/s Avg:     0 Min:     0 Max:     0 Err:     1 (100.00%) Active: 1 Started: 1 Finished: 0 
+2017/03/30 10:45:31 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-2 
+2017/03/30 10:45:31 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-3 
+2017/03/30 10:45:32 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-4 
+2017/03/30 10:45:32 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-5 
+2017/03/30 10:45:32 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-6 
+2017/03/30 10:45:33 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-7 
+2017/03/30 10:45:33 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-8 
+2017/03/30 10:45:33 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-9 
+2017/03/30 10:45:34 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-10 
+2017/03/30 10:45:34 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-11 
+2017/03/30 10:45:34 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-12 
+2017/03/30 10:45:35 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-13 
+2017/03/30 10:45:35 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-14 
+2017/03/30 10:45:35 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-15 
+2017/03/30 10:45:36 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-16 
+2017/03/30 10:45:36 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-17 
+2017/03/30 10:45:36 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-18 
+2017/03/30 10:45:37 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-19 
+2017/03/30 10:45:37 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-20 
+2017/03/30 10:45:37 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-21 
+2017/03/30 10:45:38 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-22 
+2017/03/30 10:45:38 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-23 
+2017/03/30 10:45:38 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-24 
+2017/03/30 10:45:39 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-25 
+2017/03/30 10:45:39 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-26 
+2017/03/30 10:45:39 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-27 
+2017/03/30 10:45:40 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-28 
+2017/03/30 10:45:40 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-29 
+2017/03/30 10:45:40 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-30 
+2017/03/30 10:46:00 INFO  - jmeter.reporters.Summariser: Generate Summary Results +   2448 in 00:00:29 =   85.2/s Avg:    44 Min:     0 Max:   389 Err:    24 (0.98%) Active: 30 Started: 30 Finished: 0 
+2017/03/30 10:46:00 INFO  - jmeter.reporters.Summariser: Generate Summary Results =   2449 in 00:00:29 =   84.1/s Avg:    44 Min:     0 Max:   389 Err:    25 (1.02%) 
+2017/03/30 10:46:30 INFO  - jmeter.reporters.Summariser: Generate Summary Results +   3019 in 00:00:30 =  100.7/s Avg:    47 Min:     0 Max:   425 Err:    30 (0.99%) Active: 30 Started: 30 Finished: 0 
+2017/03/30 10:46:30 INFO  - jmeter.reporters.Summariser: Generate Summary Results =   5468 in 00:00:59 =   92.5/s Avg:    46 Min:     0 Max:   425 Err:    55 (1.01%) 
+2017/03/30 10:47:00 INFO  - jmeter.reporters.Summariser: Generate Summary Results +   2908 in 00:00:30 =   96.9/s Avg:    59 Min:     0 Max:  1070 Err:    29 (1.00%) Active: 30 Started: 30 Finished: 0 
+2017/03/30 10:47:00 INFO  - jmeter.reporters.Summariser: Generate Summary Results =   8376 in 00:01:29 =   94.0/s Avg:    50 Min:     0 Max:  1070 Err:    84 (1.00%) 
+2017/03/30 10:47:30 INFO  - jmeter.reporters.Summariser: Generate Summary Results +   2062 in 00:00:30 =   68.1/s Avg:   148 Min:     0 Max:  4685 Err:    21 (1.02%) Active: 30 Started: 30 Finished: 0 
+2017/03/30 10:47:30 INFO  - jmeter.reporters.Summariser: Generate Summary Results =  10438 in 00:01:59 =   87.4/s Avg:    70 Min:     0 Max:  4685 Err:   105 (1.01%) 
+2017/03/30 10:48:00 INFO  - jmeter.reporters.Summariser: Generate Summary Results +   2061 in 00:00:30 =   69.3/s Avg:   224 Min:     0 Max: 14969 Err:    21 (1.02%) Active: 30 Started: 30 Finished: 0 
+2017/03/30 10:48:00 INFO  - jmeter.reporters.Summariser: Generate Summary Results =  12499 in 00:02:29 =   83.8/s Avg:    95 Min:     0 Max: 14969 Err:   126 (1.01%) 
+2017/03/30 10:48:30 INFO  - jmeter.reporters.Summariser: Generate Summary Results +   3057 in 00:00:30 =  101.9/s Avg:    43 Min:     0 Max:   193 Err:    30 (0.98%) Active: 30 Started: 30 Finished: 0 
+2017/03/30 10:48:30 INFO  - jmeter.reporters.Summariser: Generate Summary Results =  15556 in 00:02:59 =   86.9/s Avg:    85 Min:     0 Max: 14969 Err:   156 (1.00%) 
+2017/03/30 10:48:31 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-9 
+2017/03/30 10:48:31 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-9 
+2017/03/30 10:48:31 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-19 
+2017/03/30 10:48:31 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-25 
+2017/03/30 10:48:31 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-19 
+2017/03/30 10:48:31 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-25 
+2017/03/30 10:48:31 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-10 
+2017/03/30 10:48:31 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-10 
+2017/03/30 10:48:31 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-13 
+2017/03/30 10:48:31 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-13 
+2017/03/30 10:48:31 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-27 
+2017/03/30 10:48:31 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-27 
+2017/03/30 10:48:31 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-22 
+2017/03/30 10:48:31 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-22 
+2017/03/30 10:48:31 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-6 
+2017/03/30 10:48:31 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-6 
+2017/03/30 10:48:31 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-21 
+2017/03/30 10:48:31 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-21 
+2017/03/30 10:48:31 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-15 
+2017/03/30 10:48:31 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-15 
+2017/03/30 10:48:31 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-8 
+2017/03/30 10:48:31 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-8 
+2017/03/30 10:48:31 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-1 
+2017/03/30 10:48:31 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-1 
+2017/03/30 10:48:31 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-14 
+2017/03/30 10:48:31 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-14 
+2017/03/30 10:48:31 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-2 
+2017/03/30 10:48:31 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-2 
+2017/03/30 10:48:31 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-11 
+2017/03/30 10:48:31 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-11 
+2017/03/30 10:48:31 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-5 
+2017/03/30 10:48:31 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-5 
+2017/03/30 10:48:31 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-16 
+2017/03/30 10:48:31 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-16 
+2017/03/30 10:48:31 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-18 
+2017/03/30 10:48:31 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-18 
+2017/03/30 10:48:31 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-7 
+2017/03/30 10:48:31 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-7 
+2017/03/30 10:48:31 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-20 
+2017/03/30 10:48:31 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-20 
+2017/03/30 10:48:31 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-30 
+2017/03/30 10:48:31 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-30 
+2017/03/30 10:48:31 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-3 
+2017/03/30 10:48:31 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-3 
+2017/03/30 10:48:31 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-17 
+2017/03/30 10:48:31 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-17 
+2017/03/30 10:48:31 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-28 
+2017/03/30 10:48:31 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-28 
+2017/03/30 10:48:31 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-23 
+2017/03/30 10:48:31 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-23 
+2017/03/30 10:48:31 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-24 
+2017/03/30 10:48:31 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-24 
+2017/03/30 10:48:31 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-4 
+2017/03/30 10:48:31 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-4 
+2017/03/30 10:48:31 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-29 
+2017/03/30 10:48:31 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-29 
+2017/03/30 10:48:31 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-12 
+2017/03/30 10:48:31 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-12 
+2017/03/30 10:48:31 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-26 
+2017/03/30 10:48:31 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-26 
+2017/03/30 10:48:31 INFO  - jmeter.engine.StandardJMeterEngine: Notifying test listeners of end of test 
+2017/03/30 10:48:31 INFO  - jmeter.services.FileServer: Close: global_0-4.csv 
+2017/03/30 10:48:31 INFO  - jmeter.reporters.Summariser: Generate Summary Results +    135 in 00:00:01 =  109.8/s Avg:    64 Min:     0 Max:   231 Err:     1 (0.74%) Active: 0 Started: 30 Finished: 30 
+2017/03/30 10:48:31 INFO  - jmeter.reporters.Summariser: Generate Summary Results =  15691 in 00:03:00 =   87.0/s Avg:    85 Min:     0 Max: 14969 Err:   157 (1.00%) 
+2017/03/30 10:48:31 INFO  - jmeter.gui.util.JMeterMenuBar: setRunning(false,*local*) 
+2017/03/30 10:53:20 INFO  - jmeter.engine.StandardJMeterEngine: Running the test! 
+2017/03/30 10:53:20 INFO  - jmeter.samplers.SampleEvent: List of sample_variables: [] 
+2017/03/30 10:53:20 INFO  - jmeter.gui.util.JMeterMenuBar: setRunning(true,*local*) 
+2017/03/30 10:53:20 INFO  - jmeter.engine.StandardJMeterEngine: Starting ThreadGroup: 1 : Web Map Requests 
+2017/03/30 10:53:20 INFO  - jmeter.engine.StandardJMeterEngine: Starting 30 threads for group Web Map Requests. 
+2017/03/30 10:53:20 INFO  - jmeter.engine.StandardJMeterEngine: Thread will continue on error 
+2017/03/30 10:53:20 INFO  - jmeter.threads.ThreadGroup: Starting thread group number 1 threads 30 ramp-up 5 perThread 166.66667 delayedStart=false 
+2017/03/30 10:53:20 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-1 
+2017/03/30 10:53:20 INFO  - jmeter.services.FileServer: Stored: global_0-4.csv 
+2017/03/30 10:53:20 INFO  - jmeter.threads.ThreadGroup: Started thread group number 1 
+2017/03/30 10:53:20 INFO  - jmeter.engine.StandardJMeterEngine: All thread groups have been started 
+2017/03/30 10:53:20 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-2 
+2017/03/30 10:53:20 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-3 
+2017/03/30 10:53:21 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-4 
+2017/03/30 10:53:21 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-5 
+2017/03/30 10:53:21 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-6 
+2017/03/30 10:53:21 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-7 
+2017/03/30 10:53:21 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-8 
+2017/03/30 10:53:21 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-9 
+2017/03/30 10:53:22 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-10 
+2017/03/30 10:53:22 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-11 
+2017/03/30 10:53:22 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-12 
+2017/03/30 10:53:22 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-13 
+2017/03/30 10:53:22 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-14 
+2017/03/30 10:53:22 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-15 
+2017/03/30 10:53:23 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-16 
+2017/03/30 10:53:23 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-17 
+2017/03/30 10:53:23 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-18 
+2017/03/30 10:53:23 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-19 
+2017/03/30 10:53:23 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-20 
+2017/03/30 10:53:23 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-21 
+2017/03/30 10:53:24 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-22 
+2017/03/30 10:53:24 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-23 
+2017/03/30 10:53:24 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-24 
+2017/03/30 10:53:24 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-25 
+2017/03/30 10:53:24 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-26 
+2017/03/30 10:53:24 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-27 
+2017/03/30 10:53:25 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-28 
+2017/03/30 10:53:25 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-29 
+2017/03/30 10:53:25 INFO  - jmeter.threads.JMeterThread: Thread started: Web Map Requests 1-30 
+2017/03/30 10:53:30 INFO  - jmeter.reporters.Summariser: Generate Summary Results +    589 in 00:00:10 =   61.6/s Avg:    97 Min:     0 Max:   686 Err:     7 (1.19%) Active: 30 Started: 30 Finished: 0 
+2017/03/30 10:54:00 INFO  - jmeter.reporters.Summariser: Generate Summary Results +   2866 in 00:00:30 =   95.5/s Avg:    64 Min:     0 Max:   370 Err:    28 (0.98%) Active: 30 Started: 30 Finished: 0 
+2017/03/30 10:54:00 INFO  - jmeter.reporters.Summariser: Generate Summary Results =   3455 in 00:00:40 =   87.3/s Avg:    70 Min:     0 Max:   686 Err:    35 (1.01%) 
+2017/03/30 10:54:30 INFO  - jmeter.reporters.Summariser: Generate Summary Results +   2977 in 00:00:30 =   99.2/s Avg:    52 Min:     0 Max:   240 Err:    30 (1.01%) Active: 30 Started: 30 Finished: 0 
+2017/03/30 10:54:30 INFO  - jmeter.reporters.Summariser: Generate Summary Results =   6432 in 00:01:10 =   92.5/s Avg:    61 Min:     0 Max:   686 Err:    65 (1.01%) 
+2017/03/30 10:55:00 INFO  - jmeter.reporters.Summariser: Generate Summary Results +   2999 in 00:00:30 =  100.0/s Avg:    49 Min:     0 Max:   274 Err:    30 (1.00%) Active: 30 Started: 30 Finished: 0 
+2017/03/30 10:55:00 INFO  - jmeter.reporters.Summariser: Generate Summary Results =   9431 in 00:01:40 =   94.7/s Avg:    58 Min:     0 Max:   686 Err:    95 (1.01%) 
+2017/03/30 10:55:30 INFO  - jmeter.reporters.Summariser: Generate Summary Results +   2460 in 00:00:30 =   82.0/s Avg:   115 Min:     0 Max:  3941 Err:    24 (0.98%) Active: 30 Started: 30 Finished: 0 
+2017/03/30 10:55:30 INFO  - jmeter.reporters.Summariser: Generate Summary Results =  11891 in 00:02:10 =   91.8/s Avg:    69 Min:     0 Max:  3941 Err:   119 (1.00%) 
+2017/03/30 10:56:00 INFO  - jmeter.reporters.Summariser: Generate Summary Results +   2347 in 00:00:30 =   78.2/s Avg:   119 Min:     0 Max:  3438 Err:    24 (1.02%) Active: 30 Started: 30 Finished: 0 
+2017/03/30 10:56:00 INFO  - jmeter.reporters.Summariser: Generate Summary Results =  14238 in 00:02:40 =   89.2/s Avg:    78 Min:     0 Max:  3941 Err:   143 (1.00%) 
+2017/03/30 10:56:20 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-18 
+2017/03/30 10:56:20 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-18 
+2017/03/30 10:56:20 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-23 
+2017/03/30 10:56:20 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-23 
+2017/03/30 10:56:20 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-10 
+2017/03/30 10:56:20 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-10 
+2017/03/30 10:56:20 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-17 
+2017/03/30 10:56:20 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-17 
+2017/03/30 10:56:20 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-30 
+2017/03/30 10:56:20 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-30 
+2017/03/30 10:56:20 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-22 
+2017/03/30 10:56:20 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-22 
+2017/03/30 10:56:20 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-4 
+2017/03/30 10:56:20 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-4 
+2017/03/30 10:56:20 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-8 
+2017/03/30 10:56:20 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-8 
+2017/03/30 10:56:20 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-27 
+2017/03/30 10:56:20 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-27 
+2017/03/30 10:56:20 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-24 
+2017/03/30 10:56:20 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-24 
+2017/03/30 10:56:20 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-21 
+2017/03/30 10:56:20 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-21 
+2017/03/30 10:56:20 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-13 
+2017/03/30 10:56:20 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-13 
+2017/03/30 10:56:20 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-9 
+2017/03/30 10:56:20 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-9 
+2017/03/30 10:56:20 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-26 
+2017/03/30 10:56:20 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-26 
+2017/03/30 10:56:20 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-11 
+2017/03/30 10:56:20 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-11 
+2017/03/30 10:56:20 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-7 
+2017/03/30 10:56:20 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-7 
+2017/03/30 10:56:20 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-6 
+2017/03/30 10:56:20 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-6 
+2017/03/30 10:56:20 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-15 
+2017/03/30 10:56:20 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-15 
+2017/03/30 10:56:20 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-19 
+2017/03/30 10:56:20 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-19 
+2017/03/30 10:56:20 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-12 
+2017/03/30 10:56:20 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-12 
+2017/03/30 10:56:20 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-20 
+2017/03/30 10:56:20 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-20 
+2017/03/30 10:56:20 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-3 
+2017/03/30 10:56:20 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-3 
+2017/03/30 10:56:20 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-29 
+2017/03/30 10:56:20 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-29 
+2017/03/30 10:56:20 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-2 
+2017/03/30 10:56:20 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-2 
+2017/03/30 10:56:20 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-5 
+2017/03/30 10:56:20 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-5 
+2017/03/30 10:56:20 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-16 
+2017/03/30 10:56:20 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-16 
+2017/03/30 10:56:20 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-14 
+2017/03/30 10:56:20 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-14 
+2017/03/30 10:56:20 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-1 
+2017/03/30 10:56:20 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-1 
+2017/03/30 10:56:20 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-28 
+2017/03/30 10:56:20 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-28 
+2017/03/30 10:56:20 INFO  - jmeter.threads.JMeterThread: Stopping because end time detected by thread: Web Map Requests 1-25 
+2017/03/30 10:56:20 INFO  - jmeter.threads.JMeterThread: Thread finished: Web Map Requests 1-25 
+2017/03/30 10:56:20 INFO  - jmeter.engine.StandardJMeterEngine: Notifying test listeners of end of test 
+2017/03/30 10:56:20 INFO  - jmeter.services.FileServer: Close: global_0-4.csv 
+2017/03/30 10:56:20 INFO  - jmeter.reporters.Summariser: Generate Summary Results +   1130 in 00:00:21 =   54.4/s Avg:   335 Min:     0 Max:  6290 Err:    11 (0.97%) Active: 0 Started: 30 Finished: 30 
+2017/03/30 10:56:20 INFO  - jmeter.reporters.Summariser: Generate Summary Results =  15368 in 00:03:00 =   85.2/s Avg:    97 Min:     0 Max:  6290 Err:   154 (1.00%) 
+2017/03/30 10:56:20 INFO  - jmeter.gui.util.JMeterMenuBar: setRunning(false,*local*) 

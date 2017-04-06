@@ -1,0 +1,23 @@
+<!--The GDAL 1.9.2 native binaries and data for the Ubuntu x64-->
+<component>
+    <fileSets>
+        <fileSet>
+            <directory>src/main/resources/gdal</directory>
+            <outputDirectory>worldwind-geoserver-${project.version}/gdal</outputDirectory>
+            <includes>
+                
+                <!-- GDAL native binaries to be extracted to gdal/lib : $LB_LIBRARY_PATH -->
+                <include>gdal192-Ubuntu12-gcc4.6.3-x86_64.tar.gz</include>
+                
+                <!-- GDAL data to be extracted to gdal/data : $GDAL_DATA -->
+                <include>gdal-data.tar.gz</include>
+            
+                <!-- ECW and MrSID license notes -->
+                <include>ECWEULA.txt</include>
+                <include>linux_notes_on_ECW_and_JP2ECW.txt</include>
+                <include>readme.txt</include>
+
+            </includes>            
+        </fileSet>
+    </fileSets>
+</component>

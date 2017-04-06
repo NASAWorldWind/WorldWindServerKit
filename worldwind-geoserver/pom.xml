@@ -4,7 +4,7 @@
     <parent>
         <groupId>gov.nasa.worldwind</groupId>
         <artifactId>worldwind-serverkit</artifactId>
-        <version>0.1.0</version>
+        <version>0.2.0-RC</version>
     </parent>
     
     <artifactId>worldwind-geoserver</artifactId>
@@ -20,15 +20,15 @@
         <sde.version>9.3</sde.version>
         <jetty.port>8080</jetty.port>
         <jetty.run.daemon>false</jetty.run.daemon>            
-        <!-- configId : typically "minimal"
-        configId defines the data folder template. It should match a subfolder
+        <!-- dataConfigId : typically "minimal"
+        dataConfigId defines the data folder template. It should match a subfolder
         under the parent folder's data folder.  Its contents will be copied into
         the war file. 
         -->
-        <configId>minimal</configId>
-        <!--<configId>nasa</configId>-->
-        <!--<configId>ssgf</configId>-->
+        <baseConfigId>base</baseConfigId>
+        <dataConfigId>nasa</dataConfigId>
         <configDirectory>${basedir}/../data_config</configDirectory>
+        <!--<dataConfigId>ssgf</dataConfigId>-->
     </properties>    
     
     <dependencies>
@@ -195,6 +195,26 @@
         <dependency>
             <groupId>org.geotools</groupId>
             <artifactId>gt-imageio-ext-gdal</artifactId>
+            <exclusions>
+                <!--Exclude proprietary licensed ECW support-->
+                <exclusion>
+                    <groupId>it.geosolutions.imageio-ext</groupId>
+                    <artifactId>imageio-ext-gdalecw</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>it.geosolutions.imageio-ext</groupId>
+                    <artifactId>imageio-ext-gdalecwjp2</artifactId>
+                </exclusion>
+                <!--Exclude proprietary licensed MrSID support-->
+                <exclusion>
+                    <groupId>it.geosolutions.imageio-ext</groupId>
+                    <artifactId>imageio-ext-gdalmrsid</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>it.geosolutions.imageio-ext</groupId>
+                    <artifactId>imageio-ext-gdalmrsidjp2</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <!--imagepyramid datasource module-->
         <dependency>
@@ -259,7 +279,9 @@
             <plugin>
                 <artifactId>maven-antrun-plugin</artifactId>
                 <executions>                    
-                    <!-- Builds a valid data directory into the web app -->
+                    <!-- Builds a valid "data" directory into the web app -->
+                    <!-- In a Linux/Tomcat war file, the default embedded GeoServer 
+                    data directory location is "<web application root>/data" -->
                     <execution>
                         <id>configPackage</id>
                         <phase>package</phase>
@@ -268,14 +290,20 @@
                         </goals>
                         <configuration>
                             <tasks>
-                                <!-- check if config is available, if not fail -->
-                                <available file="${configDirectory}/${configId}" property="configIsAvailable" />
-                                <fail message="Unable to locate configuration: ${configDirectory}/${configId}" unless="configIsAvailable" />
-
-                                <!-- copy the files from the config dir to the webapp dir -->
-                                <echo message="Copying data dir from ${configDirectory}/${configId}" />
+                                <!-- copy the base distribution files from the config dir to the webapp dir -->
+                                <echo message="Copying data dir from ${configDirectory}/${baseConfigId}" />
                                 <copy todir="${webappSourceDirectory}/data">
-                                    <fileset dir="${configDirectory}/${configId}" includes="**/**" />
+                                    <fileset dir="${configDirectory}/${baseConfigId}" includes="**/**" />
+                                </copy>
+                                
+                                <!-- check if the data config is available, if not fail -->
+                                <available file="${configDirectory}/${dataConfigId}" property="configIsAvailable" />
+                                <fail message="Unable to locate configuration: ${configDirectory}/${dataConfigId}" unless="configIsAvailable" />
+                                
+                                <!-- copy the data files from the config dir to the webapp dir -->
+                                <echo message="Copying data dir from ${configDirectory}/${dataConfigId}" />
+                                <copy todir="${webappSourceDirectory}/data">
+                                    <fileset dir="${configDirectory}/${dataConfigId}" includes="**/**" />
                                 </copy>
                             </tasks>
                         </configuration>
@@ -303,7 +331,7 @@
                   <id>configPackage</id>
                   <configuration>
                     <configDirectory>${configDirectory}</configDirectory>
-                    <configId>${configId}</configId>
+                    <dataConfigId>${dataConfigId}</dataConfigId>
                   </configuration>
                   <phase>package</phase>
                   <goals>
@@ -362,7 +390,7 @@
             The Jetty Maven plugin is useful for rapid development and testing.
             To start Jetty and serve up your project execute: 
                 mvn jetty:run
-            Then point your browser to on http://localhost:8080/wwgs/web/
+            Then point your browser to on http://localhost:8080/geoserver/web/
             --> 
             <plugin>
                 <groupId>org.eclipse.jetty</groupId>
@@ -373,7 +401,7 @@
                 -->
                 <configuration>
                     <webApp>
-                        <contextPath>/wwgs</contextPath>
+                        <contextPath>/geoserver</contextPath>
                     </webApp>
                     <connectors>
                         <connector implementation="org.mortbay.jetty.nio.SelectChannelConnector">
@@ -384,11 +412,11 @@
                     <stopPort>${jetty.stopPort}</stopPort>
                     <stopKey>GEOSERVER_JETTY_STOPKEY</stopKey>
                     <daemon>false</daemon>
-                    <!-- Set the GEOSERVER_DATA_DIR -->
+                    <!-- Set the GEOSERVER_DATA_DIR for the Jetty run -->
                     <systemProperties> 
                         <systemProperty> 
                             <name>GEOSERVER_DATA_DIR</name>
-                            <value>target/worldwind-geoserver/data</value> 
+                            <value>${project.build.directory}/worldwind-geoserver/data</value> 
                         </systemProperty> 
                     </systemProperties>
                     

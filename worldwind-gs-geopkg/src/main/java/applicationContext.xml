@@ -24,8 +24,13 @@ application directory.
         <constructor-arg index="3" ref="filterFactory"/>
     </bean>
     
+    <!--    
+    Depends on the wpsXmlConfiguration-1.0.0 WPSConfiguration object registered in  
+    the wps-core module to execute WPS requests.
+    -->
     <bean id="GeoPackageProcessRequestPPIO" class="gov.nasa.worldwind.gs.geopkg.wps.GeoPackageProcessRequestPPIO" >
-        <constructor-arg ref="entityResolverProvider"/>
+        <constructor-arg index="0" ref="entityResolverProvider"/>
+        <constructor-arg index="1" ref="wpsXmlConfiguration-1.0.0" />
     </bean>
     
     <bean id="GeoPackageDataStoreFactoryInitializer" class="gov.nasa.worldwind.gs.geopkg.GeoPkgDataStoreFactoryInitializer">
