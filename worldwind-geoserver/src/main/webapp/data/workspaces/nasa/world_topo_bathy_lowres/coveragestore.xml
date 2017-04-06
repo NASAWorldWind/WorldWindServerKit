@@ -1,6 +1,6 @@
 <coverageStore>
   <id>CoverageStoreInfoImpl-7479188c:15a4e04681d:-7fc3</id>
-  <name>BMNG_world.topo.bathy</name>
+  <name>world_topo_bathy_lowres</name>
   <description>BMNG_world.topo.bathy.200405.3.2048x1024</description>
   <type>GeoTIFF</type>
   <enabled>true</enabled>
