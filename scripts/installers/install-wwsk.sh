@@ -8,12 +8,17 @@
 ## Parse arguments
 if [ $# -lt 2 ]; then
     echo "$0: missing argument(s)"
-    echo "Syntax: $0 SOURCE DEST [TARGET]"
-    echo "SOURCE:   source WWSK distribution file (.tgz) to extract"
-    echo "DEST:     destination folder"
-    echo "TARGET:   new name of unzipped folder (optional)"
+    echo "Usage: $0 SOURCE DEST [TARGET]"
+    echo "      SOURCE:   source WWSK distribution file (.tgz) to extract"
+    echo "      DEST:     destination folder"
+    echo "      TARGET:   new name of unzipped folder; if not defined, the root folder in the .tgz is used"
     echo "The DEST folder will be created if it doesn't exist"
     echo "The previous contents of the TARGET folder will be deleted"
+    echo "Examples:"
+    echo "  install-wwsk worldwind-geoserver-1.0.0-Linux64.tgz /opt/maps/wwsk"
+    echo "      Copies the root folder of .tgz to /opts/maps/wwsk"
+    echo "  install-wwsk worldwind-geoserver-1.0.0-Linux64.tgz /opt/maps wwsk"
+    echo "      Copies the root folder of .tgz to /opts/maps and renames it to wwsk"
     exit
 else
     SOURCE=$1
