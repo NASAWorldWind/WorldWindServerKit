@@ -11,7 +11,7 @@ export GEOSERVER_DATA_DIR=${GEOSERVER_HOME}/data_dir
 # -----------------------------------------------------------------------------
 # Set how much heap memory to allocate to GeoServer (min and max)
 # The max size of the "older generation" heap is controlled by the -Xms parameter.
-HEAP="-Xms2048m -Xmx2048m"
+HEAP="-Xms4096m -Xmx4096m"
 
 # Set how much memory to set aside for new objects.
 # The "young generation" is further divided into an Eden, and Semi-spaces.
