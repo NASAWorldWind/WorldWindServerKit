@@ -106,7 +106,7 @@ Add an OGC GeoPackage layer:
 3. Add a new Store
   1. In the left hand pane under 'Data' select the Stores hyperlink to navigate to the Stores page.
   2. Select "Add new Store" under "Manage the stores providing data to GeoServer".
-  3. Select "GeoPackage (mosaic) [OGC compliant]" under "Raster Data Sources"
+  3. Select "GeoPackage (tiles)" under "Raster Data Sources"
   4. Complete the store configuration and select 'Submit'
   5. Select "Save"
   6. Select "Publish" under the "Action" column on the "New Layer" page.
