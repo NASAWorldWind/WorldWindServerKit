@@ -91,7 +91,7 @@ The WWSK adds support for reading and writing OGC GeoPackages in GeoServer.
 WWSK manifests the **GeoPackage (tiles)** raster data source for OGC GeoPackages.  
 
 Note: the *GeoPackage (mosaic)* raster data source is the GeoServer/GeoTools 
-GeoPackage community extension which is not compatible with GeoPackages conforming to the 
+GeoPackage community extension is not compatible with GeoPackages conforming to the 
 OGC GeoPackage Encoding Standard (http://www.geopackage.org/spec/). 
 Do not use the community extension data source for OGC GeoPackages.
 
