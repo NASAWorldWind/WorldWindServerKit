@@ -47,3 +47,4 @@ nbactions.xml
 /wps_request.xml
 /wcs_request.txt
 /wps_output.txt
+/jmeter/wcs_test/output/
