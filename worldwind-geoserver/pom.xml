@@ -4,7 +4,7 @@
     <parent>
         <groupId>gov.nasa.worldwind</groupId>
         <artifactId>worldwind-serverkit</artifactId>
-        <version>0.2.0</version>
+        <version>0.2.1</version>
     </parent>
     
     <artifactId>worldwind-geoserver</artifactId>
@@ -206,14 +206,14 @@
                     <artifactId>imageio-ext-gdalecwjp2</artifactId>
                 </exclusion>
                 <!--Exclude proprietary licensed MrSID support-->
-                <exclusion>
+<!--                <exclusion>
                     <groupId>it.geosolutions.imageio-ext</groupId>
                     <artifactId>imageio-ext-gdalmrsid</artifactId>
                 </exclusion>
                 <exclusion>
                     <groupId>it.geosolutions.imageio-ext</groupId>
                     <artifactId>imageio-ext-gdalmrsidjp2</artifactId>
-                </exclusion>
+                </exclusion>-->
             </exclusions>
         </dependency>
         <!--imagepyramid datasource module-->
