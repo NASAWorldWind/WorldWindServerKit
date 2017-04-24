@@ -10,12 +10,12 @@
             <directory>../worldwind-geoserver/target</directory>
             <outputDirectory></outputDirectory>
             <includes>
-                <include>worldwind-geoserver.war</include>
+                <include>geoserver.war</include>
             </includes>
         </fileSet>
         <fileSet>
             <!-- licenses -->
-            <directory>release</directory>
+            <directory>src/main/resources/licenses</directory>
             <outputDirectory></outputDirectory>
             <includes>
                 <include>LICENSE.txt</include>
@@ -29,11 +29,5 @@
             </includes>
         </fileSet>-->
     </fileSets>
-<!--    <moduleSets>
-        <moduleSet>
-            <includes>
-                <include>gov.nasa.worldwind:ww-geoserver</include>
-            </includes>
-        </moduleSet>
-    </moduleSets>-->
+
 </assembly>
