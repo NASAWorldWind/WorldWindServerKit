@@ -51,7 +51,7 @@
           </elementProp>
           <elementProp name="coverage" elementType="Argument">
             <stringProp name="Argument.name">coverage</stringProp>
-            <stringProp name="Argument.value">test:pnw_pyramids_uncompressed</stringProp>
+            <stringProp name="Argument.value">pnw:usgs_ned_10m</stringProp>
             <stringProp name="Argument.desc">Coverage to request: test:gebco_2014, test:usgs_ned_10m</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
@@ -316,12 +316,12 @@
                       <boolProp name="HTTPArgument.use_equals">true</boolProp>
                       <stringProp name="Argument.name">scalesize</stringProp>
                     </elementProp>
-                    <elementProp name="overviewpolicy" elementType="HTTPArgument">
+                    <elementProp name="overviewpolicyx" elementType="HTTPArgument">
                       <boolProp name="HTTPArgument.always_encode">false</boolProp>
                       <stringProp name="Argument.value">NEAREST</stringProp>
                       <stringProp name="Argument.metadata">=</stringProp>
                       <boolProp name="HTTPArgument.use_equals">true</boolProp>
-                      <stringProp name="Argument.name">overviewpolicy</stringProp>
+                      <stringProp name="Argument.name">overviewpolicyx</stringProp>
                     </elementProp>
                   </collectionProp>
                 </elementProp>
