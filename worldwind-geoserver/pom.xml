@@ -131,12 +131,6 @@
             <artifactId>gs-web-wps</artifactId>
             <version>${gs.version}</version>
         </dependency>
-        
-        <!--GDAL extension-->
-        <dependency>
-            <groupId>org.geoserver.extension</groupId>
-            <artifactId>gs-gdal</artifactId>
-        </dependency>
 
         <!--WorldWind GeoServer WMS module-->
         <dependency>
@@ -181,22 +175,30 @@
             <groupId>org.geotools</groupId>
             <artifactId>gt-image</artifactId>
         </dependency>
+        
         <!--imagemosaic datasource module-->
         <dependency>
             <groupId>org.geotools</groupId>
             <artifactId>gt-imagemosaic</artifactId>
         </dependency>
+        
         <!--JP2K based grid coverage readers-->   
         <dependency>
             <groupId>org.geotools</groupId>
             <artifactId>gt-jp2k</artifactId>
         </dependency>
+        
+        <!--GDAL extension-->
+<!--        <dependency>
+            <groupId>org.geoserver.extension</groupId>
+            <artifactId>gs-gdal</artifactId>
+        </dependency>-->
+        
         <!--ImageI/O-Ext based grid coverage readers-->
-        <dependency>
+<!--        <dependency>
             <groupId>org.geotools</groupId>
             <artifactId>gt-imageio-ext-gdal</artifactId>
             <exclusions>
-                <!--Exclude proprietary licensed ECW support-->
                 <exclusion>
                     <groupId>it.geosolutions.imageio-ext</groupId>
                     <artifactId>imageio-ext-gdalecw</artifactId>
@@ -205,17 +207,18 @@
                     <groupId>it.geosolutions.imageio-ext</groupId>
                     <artifactId>imageio-ext-gdalecwjp2</artifactId>
                 </exclusion>
-                <!--Exclude proprietary licensed MrSID support-->
-<!--                <exclusion>
+                Exclude proprietary licensed MrSID support
+                <exclusion>
                     <groupId>it.geosolutions.imageio-ext</groupId>
                     <artifactId>imageio-ext-gdalmrsid</artifactId>
                 </exclusion>
                 <exclusion>
                     <groupId>it.geosolutions.imageio-ext</groupId>
                     <artifactId>imageio-ext-gdalmrsidjp2</artifactId>
-                </exclusion>-->
+                </exclusion>
             </exclusions>
-        </dependency>
+        </dependency>-->
+        
         <!--imagepyramid datasource module-->
         <dependency>
             <groupId>org.geotools</groupId>
