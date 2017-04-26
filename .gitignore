@@ -48,3 +48,6 @@ nbactions.xml
 /wcs_request.txt
 /wps_output.txt
 /jmeter/wcs_test/output/
+/dist/
+/jmeter/JMeter.lnk
+/jmeter/wms_test/output/
