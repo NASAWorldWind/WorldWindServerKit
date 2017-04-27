@@ -1,22 +1,11 @@
 #!/bin/bash
+
 ##========================================
 ## Run GeoServer 
 ##========================================
 
-## Setup the prerequisites for GeoSeriver
-if [ -f .setup ]; then
-    echo "Already setup."
-else
-    # Run the setup 
-    source ./setup.sh
-    touch .setup
-
-    # Create a 'wwsk' symbolic link to this distribution
-    if [ -L ../wwsk ]; then
-        rm ../wwsk
-    fi
-    ln -s $(pwd) ../wwsk
-fi
+## Setup the JRE and GDAL for GeoServer
+source ./setup.sh
 
 ## Environment variables for GeoServer
 source ./env.sh
