@@ -1,0 +1,13 @@
+<!--The open source license text files for GeoServer et al-->
+<component>
+    <fileSets>
+        <fileSet>
+            <directory>src/main/resources/licenses</directory>
+            <outputDirectory>worldwind-geoserver-${project.version}</outputDirectory>
+            <includes>
+                <include>LICENSE.txt</include>
+                <include>GPL.txt</include>
+            </includes>            
+        </fileSet>
+    </fileSets>
+</component>
