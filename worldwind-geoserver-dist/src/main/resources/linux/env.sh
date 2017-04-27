@@ -2,7 +2,7 @@
 # -----------------------------------------------------------------------------
 # Environment variables for the World Wind Server Kit (WWSK) - GeoServer
 # -----------------------------------------------------------------------------
-export GEOSERVER_HOME=`pwd`
+export GEOSERVER_HOME=$(pwd)
 export GEOSERVER_DATA_DIR=${GEOSERVER_HOME}/data_dir
 
 # -----------------------------------------------------------------------------
