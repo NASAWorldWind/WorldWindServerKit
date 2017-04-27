@@ -5,10 +5,10 @@
 
 ## Establish init daemon is systemd
 echo "Determining if the init daemon is systemd"
-which systemctl
+systemctl --version > /dev/null
 if [ $? -ne 0 ]; then
     echo "Sorry, this script only works with the systemd daemon."
-    echo "You'll have to manually configure the service for your OS.
+    echo "You'll have to manually configure the service for your OS."
     exit 1
 fi
 
@@ -23,25 +23,25 @@ fi
 ./setup.sh
 
 if [ ! -f wwsk.service ]; then
-    echo "Error: \'wwsk.service\' file was not found in current folder.
-    echo "The \'wwsk\' service was not installed.
+    echo "Error: \'wwsk.service\' file was not found in current folder."
+    echo "The \'wwsk\' service was not installed."
     exit 1
 fi
 if [ ! -f run.sh ]; then
-    echo "Error: \'run.sh\' script was not found in current folder.
-    echo "The \'wwsk\' service was not installed.
+    echo "Error: \'run.sh\' script was not found in current folder."
+    echo "The \'wwsk\' service was not installed."
     exit 1
 fi
 if [ ! -f stop.sh ]; then
-    echo "Error: \'stop.sh\' script not found in current folder.
-    echo "The \'wwsk\' service was not installed.
+    echo "Error: \'stop.sh\' script not found in current folder."
+    echo "The \'wwsk\' service was not installed."
     exit 1
 fi
 
 ## Using the s/PATTERN/REPLACEMENT/ regexp syntax with sed to update the service file.
 ## The ^ and $ are beginning/end-of-line markers; .* matches anything.
 ## We're using the s;;; pattern instead of s/// to avoid conflicts with file paths.
-echo "Updating the wwsk.service description file"
+echo "Updating the wwsk.service unit file"
 CURRENT_DIR=$(pwd)
 sed -i 's;^ExecStart=.*$;ExecStart='${CURRENT_DIR}'/run.sh;' wwsk.service
 sed -i 's;^ExecStop=.*$;ExecStop='${CURRENT_DIR}'/stop.sh;' wwsk.service
