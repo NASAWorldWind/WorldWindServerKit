@@ -4,6 +4,9 @@
         <format>zip</format>
     </formats>
     <includeBaseDirectory>false</includeBaseDirectory>
+    <componentDescriptors>
+        <componentDescriptor>src/assembly/licenses.xml</componentDescriptor>
+    </componentDescriptors>
     <fileSets>
         <fileSet>
             <!-- the war file -->
@@ -11,15 +14,6 @@
             <outputDirectory></outputDirectory>
             <includes>
                 <include>geoserver.war</include>
-            </includes>
-        </fileSet>
-        <fileSet>
-            <!-- licenses -->
-            <directory>src/main/resources/licenses</directory>
-            <outputDirectory></outputDirectory>
-            <includes>
-                <include>LICENSE.txt</include>
-                <include>GPL.txt</include>
             </includes>
         </fileSet>
 <!--        <fileSet>
