@@ -11,12 +11,12 @@ including:
     * Java runtime for Windows x64
     * GDAL natives for Windows x64
     * Basic data configuration
-* Linux x64 (worldwind-geoserver-\<version>-linux64.tgz)
+* Ubuntu x64 (worldwind-geoserver-\<version>-ubuntu64.tgz)
     * GeoServer web app configured with a Jetty application server 
     * Java runtime for Linux x64
     * GDAL natives for Ubuntu x64
     * Basic data configuration
-* Hybrid OS (worldwind-geoserver-\<version>-hybrid_os.tgz)
+* CentOS x64 (worldwind-geoserver-\<version>-centos64.tgz)
     * GeoServer web app configured with a Jetty application server 
     * Java runtime for Linux x64
     * GDAL natives for CentOS x64
