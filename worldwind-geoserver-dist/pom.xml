@@ -194,11 +194,11 @@
                                 <!--Windows x64 distribution-->
                                 <descriptor>src/assembly/win64-assembly.xml</descriptor>
                                 
-                                <!--Linux x64 distirbution-->
-                                <descriptor>src/assembly/linux64-assembly.xml</descriptor>
+                                <!--Linux/Ubuntu x64 distirbution-->
+                                <descriptor>src/assembly/ubuntu64-assembly.xml</descriptor>
                                 
-                                <!--Hybrid OS (linux-based x64) distribution-->
-                                <descriptor>src/assembly/hybrid_os-assembly.xml</descriptor>
+                                <!--Linux/CentOS x64) distribution-->
+                                <descriptor>src/assembly/centos64-assembly.xml</descriptor>
                                 
                                 <!--WAR file distibution content -->
                                 <descriptor>src/assembly/war-assembly.xml</descriptor>
