@@ -1,29 +1,36 @@
 #!/bin/bash
+
 # -----------------------------------------------------------------------------
 # Setup Java JRE and GDAL for the World Wind Server Kit (WWSK) - Linux
 # -----------------------------------------------------------------------------
-
-## Install the Java Server JRE
-MIN_VER="121"
-if [ ! -d jdk1.8.0_${MIN_VER}/jre ]; then
-    echo "Installing the Java JRE"
-    tar -xzf server-jre-8u${MIN_VER}-linux-x64.tar.gz jdk1.8.0_${MIN_VER}/jre
-    ln -s jdk1.8.0_${MIN_VER}/jre java
-fi
-
-## Install the ImageIO-Ext extention and the GDAL native binaries.
-## E.g., install geoserver-2.10.0-gdal-plugin.zip and imageio-ext-1.1.16-jars.zip
+JAVA_MIN_VER="121"
 GEOSERVER_VER="2.10.0"
 IMAGEIO_EXT_VER="1.1.16"
 IMAGEIO_EXT_ZIP="gdal/imageio-ext-${IMAGEIO_EXT_VER}-jars.zip"
 GDAL_PLUGIN_ZIP="gdal/geoserver-${GEOSERVER_VER}-gdal-plugin.zip"
-GDAL_NATIVES_ZIP="gdal/gdal192-Ubuntu12-gcc4.6.3-x86_64.tar.gz"
+GDAL_UBUNTU_NATIVES_ZIP="gdal/gdal192-Ubuntu12-gcc4.6.3-x86_64.tar.gz"
+GDAL_CENTOS_NATIVES_ZIP="gdal/gdal192-CentOS5.8-gcc4.1.2-x86_64.tar.gz"
 GDAL_DATA_ZIP="gdal/gdal-data.tar.gz"
 GDAL_LIB_PATH="gdal/lib"
 GDAL_DATA_PATH="gdal/data"
 GEOSERVER_LIB_PATH="webapps/geoserver/WEB-INF/lib"
 ECW_ARTIFACTS="imageio-ext-gdalecw-${IMAGEIO_EXT_VER}.jar imageio-ext-gdalecwjp2-${IMAGEIO_EXT_VER}.jar"
 MRSID_ARTIFACTS="imageio-ext-gdalmrsid-${IMAGEIO_EXT_VER}.jar imageio-ext-gdalmrsidjp2-${IMAGEIO_EXT_VER}.jar"
+
+## Install the Java Server JRE
+if [ ! -d jdk1.8.0_${JAVA_MIN_VER}/jre ]; then
+    echo "Installing the Java JRE"
+    tar -xzf server-jre-8u${JAVA_MIN_VER}-linux-x64.tar.gz jdk1.8.0_${JAVA_MIN_VER}/jre
+    ln -s jdk1.8.0_${JAVA_MIN_VER}/jre java
+fi
+
+## Install the ImageIO-Ext extention and the GDAL native binaries.
+## E.g., install geoserver-2.10.0-gdal-plugin.zip and imageio-ext-1.1.16-jars.zip
+if [[ -f $GDAL_UBUNTU_NATIVES_ZIP ]]; then
+    GDAL_NATIVES_ZIP=$GDAL_UBUNTU_NATIVES_ZIP
+elif [[ -f $GDAL_CENTOS_NATIVES_ZIP ]]; then
+    GDAL_NATIVES_ZIP=$GDAL_CENTOS_NATIVES_ZIP
+fi   
 if [[ ! -d gdal/lib || $1 == "reinstall" ]]; then    
     # Display a simple menu to install or skip GDAL
     echo
@@ -117,6 +124,7 @@ if [[ ! -d gdal/lib || $1 == "reinstall" ]]; then
                 break ;;
             (Help) 
                 echo "The MrSID driver adds the capability to read *.sid files."
+                echo "and JPEG2000 imagery with MrSID compression.
                 echo "It uses a proprietary license from LizardTech."
                 ;;
             (*) 
