@@ -1,6 +1,6 @@
 #!/bin/bash
 ##========================================
-## Run GeoServer
+## Run GeoServer 
 ##========================================
 
 ## Setup the prerequisites for GeoSeriver

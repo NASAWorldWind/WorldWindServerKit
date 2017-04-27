@@ -1,6 +1,6 @@
 #!/bin/sh 
 ## ================================================
-## Install the "wwsk" (WorldWindServerKit) service
+## Install the "wwsk" (WorldWindServerKit) service 
 ## ================================================
 
 ## Establish init daemon is systemd

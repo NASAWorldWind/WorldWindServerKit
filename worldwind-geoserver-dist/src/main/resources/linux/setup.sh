@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # -----------------------------------------------------------------------------
-# Setup Java JRE and GDAL for the World Wind Server Kit (WWSK) - Linux
+# Setup Java JRE and GDAL for the World Wind Server Kit (WWSK) - Linux 
 # -----------------------------------------------------------------------------
 JAVA_MIN_VER="121"
 GEOSERVER_VER="2.10.0"
