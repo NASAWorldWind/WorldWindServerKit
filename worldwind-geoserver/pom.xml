@@ -188,37 +188,6 @@
             <artifactId>gt-jp2k</artifactId>
         </dependency>
         
-        <!--GDAL extension-->
-<!--        <dependency>
-            <groupId>org.geoserver.extension</groupId>
-            <artifactId>gs-gdal</artifactId>
-        </dependency>-->
-        
-        <!--ImageI/O-Ext based grid coverage readers-->
-<!--        <dependency>
-            <groupId>org.geotools</groupId>
-            <artifactId>gt-imageio-ext-gdal</artifactId>
-            <exclusions>
-                <exclusion>
-                    <groupId>it.geosolutions.imageio-ext</groupId>
-                    <artifactId>imageio-ext-gdalecw</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>it.geosolutions.imageio-ext</groupId>
-                    <artifactId>imageio-ext-gdalecwjp2</artifactId>
-                </exclusion>
-                Exclude proprietary licensed MrSID support
-                <exclusion>
-                    <groupId>it.geosolutions.imageio-ext</groupId>
-                    <artifactId>imageio-ext-gdalmrsid</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>it.geosolutions.imageio-ext</groupId>
-                    <artifactId>imageio-ext-gdalmrsidjp2</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>-->
-        
         <!--imagepyramid datasource module-->
         <dependency>
             <groupId>org.geotools</groupId>
