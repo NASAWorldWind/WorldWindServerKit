@@ -21,6 +21,56 @@
         </license>
     </licenses>
     
+        <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <!--The GeoServer version used in this build-->
+        <gs.version>2.10.0</gs.version>
+        <!--The GeoTools version used in this build-->
+        <gt.version>16.0</gt.version>
+        <!--The ImageIO-Ext version -->
+        <imageio-ext.version>1.1.16</imageio-ext.version>
+        <!--The GeoWebCache version-->
+        <gwc.version>1.10.0</gwc.version>
+        <spring.version>4.2.5.RELEASE</spring.version>
+        <spring.security.version>4.0.4.RELEASE</spring.security.version> 
+        <servlet-api.version>3.0.1</servlet-api.version>
+        <jetty.version>9.2.13.v20150730</jetty.version>
+        <jetty.servlet-api.version>3.1.0</jetty.servlet-api.version>
+        <poi.version>3.14</poi.version>
+        <wicket.version>7.1.0</wicket.version>
+        <ant.version>1.8.4</ant.version>
+        <jaiext.version>1.0.11</jaiext.version>
+        <java.awt.headless>true</java.awt.headless>
+        <jvm.opts/>
+        <jalopy.phase>disabled</jalopy.phase>
+        <jalopy.srcExcludesPattern>disabled</jalopy.srcExcludesPattern>
+        <test.maxHeapSize>512M</test.maxHeapSize>
+        <test.excludedGroups/>
+        <test.exclude.pattern>none</test.exclude.pattern>
+        <quietTests>true</quietTests>
+        <remoteOwsTests>false</remoteOwsTests>
+        <maven.build.timestamp.format>dd-MMM-yyyy HH:mm</maven.build.timestamp.format>
+        <build.timestamp>${maven.build.timestamp}</build.timestamp>
+        <build.hudsonId>-1</build.hudsonId>
+        <fork.javac>true</fork.javac>
+        <javac.maxHeapSize>256m</javac.maxHeapSize>
+        <image.tests>true</image.tests>
+        <interactive.tests>false</interactive.tests>
+        <windows.leniency>true</windows.leniency>
+        <gf.version>3.2-SNAPSHOT</gf.version>
+        <hibernate-version>3.6.0.Final</hibernate-version>
+        <hibernate-generic-dao-version>1.1.0</hibernate-generic-dao-version>
+        <hibernate-spatial-version>1.1.1</hibernate-spatial-version>
+        <hibernate-spatial-h2-version>1.1.1</hibernate-spatial-h2-version>
+        <!-- NOTE: be careful if upgrading slf4j, check the netcdf and netcdf-out build correcly -->
+        <slf4j.version>1.6.4</slf4j.version>
+        <joda-time.version>2.8.1</joda-time.version>
+        <git.commit.useNative>false</git.commit.useNative>
+        <git.commit.runOnlyOnce>true</git.commit.runOnlyOnce>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+    </properties> 
+    
     <repositories>
         <!--GeoServer-->
         <repository>
@@ -1280,52 +1330,6 @@
         <module>worldwind-geoserver</module>
         <module>worldwind-geoserver-dist</module>
     </modules>
-
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <gs.version>2.10.0</gs.version>
-        <gt.version>16.0</gt.version>
-        <gwc.version>1.10.0</gwc.version>
-        <spring.version>4.2.5.RELEASE</spring.version>
-        <spring.security.version>4.0.4.RELEASE</spring.security.version> 
-        <servlet-api.version>3.0.1</servlet-api.version>
-        <jetty.version>9.2.13.v20150730</jetty.version>
-        <jetty.servlet-api.version>3.1.0</jetty.servlet-api.version>
-        <poi.version>3.14</poi.version>
-        <wicket.version>7.1.0</wicket.version>
-        <ant.version>1.8.4</ant.version>
-        <imageio-ext.version>1.1.13</imageio-ext.version>
-        <jaiext.version>1.0.11</jaiext.version>
-        <java.awt.headless>true</java.awt.headless>
-        <jvm.opts/>
-        <jalopy.phase>disabled</jalopy.phase>
-        <jalopy.srcExcludesPattern>disabled</jalopy.srcExcludesPattern>
-        <test.maxHeapSize>512M</test.maxHeapSize>
-        <test.excludedGroups/>
-        <test.exclude.pattern>none</test.exclude.pattern>
-        <quietTests>true</quietTests>
-        <remoteOwsTests>false</remoteOwsTests>
-        <maven.build.timestamp.format>dd-MMM-yyyy HH:mm</maven.build.timestamp.format>
-        <build.timestamp>${maven.build.timestamp}</build.timestamp>
-        <build.hudsonId>-1</build.hudsonId>
-        <fork.javac>true</fork.javac>
-        <javac.maxHeapSize>256m</javac.maxHeapSize>
-        <image.tests>true</image.tests>
-        <interactive.tests>false</interactive.tests>
-        <windows.leniency>true</windows.leniency>
-        <gf.version>3.2-SNAPSHOT</gf.version>
-        <hibernate-version>3.6.0.Final</hibernate-version>
-        <hibernate-generic-dao-version>1.1.0</hibernate-generic-dao-version>
-        <hibernate-spatial-version>1.1.1</hibernate-spatial-version>
-        <hibernate-spatial-h2-version>1.1.1</hibernate-spatial-h2-version>
-        <!-- NOTE: be careful if upgrading slf4j, check the netcdf and netcdf-out build correcly -->
-        <slf4j.version>1.6.4</slf4j.version>
-        <joda-time.version>2.8.1</joda-time.version>
-        <git.commit.useNative>false</git.commit.useNative>
-        <git.commit.runOnlyOnce>true</git.commit.runOnlyOnce>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
-    </properties> 
     
     <build>
         <pluginManagement>
