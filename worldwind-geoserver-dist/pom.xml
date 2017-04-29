@@ -10,6 +10,10 @@
     <packaging>pom</packaging>
     <name>WorldWind GeoServer Distribution</name>
     
+    <properties>
+        <geoserver.dist.folder>geoserver</geoserver.dist.folder>
+    </properties>
+    
     <dependencies>
         <!-- 
         Dependencies needed for a stand-alone version of Jetty.
@@ -88,11 +92,6 @@
         </dependency>
     </dependencies>
     
-    <properties>
-        <geoserver.dist.folder>geoserver</geoserver.dist.folder>
-        <ssgf.dist.folder>ssgf</ssgf.dist.folder>
-    </properties>
-    
     <build>
         <plugins>
             
@@ -157,17 +156,44 @@
                     </execution>
                     
                     <!--                    
-                    Unzip the GDAL natives and data
-                    There's no guarantee that a command line unzip tool is available in Windows,
-                    so we unzip the GDAL here and include the unzipped files in an assembly component.
+                    Unzip the GDAL natives and data.
+                    There's no guarantee that a command line 'unzip' tool is available in Windows or Linux,
+                    so we unzip the GDAL components here and include the unzipped files in  
+                    Windows assemblies or create .tgz's for Linux assemblies.
                     -->
                     <execution>
                         <id>unpackGDAL</id>
                         <phase>package</phase>
                         <configuration>
                             <tasks>
+                                <unzip src="${project.basedir}/src/main/resources/gdal/geoserver-${gs.version}-gdal-plugin.zip" dest="${project.build.directory}/gdal/geoserver-${gs.version}-gdal-plugin"/>
+                                <unzip src="${project.basedir}/src/main/resources/gdal/imageio-ext-${imageio-ext.version}-jars.zip" dest="${project.build.directory}/gdal/imageio-ext-${imageio-ext.version}-jars"/>
                                 <unzip src="${project.basedir}/src/main/resources/gdal/gdal-1.9.2-MSVC2010-x64.zip" dest="${project.build.directory}/gdal/win64"/>
-                                <unzip src="${project.basedir}/src/main/resources/gdal/gdal-data.zip" dest="${project.build.directory}/gdal/data"/>
+                                <unzip src="${project.basedir}/src/main/resources/gdal/gdal-data.zip" dest="${project.build.directory}/gdal"/>
+                            </tasks>                            
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+
+                    <!--
+                    Repackage .zips as .tgz's for Linux, as some distribtions don't have an unzip command.
+                    -->
+                    <execution>
+                        <id>zip2tgz</id>
+                        <phase>package</phase>
+                        <configuration>
+                            <tasks>
+                                <tar destfile="${project.build.directory}/gdal/geoserver-${gs.version}-gdal-plugin.tgz" compression="gzip">
+                                    <zipfileset src="${project.basedir}/src/main/resources/gdal/geoserver-${gs.version}-gdal-plugin.zip"/>
+                                </tar>
+                                <tar destfile="${project.build.directory}/gdal/imageio-ext-${imageio-ext.version}-jars.tgz" compression="gzip">
+                                    <zipfileset src="${project.basedir}/src/main/resources/gdal/imageio-ext-${imageio-ext.version}-jars.zip"/>
+                                </tar>
+                                <tar destfile="${project.build.directory}/gdal/gdal-data.tgz" compression="gzip">
+                                    <zipfileset src="${project.basedir}/src/main/resources/gdal/gdal-data.zip"/>
+                                </tar>
                             </tasks>                            
                         </configuration>
                         <goals>
@@ -188,6 +214,7 @@
                         <phase>install</phase>
                         <configuration>
                             <descriptors>
+
                                 <!--Binary distibution content-->
                                 <descriptor>src/assembly/bin-assembly.xml</descriptor>
                                 
