@@ -2,25 +2,28 @@
 <component>
     <fileSets>
         <fileSet>
-            <directory>src/main/resources/gdal</directory>
+            <!--Include the GDAL plugins (converted from .zip to .tgz in an ant-task. See POM)-->
+            <directory>${project.build.directory}/gdal</directory>
             <outputDirectory>worldwind-geoserver-${project.version}/gdal</outputDirectory>
             <includes>
                 <!-- GeoServer GDAL extension to be extracted to geoserver/WEB-INF/lib -->
-                <include>geoserver-2.10.0-gdal-plugin.zip</include>
-
+                <include>geoserver-${gs.version}-gdal-plugin.tgz</include>
                 <!-- ImageIO-EXT extension to be extracted to geoserver/WEB-INF/lib -->
-                <include>imageio-ext-1.1.16-jars.zip</include>
-                
+                <include>imageio-ext-${imageio-ext.version}-jars.tgz</include>
                 <!-- GDAL data to be extracted to gdal/data : $GDAL_DATA -->
-                <include>gdal-data.tar.gz</include>
-            
+                <include>gdal-data.tgz</include>
+            </includes>            
+        </fileSet>
+        <fileSet>
+            <directory>src/main/resources/gdal</directory>
+            <outputDirectory>worldwind-geoserver-${project.version}/gdal</outputDirectory>
+            <includes>
                 <!-- ECW and MrSID license notes -->
                 <include>MRSIDLicense.rtf</include>
                 <include>MrSID_decoderSDK_license.txt</include>
                 <include>ECWEULA.txt</include>
                 <include>linux_notes_on_ECW_and_JP2ECW.txt</include>
                 <include>readme.txt</include>
-
             </includes>            
         </fileSet>
     </fileSets>
