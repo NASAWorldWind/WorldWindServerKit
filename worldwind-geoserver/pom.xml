@@ -28,7 +28,6 @@
         <baseConfigId>base</baseConfigId>
         <dataConfigId>nasa</dataConfigId>
         <configDirectory>${basedir}/../data_config</configDirectory>
-        <!--<dataConfigId>ssgf</dataConfigId>-->
     </properties>    
     
     <dependencies>
