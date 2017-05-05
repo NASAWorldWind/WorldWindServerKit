@@ -15,6 +15,16 @@
             </includes>            
         </fileSet>
         <fileSet>
+            <!--Include edited scripts (embedded version no strings replaced in an ant task. See POM)--> 
+            <directory>${project.build.directory}/gdal</directory>
+            <outputDirectory>worldwind-geoserver-${project.version}</outputDirectory>
+            <lineEnding>unix</lineEnding>
+            <fileMode>0755</fileMode>
+            <includes>
+                <include>setup-gdal.sh</include>
+            </includes>            
+        </fileSet>        
+        <fileSet>
             <directory>src/main/resources/gdal</directory>
             <outputDirectory>worldwind-geoserver-${project.version}/gdal</outputDirectory>
             <includes>
