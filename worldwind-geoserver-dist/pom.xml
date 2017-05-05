@@ -200,6 +200,26 @@
                             <goal>run</goal>
                         </goals>
                     </execution>
+                    <execution>
+                        <id>editScripts</id>
+                        <phase>package</phase>
+                        <configuration>
+                            <tasks>
+                                <!--Copy scripts to build dir for editing-->
+                                <copy todir="${project.build.directory}/gdal" file="${project.basedir}/src/main/resources/gdal/setup-gdal.sh"/>
+                                <!--Edit the version numbers in the scripts-->
+                                <replace token= "GEOSERVER_VER=" value="GEOSERVER_VER=${gs.version} #Set by ant-task. was: " dir="${project.build.directory}/gdal">                                 
+                                    <include name="**/*.sh"/>
+                                </replace>
+                                <replace token= "IMAGEIO_EXT_VER=" value="IMAGEIO_EXT_VER=${imageio-ext.version} #Set by ant-task. was: " dir="${project.build.directory}/gdal">                                 
+                                    <include name="**/*.sh"/>
+                                </replace>
+                            </tasks>                            
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
                 </executions>
             </plugin>
                         
