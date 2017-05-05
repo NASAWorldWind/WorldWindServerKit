@@ -23,11 +23,11 @@
     
         <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <!--The GeoServer version used in this build-->
+        <!--The GeoServer version used in this build; used for artifacts and assemblies-->
         <gs.version>2.10.0</gs.version>
         <!--The GeoTools version used in this build-->
         <gt.version>16.0</gt.version>
-        <!--The ImageIO-Ext version -->
+        <!--The ImageIO-Ext version; used for artifacts and assemblies -->
         <imageio-ext.version>1.1.16</imageio-ext.version>
         <!--The GeoWebCache version-->
         <gwc.version>1.10.0</gwc.version>
