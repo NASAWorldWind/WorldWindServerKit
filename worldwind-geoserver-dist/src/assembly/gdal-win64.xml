@@ -2,8 +2,8 @@
     <fileSets>
         <fileSet>
             <!-- GDAL data (unzipped) --> 
-            <directory>target/gdal/data</directory>
-            <outputDirectory>worldwind-geoserver-${project.version}/gdal/data</outputDirectory>
+            <directory>target/gdal/data/gdal-data</directory>
+            <outputDirectory>worldwind-geoserver-${project.version}/gdal/data/gdal-data</outputDirectory>
             <includes>
                 <include>**/*</include>
             </includes>
