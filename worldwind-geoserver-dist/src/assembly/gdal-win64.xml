@@ -1,23 +1,56 @@
 <component>
     <fileSets>
+        
+        <!-- GeoServer GDAL jars (unzipped) --> 
         <fileSet>
-            <!-- GDAL data (unzipped) --> 
-            <directory>target/gdal/data/gdal-data</directory>
+            <directory>target/gdal/geoserver-${gs.version}-gdal-plugin</directory>
+            <outputDirectory>worldwind-geoserver-${project.version}/webapps/geoserver/WEB-INF/lib</outputDirectory>
+            <includes>
+                <include>**/*</include>
+            </includes>
+        </fileSet>        
+        
+        <!-- Image-IO Ext GDAL jars (unzipped) --> 
+        <fileSet>
+            <directory>target/gdal/imageio-ext-${imageio-ext.version}-jars</directory>
+            <outputDirectory>worldwind-geoserver-${project.version}/webapps/geoserver/WEB-INF/lib</outputDirectory>
+            <includes>
+                <include>**/*</include>
+            </includes>
+            <excludes>
+                <exclude>imageio-ext-gdaljpeg-${IMAGEIO_EXT_VER}.jar</exclude>
+                <exclude>imageio-ext-gdalgeotiff-${IMAGEIO_EXT_VER}.jar</exclude>
+            </excludes>
+        </fileSet>        
+           
+        <!-- GDAL data (unzipped) --> 
+        <fileSet>
+            <directory>target/gdal/gdal-data</directory>
             <outputDirectory>worldwind-geoserver-${project.version}/gdal/data/gdal-data</outputDirectory>
             <includes>
                 <include>**/*</include>
             </includes>
         </fileSet>
+        
+        <!-- GDAL native dlls & exe (unzipped) --> 
         <fileSet>
-            <!-- GDAL natives (unzipped) --> 
             <directory>target/gdal/win64</directory>
             <outputDirectory>worldwind-geoserver-${project.version}/gdal/lib</outputDirectory>
             <includes>
                 <include>**/*</include>
             </includes>
         </fileSet>
+        <!-- GDAL natives "bindings" jar (copy to geoserver's lib folder)--> 
         <fileSet>
-            <!-- ECW and MrSID plugin installers --> 
+            <directory>target/gdal/win64/javainfo</directory>
+            <outputDirectory>worldwind-geoserver-${project.version}/webapps/geoserver/WEB-INF/lib</outputDirectory>
+            <includes>
+                <include>imageio-ext-gdal-bindings-1.9.2.jar</include>
+            </includes>
+        </fileSet>  
+        
+        <!-- ECW and MrSID plugin installers --> 
+        <fileSet>
             <directory>src/main/resources/gdal</directory>
             <outputDirectory>worldwind-geoserver-${project.version}/gdal</outputDirectory>
             <includes>
