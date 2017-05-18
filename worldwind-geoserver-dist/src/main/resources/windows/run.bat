@@ -48,7 +48,7 @@ if not exist "%GEOSERVER_HOME%\gdal\" goto noLocalGdal
     set GDAL_HOME=%GEOSERVER_HOME%\gdal
 
     rem Path to directory containing various GDAL data files (EPSG CSV files, etc ...). 
-    set GDAL_DATA=%GDAL_HOME%\data
+    set GDAL_DATA=%GDAL_HOME%\data\gdal-data
     echo GDAL_DATA set to %GDAL_DATA%
 
     rem Path to directory containing GDAL native binaries. It will be prepended to system PATH.

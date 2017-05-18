@@ -1,26 +1,28 @@
 #!/bin/bash
-# -----------------------------------------------------------------------------
-# Setup Java JRE and GDAL for the World Wind Server Kit (WWSK) - Linux
-# -----------------------------------------------------------------------------
 
-## Install the Java Server JRE
-MIN_VER="121"
-if [ ! -d jdk1.8.0_${MIN_VER}/jre ]; then
-    echo "Installing the Java JRE"
-    tar -xzf server-jre-8u${MIN_VER}-linux-x64.tar.gz jdk1.8.0_${MIN_VER}/jre
-    ln -s jdk1.8.0_${MIN_VER}/jre java
-fi
+# --------------------------------------------------------------------------
+# Setup Java JRE and GDAL for the World Wind Server Kit (WWSK) - Linux 
+# --------------------------------------------------------------------------
 
-## Install the GDAL native binaries to the gdal/lib folder
-if [ ! -d gdal/lib ]; then
-    echo "Installing the GDAL natives"
-    mkdir gdal/lib
-    tar -xzf gdal/gdal192-Ubuntu12-gcc4.6.3-x86_64.tar.gz -C gdal/lib
-fi
+# Run the just setup once, unless 'reinstall' was invoked
+if [[ -f .setup && $1 != "reinstall"  ]]; then
+    echo "Already setup. To reconfigure run: ./setup.sh reinstall"
+else
 
-## Install the GDAL data to the gdal/data folder
-if [ ! -d gdal/data ]; then
-    echo "Installing the GDAL data"
-    mkdir gdal/data
-    tar -xzf gdal/gdal-data.tar.gz -C gdal/data
+    # Setup Java
+    source ./setup-java.sh $1
+
+    # Setup GDAL 
+    source ./setup-gdal.sh $1
+    
+    # Create a 'wwsk' symbolic link to this distribution
+    if [ -L ../wwsk ]; then
+        rm ../wwsk
+    fi
+    ln -s $(pwd) ../wwsk
+
+    # Create a flag (hidden file) that indicates the setup has already been run
+    touch .setup
+
+    echo  "Setup complete"
 fi

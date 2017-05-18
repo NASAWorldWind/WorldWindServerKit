@@ -1,0 +1,13 @@
+<!--The GDAL 1.9.2 native binaries and data for the Ubuntu x64-->
+<component>
+    <fileSets>
+        <fileSet>
+            <directory>src/main/resources/gdal</directory>
+            <outputDirectory>worldwind-geoserver-${project.version}/gdal</outputDirectory>
+            <includes>
+                <!-- GDAL native binaries to be extracted to gdal/lib : $LB_LIBRARY_PATH -->
+                <include>gdal192-Ubuntu12-gcc4.6.3-x86_64.tar.gz</include>
+            </includes>            
+        </fileSet>
+    </fileSets>
+</component>

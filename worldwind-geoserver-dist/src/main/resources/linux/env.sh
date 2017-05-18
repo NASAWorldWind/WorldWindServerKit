@@ -1,8 +1,8 @@
 #!/bin/bash
 # -----------------------------------------------------------------------------
-# Environment variables for the World Wind Server Kit (WWSK) - GeoServer
+# Environment variables for the World Wind Server Kit (WWSK) - GeoServer 
 # -----------------------------------------------------------------------------
-export GEOSERVER_HOME=`pwd`
+export GEOSERVER_HOME=$(pwd)
 export GEOSERVER_DATA_DIR=${GEOSERVER_HOME}/data_dir
 
 # -----------------------------------------------------------------------------
@@ -48,7 +48,7 @@ fi
 if [ -d "${GEOSERVER_HOME}"/gdal ]; then
     export GDAL_HOME=${GEOSERVER_HOME}/gdal
 
-    export GDAL_DATA=${GDAL_HOME}/data
+    export GDAL_DATA=${GDAL_HOME}/data/gdal-data
     echo "GDAL_DATA set to ${GDAL_DATA}"
 
     export GDAL_LIB=${GDAL_HOME}/lib
