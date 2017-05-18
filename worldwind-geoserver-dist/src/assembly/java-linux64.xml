@@ -8,5 +8,15 @@
                 <include>server-jre-8u121-linux-x64.tar.gz</include>
             </includes>           
         </fileSet>
+        <fileSet>
+            <!--Include edited scripts (embedded version no strings replaced in an ant task. See POM)--> 
+            <directory>src/main/resources/java</directory>
+            <outputDirectory>worldwind-geoserver-${project.version}</outputDirectory>
+            <lineEnding>unix</lineEnding>
+            <fileMode>0755</fileMode>
+            <includes>
+                <include>setup-java.sh</include>
+            </includes>            
+        </fileSet>    
     </fileSets>
 </component>

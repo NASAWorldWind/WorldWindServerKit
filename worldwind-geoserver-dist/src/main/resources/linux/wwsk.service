@@ -1,0 +1,11 @@
+[Unit]
+Description=WWSK GeoServer
+
+[Service]
+ExecStart=/opt/maps/wwsk/run.sh
+ExecStop=/opt/maps/wwsk/stop.sh
+WorkingDirectory=/opt/maps/wwsk
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
