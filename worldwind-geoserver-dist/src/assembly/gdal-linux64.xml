@@ -32,7 +32,7 @@
                 <include>MRSIDLicense.rtf</include>
                 <include>MrSID_decoderSDK_license.txt</include>
                 <include>ECWEULA.txt</include>
-                <include>linux_notes_on_ECW_and_JP2ECW.txt</include>
+                <include>notes_on_ECW_and_JP2ECW.txt</include>
                 <include>readme.txt</include>
             </includes>            
         </fileSet>
