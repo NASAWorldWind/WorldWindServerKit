@@ -18,8 +18,11 @@
                 <include>**/*</include>
             </includes>
             <excludes>
-                <exclude>imageio-ext-gdaljpeg-${IMAGEIO_EXT_VER}.jar</exclude>
-                <exclude>imageio-ext-gdalgeotiff-${IMAGEIO_EXT_VER}.jar</exclude>
+                <!--Exclude problem jars: 
+                    Including gdalgeotiff caused GeoTIFF w/JPEG compression to fail.
+                -->
+                <exclude>imageio-ext-gdalgeotiff-${imageio-ext.version}.jar</exclude>
+                <!--<exclude>imageio-ext-gdaljpeg-${imageio-ext.version}.jar</exclude>-->
             </excludes>
         </fileSet>        
            
@@ -58,5 +61,18 @@
                 <include>gdal-19-1600-x64-mrsid.msi</include>
             </includes>
         </fileSet>
+        <fileSet>
+            <directory>src/main/resources/gdal</directory>
+            <outputDirectory>worldwind-geoserver-${project.version}/gdal</outputDirectory>
+            <includes>
+                <!-- ECW and MrSID license notes -->
+                <include>MRSIDLicense.rtf</include>
+                <include>MrSID_decoderSDK_license.txt</include>
+                <include>ECWEULA.txt</include>
+                <include>msi-installer-license.txt</include>
+                <include>notes_on_ECW_and_JP2ECW.txt</include>
+                <include>readme.txt</include>
+            </includes>            
+        </fileSet>    
     </fileSets>
 </component>
