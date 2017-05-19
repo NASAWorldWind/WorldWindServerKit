@@ -7,6 +7,7 @@
     </formats>
     <includeBaseDirectory>false</includeBaseDirectory>
     <componentDescriptors>
+        <componentDescriptor>src/assembly/licenses.xml</componentDescriptor>
         <componentDescriptor>src/assembly/geoserver.xml</componentDescriptor>
         <componentDescriptor>src/assembly/jetty.xml</componentDescriptor>
         <componentDescriptor>src/assembly/data-nasa.xml</componentDescriptor>

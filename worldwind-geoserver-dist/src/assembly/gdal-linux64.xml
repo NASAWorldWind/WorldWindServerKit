@@ -1,0 +1,40 @@
+<!--The GDAL 1.9.2 native binaries and data for the Ubuntu x64-->
+<component>
+    <fileSets>
+        <fileSet>
+            <!--Include the GDAL plugins (converted from .zip to .tgz in an ant-task. See POM)-->
+            <directory>${project.build.directory}/gdal</directory>
+            <outputDirectory>worldwind-geoserver-${project.version}/gdal</outputDirectory>
+            <includes>
+                <!-- GeoServer GDAL extension to be extracted to geoserver/WEB-INF/lib -->
+                <include>geoserver-${gs.version}-gdal-plugin.tgz</include>
+                <!-- ImageIO-EXT extension to be extracted to geoserver/WEB-INF/lib -->
+                <include>imageio-ext-${imageio-ext.version}-jars.tgz</include>
+                <!-- GDAL data to be extracted to gdal/data : $GDAL_DATA -->
+                <include>gdal-data.tgz</include>
+            </includes>            
+        </fileSet>
+        <fileSet>
+            <!--Include edited scripts (embedded version no strings replaced in an ant task. See POM)--> 
+            <directory>${project.build.directory}/gdal</directory>
+            <outputDirectory>worldwind-geoserver-${project.version}</outputDirectory>
+            <lineEnding>unix</lineEnding>
+            <fileMode>0755</fileMode>
+            <includes>
+                <include>setup-gdal.sh</include>
+            </includes>            
+        </fileSet>        
+        <fileSet>
+            <directory>src/main/resources/gdal</directory>
+            <outputDirectory>worldwind-geoserver-${project.version}/gdal</outputDirectory>
+            <includes>
+                <!-- ECW and MrSID license notes -->
+                <include>MRSIDLicense.rtf</include>
+                <include>MrSID_decoderSDK_license.txt</include>
+                <include>ECWEULA.txt</include>
+                <include>notes_on_ECW_and_JP2ECW.txt</include>
+                <include>readme.txt</include>
+            </includes>            
+        </fileSet>
+    </fileSets>
+</component>

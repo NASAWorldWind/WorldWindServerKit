@@ -28,7 +28,6 @@
         <baseConfigId>base</baseConfigId>
         <dataConfigId>nasa</dataConfigId>
         <configDirectory>${basedir}/../data_config</configDirectory>
-        <!--<dataConfigId>ssgf</dataConfigId>-->
     </properties>    
     
     <dependencies>
@@ -131,12 +130,6 @@
             <artifactId>gs-web-wps</artifactId>
             <version>${gs.version}</version>
         </dependency>
-        
-        <!--GDAL extension-->
-        <dependency>
-            <groupId>org.geoserver.extension</groupId>
-            <artifactId>gs-gdal</artifactId>
-        </dependency>
 
         <!--WorldWind GeoServer WMS module-->
         <dependency>
@@ -181,41 +174,19 @@
             <groupId>org.geotools</groupId>
             <artifactId>gt-image</artifactId>
         </dependency>
+        
         <!--imagemosaic datasource module-->
         <dependency>
             <groupId>org.geotools</groupId>
             <artifactId>gt-imagemosaic</artifactId>
         </dependency>
+        
         <!--JP2K based grid coverage readers-->   
         <dependency>
             <groupId>org.geotools</groupId>
             <artifactId>gt-jp2k</artifactId>
         </dependency>
-        <!--ImageI/O-Ext based grid coverage readers-->
-        <dependency>
-            <groupId>org.geotools</groupId>
-            <artifactId>gt-imageio-ext-gdal</artifactId>
-            <exclusions>
-                <!--Exclude proprietary licensed ECW support-->
-                <exclusion>
-                    <groupId>it.geosolutions.imageio-ext</groupId>
-                    <artifactId>imageio-ext-gdalecw</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>it.geosolutions.imageio-ext</groupId>
-                    <artifactId>imageio-ext-gdalecwjp2</artifactId>
-                </exclusion>
-                <!--Exclude proprietary licensed MrSID support-->
-                <exclusion>
-                    <groupId>it.geosolutions.imageio-ext</groupId>
-                    <artifactId>imageio-ext-gdalmrsid</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>it.geosolutions.imageio-ext</groupId>
-                    <artifactId>imageio-ext-gdalmrsidjp2</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
+        
         <!--imagepyramid datasource module-->
         <dependency>
             <groupId>org.geotools</groupId>
@@ -358,7 +329,7 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
                 <configuration>
-                    <warName>worldwind-geoserver</warName>
+                    <warName>geoserver</warName>
                     <webappDirectory>${project.build.directory}/worldwind-geoserver</webappDirectory>
                     <packagingExcludes>WEB-INF/lib/javax.servlet-api*.jar</packagingExcludes>
                     <archive>
