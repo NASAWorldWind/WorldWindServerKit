@@ -35,15 +35,15 @@
         <!-- 
         The GeoServer version used in this build and used for artifacts and assemblies.
         You can browse the GeoServer extensions this version for this version here:
-            https://sourceforge.net/projects/geoserver/files/GeoServer/2.11.0/extensions/
+            https://sourceforge.net/projects/geoserver/files/GeoServer/2.11.1/extensions/
         You can download the gdal-plugin jars used in the worldwind-geoserver-dist assemblies here:
-            https://sourceforge.net/projects/geoserver/files/GeoServer/2.11.0/extensions/geoserver-2.11.0-gdal-plugin.zip/download
+            https://sourceforge.net/projects/geoserver/files/GeoServer/2.11.1/extensions/geoserver-2.11.1-gdal-plugin.zip/download
         -->
-        <gs.version>2.11.0</gs.version>
+        <gs.version>2.11.1</gs.version>
         <!--The GeoTools version used in this build-->
-        <gt.version>17-SNAPSHOT</gt.version>
+        <gt.version>17.1</gt.version>
         <!--The GeoWebCache version-->
-        <gwc.version>1.11-SNAPSHOT</gwc.version>
+        <gwc.version>1.11.0</gwc.version>
         <spring.version>4.2.5.RELEASE</spring.version>
         <spring.security.version>4.0.4.RELEASE</spring.security.version> 
         <servlet-api.version>3.0.1</servlet-api.version>
