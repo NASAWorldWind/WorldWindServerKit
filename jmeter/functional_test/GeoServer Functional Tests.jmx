@@ -17,6 +17,11 @@
             <stringProp name="Argument.value">8080</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
+          <elementProp name="PROJECT_PATH" elementType="Argument">
+            <stringProp name="Argument.name">PROJECT_PATH</stringProp>
+            <stringProp name="Argument.value">D:\Projects\NASAWorldWind\WorldWindServerKit</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
         </collectionProp>
       </elementProp>
       <stringProp name="TestPlan.user_define_classpath"></stringProp>
@@ -552,12 +557,12 @@
               <connectTime>true</connectTime>
             </value>
           </objProp>
-          <stringProp name="filename">D:\Projects\NASAWorldWind\WorldWindServerKit\jmeter\functional_test\wms_summary.csv</stringProp>
+          <stringProp name="filename">${PROJECT_PATH}/jmeter/functional_test/output/wmssummary.csv</stringProp>
           <boolProp name="useGroupName">true</boolProp>
         </ResultCollector>
         <hashTree/>
         <ResultSaver guiclass="ResultSaverGui" testclass="ResultSaver" testname="Save GetMap Responses " enabled="true">
-          <stringProp name="FileSaver.filename">D:\Projects\NASAWorldWind\WorldWindServerKit\jmeter\functional_test\output\wms</stringProp>
+          <stringProp name="FileSaver.filename">${PROJECT_PATH}/jmeter/functional_test/output/wms</stringProp>
           <boolProp name="FileSaver.errorsonly">false</boolProp>
           <boolProp name="FileSaver.skipautonumber">false</boolProp>
           <boolProp name="FileSaver.skipsuffix">false</boolProp>
@@ -627,29 +632,30 @@
               <encoding>false</encoding>
               <assertions>true</assertions>
               <subresults>true</subresults>
-              <responseData>false</responseData>
+              <responseData>true</responseData>
               <samplerData>false</samplerData>
               <xml>false</xml>
               <fieldNames>true</fieldNames>
               <responseHeaders>false</responseHeaders>
-              <requestHeaders>false</requestHeaders>
+              <requestHeaders>true</requestHeaders>
               <responseDataOnError>false</responseDataOnError>
               <saveAssertionResultsFailureMessage>true</saveAssertionResultsFailureMessage>
               <assertionsResultsToSave>0</assertionsResultsToSave>
               <bytes>true</bytes>
               <sentBytes>true</sentBytes>
               <url>true</url>
+              <fileName>true</fileName>
               <threadCounts>true</threadCounts>
               <idleTime>true</idleTime>
               <connectTime>true</connectTime>
             </value>
           </objProp>
-          <stringProp name="filename">D:\Projects\NASAWorldWind\WorldWindServerKit\jmeter\functional_test\wps_summary.csv</stringProp>
+          <stringProp name="filename">${PROJECT_PATH}/jmeter/functional_test/output/wpssummary.csv</stringProp>
           <boolProp name="useGroupName">true</boolProp>
         </ResultCollector>
         <hashTree/>
         <ResultSaver guiclass="ResultSaverGui" testclass="ResultSaver" testname="Save WPS Results" enabled="true">
-          <stringProp name="FileSaver.filename">D:\Projects\NASAWorldWind\WorldWindServerKit\jmeter\functional_test\output\wps</stringProp>
+          <stringProp name="FileSaver.filename">${PROJECT_PATH}/jmeter/functional_test/output/wps</stringProp>
           <boolProp name="FileSaver.errorsonly">false</boolProp>
           <boolProp name="FileSaver.skipautonumber">false</boolProp>
           <boolProp name="FileSaver.skipsuffix">false</boolProp>
