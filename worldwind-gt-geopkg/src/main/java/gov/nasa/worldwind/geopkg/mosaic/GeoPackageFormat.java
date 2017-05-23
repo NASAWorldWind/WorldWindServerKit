@@ -36,12 +36,12 @@ import org.opengis.parameter.GeneralParameterDescriptor;
 
 /**
  * GeoPackage Grid Format (supports the GP mosaic datastore).
- * 
+ *
  * @author Justin Deoliveira
  * @author Niels Charlier
  */
 public class GeoPackageFormat extends AbstractGridFormat {
-       
+
     private final static Logger LOGGER = Logging.getLogger(GeoPackageFormat.class.getPackage().getName());
 
     public static File getFileFromSource(Object source) {
@@ -55,7 +55,7 @@ public class GeoPackageFormat extends AbstractGridFormat {
             if (source instanceof File) {
                 sourceFile = (File) source;
             } else if (source instanceof URL) {
-                if (((URL) source).getProtocol().equals("file")){
+                if (((URL) source).getProtocol().equals("file")) {
                     sourceFile = DataUtilities.urlToFile((URL) source);
                 }
             } else if (source instanceof String) {
@@ -91,7 +91,7 @@ public class GeoPackageFormat extends AbstractGridFormat {
     public GridCoverageWriter getWriter(Object destination) {
         return getWriter(destination, null);
     }
-    
+
     @Override
     public GridCoverageWriter getWriter(Object destination, Hints hints) {
         throw new UnsupportedOperationException("Unsupported method: Geopackage format is read-only.");
@@ -108,7 +108,7 @@ public class GeoPackageFormat extends AbstractGridFormat {
         if (sourceFile == null) {
             return false;
         }
-        
+
         //TODO: check if it is proper sqlite and geopackage file
         return sourceFile.getName().endsWith(".gpkg");
     }
@@ -117,7 +117,7 @@ public class GeoPackageFormat extends AbstractGridFormat {
     public GeoToolsWriteParams getDefaultImageIOWriteParameters() {
         throw new UnsupportedOperationException("Unsupported method.");
     }
-    
+
     /**
      * Creates an instance and sets the metadata.
      */
@@ -129,7 +129,7 @@ public class GeoPackageFormat extends AbstractGridFormat {
      * Sets the metadata information.
      */
     private void setInfo() {
-        final HashMap<String,String> info = new HashMap<String,String> ();
+        final HashMap<String, String> info = new HashMap<String, String>();
         info.put("name", "GeoPackage (tiles)");
         info.put("description", "GeoPackage format with OGC encoding");
         info.put("vendor", "Geotools");
@@ -140,8 +140,8 @@ public class GeoPackageFormat extends AbstractGridFormat {
         // reading parameters
         readParameters = new ParameterGroup(new DefaultParameterDescriptorGroup(mInfo,
                 new GeneralParameterDescriptor[]{
-                        READ_GRIDGEOMETRY2D /*,
-                       INPUT_TRANSPARENT_COLOR,
+                    READ_GRIDGEOMETRY2D,
+                    INPUT_TRANSPARENT_COLOR /*,
                 OUTPUT_TRANSPARENT_COLOR,
                 USE_JAI_IMAGEREAD,
                 BACKGROUND_VALUES,
@@ -154,8 +154,7 @@ public class GeoPackageFormat extends AbstractGridFormat {
                 ACCURATE_RESOLUTION,
                 SORT_BY,
                 MERGE_BEHAVIOR,
-                FOOTPRINT_BEHAVIOR*/
-        }));
+                FOOTPRINT_BEHAVIOR*/}));
 
         // reading parameters
         writeParameters = null;
