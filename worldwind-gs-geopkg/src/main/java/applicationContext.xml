@@ -7,6 +7,9 @@ application directory.
 <!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
 <beans>
     
+    <!--GeoPackageModuleStatus provides an entry in the "Server Status" > "Modules" page-->
+    <bean class="gov.nasa.worldwind.gs.geopkg.GeoPackageModuleStatus"/>  
+      
     <bean id="GeoPackageGetMapOutputFormat" class="gov.nasa.worldwind.gs.geopkg.GeoPackageGetMapOutputFormat">
         <constructor-arg ref="webMapService" />
         <constructor-arg ref="wms" />
