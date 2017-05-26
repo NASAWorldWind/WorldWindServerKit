@@ -44,6 +44,7 @@ import gov.nasa.worldwind.geopkg.Tile;
 import gov.nasa.worldwind.geopkg.TileEntry;
 import gov.nasa.worldwind.geopkg.TileMatrix;
 import gov.nasa.worldwind.geopkg.TileReader;
+import static java.awt.image.BufferedImage.TYPE_4BYTE_ABGR;
 
 import org.geotools.coverage.CoverageFactoryFinder;
 import org.geotools.coverage.grid.GridCoverage2D;
@@ -349,6 +350,7 @@ public class GeoPackageReader extends AbstractGridCoverage2DReader {
             // MASKING INPUT COLOR as indicated
             //
             if (inputTransparentColor != null) {
+                // ImageWorker.makeColorTransparent only works images with a IndexColorModel or a ComponentColorModel
                 image = new ImageWorker(image).makeColorTransparent(inputTransparentColor).getRenderedOperation().getAsBufferedImage();
             }      
             
@@ -359,7 +361,7 @@ public class GeoPackageReader extends AbstractGridCoverage2DReader {
     }
 
     /**
-     * Creates a BufferedImage from the supplied image data.
+     * Creates a BufferedImage from the supplied image data byte array.
      *
      * @param data A byte array containing image data
      * @return A new BufferedImage
@@ -385,7 +387,8 @@ public class GeoPackageReader extends AbstractGridCoverage2DReader {
      * @return A new BufferedImage with transparent fill.
      */
     protected BufferedImage getStartImage(int width, int height) {
-        int imageType = BufferedImage.TYPE_INT_ARGB;
+        //int imageType = BufferedImage.TYPE_INT_ARGB;
+        int imageType = BufferedImage.TYPE_4BYTE_ABGR;
 
         BufferedImage image = new BufferedImage(width, height, imageType);
 
