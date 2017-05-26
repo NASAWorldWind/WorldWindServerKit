@@ -1,0 +1,8 @@
+## Travis Continuous Integration (Travis CI) build script for the WWSK
+
+language: java
+
+jdk:
+#  - openjdk7
+#  - oraclejdk7
+  - oraclejdk8
