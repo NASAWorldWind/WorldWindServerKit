@@ -39,37 +39,17 @@ import org.opengis.parameter.GeneralParameterDescriptor;
  *
  * @author Justin Deoliveira
  * @author Niels Charlier
+ * @author Bruce Schubert (contributor)
  */
 public class GeoPackageFormat extends AbstractGridFormat {
 
     private final static Logger LOGGER = Logging.getLogger(GeoPackageFormat.class.getPackage().getName());
 
-    public static File getFileFromSource(Object source) {
-        if (source == null) {
-            return null;
-        }
-
-        File sourceFile = null;
-
-        try {
-            if (source instanceof File) {
-                sourceFile = (File) source;
-            } else if (source instanceof URL) {
-                if (((URL) source).getProtocol().equals("file")) {
-                    sourceFile = DataUtilities.urlToFile((URL) source);
-                }
-            } else if (source instanceof String) {
-                sourceFile = new File((String) source);
-            }
-        } catch (Exception e) {
-            if (LOGGER.isLoggable(Level.FINE)) {
-                LOGGER.log(Level.FINE, e.getLocalizedMessage(), e);
-            }
-
-            return null;
-        }
-
-        return sourceFile;
+    /**
+     * Creates an instance and sets the metadata.
+     */
+    public GeoPackageFormat() {
+        setInfo();
     }
 
     @Override
@@ -119,13 +99,6 @@ public class GeoPackageFormat extends AbstractGridFormat {
     }
 
     /**
-     * Creates an instance and sets the metadata.
-     */
-    public GeoPackageFormat() {
-        setInfo();
-    }
-
-    /**
      * Sets the metadata information.
      */
     private void setInfo() {
@@ -138,26 +111,56 @@ public class GeoPackageFormat extends AbstractGridFormat {
         mInfo = info;
 
         // reading parameters
-        readParameters = new ParameterGroup(new DefaultParameterDescriptorGroup(mInfo,
-                new GeneralParameterDescriptor[]{
-                    READ_GRIDGEOMETRY2D,
-                    INPUT_TRANSPARENT_COLOR /*,
-                OUTPUT_TRANSPARENT_COLOR,
-                USE_JAI_IMAGEREAD,
-                BACKGROUND_VALUES,
-                SUGGESTED_TILE_SIZE,
-                ALLOW_MULTITHREADING,
-                MAX_ALLOWED_TILES,
-                TIME,
-                ELEVATION,
-                FILTER,
-                ACCURATE_RESOLUTION,
-                SORT_BY,
-                MERGE_BEHAVIOR,
-                FOOTPRINT_BEHAVIOR*/}));
+        readParameters = new ParameterGroup(
+                new DefaultParameterDescriptorGroup(
+                        mInfo,
+                        new GeneralParameterDescriptor[]{
+                            READ_GRIDGEOMETRY2D,
+                            INPUT_TRANSPARENT_COLOR /*, 
+                            SUGGESTED_TILE_SIZE,
+                            OUTPUT_TRANSPARENT_COLOR,
+                            USE_JAI_IMAGEREAD,
+                            BACKGROUND_VALUES,
+                            ALLOW_MULTITHREADING,
+                            MAX_ALLOWED_TILES,
+                            TIME,
+                            ELEVATION,
+                            FILTER,
+                            ACCURATE_RESOLUTION,
+                            SORT_BY,
+                            MERGE_BEHAVIOR,
+                            FOOTPRINT_BEHAVIOR */}));
 
         // reading parameters
         writeParameters = null;
+    }
+
+    public static File getFileFromSource(Object source) {
+        if (source == null) {
+            return null;
+        }
+
+        File sourceFile = null;
+
+        try {
+            if (source instanceof File) {
+                sourceFile = (File) source;
+            } else if (source instanceof URL) {
+                if (((URL) source).getProtocol().equals("file")) {
+                    sourceFile = DataUtilities.urlToFile((URL) source);
+                }
+            } else if (source instanceof String) {
+                sourceFile = new File((String) source);
+            }
+        } catch (Exception e) {
+            if (LOGGER.isLoggable(Level.FINE)) {
+                LOGGER.log(Level.FINE, e.getLocalizedMessage(), e);
+            }
+
+            return null;
+        }
+
+        return sourceFile;
     }
 
 }
