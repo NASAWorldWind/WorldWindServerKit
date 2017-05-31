@@ -1,10 +1,46 @@
-## Travis Continuous Integration (Travis CI) build script for the WWSK
-
+## WWSK Travis Continuous Integration (Travis CI) build script
 language: java
 
-jdk:
-#  - openjdk7
-#  - oraclejdk7
-  - oraclejdk8
+# Cache the local maven repository
+cache:
+  directories:
+    - "$HOME/.m2"
 
-build: mvn test -B generate-sources javadoc:javadoc
+# Remove the (cached) local user-specific maven settings
+before_install:
+  - rm ~/.m2/settings.xml
+  
+# Define the JDK(s) to build against
+jdk:
+  - oraclejdk8
+#  - oraclejdk7
+#  - openjdk7
+
+script:
+    ## Maven Phases
+    # validate: validate the project
+    # clean:    cleans up artifacts by prior builds
+    # compile:  compile the source
+    # test:     test the compiled code using unit testing framework
+    # package:  package compile code into dist. formats, (e.g., JAR files)
+    # integration_test: deploy package to where integration tests can be run
+    # verify:   run any checks to verify the package is valid
+    # install:  install the package into the local repository
+    # deploy:   copies the final package to the remote repository
+    # site:     generates the site documentation
+    # 
+    ## Maven Plugins
+    # generate-sources 
+    # javadoc:javadoc
+    #
+    ## Maven Commands
+    # -B (--batch-mode) Run in non-interactive model
+    # -U (--update-snapshots) Forces a check for missing releases and updated snapshots on remote repos
+    # -T2 (--threads <arg>) Thread count: 2
+    # -fae (--fail-at-end) Only fail the build afterwards; allow non-impacted builds to continue
+    # -P (--activate-profiles <arg>) Comma-delimited list of profiles to activate
+    #
+    ## Example script entry from GeoServer:
+    #- mvn -f src/pom.xml -B -U -T2 -fae -Prelease clean install && mvn -f src/community/pom.xml -B -U -T2 -fae -DskipTests -Prelease -PcommunityRelease clean install
+    #
+    -mvn clean install -B -U -T2 -fae
