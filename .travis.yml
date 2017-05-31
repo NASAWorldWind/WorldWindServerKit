@@ -1,6 +1,12 @@
 ## WWSK Travis Continuous Integration (Travis CI) build script
 language: java
 
+# Define the JDK(s) to build against
+jdk:
+  - oraclejdk8
+#  - oraclejdk7
+#  - openjdk7
+
 # Cache the local maven repository
 cache:
   directories:
@@ -10,12 +16,11 @@ cache:
 before_install:
   - rm ~/.m2/settings.xml
   
-# Define the JDK(s) to build against
-jdk:
-  - oraclejdk8
-#  - oraclejdk7
-#  - openjdk7
-
+# Before running the build, the default Travis CI behavior installs dependencies: 
+#   mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
+# We skip the installation step as we perform the dependency management in the build step (script)
+install: true
+  
 script:
     ## Maven Phases
     # validate: validate the project
