@@ -43,4 +43,4 @@ script:
     ## Example script entry from GeoServer:
     #- mvn -f src/pom.xml -B -U -T2 -fae -Prelease clean install && mvn -f src/community/pom.xml -B -U -T2 -fae -DskipTests -Prelease -PcommunityRelease clean install
     #
-    -mvn clean install -B -U -T2 -fae
+    - mvn clean install -B -U -T2 -fae
