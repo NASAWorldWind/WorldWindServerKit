@@ -1,52 +1,56 @@
-## WWSK Travis Continuous Integration (Travis CI) build script
+## WorldWindServerKit (WWSK) Travis-CI build script
+
+# Required to install the jq JSON filter used to parse GitHub API results in scripts
+sudo: required
+
+# WWSK is a Java project
 language: java
 
-# Define the JDK(s) to build against
 jdk:
+  # Define the JDK(s) to build against
   - oraclejdk8
-#  - oraclejdk7
-#  - openjdk7
 
-# Cache the local maven repository
 cache:
+  # Cache the local maven repository
   directories:
     - "$HOME/.m2"
 
-# Remove the (cached) local user-specific maven settings
 before_install:
+  # Remove any (cached) user-specific maven settings
   - rm ~/.m2/settings.xml
   
-# Before running the build, the default Travis CI behavior installs dependencies: 
-#   mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
-# We skip the installation step as we perform the dependency management in the build step (script)
+# Skip the default install step (mvn install) as our dependency management is done in the build step
 install: true
   
-# Build the WWSK using from the parent POM
+before_script:
+  # Prepare the Travis build environment
+  - ./travis/prepare_environment.sh  
+  
 script:
-    ## Maven Phases
-    # validate: validate the project
-    # clean:    cleans up artifacts by prior builds
-    # compile:  compile the source
-    # test:     test the compiled code using unit testing framework
-    # package:  package compile code into dist. formats, (e.g., JAR files)
-    # integration_test: deploy package to where integration tests can be run
-    # verify:   run any checks to verify the package is valid
-    # install:  install the package into the local repository
-    # deploy:   copies the final package to the remote repository
-    # site:     generates the site documentation
-    # 
-    ## Maven Plugins
-    # generate-sources 
-    # javadoc:javadoc
-    #
-    ## Maven Commands
-    # -B (--batch-mode) Run in non-interactive model
-    # -U (--update-snapshots) Forces a check for missing releases and updated snapshots on remote repos
-    # -T2 (--threads <arg>) Thread count: 2
-    # -fae (--fail-at-end) Only fail the build afterwards; allow non-impacted builds to continue
-    # -P (--activate-profiles <arg>) Comma-delimited list of profiles to activate
-    #
-    ## Example script entry from GeoServer:
-    #- mvn -f src/pom.xml -B -U -T2 -fae -Prelease clean install && mvn -f src/community/pom.xml -B -U -T2 -fae -DskipTests -Prelease -PcommunityRelease clean install
-    #
-    - mvn clean install -B -U -T2 -fae -Prelease
+  # Build the WWSK with Maven
+  #
+  ## Maven Phases
+  # validate: validate the project
+  # clean:    cleans up artifacts by prior builds
+  # compile:  compile the source
+  # test:     test the compiled code using unit testing framework
+  # package:  package compile code into dist. formats, (e.g., JAR files)
+  # integration_test: deploy package to where integration tests can be run
+  # verify:   run any checks to verify the package is valid
+  # install:  install the package into the local repository
+  # deploy:   copies the final package to the remote repository
+  # site:     generates the site documentation
+  ## Maven Commands
+  # -B (--batch-mode) Run in non-interactive model
+  # -U (--update-snapshots) Forces a check for missing releases and updated snapshots on remote repos
+  # -T2 (--threads <arg>) Thread count: 2
+  # -fae (--fail-at-end) Only fail the build afterwards; allow non-impacted builds to continue
+  # -P (--activate-profiles <arg>) Comma-delimited list of profiles to activate
+  #
+  # Build WWSK using the "release" profile (generates javadoc and sources)
+  - mvn clean install -B -U -T2 -fae -Prelease
+  
+after_success:
+  # Upload distibutions to GitHub releases, depending on what initiated the build
+  - ./travis/update_release.sh
+  
