@@ -120,39 +120,39 @@ fi
 # Release Artifacts
 # =================
 
-# Define locations for distributions
-DIST_PATH="worldwind-geoserver-dist/target"
-
 # Emit a log message for the updated release
 echo "Uploading release assets for ${RELEASE_NAME}"
 
-# Remove the old release assets if they exist (asset id length > 0)
-for FILE in ${DIST_PATH}/*
+# Build the list of WWSK distribution filenames to upload
+DIST_PATH="worldwind-geoserver-dist/target"
+DIST_FILES=()
+for FILE in ${DIST_PATH}/* 
 do
     # Only process files; not directories
     if [[ -f $FILE ]]; then
-        FILENAME=$(basename $FILE)
-        # Note, we're using the jq "--arg name value" commandline option to create a predefined filename variable
-        ASSET_ID=$(curl ${RELEASES_URL}/${RELEASE_ID}/assets | jq --arg filename $FILENAME '.[] | select(.name == $filename) | .id')
-        if [ ${#ASSET_ID} -gt 0 ]; then
-            echo "Deleting ${FILENAME}"
-            curl -include --header "Authorization: token ${GITHUB_API_KEY}" --request DELETE ${RELEASES_URL}/assets/${ASSET_ID}
-        fi
+        DIST_FILES+=$(basename $FILE)
+    fi
+done
+
+# Remove the old release assets if they exist (asset id length > 0)
+for FILENAME in $DIST_FILES
+do
+    # Note, we're using the jq "--arg name value" commandline option to create a predefined filename variable
+    ASSET_ID=$(curl ${RELEASES_URL}/${RELEASE_ID}/assets | jq --arg filename $FILENAME '.[] | select(.name == $filename) | .id')
+    if [ ${#ASSET_ID} -gt 0 ]; then
+        echo "Deleting ${FILENAME}"
+        curl -include --header "Authorization: token ${GITHUB_API_KEY}" --request DELETE ${RELEASES_URL}/assets/${ASSET_ID}
     fi
 done
 
 # Upload the new release assets
-for FILE in ${DIST_PATH}/*
+for FILENAME in $DIST_FILES
 do
-    # Only process files; not directories
-    if [[ -f $FILE ]]; then
-        echo "\nPosting ${FILENAME}"
-        FILENAME=$(basename $FILE)
-        curl -include \
-        --header "Authorization: token ${GITHUB_API_KEY}" \
-        --header "Content-Type: application/vnd.android.package-archive" \
-        --header "Accept: application/json" \
-        --data-binary @${TRAVIS_BUILD_DIR}/${FILE} \
-        --request POST ${UPLOADS_URL}/${RELEASE_ID}/assets?name=${FILENAME}
-    fi
+    echo "\nPosting ${FILENAME}"
+    curl -include \
+    --header "Authorization: token ${GITHUB_API_KEY}" \
+    --header "Content-Type: application/vnd.android.package-archive" \
+    --header "Accept: application/json" \
+    --data-binary @${TRAVIS_BUILD_DIR}/${DIST_PATH}/${FILENAME} \
+    --request POST ${UPLOADS_URL}/${RELEASE_ID}/assets?name=${FILENAME}
 done
