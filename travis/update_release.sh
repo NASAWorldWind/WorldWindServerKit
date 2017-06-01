@@ -123,36 +123,32 @@ fi
 # Emit a log message for the updated release
 echo "Uploading release assets for ${RELEASE_NAME}"
 
-# Build the list of WWSK distribution filenames to upload
-DIST_PATH="worldwind-geoserver-dist/target"
-DIST_FILES=()
-for FILE in ${DIST_PATH}/* 
+# Process the array of files in the WWSK distribution folder
+DIST_FILES=(worldwind-geoserver-dist/target/*)
+for FILE in $DIST_FILES
 do
-    # Only process files; not directories
-    if [[ -f $FILE ]]; then
-        DIST_FILES+=$(basename $FILE)
+    # Only process readable files; e.g., not directories
+    if [[ ! -r $FILE ]]; then
+        continue
     fi
-done
+    # Note: must use quotes to handle files with embedded spaces in their names
+    FILENAME=$(basename "${FILE}")
 
-# Remove the old release assets if they exist (asset id length > 0)
-for FILENAME in $DIST_FILES
-do
+    # Remove the old release asset if it exists (asset id length > 0)
     # Note, we're using the jq "--arg name value" commandline option to create a predefined filename variable
     ASSET_ID=$(curl ${RELEASES_URL}/${RELEASE_ID}/assets | jq --arg filename $FILENAME '.[] | select(.name == $filename) | .id')
     if [ ${#ASSET_ID} -gt 0 ]; then
-        echo "Deleting ${FILENAME}"
+        echo "\nDeleting ${FILENAME}"
         curl -include --header "Authorization: token ${GITHUB_API_KEY}" --request DELETE ${RELEASES_URL}/assets/${ASSET_ID}
     fi
-done
 
-# Upload the new release assets
-for FILENAME in $DIST_FILES
-do
+    # Upload the new release asset
     echo "\nPosting ${FILENAME}"
     curl -include \
     --header "Authorization: token ${GITHUB_API_KEY}" \
     --header "Content-Type: application/vnd.android.package-archive" \
     --header "Accept: application/json" \
-    --data-binary @${TRAVIS_BUILD_DIR}/${DIST_PATH}/${FILENAME} \
+    --data-binary @${TRAVIS_BUILD_DIR}/${FILE} \
     --request POST ${UPLOADS_URL}/${RELEASE_ID}/assets?name=${FILENAME}
+
 done
