@@ -51,8 +51,19 @@ script:
   
 after_success:
   # Upload distibutions to GitHub releases, depending on what initiated the build
-  - ./travis/update_release.sh
-  
+  # - ./travis/update_release.sh
+
+deploy: 
+  # Publish artifacts to GitHub release, by default, travis will not invoke this step for PRs
+  - provider: releases
+    api_key: $GITHUB_API_KEY
+    file_glob: true
+    file: worldwind-geoserver-dist/target/*
+    skip_cleanup: true
+    overwrite: true
+    on:
+      tags: true
+      
 notifications:
   # Notify the worldwind-services mailing list on every build
   email:
