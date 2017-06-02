@@ -51,8 +51,8 @@ script:
   
 after_success:
   # Create a draft release on GitHub, depending on what initiated the build
-  #- ./travis/create_draft_release.sh
-  - ./travis/update_release.sh
+  - ./travis/create_draft_release.sh
+  # - ./travis/update_release.sh
 
 deploy: 
 #  # Create a draft release on GitHub
@@ -62,15 +62,15 @@ deploy:
 #    on:
 #      tags: true  
   # Publish artifacts to GitHub release, by default, travis will not invoke this step for PRs
-#  - provider: releases
-#    api_key: $GITHUB_API_KEY
-#    file_glob: true
-#    file: worldwind-geoserver-dist/target/*.*
-#    skip_cleanup: true
-#    overwrite: true
-#    on:
-#      tags: true
-#      
+  - provider: releases
+    api_key: $GITHUB_API_KEY
+    file_glob: true
+    file: worldwind-geoserver-dist/target/*.*
+    skip_cleanup: true
+    overwrite: true
+    on:
+      tags: true
+      
 notifications:
   # Notify the worldwind-services mailing list on every build
   email:
