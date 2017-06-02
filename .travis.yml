@@ -48,7 +48,7 @@ script:
   # -P (--activate-profiles <arg>) Comma-delimited list of profiles to activate
   #
   # Build WWSK using the "release" profile (generates javadoc and sources)
-  - mvn clean install -B -U -T2 -Prelease --debug
+  - mvn clean install -B -U -Prelease
   
 after_success:
   # Dump debugging data
