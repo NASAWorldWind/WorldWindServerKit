@@ -51,7 +51,7 @@ script:
   
 after_success:
   # Create a draft release on GitHub, depending on what initiated the build
-  - ./travis/create_draft_release.sh
+  # - ./travis/create_draft_release.sh
   # - ./travis/update_release.sh
 
 deploy: 
@@ -68,6 +68,7 @@ deploy:
     file: worldwind-geoserver-dist/target/*.*
     skip_cleanup: true
     overwrite: true
+    draft: true
     on:
       tags: true
       
