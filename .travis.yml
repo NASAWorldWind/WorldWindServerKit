@@ -51,7 +51,9 @@ script:
   - mvn clean install -B -U -T2 -Prelease
   
 after_success:
-  # Dump the distribution folder contents for debugging
+  # Dump debugging data
+  - find . -type d
+  - ls -LR
   - ls -la worldwind-geoserver-dist/target
   # Upload distibutions to GitHub releases, depending on what initiated the build
   - ./travis/update_release.sh
