@@ -1,10 +1,9 @@
 #!/bin/bash
 
 # ==============================================================================
-# Creates or updates a GitHub release and uploads release artifacts for builds 
-# initiated by a tag. Does nothing if the# build is not associated with a tag.
-#
-# Uses curl to performs CRUD operations on the GitHub Repos/Releases REST API.
+# Creates or updates a GitHub release. Does nothing if the# build is not 
+# associated with a tag. Uses curl to performs CRUD operations on the 
+# GitHub Repos/Releases REST API.
 #
 # Uses jq to process the REST API JSON results. jq should be installed before 
 # this script is executed, e.g., in the .travis.yml "before_script" block:
@@ -13,10 +12,18 @@
 #
 # Uses Git to update tags in the repo. Git commands using authentication are 
 # redirected to /dev/null to prevent leaking # the access token into the log.
+#
+# Just a heads up, in a tagged build, Travis cloned the repo into a branch named 
+# with the tag, thus the variable TRAVIS_BRANCH contains the tag name, not 
+# "master" or "develop" like you might expect. Thus testing if the tag was made 
+# on a particular branch cannot be done using the TRAVIS_BRANCH var in tagged build.
 # ==============================================================================
 
 # Ensure shell commands are not echoed in the log to prevent leaking the access token.
 set +x
+
+# Set the prefix to be prepended to the tag to create a release name; may be blank.
+RELEASE_PREFIX="WWSK "
 
 # Ensure the GitHub Personal Access Token for GitHub exists
 if [[ -z "$GITHUB_API_KEY" ]]; then
@@ -24,17 +31,9 @@ if [[ -z "$GITHUB_API_KEY" ]]; then
     exit 1
 fi
 
-# GitHub RESTful API URLs
-RELEASES_URL="https://api.github.com/repos/emxsys/worldwindserverkit/releases"
-
-# Just a heads up, in a tagged build, Travis cloned the repo into a branch named 
-# with the tag, thus the variable TRAVIS_BRANCH contains the tag name, not 
-# "master" or "develop" like you might expect. Thus testing if the tag was made 
-# on a particular branch cannot be done using the TRAVIS_BRANCH var in tagged build.
-
 # Initialize the release variables predicated on the tag. 
 if [[ -n $TRAVIS_TAG ]]; then # a tagged build; prepare a draft release
-    RELEASE_NAME="WWSK ${TRAVIS_TAG}" 
+    RELEASE_NAME="${RELEASE_PREFIX}${TRAVIS_TAG}" 
     DRAFT="true"
     PRERELEASE="false"
 else # build is not associated with a tag; exit without error
@@ -45,6 +44,12 @@ fi
 # ===========================
 # GitHub Release Maintenance
 # ===========================
+
+# GitHub RESTful API URL
+LOWERCASE_REPO_SLUG="$(echo $TRAVIS_REPO_SLUG | tr '[A-Z]' '[a-z]')"
+echo "$TRAVIS_REPO_SLUG -> $LOWERCASE_REPO_SLUG"
+
+RELEASES_URL="https://api.github.com/repos/${LOWERCASE_REPO_SLUG}/releases"
 
 # Query the release ids for releases with with the given name. If there's more 
 # than one, then we'll use the first. In order to see draft releases, you must 
