@@ -28,14 +28,14 @@ if [[ -z "$GITHUB_API_KEY" ]]; then
     exit 1
 fi
 
-# Get the GitHub remote origin URL
-REMOTE_URL=$(git config --get remote.origin.url) > /dev/null
-# Add the GitHub authentication token if it's not already embedded in the URL (test if an "@" sign is present)
-if [[ $REMOTE_URL != *"@"* ]]; then
-    # Use the stream editor to inject the GitHub authentication token into the remote url after the protocol
-    # Example:  https://github.com/.../repo.git -> https://<token>@github.com/.../repo.git
-    REMOTE_URL=$(echo $REMOTE_URL | sed -e "s#://#://$GITHUB_API_KEY@#g") > /dev/null
-fi
+## Get the GitHub remote origin URL
+#REMOTE_URL=$(git config --get remote.origin.url) > /dev/null
+## Add the GitHub authentication token if it's not already embedded in the URL (test if an "@" sign is present)
+#if [[ $REMOTE_URL != *"@"* ]]; then
+#    # Use the stream editor to inject the GitHub authentication token into the remote url after the protocol
+#    # Example:  https://github.com/.../repo.git -> https://<token>@github.com/.../repo.git
+#    REMOTE_URL=$(echo $REMOTE_URL | sed -e "s#://#://$GITHUB_API_KEY@#g") > /dev/null
+#fi
 
 # Initialize the release variables predicated on the tag. 
 RELEASE_PREFIX=  # prefix to be prepended to the tag; may be blank.
