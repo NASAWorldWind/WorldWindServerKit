@@ -49,7 +49,8 @@ if [[ -n $TRAVIS_TAG ]]; then # a tagged build; prepare a draft release
     RELEASE_NAME=$TRAVIS_TAG
     DRAFT="true"
     PRERELEASE="false"
-else # build is not associated with a tag; exit quietly without error
+else # build is not associated with a tag; exit without error
+    echo "Skipping release updates as this is not a tagged build"
     exit 0
 fi
 
@@ -136,9 +137,11 @@ do
     # Use quotes to handle spaces in file names
     FILENAME=$(basename "$FILE")
 
+    echo "Query for existing $FILENAME asset"
     # Remove the old release asset if it exists (asset id length > 0)
-    # Note, we're using the "jq --arg name value" command-line option to create a predefined filename variable
-    ASSET_ID=$(curl ${RELEASES_URL}/${RELEASE_ID}/assets | jq --arg filename "$FILENAME" '.[] | select(.name == $filename) | .id')
+    # We're using the "jq --arg name value" command-line option to create a predefined $filename variable
+    # TODO: I'm not sure this would handle embedded spaces in a filename.
+    ASSET_ID=$(curl ${RELEASES_URL}/${RELEASE_ID}/assets | jq --arg filename $FILENAME '.[] | select(.name == $filename) | .id')
     if [ ${#ASSET_ID} -gt 0 ]; then
         echo "Deleting $FILENAME"
         curl -include --header "Authorization: token ${GITHUB_API_KEY}" --request DELETE ${RELEASES_URL}/assets/${ASSET_ID}
@@ -153,4 +156,10 @@ do
     --data-binary @${TRAVIS_BUILD_DIR}/${FILE} \
     --request POST ${UPLOADS_URL}/${RELEASE_ID}/assets?name=${FILENAME}
 
+    # Upload error handling
+    RESULT=$?
+    if [[ $RESULT -gt 0 ]]; then
+        echo "$0 error: curl post failed. Returned $RESULT"
+        exit 1
+    fi
 done
