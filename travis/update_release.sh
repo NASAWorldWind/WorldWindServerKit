@@ -127,23 +127,23 @@ echo "Uploading release assets for ${RELEASE_NAME}"
 DIST_FILES=(worldwind-geoserver-dist/target/*)
 for FILE in $DIST_FILES
 do
-    # Only process readable files; e.g., not directories
-    if [[ ! -r $FILE ]]; then
+    # Only process files; skip folders
+    if [[ ! -f $FILE ]]; then
         continue
     fi
     # Note: must use quotes to handle files with embedded spaces in their names
     FILENAME=$(basename "${FILE}")
 
     # Remove the old release asset if it exists (asset id length > 0)
-    # Note, we're using the jq "--arg name value" commandline option to create a predefined filename variable
+    # Note, we're using the jq "--arg name value" command-line option to create a predefined filename variable
     ASSET_ID=$(curl ${RELEASES_URL}/${RELEASE_ID}/assets | jq --arg filename $FILENAME '.[] | select(.name == $filename) | .id')
     if [ ${#ASSET_ID} -gt 0 ]; then
-        echo "\nDeleting ${FILENAME}"
+        echo "Deleting ${FILENAME}"
         curl -include --header "Authorization: token ${GITHUB_API_KEY}" --request DELETE ${RELEASES_URL}/assets/${ASSET_ID}
     fi
 
     # Upload the new release asset
-    echo "\nPosting ${FILENAME}"
+    echo "Posting ${FILENAME}"
     curl -include \
     --header "Authorization: token ${GITHUB_API_KEY}" \
     --header "Content-Type: application/vnd.android.package-archive" \
