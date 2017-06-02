@@ -30,8 +30,6 @@ script:
   # Build the WWSK with Maven
   #
   ## Maven Phases
-  # validate: validate the project
-  # clean:    cleans up artifacts by prior builds
   # compile:  compile the source
   # test:     test the compiled code using unit testing framework
   # package:  package compile code into dist. formats, (e.g., JAR files)
@@ -40,21 +38,18 @@ script:
   # install:  install the package into the local repository
   # deploy:   copies the final package to the remote repository
   # site:     generates the site documentation
+  # ------- optional
+  # validate: validate the project
+  # clean:    cleans up artifacts by prior builds
   ## Maven Commands
   # -B (--batch-mode) Run in non-interactive model
   # -U (--update-snapshots) Forces a check for missing releases and updated snapshots on remote repos
-  # -T2 (--threads <arg>) Thread count: 2
-  # -fae (--fail-at-end) Only fail the build afterwards; allow non-impacted builds to continue
   # -P (--activate-profiles <arg>) Comma-delimited list of profiles to activate
   #
   # Build WWSK using the "release" profile (generates javadoc and sources)
   - mvn clean install -B -U -Prelease
   
 after_success:
-  # Dump debugging data
-  - find . -type d
-  - ls -LR
-  - ls -la worldwind-geoserver-dist/target
   # Upload distibutions to GitHub releases, depending on what initiated the build
   - ./travis/update_release.sh
   
