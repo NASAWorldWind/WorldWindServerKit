@@ -139,9 +139,14 @@ do
 
     echo "Query for existing $FILENAME asset"
     # Remove the old release asset if it exists (asset id length > 0)
-    # We're using the "jq --arg name value" command-line option to create a predefined $filename variable
+    # Query the GitHub assets with curl and parse the result with jq. 
+    # See the jq manual for more info: https://stedolan.github.io/jq/manual/
+    # Note: We're using the "jq --arg name value" command-line option to create 
+    # a predefined $filename variable. 
     # TODO: I'm not sure this would handle embedded spaces in a filename.
-    ASSET_ID=$(curl ${RELEASES_URL}/${RELEASE_ID}/assets | jq --arg filename $FILENAME '.[] | select(.name == $filename) | .id')
+    RESPONSE=$(curl ${RELEASES_URL}/${RELEASE_ID}/assets)
+    echo $RESPONSE
+    ASSET_ID=$(echo $RESPONSE | jq --arg filename ${FILENAME} '.[] | select(.name == $filename) | .id')
     if [ ${#ASSET_ID} -gt 0 ]; then
         echo "Deleting $FILENAME"
         curl -include --header "Authorization: token ${GITHUB_API_KEY}" --request DELETE ${RELEASES_URL}/assets/${ASSET_ID}
