@@ -54,6 +54,12 @@ after_success:
   # - ./travis/update_release.sh
 
 deploy: 
+  # Create a draft release on GitHub
+  - provider: script
+    script: ./travis/create_draft_release.sh
+    skip_cleanup: true
+    on:
+      tags: true  
   # Publish artifacts to GitHub release, by default, travis will not invoke this step for PRs
   - provider: releases
     api_key: $GITHUB_API_KEY
