@@ -1,17 +1,18 @@
 #!/bin/bash
 
 # ==============================================================================
-# Creates or updates a GitHub release. Does nothing if the# build is not 
-# associated with a tag. Uses curl to performs CRUD operations on the 
+# Creates or updates a GitHub release. Does nothing if the build is not 
+# associated with a tag. The script uses curl to performs CRUD operations on the 
 # GitHub Repos/Releases REST API.
 #
-# Uses jq to process the REST API JSON results. jq should be installed before 
-# this script is executed, e.g., in the .travis.yml "before_script" block:
-#       sudo apt-get install -qq jq
+# The script uses jq to process the REST API JSON results. jq should be 
+# installed before this script is executed, e.g., in the .travis.yml 
+# "before_script" block, e.g.: sudo apt-get install -qq jq
 # See https://stedolan.github.io/jq/manual/ for jq documentation.
 #
-# Uses Git to update tags in the repo. Git commands using authentication are 
-# redirected to /dev/null to prevent leaking # the access token into the log.
+# The script uses Git to update tags in the repo. Git commands using
+# authentication are redirected to /dev/null to prevent leaking the access 
+# token into the log.
 #
 # Just a heads up, in a tagged build, Travis cloned the repo into a branch named 
 # with the tag, thus the variable TRAVIS_BRANCH contains the tag name, not 
@@ -27,15 +28,6 @@ if [[ -z "$GITHUB_API_KEY" ]]; then
     echo "$0 error: You must export the GITHUB_API_KEY containing the personal access token for Travis\; GitHub was not updated."
     exit 1
 fi
-
-## Get the GitHub remote origin URL
-#REMOTE_URL=$(git config --get remote.origin.url) > /dev/null
-## Add the GitHub authentication token if it's not already embedded in the URL (test if an "@" sign is present)
-#if [[ $REMOTE_URL != *"@"* ]]; then
-#    # Use the stream editor to inject the GitHub authentication token into the remote url after the protocol
-#    # Example:  https://github.com/.../repo.git -> https://<token>@github.com/.../repo.git
-#    REMOTE_URL=$(echo $REMOTE_URL | sed -e "s#://#://$GITHUB_API_KEY@#g") > /dev/null
-#fi
 
 # Initialize the release variables predicated on the tag. 
 RELEASE_PREFIX=  # prefix to be prepended to the tag; may be blank.
