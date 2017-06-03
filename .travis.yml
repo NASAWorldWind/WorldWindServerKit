@@ -1,52 +1,63 @@
-## WWSK Travis Continuous Integration (Travis CI) build script
+## WorldWindServerKit (WWSK) Travis-CI build script
+
+# Required to install the jq JSON filter used to parse GitHub API results in scripts
+sudo: required
+
+# WWSK is a Java project
 language: java
 
-# Define the JDK(s) to build against
 jdk:
+  # Define the JDK(s) to build against
   - oraclejdk8
-#  - oraclejdk7
-#  - openjdk7
 
-# Cache the local maven repository
 cache:
+  # Cache the local maven repository
   directories:
     - "$HOME/.m2"
 
-# Remove the (cached) local user-specific maven settings
 before_install:
+  # Remove any (cached) user-specific maven settings
   - rm ~/.m2/settings.xml
   
-# Before running the build, the default Travis CI behavior installs dependencies: 
-#   mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
-# We skip the installation step as we perform the dependency management in the build step (script)
+# Skip the default install step (mvn install) as our dependency management is done in the build step
 install: true
   
-# Build the WWSK using from the parent POM
+before_script:
+  # Prepare the Travis build environment
+  - ./travis/prepare_environment.sh  
+  
 script:
-    ## Maven Phases
-    # validate: validate the project
-    # clean:    cleans up artifacts by prior builds
-    # compile:  compile the source
-    # test:     test the compiled code using unit testing framework
-    # package:  package compile code into dist. formats, (e.g., JAR files)
-    # integration_test: deploy package to where integration tests can be run
-    # verify:   run any checks to verify the package is valid
-    # install:  install the package into the local repository
-    # deploy:   copies the final package to the remote repository
-    # site:     generates the site documentation
-    # 
-    ## Maven Plugins
-    # generate-sources 
-    # javadoc:javadoc
-    #
-    ## Maven Commands
-    # -B (--batch-mode) Run in non-interactive model
-    # -U (--update-snapshots) Forces a check for missing releases and updated snapshots on remote repos
-    # -T2 (--threads <arg>) Thread count: 2
-    # -fae (--fail-at-end) Only fail the build afterwards; allow non-impacted builds to continue
-    # -P (--activate-profiles <arg>) Comma-delimited list of profiles to activate
-    #
-    ## Example script entry from GeoServer:
-    #- mvn -f src/pom.xml -B -U -T2 -fae -Prelease clean install && mvn -f src/community/pom.xml -B -U -T2 -fae -DskipTests -Prelease -PcommunityRelease clean install
-    #
-    - mvn clean install -B -U -T2 -fae -Prelease
+  # Build the WWSK with Maven
+  ## Maven Commands
+  # -B (--batch-mode) Run in non-interactive model
+  # -U (--update-snapshots) Forces a check for missing releases and updated snapshots on remote repos
+  # -P (--activate-profiles <arg>) Comma-delimited list of profiles to activate
+  # Build WWSK using the "release" profile (generates javadoc and sources)
+  - mvn clean install -B -U -Prelease
+  
+after_success:
+  # Create a draft release on GitHub, depending on what initiated the build
+  - ./travis/create_draft_release.sh
+  # - ./travis/update_release.sh
+
+deploy: 
+  # Publish artifacts to the GitHub release, by default, travis will not invoke this step for PRs
+  # Re. undocumented draft and tag_name settings, see: https://github.com/travis-ci/travis-ci/issues/6132
+  - provider: releases
+    api_key: $GITHUB_API_KEY
+    file_glob: true
+    file: worldwind-geoserver-dist/target/*.*
+    skip_cleanup: true
+    overwrite: true
+    draft: true
+    tag_name: $TRAVIS_TAG
+    on:
+      tags: true
+      
+notifications:
+  # Notify the worldwind-services mailing list on every build
+  email:
+    recipients:
+      secure: SheoPrZZHX1c70JTwoRULza5XobdTPisIgQSfpFBSjolS/Z+qJBIZkyQNKRPfzvs5FEZNBHlaXnvAEX8sUHAJtvp5A9P/c0jaZ3dA0IQ1TJCNg3XT2ZLz4R5JOQclYbgBIqr27MSmx9vvnfGUDCSKaRXdLxmB0Hun7zlkR79IEQ6lLeeB9pu7N/4vuzdmMGKU1lOWs3tmDpdeNOdgSYhKW81eX0FHrgWTXeXcv/3hhtn87XogwKdVKeYFKY+1wHUV3j+dnqeN7yMhqlpljHkOpQ5YqG7nDnPbSJZJ2NINTB/+Mus57eq67FnNl4CDAsWue97wrY8u/+mtGP0boyhXUlBaKJdJpENnuSbxLZtMzvrI5JucxgGXiKei+q84DAh1BbN0+205kBfQgh24GF68bMuKFSpJDobN6usLXVnfjnTrlrMkJQ9wGY/m8g9P9IhJpguJuhYocB6ByMOCkkeSEXdVN6Wb7MGXcfSWdnasVhqAX4yYUt34WUO+vWf842atzXWMZDyStjUe/hWQactB2FhyZBt9kIjMBMWodEhAlDPgFSzwz4huiDkAjeQSszqDQQVOXGFG+f64HhnhYElkY7F08/Yy/sI5HlQ0C0nlNXVsFZ5oHRWwyw02tVVdzNo3ho2h1NSW935S0z3rWRlNOxxKisBON0OBGgZdWJRLYc=
+    on_success: always
+    on_failure: always  
