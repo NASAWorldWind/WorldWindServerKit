@@ -51,7 +51,7 @@ script:
   
 after_success:
   # Create a draft release on GitHub, depending on what initiated the build
-  # - ./travis/create_draft_release.sh
+  - ./travis/create_draft_release.sh
   # - ./travis/update_release.sh
 
 deploy: 
@@ -62,6 +62,7 @@ deploy:
 #    on:
 #      tags: true  
   # Publish artifacts to GitHub release, by default, travis will not invoke this step for PRs
+  # Re. draft and tag_name, see: https://github.com/travis-ci/travis-ci/issues/6132
   - provider: releases
     api_key: $GITHUB_API_KEY
     file_glob: true
