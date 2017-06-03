@@ -69,6 +69,7 @@ deploy:
     skip_cleanup: true
     overwrite: true
     draft: true
+    tag_name: $TRAVIS_TAG
     on:
       tags: true
       
