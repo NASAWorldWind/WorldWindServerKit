@@ -44,6 +44,7 @@ import gov.nasa.worldwind.geopkg.Tile;
 import gov.nasa.worldwind.geopkg.TileEntry;
 import gov.nasa.worldwind.geopkg.TileMatrix;
 import gov.nasa.worldwind.geopkg.TileReader;
+import static java.awt.image.BufferedImage.TYPE_4BYTE_ABGR;
 
 import org.geotools.coverage.CoverageFactoryFinder;
 import org.geotools.coverage.grid.GridCoverage2D;
@@ -55,6 +56,7 @@ import org.geotools.coverage.grid.io.AbstractGridFormat;
 import org.geotools.factory.Hints;
 import org.geotools.geometry.GeneralEnvelope;
 import org.geotools.geometry.jts.ReferencedEnvelope;
+import org.geotools.image.ImageWorker;
 import org.geotools.referencing.CRS;
 import org.geotools.util.Utilities;
 import org.geotools.util.logging.Logging;
@@ -218,6 +220,7 @@ public class GeoPackageReader extends AbstractGridCoverage2DReader {
 
             ReferencedEnvelope requestedEnvelope = null;
             Rectangle dim = null;
+            Color inputTransparentColor = null;
 
             // Extract the GridGeometry2D from the parameters and set the
             // requested envelope and dimensions.
@@ -233,6 +236,10 @@ public class GeoPackageReader extends AbstractGridCoverage2DReader {
                             requestedEnvelope = null;
                         }
                         dim = gg.getGridRange2D().getBounds();
+                    }
+                    if (name.equals(AbstractGridFormat.INPUT_TRANSPARENT_COLOR.getName())) {
+                        inputTransparentColor = (Color) param.getValue();
+                        continue;
                     }
                 }
             }
@@ -310,17 +317,19 @@ public class GeoPackageReader extends AbstractGridCoverage2DReader {
                 BufferedImage tileImage = readImage(tile.getData());
 
                 ////////////////////////////////////////////////////////////////
-                // Uncomment block to draw a border around the tiles for debugging
-//                {
-//                    Graphics2D graphics = tileImage.createGraphics();
-//                    float thickness = 2;
-//                    graphics.setStroke(new BasicStroke(thickness));
-//                    graphics.drawRect(0, 0, tileImage.getWidth(), tileImage.getHeight());
-//                }
-                ////////////////////////////////////////////////////////////////
+                // DEBUGGING: Uncomment block to draw a border around the tiles
+                /*
+                {
+                    Graphics2D graphics = tileImage.createGraphics();
+                    float thickness = 2;
+                    graphics.setStroke(new BasicStroke(thickness));
+                    graphics.drawRect(0, 0, tileImage.getWidth(), tileImage.getHeight());
+                }
+                */
                 
+                // Create the destination image that we draw into
                 if (image == null) {
-                    image = getStartImage(width, height);
+                    image = getStartImage(width, height, inputTransparentColor);
                 }
 
                 // Get the tile coordinates within the mosaic
@@ -336,9 +345,19 @@ public class GeoPackageReader extends AbstractGridCoverage2DReader {
 
             it.close();
 
+            // If there were no tiles, then we need to create an empty image
             if (image == null) { // no tiles ??
-                image = getStartImage(width, height);
+                image = getStartImage(width, height, inputTransparentColor);
             }
+
+
+            // Apply the color transparency mask
+            if (inputTransparentColor != null) {
+                // Note: ImageWorker.makeColorTransparent only works 
+                // with an IndexColorModel or a ComponentColorModel
+                image = new ImageWorker(image).makeColorTransparent(inputTransparentColor).getRenderedOperation().getAsBufferedImage();
+            }
+
         } finally {
             file.close();
         }
@@ -346,11 +365,11 @@ public class GeoPackageReader extends AbstractGridCoverage2DReader {
     }
 
     /**
-     * Creates a BufferedImage from the supplied image data. 
-     * 
+     * Creates a BufferedImage from the supplied image data byte array.
+     *
      * @param data A byte array containing image data
      * @return A new BufferedImage
-     * @throws IOException 
+     * @throws IOException
      */
     protected static BufferedImage readImage(byte[] data) throws IOException {
         ByteArrayInputStream bis = new ByteArrayInputStream(data);
@@ -371,8 +390,10 @@ public class GeoPackageReader extends AbstractGridCoverage2DReader {
      * @param height The height of the new image
      * @return A new BufferedImage with transparent fill.
      */
-    protected BufferedImage getStartImage(int width, int height) {
-        int imageType = BufferedImage.TYPE_INT_ARGB;
+    protected BufferedImage getStartImage(int width, int height, Color inputTransparentColor) {
+
+        // ImageWorker.makeColorTransparent only works images with an IndexColorModel or a ComponentColorModel
+        int imageType = (inputTransparentColor != null) ? BufferedImage.TYPE_4BYTE_ABGR : BufferedImage.TYPE_INT_ARGB;
 
         BufferedImage image = new BufferedImage(width, height, imageType);
 
