@@ -30,7 +30,6 @@ before_script:
   # Ensure scripts can be executed (required if scripts are authored in Windows)
   - chmod +x ./travis/*.sh
 
-  
 script:
   # Build the WWSK with Maven
   ## Maven Commands
@@ -43,7 +42,6 @@ script:
 after_success:
   # Create a draft release on GitHub in preparation for deploy
   - ./travis/create_draft_release.sh
-  # - ./travis/update_release.sh
 
 deploy: 
   # Publish artifacts to the GitHub release, by default, travis will not invoke this step for PRs.
@@ -64,7 +62,6 @@ notifications:
   # Notify the World Wind services mailing list on every build
   email:
     recipients:
-        secure: $WORLDWIND_SERVICES
-
+        $WORLDWIND_SERVICES
     on_success: always
     on_failure: always  
