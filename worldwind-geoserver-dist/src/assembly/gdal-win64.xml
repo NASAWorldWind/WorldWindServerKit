@@ -19,10 +19,10 @@
             </includes>
             <excludes>
                 <!--Exclude problem jars: 
-                    Including gdalgeotiff caused GeoTIFF w/JPEG compression to fail.
+                    Including gdalgeotiff and gdaljpeg which caused GeoTIFF w/JPEG compression to fail.
                 -->
                 <exclude>imageio-ext-gdalgeotiff-${imageio-ext.version}.jar</exclude>
-                <!--<exclude>imageio-ext-gdaljpeg-${imageio-ext.version}.jar</exclude>-->
+                <exclude>imageio-ext-gdaljpeg-${imageio-ext.version}.jar</exclude>
             </excludes>
         </fileSet>        
            

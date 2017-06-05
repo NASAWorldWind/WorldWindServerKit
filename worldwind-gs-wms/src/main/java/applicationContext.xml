@@ -7,6 +7,10 @@ application directory.
 <!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
 
 <beans>
+    
+    <!--WmsModuleStatus provides an entry in the "Server Status" > "Modules" page-->
+    <bean class="gov.nasa.worldwind.gs.wms.map.WmsModuleStatus"/>  
+        
     <bean id="PNGMapProducer" class="gov.nasa.worldwind.gs.wms.map.CustomRenderedImageMapOutputFormat">
       <constructor-arg>
         <description>The prescribed output format MIME-Type</description>
@@ -21,6 +25,7 @@ application directory.
       <constructor-arg ref="wms" />
       <property name="extension" value="png"/>
     </bean>
+    
     <bean id="PNG8MapProducer" class="gov.nasa.worldwind.gs.wms.map.CustomRenderedImageMapOutputFormat">
       <constructor-arg>
         <description>The prescribed output format MIME-Type</description>
