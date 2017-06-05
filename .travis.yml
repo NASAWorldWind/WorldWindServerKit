@@ -29,6 +29,7 @@ before_script:
   - jq --version
   # Ensure scripts can be executed (required if scripts are authored in Windows)
   - chmod +x ./travis/*.sh
+
   
 script:
   # Build the WWSK with Maven
@@ -64,5 +65,6 @@ notifications:
   email:
     recipients:
         secure: $WORLDWIND_SERVICES
+
     on_success: always
     on_failure: always  
