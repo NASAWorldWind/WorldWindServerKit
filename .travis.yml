@@ -62,6 +62,6 @@ notifications:
   # Notify the World Wind services mailing list on every build
   email:
     recipients:
-        $WORLDWIND_SERVICES
+        secure: "f2Goc8YSBLEpeANExDtpfrcYlPZTouNgsytkR/t4XheS/hXVkWNb2mxterH/5BwjRgVHQYJCMqeZXE8vQPBDsnLRqQzDHV5AXa/M9aTkPNgpkMHK25NVxpudWULM/jtlHBsA4nIhDZwS2K01bIT8DlcAnoAXXhg8QH/QqYFDAIHd3qzsfjH+f45G4SFzo2xnG44tF3bokQegZw5+95HzTlNJzrDyQesXHstzXi8Nw6W+GMoYtAi4uls52U6ByUiKJBbIfhq1XdicT+gS2M2FAZTAZQqJnW1F1Kfc4yNcvRSujM0O+8MmK/5WvQY7hBaBRLPr2/94vkqEbgLEUCO/focliskBGGxPgt9i4+yUA3gwTiZ8wQ8exHTD0A2Yyy//12BVWdyyZQ3pa2l/Cw6ia0mX74B4dVn+m0t/5TD8+kYzu/cNfBqwA07VsNdVB8FCXRIPXNdgsFMj4YBC4bslYeNJ71PBfb6Zzdwq94JGjyc0t1/krJ+/II/wrEygxHrhOnomtWdzPkhhkn5MuLM3Y+21YRnn55/6cn/oIDPrp2NrwXIY0GNMfkBx24nXSZAbnA4wKIShRrBqHxYO/D6oGLy0t2nku0iEyZHZMXaL1kubZetGTU2MDt40PlWFT+ByeGr/mSM+gwFTf/Jq5fYQuGqG7iBo0nI83y70J57aywY="
     on_success: always
     on_failure: always  
