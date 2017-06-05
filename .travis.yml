@@ -1,0 +1,67 @@
+## WorldWindServerKit (WWSK) Travis-CI build script
+
+# Required to install the jq JSON filter used to parse GitHub API results in scripts
+sudo: required
+
+# WWSK is a Java project
+language: java
+
+jdk:
+  # Define the JDK(s) to build against
+  - oraclejdk8
+
+cache:
+  # Cache the local maven repository
+  directories:
+    - "$HOME/.m2"
+
+before_install:
+  # Remove any (cached) user-specific maven settings
+  - rm ~/.m2/settings.xml
+  
+# Skip the default install step (mvn install) as our dependency management is done in the build step
+install: true
+  
+before_script:
+  # Install the jq shell filter so we can extract data from GitHub API JSON results
+  # See apt configuration: https://docs.travis-ci.com/user/ci-environment/#apt-configuration
+  - sudo apt-get install -qq jq
+  - jq --version
+  # Ensure scripts can be executed (required if scripts are authored in Windows)
+  - chmod +x ./travis/*.sh
+
+script:
+  # Build the WWSK with Maven
+  ## Maven Commands
+  # -B (--batch-mode) Run in non-interactive model
+  # -U (--update-snapshots) Forces a check for missing releases and updated snapshots on remote repos
+  # -P (--activate-profiles <arg>) Comma-delimited list of profiles to activate
+  # Build WWSK using the "release" profile (generates javadoc and sources)
+  - mvn clean install -B -U -Prelease
+  
+after_success:
+  # Create a draft release on GitHub in preparation for deploy
+  - ./travis/create_draft_release.sh
+
+deploy: 
+  # Publish artifacts to the GitHub release, by default, travis will not invoke this step for PRs.
+  # Uses undocumented "draft" and "tag_name" settings to deploy without publishing.
+  # See: https://github.com/travis-ci/travis-ci/issues/6132 for more info.
+  - provider: releases
+    api_key: $GITHUB_API_KEY
+    file_glob: true
+    file: worldwind-geoserver-dist/target/*.*
+    skip_cleanup: true
+    overwrite: true
+    draft: true
+    tag_name: $TRAVIS_TAG
+    on:
+      tags: true
+      
+notifications:
+  # Notify the World Wind services mailing list on every build
+  email:
+    recipients:
+        secure: "f2Goc8YSBLEpeANExDtpfrcYlPZTouNgsytkR/t4XheS/hXVkWNb2mxterH/5BwjRgVHQYJCMqeZXE8vQPBDsnLRqQzDHV5AXa/M9aTkPNgpkMHK25NVxpudWULM/jtlHBsA4nIhDZwS2K01bIT8DlcAnoAXXhg8QH/QqYFDAIHd3qzsfjH+f45G4SFzo2xnG44tF3bokQegZw5+95HzTlNJzrDyQesXHstzXi8Nw6W+GMoYtAi4uls52U6ByUiKJBbIfhq1XdicT+gS2M2FAZTAZQqJnW1F1Kfc4yNcvRSujM0O+8MmK/5WvQY7hBaBRLPr2/94vkqEbgLEUCO/focliskBGGxPgt9i4+yUA3gwTiZ8wQ8exHTD0A2Yyy//12BVWdyyZQ3pa2l/Cw6ia0mX74B4dVn+m0t/5TD8+kYzu/cNfBqwA07VsNdVB8FCXRIPXNdgsFMj4YBC4bslYeNJ71PBfb6Zzdwq94JGjyc0t1/krJ+/II/wrEygxHrhOnomtWdzPkhhkn5MuLM3Y+21YRnn55/6cn/oIDPrp2NrwXIY0GNMfkBx24nXSZAbnA4wKIShRrBqHxYO/D6oGLy0t2nku0iEyZHZMXaL1kubZetGTU2MDt40PlWFT+ByeGr/mSM+gwFTf/Jq5fYQuGqG7iBo0nI83y70J57aywY="
+    on_success: always
+    on_failure: always  
