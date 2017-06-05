@@ -63,6 +63,6 @@ notifications:
   # Notify the World Wind services mailing list on every build
   email:
     recipients:
-        - $WORLDWIND_SERVICES
+        secure: $WORLDWIND_SERVICES
     on_success: always
     on_failure: always  
