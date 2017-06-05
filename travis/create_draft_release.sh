@@ -23,30 +23,27 @@
 # Ensure shell commands are not echoed in the log to prevent leaking the access token.
 set +x
 
+# Prerequisite: build must be associated with a tag, if not, exit without error
+if [[ -z $TRAVIS_TAG ]]; then 
+    echo "Skipping release creation as this is not a tagged build."
+    exit 0
+fi
+
 # Prerequisite: ensure the GitHub Personal Access Token for GitHub exists
 if [[ -z "$GITHUB_API_KEY" ]]; then
     echo "$0 error: You must export the GITHUB_API_KEY containing the personal access token for Travis\; GitHub was not updated."
     exit 1
 fi
 
-# Initialize the release variables predicated on the tag. 
-RELEASE_PREFIX=  # prefix to be prepended to the tag; may be blank.
-if [[ -n $TRAVIS_TAG ]]; then # a tagged build; prepare a draft release
-    RELEASE_NAME="${RELEASE_PREFIX}${TRAVIS_TAG}" 
-    DRAFT="true"
-    PRERELEASE="true"
-else # build is not associated with a tag; exit without error
-    echo "Skipping release creation as this is not a tagged build"
-    exit 0
-fi
-
 # ===========================
 # GitHub Release Maintenance
 # ===========================
 
-# GitHub RESTful API URL
-LOWERCASE_REPO_SLUG="$(echo $TRAVIS_REPO_SLUG | tr '[A-Z]' '[a-z]')"
-RELEASES_URL="https://api.github.com/repos/${LOWERCASE_REPO_SLUG}/releases"
+RELEASE_PREFIX= # prefix to be prepended to the tag; may be blank.
+RELEASE_NAME="${RELEASE_PREFIX}${TRAVIS_TAG}" 
+DRAFT="true"        # state of new release
+PRERELEASE="true"   # attribute of new release
+RELEASES_URL="https://api.github.com/repos/${TRAVIS_REPO_SLUG}/releases" # GitHub RESTful API URL
 
 # Query the release ids for releases with with the given name. If there's more 
 # than one, then we'll use the first. In order to see draft releases, you must 
@@ -91,7 +88,7 @@ else
     # Emit a log message for the updated release
     echo "Updating release ${RELEASE_NAME} with the tag ${TRAVIS_TAG}"
 
-    # Define the patch data to update the tag_name
+    # Define the patch data used to update the tag_name
     JSON_DATA="{ \
         \"tag_name\": \"${TRAVIS_TAG}\" \
      }"

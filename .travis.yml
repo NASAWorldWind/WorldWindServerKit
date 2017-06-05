@@ -23,8 +23,13 @@ before_install:
 install: true
   
 before_script:
-  # Prepare the Travis build environment
-  - ./travis/prepare_environment.sh  
+  # Install the jq shell filter so we can extract data from GitHub API JSON results
+  # See apt configuration: https://docs.travis-ci.com/user/ci-environment/#apt-configuration
+  - sudo apt-get install -qq jq
+  - jq --version
+  # Ensure scripts can be executed (required if scripts are authored in Windows)
+  - chmod +x ./travis/*.sh
+
   
 script:
   # Build the WWSK with Maven
@@ -36,13 +41,14 @@ script:
   - mvn clean install -B -U -Prelease
   
 after_success:
-  # Create a draft release on GitHub, depending on what initiated the build
+  # Create a draft release on GitHub in preparation for deploy
   - ./travis/create_draft_release.sh
   # - ./travis/update_release.sh
 
 deploy: 
-  # Publish artifacts to the GitHub release, by default, travis will not invoke this step for PRs
-  # Re. undocumented draft and tag_name settings, see: https://github.com/travis-ci/travis-ci/issues/6132
+  # Publish artifacts to the GitHub release, by default, travis will not invoke this step for PRs.
+  # Uses undocumented "draft" and "tag_name" settings to deploy without publishing.
+  # See: https://github.com/travis-ci/travis-ci/issues/6132 for more info.
   - provider: releases
     api_key: $GITHUB_API_KEY
     file_glob: true
@@ -55,9 +61,10 @@ deploy:
       tags: true
       
 notifications:
-  # Notify the worldwind-services mailing list on every build
+  # Notify the World Wind services mailing list on every build
   email:
     recipients:
-      secure: SheoPrZZHX1c70JTwoRULza5XobdTPisIgQSfpFBSjolS/Z+qJBIZkyQNKRPfzvs5FEZNBHlaXnvAEX8sUHAJtvp5A9P/c0jaZ3dA0IQ1TJCNg3XT2ZLz4R5JOQclYbgBIqr27MSmx9vvnfGUDCSKaRXdLxmB0Hun7zlkR79IEQ6lLeeB9pu7N/4vuzdmMGKU1lOWs3tmDpdeNOdgSYhKW81eX0FHrgWTXeXcv/3hhtn87XogwKdVKeYFKY+1wHUV3j+dnqeN7yMhqlpljHkOpQ5YqG7nDnPbSJZJ2NINTB/+Mus57eq67FnNl4CDAsWue97wrY8u/+mtGP0boyhXUlBaKJdJpENnuSbxLZtMzvrI5JucxgGXiKei+q84DAh1BbN0+205kBfQgh24GF68bMuKFSpJDobN6usLXVnfjnTrlrMkJQ9wGY/m8g9P9IhJpguJuhYocB6ByMOCkkeSEXdVN6Wb7MGXcfSWdnasVhqAX4yYUt34WUO+vWf842atzXWMZDyStjUe/hWQactB2FhyZBt9kIjMBMWodEhAlDPgFSzwz4huiDkAjeQSszqDQQVOXGFG+f64HhnhYElkY7F08/Yy/sI5HlQ0C0nlNXVsFZ5oHRWwyw02tVVdzNo3ho2h1NSW935S0z3rWRlNOxxKisBON0OBGgZdWJRLYc=
+        secure: $WORLDWIND_SERVICES
+
     on_success: always
     on_failure: always  
