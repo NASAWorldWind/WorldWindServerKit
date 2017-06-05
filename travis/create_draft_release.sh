@@ -43,7 +43,7 @@ RELEASE_PREFIX= # prefix to be prepended to the tag; may be blank.
 RELEASE_NAME="${RELEASE_PREFIX}${TRAVIS_TAG}" 
 DRAFT="true"        # state of new release
 PRERELEASE="true"   # attribute of new release
-RELEASES_URL="https://api.github.com/repos/${TRAVIS_REPO_SLUG/releases" # GitHub RESTful API URL
+RELEASES_URL="https://api.github.com/repos/${TRAVIS_REPO_SLUG}/releases" # GitHub RESTful API URL
 
 # Query the release ids for releases with with the given name. If there's more 
 # than one, then we'll use the first. In order to see draft releases, you must 
