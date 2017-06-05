@@ -23,8 +23,12 @@ before_install:
 install: true
   
 before_script:
-  # Prepare the Travis build environment
-  - ./travis/prepare_environment.sh  
+  # Install the jq shell filter so we can extract data from GitHub API JSON results
+  # See apt configuration: https://docs.travis-ci.com/user/ci-environment/#apt-configuration
+  - sudo apt-get install -qq jq
+  - jq --version
+  # Ensure scripts can be executed (required if scripts are authored in Windows)
+  - chmod +x ./travis/*.sh
   
 script:
   # Build the WWSK with Maven
@@ -36,13 +40,14 @@ script:
   - mvn clean install -B -U -Prelease
   
 after_success:
-  # Create a draft release on GitHub, depending on what initiated the build
+  # Create a draft release on GitHub in preparation for deploy
   - ./travis/create_draft_release.sh
   # - ./travis/update_release.sh
 
 deploy: 
-  # Publish artifacts to the GitHub release, by default, travis will not invoke this step for PRs
-  # Re. undocumented draft and tag_name settings, see: https://github.com/travis-ci/travis-ci/issues/6132
+  # Publish artifacts to the GitHub release, by default, travis will not invoke this step for PRs.
+  # Uses undocumented "draft" and "tag_name" settings to deploy without publishing.
+  # See: https://github.com/travis-ci/travis-ci/issues/6132 for more info.
   - provider: releases
     api_key: $GITHUB_API_KEY
     file_glob: true
