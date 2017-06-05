@@ -21,25 +21,46 @@
         </license>
     </licenses>
     
-        <properties>
+    <!--
+    You can browse the GeoServer repository to view the current GeoServer 
+    artifacts: 
+        https://repo.boundlessgeo.com/main/org/geoserver/geoserver/
+    
+    See the geoserver-<version>.pom file in the GeoServer repository for a 
+    reference to the versions used in a particular GeoServer release. E.g.: 
+        https://repo.boundlessgeo.com/main/org/geoserver/geoserver/2.11.0/geoserver-2.11.0.pom
+    -->
+    <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <!--The GeoServer version used in this build; used for artifacts and assemblies-->
-        <gs.version>2.10.0</gs.version>
+        <!-- 
+        The GeoServer version used in this build and used for artifacts and assemblies.
+        You can browse the GeoServer extensions this version for this version here:
+            https://sourceforge.net/projects/geoserver/files/GeoServer/2.11.1/extensions/
+        You can download the gdal-plugin jars used in the worldwind-geoserver-dist assemblies here:
+            https://sourceforge.net/projects/geoserver/files/GeoServer/2.11.1/extensions/geoserver-2.11.1-gdal-plugin.zip/download
+        -->
+        <gs.version>2.11.1</gs.version>
         <!--The GeoTools version used in this build-->
-        <gt.version>16.0</gt.version>
-        <!--The ImageIO-Ext version; used for artifacts and assemblies -->
-        <imageio-ext.version>1.1.16</imageio-ext.version>
+        <gt.version>17.1</gt.version>
         <!--The GeoWebCache version-->
-        <gwc.version>1.10.0</gwc.version>
+        <gwc.version>1.11.0</gwc.version>
         <spring.version>4.2.5.RELEASE</spring.version>
         <spring.security.version>4.0.4.RELEASE</spring.security.version> 
         <servlet-api.version>3.0.1</servlet-api.version>
         <jetty.version>9.2.13.v20150730</jetty.version>
         <jetty.servlet-api.version>3.1.0</jetty.servlet-api.version>
         <poi.version>3.14</poi.version>
-        <wicket.version>7.1.0</wicket.version>
+        <!--Wicket version -->
+        <wicket.version>7.6.0</wicket.version>
         <ant.version>1.8.4</ant.version>
-        <jaiext.version>1.0.11</jaiext.version>
+        <!--
+        The ImageIO-Ext version; used for GDAL artifacts and assemblies. 
+        You can download the ImageID-Ext jars and resourses used in the worldwind-geoserver-dist assemblies here:
+            http://demo.geo-solutions.it/share/github/imageio-ext/releases/1.1.X/1.1.17/
+        -->
+        <imageio-ext.version>1.1.17</imageio-ext.version>
+        <!--JAI version -->
+        <jaiext.version>1.0.13</jaiext.version>
         <java.awt.headless>true</java.awt.headless>
         <jvm.opts/>
         <jalopy.phase>disabled</jalopy.phase>
@@ -69,6 +90,7 @@
         <git.commit.runOnlyOnce>true</git.commit.runOnlyOnce>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
+        <compress-lzf.version>1.0.3</compress-lzf.version>
     </properties> 
     
     <repositories>
@@ -79,7 +101,6 @@
             <url>https://repo.boundlessgeo.com/main/</url>
             <!-- contains snapshot and release (including third-party-dependences)               -->
             <!-- Restlet maven Repository (http://maven.restlet.org)                             -->
-            <!-- ucar (https://artifacts.unidata.ucar.edu/content/repositories/unidata-releases) -->
             <snapshots>
                 <enabled>true</enabled>
             </snapshots>
@@ -1330,27 +1351,50 @@
         <module>worldwind-geoserver</module>
         <module>worldwind-geoserver-dist</module>
     </modules>
+
     
     <build>
         <pluginManagement>
             <plugins>
                 <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-antrun-plugin</artifactId>
                     <version>1.8</version>
                 </plugin>
                 <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-assembly-plugin</artifactId>
                     <version>3.0.0</version>
                 </plugin>
                 <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-dependency-plugin</artifactId>
                     <version>2.10</version>
                 </plugin>
                 <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-war-plugin</artifactId>
                     <version>3.0.0</version>
                 </plugin>
-            </plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-javadoc-plugin</artifactId>
+                    <version>2.10.4</version>
+                    <configuration>
+                        <!--Prevent the javadoc-plugin from generating errors that terminate a build-->
+                        <additionalparam>-Xdoclint:none</additionalparam>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-source-plugin</artifactId>
+                    <version>3.0.1</version>
+                    <configuration>
+                        <!--Prevent the javadoc-plugin from generating errors that terminate a build-->
+                        <additionalparam>-Xdoclint:none</additionalparam>
+                    </configuration>
+                </plugin>
+            </plugins>              
         </pluginManagement>
     </build>
 </project>

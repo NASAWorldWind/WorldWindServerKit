@@ -51,4 +51,5 @@ nbactions.xml
 /jmeter/jmeter.log
 /jmeter/wcs_test/output/
 /jmeter/wms_test/output/
+/jmeter/functional_test/output/
 /dist/
