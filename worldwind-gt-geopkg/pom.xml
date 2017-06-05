@@ -13,7 +13,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>gov.nasa.worldwind</groupId>
+        <groupId>gov.nasa.worldwind.server</groupId>
         <artifactId>worldwind-serverkit</artifactId>
         <version>0.3.0-SNAPSHOT</version>
     </parent>
@@ -21,7 +21,7 @@
     <!-- =========================================================== -->
     <!--     Module Description                                      -->
     <!-- =========================================================== -->
-    <groupId>gov.nasa.worldwind</groupId>
+    <groupId>gov.nasa.worldwind.server</groupId>
     <artifactId>worldwind-gt-geopkg</artifactId>
     <packaging>jar</packaging>
     <name>WorldWind GeoPackage Module</name>
