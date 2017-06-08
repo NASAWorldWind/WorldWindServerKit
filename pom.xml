@@ -32,6 +32,8 @@
     -->
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <bintray.repo>emxsys/emxsys-wwsk</bintray.repo>
+        <bintray.package>worldwind-serverkit</bintray.package>        
         <!-- 
         The GeoServer version used in this build and used for artifacts and assemblies.
         You can browse the GeoServer extensions this version for this version here:
@@ -129,9 +131,38 @@
                 <enabled>true</enabled>
             </releases>
         </repository>
+        
+        <!--Emxsys--> 
+        <repository>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+            <id>bintray-emxsys-worldwind</id>
+            <name>bintray</name>
+            <url>http://dl.bintray.com/emxsys/worldwind</url>
+        </repository>
     </repositories>
-    
+    <pluginRepositories>
+        <!--Emxsys--> 
+        <pluginRepository>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+            <id>bintray-emxsys-worldwind</id>
+            <name>bintray-plugins</name>
+            <url>http://dl.bintray.com/emxsys/worldwind</url>
+        </pluginRepository>
+    </pluginRepositories> 
 
+    <distributionManagement> 
+        <!--Publish releases to bintray (SNAPSHOTS are not allowed)-->
+        <repository> 
+            <id>bintray-emxsys-worldwind</id> 
+            <name>emxsys-worldlwind</name> 
+            <url>https://api.bintray.com/maven/emxsys/worldwind/WorldWindServerKit/;publish=1</url> 
+        </repository> 
+    </distributionManagement>      
+       
     <!--Centralized dependency management of versions-->
     <dependencyManagement>
         <dependencies>
