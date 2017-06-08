@@ -129,9 +129,38 @@
                 <enabled>true</enabled>
             </releases>
         </repository>
+        
+        <!--NASAWorldWind--> 
+        <repository>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+            <id>bintray-nasaworldwind-maven</id>
+            <name>bintray</name>
+            <url>http://nasaworldwind.bintray.com/maven</url>
+        </repository>
     </repositories>
+    <pluginRepositories>
+        <!--NASAWorldWind--> 
+        <pluginRepository>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+            <id>bintray-nasaworldwind-maven</id>
+            <name>bintray-plugins</name>
+            <url>http://nasaworldwind.bintray.com/maven</url>
+        </pluginRepository>
+    </pluginRepositories>
     
-
+    <distributionManagement> 
+        <repository>
+            <!--id must match server id defined in settings.xml to get credentials-->
+            <id>bintray-nasaworldwind-maven</id> 
+            <name>nasaworldwind-maven</name> 
+            <url>https://api.bintray.com/maven/nasaworldwind/maven/WorldWindServerKit/;publish=0</url> 
+        </repository> 
+    </distributionManagement>     
+       
     <!--Centralized dependency management of versions-->
     <dependencyManagement>
         <dependencies>
@@ -1375,6 +1404,11 @@
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-war-plugin</artifactId>
                     <version>3.0.0</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-deploy-plugin</artifactId>
+                    <version>2.8.2</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
