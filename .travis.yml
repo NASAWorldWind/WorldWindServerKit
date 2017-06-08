@@ -62,7 +62,8 @@ deploy:
     script: mvn deploy --settings ./travis/maven_settings.xml 
     skip_cleanup: true
     on:
-      branch: master
+      tags: true
+      branch: feataure/maven_artifacts
       
 notifications:
   # Notify the World Wind services mailing list on every build
