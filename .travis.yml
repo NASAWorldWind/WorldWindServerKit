@@ -58,12 +58,13 @@ deploy:
       tags: true
   # Upload build artifacts to bintray using Maven. The maven_settings.xml uses  
   # the BINTRAY_USER and BINTRAY_API_KEY enviroment variables to access bintray.
+  # Skip the unit test as they were run in the build step.
   - provider: script
-    script: mvn deploy --batch-mode --settings ./travis/maven_settings.xml 
+    script: mvn deploy -DskipTests=true --batch-mode --settings ./travis/maven_settings.xml 
     skip_cleanup: true
     on:
+      # branch: master
       tags: true
-      branch: feataure/maven_artifacts
       
 notifications:
   # Notify the World Wind services mailing list on every build
