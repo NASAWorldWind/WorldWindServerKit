@@ -9,7 +9,7 @@ application directory.
     <parent>
         <groupId>gov.nasa.worldwind.server</groupId>
         <artifactId>worldwind-serverkit</artifactId>
-        <version>0.3.0-ALPHA3</version>
+        <version>0.3.0-ALPHA4</version>
     </parent>
 
     <groupId>gov.nasa.worldwind.server</groupId>
