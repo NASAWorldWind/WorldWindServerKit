@@ -159,7 +159,7 @@
         <repository> 
             <id>bintray-emxsys-worldwind</id> 
             <name>emxsys-worldlwind</name> 
-            <url>https://api.bintray.com/maven/nasa/maven/WorldWindServerKit/;publish=0</url> 
+            <url>https://api.bintray.com/maven/nasa/maven/WorldWindServerKit/;publish=1</url> 
         </repository> 
     </distributionManagement>      
        
