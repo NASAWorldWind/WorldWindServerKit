@@ -56,10 +56,10 @@ deploy:
     tag_name: $TRAVIS_TAG
     on:
       tags: true
-  # Upload maven artifacts to bintray. The maven_settings.xml uses the 
-  # BINTRAY_USER and BINTRAY_API_KEY enviroment variables to access bintray.
+  # Upload build artifacts to bintray using Maven. The maven_settings.xml uses  
+  # the BINTRAY_USER and BINTRAY_API_KEY enviroment variables to access bintray.
   - provider: script
-    script: mvn deploy --settings ./travis/maven_settings.xml 
+    script: mvn deploy --batch-mode --settings ./travis/maven_settings.xml 
     skip_cleanup: true
     on:
       tags: true
