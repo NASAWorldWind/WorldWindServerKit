@@ -56,15 +56,18 @@ deploy:
     tag_name: $TRAVIS_TAG
     on:
       tags: true
-  # Upload build artifacts to bintray using Maven. The maven_settings.xml uses  
-  # the $BINTRAY_USER and $BINTRAY_API_KEY enviroment variables to access bintray.
-  # We skip the unit test as they were run in the build step.
+  # Upload build artifacts from the master branch to Bintray using Maven. 
+  # Bintray does not allow snapshots; so we restrict the deploy to the master
+  # branch (OR could use tagged builds) which should not have SNAPSHOT versions.
+  # The maven_settings.xml uses the $BINTRAY_USER and $BINTRAY_API_KEY 
+  # enviroment variables to access Bintray. We skip the unit test as 
+  # they were run in the build step.
   - provider: script
     script: mvn deploy -DskipTests=true --batch-mode --settings ./travis/maven_settings.xml 
     skip_cleanup: true
     on:
-      tags: true
-      # branch: master
+      branch: master
+      #tags: true
       
 notifications:
   # Notify the World Wind services mailing list on every build
