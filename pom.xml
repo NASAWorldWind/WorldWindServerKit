@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>gov.nasa.worldwind.server</groupId>
     <artifactId>worldwind-serverkit</artifactId>
-    <version>0.3.0-ALPHA4</version> 
+    <version>0.3.0-SNAPSHOT</version> 
     <packaging>pom</packaging>
 
     <name>WorldWind Server Kit</name>
@@ -132,36 +132,36 @@
             </releases>
         </repository>
         
-        <!--Emxsys--> 
+        <!--NASAWorldWind--> 
         <repository>
             <snapshots>
                 <enabled>false</enabled>
             </snapshots>
-            <id>bintray-emxsys-worldwind</id>
+            <id>bintray-nasaworldwind-maven</id>
             <name>bintray</name>
-            <url>http://dl.bintray.com/emxsys/worldwind</url>
+            <url>http://nasaworldwind.bintray.com/maven</url>
         </repository>
     </repositories>
     <pluginRepositories>
-        <!--Emxsys--> 
+        <!--NASAWorldWind--> 
         <pluginRepository>
             <snapshots>
                 <enabled>false</enabled>
             </snapshots>
-            <id>bintray-emxsys-worldwind</id>
+            <id>bintray-nasaworldwind-maven</id>
             <name>bintray-plugins</name>
-            <url>http://dl.bintray.com/emxsys/worldwind</url>
+            <url>http://nasaworldwind.bintray.com/maven</url>
         </pluginRepository>
-    </pluginRepositories> 
-
+    </pluginRepositories>
+    
     <distributionManagement> 
-        <!--Publish releases to bintray (SNAPSHOTS are not allowed)-->
-        <repository> 
-            <id>bintray-emxsys-worldwind</id> 
-            <name>emxsys-worldlwind</name> 
-            <url>https://api.bintray.com/maven/emxsys/worldwind/WorldWindServerKit/;publish=0</url> 
+        <repository>
+            <!--id must match server id defined in settings.xml to get credentials-->
+            <id>bintray-nasaworldwind-maven</id> 
+            <name>nasaworldwind-maven</name> 
+            <url>https://api.bintray.com/maven/nasaworldwind/maven/WorldWindServerKit/;publish=0</url> 
         </repository> 
-    </distributionManagement>      
+    </distributionManagement>     
        
     <!--Centralized dependency management of versions-->
     <dependencyManagement>
