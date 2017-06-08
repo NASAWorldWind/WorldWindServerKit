@@ -31,12 +31,11 @@ before_script:
   - chmod +x ./travis/*.sh
 
 script:
-  # Build the WWSK with Maven
+  # Build WWSK with Maven using the "release" profile (generates javadoc and sources)
   ## Maven Commands
   # -B (--batch-mode) Run in non-interactive model
   # -U (--update-snapshots) Forces a check for missing releases and updated snapshots on remote repos
   # -P (--activate-profiles <arg>) Comma-delimited list of profiles to activate
-  # Build WWSK using the "release" profile (generates javadoc and sources)
   - mvn clean install -B -U -Prelease
   
 after_success:
@@ -44,8 +43,8 @@ after_success:
   - ./travis/create_draft_release.sh
 
 deploy: 
-  # Publish artifacts to the GitHub release, by default, travis will not invoke this step for PRs.
-  # Uses undocumented "draft" and "tag_name" settings to deploy without publishing.
+  # Publish WWSK distributions to GitHub releases. Uses undocumented "draft" and 
+  # "tag_name" settings to deploy without publishing.
   # See: https://github.com/travis-ci/travis-ci/issues/6132 for more info.
   - provider: releases
     api_key: $GITHUB_API_KEY
@@ -57,6 +56,13 @@ deploy:
     tag_name: $TRAVIS_TAG
     on:
       tags: true
+  # Upload maven artifacts to bintray. The maven_settings.xml uses the 
+  # BINTRAY_USER and BINTRAY_API_KEY enviroment variables to access bintray.
+  - provider: script
+    script: mvn deploy --settings ./travis/maven_settings.xml 
+    skip_cleanup: true
+    on:
+      branch: master
       
 notifications:
   # Notify the World Wind services mailing list on every build
