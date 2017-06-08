@@ -63,8 +63,8 @@ deploy:
     script: mvn deploy -DskipTests=true --batch-mode --settings ./travis/maven_settings.xml 
     skip_cleanup: true
     on:
-      # tags: true
-      branch: master
+      tags: true
+      # branch: master
       
 notifications:
   # Notify the World Wind services mailing list on every build
