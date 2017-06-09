@@ -7,6 +7,10 @@
     <version>0.3.0-SNAPSHOT</version> 
     <packaging>pom</packaging>
 
+    <!--=====================================================================-->
+    <!--Project Information                                                  -->
+    <!--=====================================================================-->
+    
     <name>WorldWind Server Kit</name>
     <description>A standard and sharable GeoServer distribution.</description>
     <url>https://github.com/NASAWorldWind/WorldWindServerKit</url>
@@ -35,12 +39,28 @@
         <module>worldwind-gs-wms</module>
         <module>worldwind-geoserver</module>
         <module>worldwind-geoserver-dist</module>
-    </modules>    
+    </modules>  
+      
+    <!--=====================================================================-->
+    <!--Environment Settings                                                 -->
+    <!--=====================================================================-->
     
     <scm>
-    <issueManagement/>
-    <ciManagement/>
+        <connection>scm:git:https://github.com/NASAWorldWind/WorldWindServerKit.git</connection>
+        <developerConnection>scm:git:https://github.com/NASAWorldWind/WorldWindServerKit.git</developerConnection>
+        <url>https://github.com/NASAWorldWind/WorldWindServerKit</url>
+        <tag>HEAD</tag>
+    </scm>    
+    <issueManagement>
+        <system>GitHub Issues</system>
+        <url>https://github.com/NASAWorldWind/WorldWindServerKit/issues</url>
+    </issueManagement>
+    <ciManagement>
+        <system>Travis CI</system>
+        <url>https://travis-ci.org/NASAWorldWind/WorldWindServerKit</url>
+    </ciManagement>
     <distributionManagement> 
+        <downloadUrl>https://bintray.com/nasaworldwind/maven/WorldWindServerKit</downloadUrl>
         <repository>
             <!--The id must match server id defined in the Maven settings.xml for the credentials-->
             <id>bintray-nasaworldwind-maven</id> 
@@ -50,6 +70,10 @@
             <url>https://api.bintray.com/maven/nasaworldwind/maven/WorldWindServerKit/;publish=0</url> 
         </repository> 
     </distributionManagement>      
+    
+    <!--=====================================================================-->
+    <!--The Basics                                                           -->
+    <!--=====================================================================-->
     
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -1389,7 +1413,11 @@
             <url>http://nasaworldwind.bintray.com/maven</url>
         </pluginRepository>
     </pluginRepositories>
-   
+    
+    <!--=====================================================================-->
+    <!--Build Settings                                                       -->
+    <!--=====================================================================-->
+
     <build>
         <pluginManagement>
             <plugins>
