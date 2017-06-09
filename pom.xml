@@ -1470,6 +1470,7 @@
                     <version>2.5.3</version>
                     <configuration>
                         <autoVersionSubmodules>true</autoVersionSubmodules>
+                        <tagNameFormat>v${project.version}</tagNameFormat>
                     </configuration>
                 </plugin>
                 <plugin>
