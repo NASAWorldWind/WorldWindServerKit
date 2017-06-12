@@ -180,7 +180,7 @@ application directory.
                     <name>release</name>
                 </property>
             </activation>
-            <dependencies/>
+            <dependencies />
             <build>
                 <plugins>
                     <plugin>
@@ -209,12 +209,12 @@ application directory.
                     </plugin>               
                 </plugins>
             </build>
-            <modules/>
+            <modules />
         </profile>
     </profiles>
     
     <build>
-        <plugins/>
+        <plugins />
         <resources>
             <resource>
                 <directory>${basedir}/src/main/java</directory>

@@ -117,7 +117,7 @@
                     <name>release</name>
                 </property>
             </activation>
-            <dependencies/>
+            <dependencies />
             <build>
                 <plugins>
                     <plugin>
@@ -146,12 +146,12 @@
                     </plugin>               
                 </plugins>
             </build>
-            <modules/>
+            <modules />
         </profile>
     </profiles>
     
     <build>
-        <plugins/>
+        <plugins />
         <resources>
             <resource>
                 <directory>${basedir}/src/main/java</directory>

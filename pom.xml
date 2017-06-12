@@ -1537,7 +1537,7 @@
                     <localCheckout>true</localCheckout>
                     <pushChanges>false</pushChanges>
                     <releaseProfiles>release-emxsys</releaseProfiles>
-                    <tagNameFormat>v${project.version}</tagNameFormat>
+                    <tagNameFormat>v@{project.version}</tagNameFormat>
                 </configuration>
             </plugin>
         </plugins>
