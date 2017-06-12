@@ -65,8 +65,14 @@
     <!--=====================================================================-->
     
     <scm>
+        <connection>scm:git:git://github.com/emxsys/WorldWindServerKit.git</connection>
+        <developerConnection>scm:git:[fetch=]git://github.com/emxsys/WorldWindServerKit.git[push=]git@github.com:emxsys/WorldWindServerKit.git</developerConnection>
+<!--
         <connection>scm:git:git://emxsys/WorldWindServerKit.git</connection>
-        <developerConnection>scm:git:[fetch=]git://github.com/emxsys/WorldWindServerKit[push=]${env.GITHUB_API_KEY}@github.com:emxsys/WorldWindServerKit.git</developerConnection> 
+        <developerConnection>scm:git:https://github.com/emxsys/WorldWindServerKit.git</developerConnection>
+        -->
+        <!--CAUTION: using the GITHUB_API_KEY in the developerConnection leaks the token into the log--> 
+        <!--<developerConnection>scm:git:[fetch=]git://github.com/emxsys/WorldWindServerKit[push=]${env.GITHUB_API_KEY}@github.com:emxsys/WorldWindServerKit.git</developerConnection>--> 
         <url>https://github.com/emxsys/WorldWindServerKit</url>
     </scm>    
     <!--
@@ -1523,6 +1529,7 @@
                     <autoVersionSubmodules>true</autoVersionSubmodules>
                     <tagNameFormat>v${project.version}</tagNameFormat>
                     <releaseProfiles>release-emxsys</releaseProfiles>
+                    <pushChanges>false</pushChanges>
                 </configuration>
             </plugin>
         </plugins>
