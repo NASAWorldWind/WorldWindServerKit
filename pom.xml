@@ -65,15 +65,15 @@
     <!--=====================================================================-->
     
     <scm>
+        <url>https://github.com/emxsys/WorldWindServerKit</url>
         <connection>scm:git:git://github.com/emxsys/WorldWindServerKit.git</connection>
-        <developerConnection>scm:git:[fetch=]git://github.com/emxsys/WorldWindServerKit.git[push=]git@github.com:emxsys/WorldWindServerKit.git</developerConnection>
+        <developerConnection>scm:git:git@github.com:emxsys/WorldWindServerKit.git</developerConnection>
 <!--
         <connection>scm:git:git://emxsys/WorldWindServerKit.git</connection>
         <developerConnection>scm:git:https://github.com/emxsys/WorldWindServerKit.git</developerConnection>
         -->
         <!--CAUTION: using the GITHUB_API_KEY in the developerConnection leaks the token into the log--> 
         <!--<developerConnection>scm:git:[fetch=]git://github.com/emxsys/WorldWindServerKit[push=]${env.GITHUB_API_KEY}@github.com:emxsys/WorldWindServerKit.git</developerConnection>--> 
-        <url>https://github.com/emxsys/WorldWindServerKit</url>
     </scm>    
     <!--
         <scm>
@@ -1505,31 +1505,39 @@
         <!-- Define the plugin goals and executions -->
         <plugins>
             <plugin>
+                <!--Enforcer plugin--> 
                 <artifactId>maven-enforcer-plugin</artifactId>
                 <groupId>org.apache.maven.plugins</groupId>
                 <executions>
                     <execution>
+                        <!--                        
+                        This simple "Always Pass" configuration simply satisfies
+                        the configuration requirements of this plugin.  Other modules
+                        and/or profiles can add more purposeful configurations.
+                        -->
                         <id>default-enforce</id>
                         <goals>
                             <goal>enforce</goal>
                         </goals>
                         <configuration>
                             <rules>
-                                <AlwaysPass/>
+                                <AlwaysPass />
                             </rules>
                             <fail>true</fail>
                         </configuration>
                     </execution>
                 </executions>            
-            </plugin>                  
+            </plugin>             
             <plugin>
+                <!--Release plugin-->  
                 <artifactId>maven-release-plugin</artifactId>
                 <groupId>org.apache.maven.plugins</groupId>
                 <configuration>
                     <autoVersionSubmodules>true</autoVersionSubmodules>
-                    <tagNameFormat>v${project.version}</tagNameFormat>
-                    <releaseProfiles>release-emxsys</releaseProfiles>
+                    <localCheckout>true</localCheckout>
                     <pushChanges>false</pushChanges>
+                    <releaseProfiles>release-emxsys</releaseProfiles>
+                    <tagNameFormat>v${project.version}</tagNameFormat>
                 </configuration>
             </plugin>
         </plugins>
