@@ -14,11 +14,12 @@
     <!-- Build with "release" profile to generate javadoc and sources jars:  -->
     <!--    mvn clean install -Drelease                                      -->
     <!--                                                                     -->
+    <!-- Release preparation:                                                -->
+    <!--    mvn release:prepare                                              -->
+    <!--                                                                     -->
     <!-- Deploy build artifacts to Bintray:                                  -->
     <!--    mvn deploy -DskipTests=true                                      -->
     <!--                                                                     -->
-    <!-- Release:                                                            -->
-    <!--    mvn release:prepare                                              -->
     <!--=====================================================================-->
     
     <groupId>gov.nasa.worldwind.server</groupId>
@@ -67,7 +68,7 @@
     <scm>
         <url>https://github.com/emxsys/WorldWindServerKit</url>
         <connection>scm:git:git://github.com/emxsys/WorldWindServerKit.git</connection>
-        <developerConnection>scm:git:git@github.com:emxsys/WorldWindServerKit.git</developerConnection>
+        <developerConnection>scm:git:https://github.com/emxsys/WorldWindServerKit.git</developerConnection>
         <tag>HEAD</tag>
 <!--
         <connection>scm:git:git://emxsys/WorldWindServerKit.git</connection>
@@ -113,6 +114,8 @@
             http://demo.geo-solutions.it/share/github/imageio-ext/releases/1.1.X/1.1.17/
         -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <!--server id found in settings.xml used by the release plugin for GitHub credentials-->
+        <project.scm.id>github-emxsys</project.scm.id>        
         <!--The GeoServer version used in this build and used for artifacts and assemblies-->
         <gs.version>2.11.1</gs.version>
         <!--The GeoTools version used in this build-->
@@ -1537,8 +1540,8 @@
                     <autoVersionSubmodules>true</autoVersionSubmodules>
                     <!--release:perform should use local checkout, not from upstream-->
                     <localCheckout>true</localCheckout>
-                    <!--release:prepare should not push to upstream repo-->
-                    <pushChanges>false</pushChanges>
+                    <!--release:prepare should push to upstream repo-->
+                    <pushChanges>true</pushChanges>
                     <releaseProfiles>release-emxsys</releaseProfiles>
                     <tagNameFormat>v@{project.version}</tagNameFormat>
                 </configuration>
