@@ -63,7 +63,7 @@ deploy:
   # enviroment variables to access Bintray. We skip the unit test as 
   # they were run in the build step.
   - provider: script
-    script: mvn deploy -DskipTests=true --batch-mode --settings ./travis/maven_settings.xml 
+    script: mvn deploy -Pdeploy-nasa -DskipTests=true --batch-mode --settings ./travis/maven_settings.xml 
     skip_cleanup: true
     on:
       #branch: master
