@@ -70,7 +70,7 @@
         <connection>scm:git:git://github.com/emxsys/WorldWindServerKit.git</connection>
         <developerConnection>scm:git:https://github.com/emxsys/WorldWindServerKit.git</developerConnection>
         <tag>HEAD</tag>
-<!--
+        <!--
         <connection>scm:git:git://emxsys/WorldWindServerKit.git</connection>
         <developerConnection>scm:git:https://github.com/emxsys/WorldWindServerKit.git</developerConnection>
         -->
@@ -1578,9 +1578,20 @@
                                 </goals>
                                 <configuration>
                                     <rules>
+                                        <!--GITHUP_API_KEY environment var is referenced in maven settings.xml-->
                                         <requireEnvironmentVariable>
                                             <variableName>GITHUB_API_KEY</variableName>
                                             <message>[ERROR] The GITHUB_API_KEY environment variable must be set!${line.separator}</message>
+                                        </requireEnvironmentVariable>
+                                        <!--BINTRAY_USER environment var is referenced in maven settings.xml-->
+                                        <requireEnvironmentVariable>
+                                            <variableName>BINTRAY_USER</variableName>
+                                            <message>[ERROR] The BINTRAY_USER environment variable must be set!${line.separator}</message>
+                                        </requireEnvironmentVariable>
+                                        <!--BINTRAY_API_KEY environment var is referenced in maven settings.xml-->
+                                        <requireEnvironmentVariable>
+                                            <variableName>BINTRAY_API_KEY</variableName>
+                                            <message>[ERROR] The BINTRAY_API_KEY environment variable must be set!${line.separator}</message>
                                         </requireEnvironmentVariable>
                                     </rules>
                                     <fail>true</fail>                        
@@ -1593,7 +1604,7 @@
         </profile>
         
         <profile>
-            <id>release-nasa</id>
+            <id>deploy-nasa</id>
             <distributionManagement> 
                 <downloadUrl>https://bintray.com/nasaworldwind/maven/WorldWindServerKit</downloadUrl>
                 <repository>
@@ -1621,6 +1632,16 @@
                                         <requireEnvironmentVariable>
                                             <variableName>GITHUB_API_KEY</variableName>
                                             <message>[ERROR] The GITHUB_API_KEY environment variable must be set!${line.separator}</message>
+                                        </requireEnvironmentVariable>
+                                        <!--BINTRAY_USER environment var is referenced in the maven settings.xml-->
+                                        <requireEnvironmentVariable>
+                                            <variableName>BINTRAY_USER</variableName>
+                                            <message>[ERROR] The BINTRAY_USER environment variable must be set!${line.separator}</message>
+                                        </requireEnvironmentVariable>
+                                        <!--BINTRAY_API_KEY environment var is referenced in the maven settings.xml-->
+                                        <requireEnvironmentVariable>
+                                            <variableName>BINTRAY_API_KEY</variableName>
+                                            <message>[ERROR] The BINTRAY_API_KEY environment variable must be set!${line.separator}</message>
                                         </requireEnvironmentVariable>
                                     </rules>
                                     <fail>true</fail>                        
