@@ -68,6 +68,7 @@
         <url>https://github.com/emxsys/WorldWindServerKit</url>
         <connection>scm:git:git://github.com/emxsys/WorldWindServerKit.git</connection>
         <developerConnection>scm:git:git@github.com:emxsys/WorldWindServerKit.git</developerConnection>
+        <tag>HEAD</tag>
 <!--
         <connection>scm:git:git://emxsys/WorldWindServerKit.git</connection>
         <developerConnection>scm:git:https://github.com/emxsys/WorldWindServerKit.git</developerConnection>
@@ -1534,7 +1535,9 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <configuration>
                     <autoVersionSubmodules>true</autoVersionSubmodules>
+                    <!--release:perform should use local checkout, not from upstream-->
                     <localCheckout>true</localCheckout>
+                    <!--release:prepare should not push to upstream repo-->
                     <pushChanges>false</pushChanges>
                     <releaseProfiles>release-emxsys</releaseProfiles>
                     <tagNameFormat>v@{project.version}</tagNameFormat>
