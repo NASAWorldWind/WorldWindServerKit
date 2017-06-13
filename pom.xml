@@ -13,13 +13,17 @@
     <!--                                                                     -->
     <!-- Build with "release" profile to generate javadoc and sources jars:  -->
     <!--    mvn clean install -Prelease                                      -->
+    <!--                                                                     -->    
+    <!-- Prepare release versions in project POMs:                           -->
+    <!--    mvn versions:set -DnewVersion={version}                          -->
+    <!-- or                                                                  -->
+    <!--    mvn versions:set -DremoveSnapshot=true                           -->
     <!--                                                                     -->
-    <!-- Release preparation requires updating the POM version numbers prior -->
-    <!-- to tagging:                                                         -->
-    <!--    mvn release:update-versions -DdevelopmentVersion={version}       -->
+    <!-- Deploy build artifacts to Bintray with the "deploy" profile:        -->
+    <!--    mvn deploy -Pdeploy -DskipTests=true                             -->
     <!--                                                                     -->
-    <!-- Deploy build artifacts to Bintray with the "release" profile:       -->
-    <!--    mvn deploy -Prelease -DskipTests=true                            -->
+    <!-- Prepare next release SNAPSHOT versions in project POMs:             -->
+    <!--    mvn versions:set -DnewVersion={version-SNAPSHOT}                 -->
     <!--                                                                     -->
     <!--=====================================================================-->
     
@@ -1453,6 +1457,9 @@
                     <artifactId>maven-deploy-plugin</artifactId>
                     <groupId>org.apache.maven.plugins</groupId>
                     <version>2.8.2</version>
+                    <configuration>
+                        <updateReleaseInfo>true</updateReleaseInfo>
+                    </configuration>
                 </plugin>
                 <plugin>
                     <artifactId>maven-enforcer-plugin</artifactId>
@@ -1490,6 +1497,11 @@
                     <artifactId>maven-war-plugin</artifactId>
                     <groupId>org.apache.maven.plugins</groupId>
                     <version>3.0.0</version>
+                </plugin>
+                <plugin>
+                    <artifactId>versions-maven-plugin</artifactId>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <version>2.4</version>
                 </plugin>
             </plugins>              
         </pluginManagement>
@@ -1529,7 +1541,7 @@
                     <localCheckout>true</localCheckout>
                     <!--release:prepare should push to upstream repo-->
                     <pushChanges>true</pushChanges>
-                    <releaseProfiles>release</releaseProfiles>
+                    <releaseProfiles>deploy</releaseProfiles>
                     <tagNameFormat>v@{project.version}</tagNameFormat>
                 </configuration>
             </plugin>
@@ -1540,7 +1552,7 @@
     
     <profiles>
         <profile>
-            <id>release</id>
+            <id>deploy</id>
             <distributionManagement> 
                 <downloadUrl>https://bintray.com/nasaworldwind/maven/WorldWindServerKit</downloadUrl>
                 <repository>
@@ -1593,5 +1605,59 @@
                 </plugins>
             </build>
         </profile>
+        <!--        <profile>
+            <id>deploy</id>
+            <distributionManagement> 
+                <downloadUrl>https://bintray.com/emxsys/worldwind/WorldWindServerKit</downloadUrl>
+                <repository>
+                    The id must match a server id defined in the Maven settings.xml to get the Bintray credentials
+                    <id>bintray-emxsys-worldwind</id> 
+                    <name>emxsys-worldwind</name> 
+                    Set publish=1 to automatically publish the uploaded artifacts in Bintray 
+                    Set publish=0 to manually publish the artifacts via the Bintray UI 
+                    <url>https://api.bintray.com/maven/emxsys/worldwind/WorldWindServerKit/;publish=0</url> 
+                </repository> 
+            </distributionManagement>             
+            <properties>
+                The project.scm.id must match a server id defined in the Maven settings.xml to get the GitHub credentials
+                <project.scm.id>github-emxsys</project.scm.id>        
+            </properties>
+            <build>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-enforcer-plugin</artifactId>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <executions>
+                            <execution>
+                                <id>enforce-environment-variable-is-set</id>
+                                <goals>
+                                    <goal>enforce</goal>
+                                </goals>
+                                <configuration>
+                                    <rules>
+                                        GITHUB_API_KEY environment var is referenced in the maven settings.xml
+                                        <requireEnvironmentVariable>
+                                            <variableName>GITHUB_API_KEY</variableName>
+                                            <message>[ERROR] The GITHUB_API_KEY environment variable must be set!${line.separator}</message>
+                                        </requireEnvironmentVariable>
+                                        BINTRAY_USER environment var is referenced in the maven settings.xml
+                                        <requireEnvironmentVariable>
+                                            <variableName>BINTRAY_USER</variableName>
+                                            <message>[ERROR] The BINTRAY_USER environment variable must be set!${line.separator}</message>
+                                        </requireEnvironmentVariable>
+                                        BINTRAY_API_KEY environment var is referenced in the maven settings.xml
+                                        <requireEnvironmentVariable>
+                                            <variableName>BINTRAY_API_KEY</variableName>
+                                            <message>[ERROR] The BINTRAY_API_KEY environment variable must be set!${line.separator}</message>
+                                        </requireEnvironmentVariable>
+                                    </rules>
+                                    <fail>true</fail>                        
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>                  
+                </plugins>
+            </build>
+        </profile>-->
     </profiles>
 </project>
