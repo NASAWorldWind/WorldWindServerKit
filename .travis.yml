@@ -40,7 +40,7 @@ script:
   
 after_success:
   # Create a draft release on GitHub in preparation for deploy
-#  - ./travis/create_draft_release.sh
+  - ./travis/create_draft_release.sh
 
 deploy: 
   # Publish WWSK distributions to GitHub releases. Uses undocumented "draft" and 
