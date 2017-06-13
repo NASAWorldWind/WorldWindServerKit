@@ -69,7 +69,7 @@
         <url>https://github.com/emxsys/WorldWindServerKit</url>
         <connection>scm:git:git://github.com/emxsys/WorldWindServerKit.git</connection>
         <developerConnection>scm:git:https://github.com/emxsys/WorldWindServerKit.git</developerConnection>
-        <tag>HEAD</tag>
+        <tag>v0.3.0-BETA13</tag>
         <!--
         <connection>scm:git:git://emxsys/WorldWindServerKit.git</connection>
         <developerConnection>scm:git:https://github.com/emxsys/WorldWindServerKit.git</developerConnection>
@@ -1608,7 +1608,7 @@
             <distributionManagement> 
                 <downloadUrl>https://bintray.com/nasaworldwind/maven/WorldWindServerKit</downloadUrl>
                 <repository>
-                    <!--The id must match server id defined in the Maven settings.xml for the credentials-->
+                    <!--The id must match server id defined in the Maven settings.xml got get the bintray credentials-->
                     <id>bintray-nasaworldwind-maven</id> 
                     <name>nasaworldwind-maven</name> 
                     <!--Set publish=1 to automatically publish the uploaded artifacts in Bintray--> 
