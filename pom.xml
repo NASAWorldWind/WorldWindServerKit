@@ -12,13 +12,14 @@
     <!--    mvn clean install                                                -->
     <!--                                                                     -->
     <!-- Build with "release" profile to generate javadoc and sources jars:  -->
-    <!--    mvn clean install -Drelease                                      -->
+    <!--    mvn clean install -Prelease                                      -->
     <!--                                                                     -->
-    <!-- Release preparation:                                                -->
-    <!--    mvn release:prepare                                              -->
+    <!-- Release preparation requires updating the POM version numbers prior -->
+    <!-- to tagging:                                                         -->
+    <!--    mvn release:update-versions -DdevelopmentVersion={version}       -->
     <!--                                                                     -->
-    <!-- Deploy build artifacts to Bintray:                                  -->
-    <!--    mvn deploy -DskipTests=true                                      -->
+    <!-- Deploy build artifacts to Bintray with the "release" profile:       -->
+    <!--    mvn deploy -Prelease -DskipTests=true                            -->
     <!--                                                                     -->
     <!--=====================================================================-->
     
@@ -66,24 +67,11 @@
     <!--=====================================================================-->
     
     <scm>
-        <url>https://github.com/emxsys/WorldWindServerKit</url>
-        <connection>scm:git:git://github.com/emxsys/WorldWindServerKit.git</connection>
-        <developerConnection>scm:git:https://github.com/emxsys/WorldWindServerKit.git</developerConnection>
-        <tag>v0.3.0-BETA13</tag>
-        <!--
-        <connection>scm:git:git://emxsys/WorldWindServerKit.git</connection>
-        <developerConnection>scm:git:https://github.com/emxsys/WorldWindServerKit.git</developerConnection>
-        -->
-        <!--CAUTION: using the GITHUB_API_KEY in the developerConnection leaks the token into the log--> 
-        <!--<developerConnection>scm:git:[fetch=]git://github.com/emxsys/WorldWindServerKit[push=]${env.GITHUB_API_KEY}@github.com:emxsys/WorldWindServerKit.git</developerConnection>--> 
+        <url>https://github.com/NASAWorldWind/WorldWindServerKit</url>
+        <connection>scm:git:git://github.com/NASAWorldWind/WorldWindServerKit.git</connection>
+        <developerConnection>scm:git:https://github.com/NASAWorldWind/WorldWindServerKit.git</developerConnection>
+        <tag>HEAD</tag>
     </scm>    
-    <!--
-        <scm>
-            <connection>scm:git:git://NASAWorldWind/WorldWindServerKit.git</connection>
-            <developerConnection>scm:git:[fetch=]git://github.com/NASAWorldWind/WorldWindServerKit[push=]${env.GITHUB_API_KEY}@github.com:NASAWorldWind/WorldWindServerKit.git</developerConnection> 
-            <url>https://github.com/NASAWorldWind/WorldWindServerKit</url>
-        </scm>    
-    -->
     <issueManagement>
         <system>GitHub Issues</system>
         <url>https://github.com/NASAWorldWind/WorldWindServerKit/issues</url>
@@ -92,7 +80,7 @@
         <system>Travis CI</system>
         <url>https://travis-ci.org/NASAWorldWind/WorldWindServerKit</url>
     </ciManagement>
-    <!--See the deploy-bintray profile for more distributionManagement-->
+    <!--See the "release" profile(s) for distributionManagement-->
     <distributionManagement /> 
     
     <!--=====================================================================-->
@@ -102,7 +90,7 @@
     <properties>
         <!-- 
         See the geoserver-<version>.pom file in the GeoServer repository for a 
-        reference to the versions used in a particular GeoServer release. E.g.: 
+        reference to the version properties used in a particular GeoServer release. E.g.: 
             https://repo.boundlessgeo.com/main/org/geoserver/geoserver/2.11.1/geoserver-2.11.1.pom
         You can browse the GeoServer repository to view the current GeoServer artifacts:
             https://repo.boundlessgeo.com/main/org/geoserver/geoserver/
@@ -113,9 +101,8 @@
         You can download the ImageID-Ext jars and resourses used in the worldwind-geoserver-dist assemblies here:
             http://demo.geo-solutions.it/share/github/imageio-ext/releases/1.1.X/1.1.17/
         -->
+        
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <!--server id found in settings.xml used by the release plugin for GitHub credentials-->
-        <project.scm.id>github-emxsys</project.scm.id>        
         <!--The GeoServer version used in this build and used for artifacts and assemblies-->
         <gs.version>2.11.1</gs.version>
         <!--The GeoTools version used in this build-->
@@ -1542,7 +1529,7 @@
                     <localCheckout>true</localCheckout>
                     <!--release:prepare should push to upstream repo-->
                     <pushChanges>true</pushChanges>
-                    <releaseProfiles>release-emxsys</releaseProfiles>
+                    <releaseProfiles>release</releaseProfiles>
                     <tagNameFormat>v@{project.version}</tagNameFormat>
                 </configuration>
             </plugin>
@@ -1553,62 +1540,11 @@
     
     <profiles>
         <profile>
-            <id>release-emxsys</id>
-            <distributionManagement> 
-                <downloadUrl>https://bintray.com/emxsys/worldwind/WorldWindServerKit</downloadUrl>
-                <repository>
-                    <!--The id must match server id defined in the Maven settings.xml for the credentials-->
-                    <id>bintray-emxsys-worldwind</id> 
-                    <name>emxsys-worldwind</name> 
-                    <!--Set publish=1 to automatically publish the uploaded artifacts in Bintray--> 
-                    <!--Set publish=0 to manually publish the artifacts via the Bintray UI--> 
-                    <url>https://api.bintray.com/maven/emxsys/worldwind/WorldWindServerKit/;publish=0</url> 
-                </repository> 
-            </distributionManagement>             
-            <build>
-                <plugins>
-                    <plugin>
-                        <artifactId>maven-enforcer-plugin</artifactId>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <executions>
-                            <execution>
-                                <id>enforce-environment-variable-is-set</id>
-                                <goals>
-                                    <goal>enforce</goal>
-                                </goals>
-                                <configuration>
-                                    <rules>
-                                        <!--GITHUP_API_KEY environment var is referenced in maven settings.xml-->
-                                        <requireEnvironmentVariable>
-                                            <variableName>GITHUB_API_KEY</variableName>
-                                            <message>[ERROR] The GITHUB_API_KEY environment variable must be set!${line.separator}</message>
-                                        </requireEnvironmentVariable>
-                                        <!--BINTRAY_USER environment var is referenced in maven settings.xml-->
-                                        <requireEnvironmentVariable>
-                                            <variableName>BINTRAY_USER</variableName>
-                                            <message>[ERROR] The BINTRAY_USER environment variable must be set!${line.separator}</message>
-                                        </requireEnvironmentVariable>
-                                        <!--BINTRAY_API_KEY environment var is referenced in maven settings.xml-->
-                                        <requireEnvironmentVariable>
-                                            <variableName>BINTRAY_API_KEY</variableName>
-                                            <message>[ERROR] The BINTRAY_API_KEY environment variable must be set!${line.separator}</message>
-                                        </requireEnvironmentVariable>
-                                    </rules>
-                                    <fail>true</fail>                        
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>                  
-                </plugins>
-            </build>
-        </profile>
-        
-        <profile>
-            <id>deploy-nasa</id>
+            <id>release</id>
             <distributionManagement> 
                 <downloadUrl>https://bintray.com/nasaworldwind/maven/WorldWindServerKit</downloadUrl>
                 <repository>
-                    <!--The id must match server id defined in the Maven settings.xml got get the bintray credentials-->
+                    <!--The id must match a server id defined in the Maven settings.xml to get the Bintray credentials-->
                     <id>bintray-nasaworldwind-maven</id> 
                     <name>nasaworldwind-maven</name> 
                     <!--Set publish=1 to automatically publish the uploaded artifacts in Bintray--> 
@@ -1616,6 +1552,10 @@
                     <url>https://api.bintray.com/maven/nasaworldwind/maven/WorldWindServerKit/;publish=0</url> 
                 </repository> 
             </distributionManagement>             
+            <properties>
+                <!--The project.scm.id must match a server id defined in the Maven settings.xml to get the GitHub credentials-->
+                <project.scm.id>github-nasaworldwind</project.scm.id>        
+            </properties>
             <build>
                 <plugins>
                     <plugin>
@@ -1629,6 +1569,7 @@
                                 </goals>
                                 <configuration>
                                     <rules>
+                                        <!--GITHUB_API_KEY environment var is referenced in the maven settings.xml-->
                                         <requireEnvironmentVariable>
                                             <variableName>GITHUB_API_KEY</variableName>
                                             <message>[ERROR] The GITHUB_API_KEY environment variable must be set!${line.separator}</message>
