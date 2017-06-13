@@ -9,9 +9,16 @@
           xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd">
     <servers>
         <server>
+            <!--Bintray credentials for deploy-->
             <id>bintray-nasaworldwind-maven</id>
             <username>${env.BINTRAY_USER}</username>
             <password>${env.BINTRAY_API_KEY}</password>
+        </server>
+        <server>
+            <!--GitHub scm credentials used by the maven-release-plugin-->
+            <id>github-nasaworldwind</id>
+            <username>nasaworldwind</username>
+            <password>${env.GITHUB_API_KEY}</password>
         </server>
     </servers>    
 </settings>
