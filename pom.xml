@@ -29,7 +29,7 @@
     
     <groupId>gov.nasa.worldwind.server</groupId>
     <artifactId>worldwind-serverkit</artifactId>
-    <version>0.3.0-SNAPSHOT</version> 
+    <version>0.3.0-RC</version> 
     <packaging>pom</packaging>
 
     <!--=====================================================================-->
