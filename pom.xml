@@ -1,19 +1,49 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>gov.nasa.worldwind</groupId>
+    
+    <!--=====================================================================-->
+    <!-- WorldWindServerKit super POM                                        -->
+    <!--                                                                     -->
+    <!--                                                                     -->
+    <!-- Maven build instrctions                                             -->    
+    <!-- ~~~~~~~~~~~~~~~~~~~~~~~                                             -->
+    <!-- Perform a simple build:                                             -->
+    <!--    mvn clean install                                                -->
+    <!--                                                                     -->
+    <!-- Build with "release" profile to generate javadoc and sources jars:  -->
+    <!--    mvn clean install -Prelease                                      -->
+    <!--                                                                     -->    
+    <!-- Prepare release versions in project POMs:                           -->
+    <!--    mvn versions:set -DnewVersion={version}                          -->
+    <!-- or                                                                  -->
+    <!--    mvn versions:set -DremoveSnapshot=true                           -->
+    <!--                                                                     -->
+    <!-- Deploy build artifacts to Bintray with the "deploy" profile:        -->
+    <!--    mvn deploy -Pdeploy -DskipTests=true                             -->
+    <!--                                                                     -->
+    <!-- Prepare next release SNAPSHOT versions in project POMs:             -->
+    <!--    mvn versions:set -DnewVersion={version-SNAPSHOT}                 -->
+    <!--                                                                     -->
+    <!--=====================================================================-->
+    
+    <groupId>gov.nasa.worldwind.server</groupId>
     <artifactId>worldwind-serverkit</artifactId>
-    <version>0.3.0-SNAPSHOT</version> 
+    <version>0.3.0-TEST</version> 
     <packaging>pom</packaging>
 
+    <!--=====================================================================-->
+    <!--Project Information                                                  -->
+    <!--=====================================================================-->
+    
     <name>WorldWind Server Kit</name>
     <description>A standard and sharable GeoServer distribution.</description>
-    
+    <url>https://github.com/NASAWorldWind/WorldWindServerKit</url>
+    <inceptionYear>2017</inceptionYear>
     <organization>
         <name>NASA World Wind</name>
         <url>https://worldwind.arc.nasa.gov</url>
     </organization>
-
     <licenses>
         <license>
             <name>General Public License (GPL)</name>
@@ -21,24 +51,63 @@
         </license>
     </licenses>
     
-    <!--
-    You can browse the GeoServer repository to view the current GeoServer 
-    artifacts: 
-        https://repo.boundlessgeo.com/main/org/geoserver/geoserver/
+    <developers />
+    <contributors />
     
-    See the geoserver-<version>.pom file in the GeoServer repository for a 
-    reference to the versions used in a particular GeoServer release. E.g.: 
-        https://repo.boundlessgeo.com/main/org/geoserver/geoserver/2.11.0/geoserver-2.11.0.pom
-    -->
+    <mailingLists />
+    
+    <prerequisites />
+    
+    <modules>
+        <module>worldwind-gt-geopkg</module>
+        <module>worldwind-gs-geopkg</module>
+        <module>worldwind-gs-wms</module>
+        <module>worldwind-geoserver</module>
+        <module>worldwind-geoserver-dist</module>
+    </modules>  
+      
+    <!--=====================================================================-->
+    <!--Environment Settings                                                 -->
+    <!--=====================================================================-->
+    
+    <scm>
+        <url>https://github.com/NASAWorldWind/WorldWindServerKit</url>
+        <connection>scm:git:git://github.com/NASAWorldWind/WorldWindServerKit.git</connection>
+        <developerConnection>scm:git:https://github.com/NASAWorldWind/WorldWindServerKit.git</developerConnection>
+        <tag>HEAD</tag>
+    </scm>    
+    <issueManagement>
+        <system>GitHub Issues</system>
+        <url>https://github.com/NASAWorldWind/WorldWindServerKit/issues</url>
+    </issueManagement>
+    <ciManagement>
+        <system>Travis CI</system>
+        <url>https://travis-ci.org/NASAWorldWind/WorldWindServerKit</url>
+    </ciManagement>
+    <!--See the "release" profile(s) for distributionManagement-->
+    <distributionManagement /> 
+    
+    <!--=====================================================================-->
+    <!--The Basics                                                           -->
+    <!--=====================================================================-->
+    
     <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <!-- 
-        The GeoServer version used in this build and used for artifacts and assemblies.
-        You can browse the GeoServer extensions this version for this version here:
+        See the geoserver-<version>.pom file in the GeoServer repository for a 
+        reference to the version properties used in a particular GeoServer release. E.g.: 
+            https://repo.boundlessgeo.com/main/org/geoserver/geoserver/2.11.1/geoserver-2.11.1.pom
+        You can browse the GeoServer repository to view the current GeoServer artifacts:
+            https://repo.boundlessgeo.com/main/org/geoserver/geoserver/
+        You can browse the GeoServer extensions for this version here:
             https://sourceforge.net/projects/geoserver/files/GeoServer/2.11.1/extensions/
         You can download the gdal-plugin jars used in the worldwind-geoserver-dist assemblies here:
             https://sourceforge.net/projects/geoserver/files/GeoServer/2.11.1/extensions/geoserver-2.11.1-gdal-plugin.zip/download
+        You can download the ImageID-Ext jars and resourses used in the worldwind-geoserver-dist assemblies here:
+            http://demo.geo-solutions.it/share/github/imageio-ext/releases/1.1.X/1.1.17/
         -->
+        
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <!--The GeoServer version used in this build and used for artifacts and assemblies-->
         <gs.version>2.11.1</gs.version>
         <!--The GeoTools version used in this build-->
         <gt.version>17.1</gt.version>
@@ -53,20 +122,16 @@
         <!--Wicket version -->
         <wicket.version>7.6.0</wicket.version>
         <ant.version>1.8.4</ant.version>
-        <!--
-        The ImageIO-Ext version; used for GDAL artifacts and assemblies. 
-        You can download the ImageID-Ext jars and resourses used in the worldwind-geoserver-dist assemblies here:
-            http://demo.geo-solutions.it/share/github/imageio-ext/releases/1.1.X/1.1.17/
-        -->
+        <!--The ImageIO-Ext version; used for GDAL artifacts and assemblies-->
         <imageio-ext.version>1.1.17</imageio-ext.version>
         <!--JAI version -->
         <jaiext.version>1.0.13</jaiext.version>
         <java.awt.headless>true</java.awt.headless>
-        <jvm.opts/>
+        <jvm.opts />
         <jalopy.phase>disabled</jalopy.phase>
         <jalopy.srcExcludesPattern>disabled</jalopy.srcExcludesPattern>
         <test.maxHeapSize>512M</test.maxHeapSize>
-        <test.excludedGroups/>
+        <test.excludedGroups />
         <test.exclude.pattern>none</test.exclude.pattern>
         <quietTests>true</quietTests>
         <remoteOwsTests>false</remoteOwsTests>
@@ -92,46 +157,7 @@
         <maven.compiler.target>1.8</maven.compiler.target>
         <compress-lzf.version>1.0.3</compress-lzf.version>
     </properties> 
-    
-    <repositories>
-        <!--GeoServer-->
-        <repository>
-            <id>boundless</id>
-            <name>Boundless Maven Repository</name>
-            <url>https://repo.boundlessgeo.com/main/</url>
-            <!-- contains snapshot and release (including third-party-dependences)               -->
-            <!-- Restlet maven Repository (http://maven.restlet.org)                             -->
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-        </repository>
-  
-        <!--GeoTools-->
-        <repository>
-            <id>osgeo</id>
-            <name>Open Source Geospatial Foundation Repository</name>
-            <url>http://download.osgeo.org/webdav/geotools/</url>
-            <!-- release repository used by geotools (and third-party dependencies) -->
-        </repository>
-   
-        <!--GeoSolutions-->
-        <repository>
-            <id>geosolutions</id>
-            <name>GeoSolutions Repository</name>
-            <url>http://maven.geo-solutions.it/</url>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-        </repository>
-    </repositories>
-    
-
+       
     <!--Centralized dependency management of versions-->
     <dependencyManagement>
         <dependencies>
@@ -1344,41 +1370,105 @@
         </dependency> 
     </dependencies>
     
-    <modules>
-        <module>worldwind-gt-geopkg</module>
-        <module>worldwind-gs-geopkg</module>
-        <module>worldwind-gs-wms</module>
-        <module>worldwind-geoserver</module>
-        <module>worldwind-geoserver-dist</module>
-    </modules>
-
+    <repositories>
+        <!--GeoServer-->
+        <repository>
+            <id>boundless</id>
+            <name>Boundless Maven Repository</name>
+            <url>https://repo.boundlessgeo.com/main/</url>
+            <!-- contains snapshot and release (including third-party-dependences)               -->
+            <!-- Restlet maven Repository (http://maven.restlet.org)                             -->
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+        </repository>
+  
+        <!--GeoTools-->
+        <repository>
+            <id>osgeo</id>
+            <name>Open Source Geospatial Foundation Repository</name>
+            <url>http://download.osgeo.org/webdav/geotools/</url>
+            <!-- release repository used by geotools (and third-party dependencies) -->
+        </repository>
+   
+        <!--GeoSolutions-->
+        <repository>
+            <id>geosolutions</id>
+            <name>GeoSolutions Repository</name>
+            <url>http://maven.geo-solutions.it/</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+        </repository>
+        
+        <!--NASAWorldWind--> 
+        <repository>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+            <id>bintray-nasaworldwind-maven</id>
+            <name>bintray</name>
+            <url>http://nasaworldwind.bintray.com/maven</url>
+        </repository>
+    </repositories>
+    <pluginRepositories>
+        <!--NASAWorldWind--> 
+        <pluginRepository>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+            <id>bintray-nasaworldwind-maven</id>
+            <name>bintray-plugins</name>
+            <url>http://nasaworldwind.bintray.com/maven</url>
+        </pluginRepository>
+    </pluginRepositories>
     
+    <!--=====================================================================-->
+    <!--Build Settings                                                       -->
+    <!--=====================================================================-->
+
     <build>
-        <pluginManagement>
+        <!-- Define the plugin versions -->
+        <pluginManagement>  
+            <!--Plugins sorted in alphabetical order-->
             <plugins>
                 <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-antrun-plugin</artifactId>
+                    <groupId>org.apache.maven.plugins</groupId>
                     <version>1.8</version>
                 </plugin>
                 <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-assembly-plugin</artifactId>
+                    <groupId>org.apache.maven.plugins</groupId>
                     <version>3.0.0</version>
                 </plugin>
                 <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-dependency-plugin</artifactId>
+                    <groupId>org.apache.maven.plugins</groupId>
                     <version>2.10</version>
                 </plugin>
                 <plugin>
+                    <artifactId>maven-deploy-plugin</artifactId>
                     <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-war-plugin</artifactId>
-                    <version>3.0.0</version>
+                    <version>2.8.2</version>
+                    <configuration>
+                        <updateReleaseInfo>true</updateReleaseInfo>
+                    </configuration>
                 </plugin>
                 <plugin>
+                    <artifactId>maven-enforcer-plugin</artifactId>
                     <groupId>org.apache.maven.plugins</groupId>
+                    <version>1.4.1</version>
+                </plugin>                
+                <plugin>
                     <artifactId>maven-javadoc-plugin</artifactId>
+                    <groupId>org.apache.maven.plugins</groupId>
                     <version>2.10.4</version>
                     <configuration>
                         <!--Prevent the javadoc-plugin from generating errors that terminate a build-->
@@ -1386,15 +1476,188 @@
                     </configuration>
                 </plugin>
                 <plugin>
+                    <artifactId>maven-release-plugin</artifactId>
                     <groupId>org.apache.maven.plugins</groupId>
+                    <version>2.5.3</version>
+                    <configuration>
+                        <autoVersionSubmodules>true</autoVersionSubmodules>
+                        <tagNameFormat>v${project.version}</tagNameFormat>
+                    </configuration>
+                </plugin>
+                <plugin>
                     <artifactId>maven-source-plugin</artifactId>
+                    <groupId>org.apache.maven.plugins</groupId>
                     <version>3.0.1</version>
                     <configuration>
                         <!--Prevent the javadoc-plugin from generating errors that terminate a build-->
                         <additionalparam>-Xdoclint:none</additionalparam>
                     </configuration>
                 </plugin>
+                <plugin>
+                    <artifactId>maven-war-plugin</artifactId>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <version>3.0.0</version>
+                </plugin>
+                <plugin>
+                    <artifactId>versions-maven-plugin</artifactId>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <version>2.4</version>
+                </plugin>
             </plugins>              
         </pluginManagement>
+        <!-- Define the plugin goals and executions -->
+        <plugins>
+            <plugin>
+                <!--Enforcer plugin--> 
+                <artifactId>maven-enforcer-plugin</artifactId>
+                <groupId>org.apache.maven.plugins</groupId>
+                <executions>
+                    <execution>
+                        <!--                        
+                        This simple "Always Pass" configuration simply satisfies
+                        the configuration requirements of this plugin.  Other modules
+                        and/or profiles can add more purposeful configurations.
+                        -->
+                        <id>default-enforce</id>
+                        <goals>
+                            <goal>enforce</goal>
+                        </goals>
+                        <configuration>
+                            <rules>
+                                <AlwaysPass />
+                            </rules>
+                            <fail>true</fail>
+                        </configuration>
+                    </execution>
+                </executions>            
+            </plugin>             
+            <plugin>
+                <!--Release plugin-->  
+                <artifactId>maven-release-plugin</artifactId>
+                <groupId>org.apache.maven.plugins</groupId>
+                <configuration>
+                    <autoVersionSubmodules>true</autoVersionSubmodules>
+                    <!--release:perform should use local checkout, not from upstream-->
+                    <localCheckout>true</localCheckout>
+                    <!--release:prepare should push to upstream repo-->
+                    <pushChanges>true</pushChanges>
+                    <releaseProfiles>deploy</releaseProfiles>
+                    <tagNameFormat>v@{project.version}</tagNameFormat>
+                </configuration>
+            </plugin>
+        </plugins>
     </build>
+    
+    <reporting />
+    
+    <profiles>
+        <profile>
+            <id>deploy</id>
+            <distributionManagement> 
+                <downloadUrl>https://bintray.com/nasaworldwind/maven/WorldWindServerKit</downloadUrl>
+                <repository>
+                    <!--The id must match a server id defined in the Maven settings.xml to get the Bintray credentials-->
+                    <id>bintray-nasaworldwind-maven</id> 
+                    <name>nasaworldwind-maven</name> 
+                    <!--Set publish=1 to automatically publish the uploaded artifacts in Bintray--> 
+                    <!--Set publish=0 to manually publish the artifacts via the Bintray UI--> 
+                    <url>https://api.bintray.com/maven/nasaworldwind/maven/WorldWindServerKit/;publish=0</url> 
+                </repository> 
+            </distributionManagement>             
+            <properties>
+                <!--The project.scm.id must match a server id defined in the Maven settings.xml to get the GitHub credentials-->
+                <project.scm.id>github-nasaworldwind</project.scm.id>        
+            </properties>
+            <build>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-enforcer-plugin</artifactId>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <executions>
+                            <execution>
+                                <id>enforce-environment-variable-is-set</id>
+                                <goals>
+                                    <goal>enforce</goal>
+                                </goals>
+                                <configuration>
+                                    <rules>
+                                        <!--GITHUB_API_KEY environment var is referenced in the maven settings.xml-->
+                                        <requireEnvironmentVariable>
+                                            <variableName>GITHUB_API_KEY</variableName>
+                                            <message>[ERROR] The GITHUB_API_KEY environment variable must be set!${line.separator}</message>
+                                        </requireEnvironmentVariable>
+                                        <!--BINTRAY_USER environment var is referenced in the maven settings.xml-->
+                                        <requireEnvironmentVariable>
+                                            <variableName>BINTRAY_USER</variableName>
+                                            <message>[ERROR] The BINTRAY_USER environment variable must be set!${line.separator}</message>
+                                        </requireEnvironmentVariable>
+                                        <!--BINTRAY_API_KEY environment var is referenced in the maven settings.xml-->
+                                        <requireEnvironmentVariable>
+                                            <variableName>BINTRAY_API_KEY</variableName>
+                                            <message>[ERROR] The BINTRAY_API_KEY environment variable must be set!${line.separator}</message>
+                                        </requireEnvironmentVariable>
+                                    </rules>
+                                    <fail>true</fail>                        
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>                  
+                </plugins>
+            </build>
+        </profile>
+        <!--        <profile>
+            <id>deploy</id>
+            <distributionManagement> 
+                <downloadUrl>https://bintray.com/emxsys/worldwind/WorldWindServerKit</downloadUrl>
+                <repository>
+                    The id must match a server id defined in the Maven settings.xml to get the Bintray credentials
+                    <id>bintray-emxsys-worldwind</id> 
+                    <name>emxsys-worldwind</name> 
+                    Set publish=1 to automatically publish the uploaded artifacts in Bintray 
+                    Set publish=0 to manually publish the artifacts via the Bintray UI 
+                    <url>https://api.bintray.com/maven/emxsys/worldwind/WorldWindServerKit/;publish=0</url> 
+                </repository> 
+            </distributionManagement>             
+            <properties>
+                The project.scm.id must match a server id defined in the Maven settings.xml to get the GitHub credentials
+                <project.scm.id>github-emxsys</project.scm.id>        
+            </properties>
+            <build>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-enforcer-plugin</artifactId>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <executions>
+                            <execution>
+                                <id>enforce-environment-variable-is-set</id>
+                                <goals>
+                                    <goal>enforce</goal>
+                                </goals>
+                                <configuration>
+                                    <rules>
+                                        GITHUB_API_KEY environment var is referenced in the maven settings.xml
+                                        <requireEnvironmentVariable>
+                                            <variableName>GITHUB_API_KEY</variableName>
+                                            <message>[ERROR] The GITHUB_API_KEY environment variable must be set!${line.separator}</message>
+                                        </requireEnvironmentVariable>
+                                        BINTRAY_USER environment var is referenced in the maven settings.xml
+                                        <requireEnvironmentVariable>
+                                            <variableName>BINTRAY_USER</variableName>
+                                            <message>[ERROR] The BINTRAY_USER environment variable must be set!${line.separator}</message>
+                                        </requireEnvironmentVariable>
+                                        BINTRAY_API_KEY environment var is referenced in the maven settings.xml
+                                        <requireEnvironmentVariable>
+                                            <variableName>BINTRAY_API_KEY</variableName>
+                                            <message>[ERROR] The BINTRAY_API_KEY environment variable must be set!${line.separator}</message>
+                                        </requireEnvironmentVariable>
+                                    </rules>
+                                    <fail>true</fail>                        
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>                  
+                </plugins>
+            </build>
+        </profile>-->
+    </profiles>
 </project>

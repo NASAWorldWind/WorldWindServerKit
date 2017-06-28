@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    User-specific configuration for maven. Includes things that should not 
+    be distributed with the pom.xml file, such as developer identity, along with 
+    local settings, like proxy information. The default location for the
+    settings file is ~/.m2/settings.xml 
+-->
+<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd">
+    <servers>
+        <server>
+            <!--Bintray credentials for deploy-->
+            <id>bintray-nasaworldwind-maven</id>
+            <username>${env.BINTRAY_USER}</username>
+            <password>${env.BINTRAY_API_KEY}</password>
+        </server>
+        <server>
+            <!--GitHub scm credentials used by the maven-release-plugin-->
+            <id>github-nasaworldwind</id>
+            <username>nasaworldwind</username>
+            <password>${env.GITHUB_API_KEY}</password>
+        </server>
+    </servers>    
+</settings>

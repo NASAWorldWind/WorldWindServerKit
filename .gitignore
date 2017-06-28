@@ -53,3 +53,9 @@ nbactions.xml
 /jmeter/wms_test/output/
 /jmeter/functional_test/output/
 /dist/
+/worldwind-geoserver-dist/pom.xml.versionsBackup
+/worldwind-gt-geopkg/pom.xml.versionsBackup
+/worldwind-gs-geopkg/pom.xml.versionsBackup
+/worldwind-gs-wms/pom.xml.versionsBackup
+/worldwind-geoserver/pom.xml.versionsBackup
+/pom.xml.versionsBackup

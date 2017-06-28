@@ -31,12 +31,11 @@ before_script:
   - chmod +x ./travis/*.sh
 
 script:
-  # Build the WWSK with Maven
+  # Build WWSK with Maven using the "release" profile (generates javadoc and sources)
   ## Maven Commands
   # -B (--batch-mode) Run in non-interactive model
   # -U (--update-snapshots) Forces a check for missing releases and updated snapshots on remote repos
   # -P (--activate-profiles <arg>) Comma-delimited list of profiles to activate
-  # Build WWSK using the "release" profile (generates javadoc and sources)
   - mvn clean install -B -U -Prelease
   
 after_success:
@@ -44,8 +43,8 @@ after_success:
   - ./travis/create_draft_release.sh
 
 deploy: 
-  # Publish artifacts to the GitHub release, by default, travis will not invoke this step for PRs.
-  # Uses undocumented "draft" and "tag_name" settings to deploy without publishing.
+  # Publish WWSK distributions to GitHub releases. Uses undocumented "draft" and 
+  # "tag_name" settings to deploy without publishing.
   # See: https://github.com/travis-ci/travis-ci/issues/6132 for more info.
   - provider: releases
     api_key: $GITHUB_API_KEY
@@ -57,11 +56,23 @@ deploy:
     tag_name: $TRAVIS_TAG
     on:
       tags: true
+  # Upload build artifacts from the master branch to Bintray using Maven. 
+  # Bintray does not allow snapshots; so we restrict the deploy to the master
+  # branch (OR could use tagged builds) which should not have SNAPSHOT versions.
+  # The maven_settings.xml uses the $BINTRAY_USER and $BINTRAY_API_KEY 
+  # enviroment variables to access Bintray. We skip the unit test as 
+  # they were run in the build step.
+  - provider: script
+    script: mvn deploy -Pdeploy -DskipTests=true --batch-mode --settings ./travis/maven_settings.xml 
+    skip_cleanup: true
+    on:
+      #branch: master
+      tags: true
       
 notifications:
   # Notify the World Wind services mailing list on every build
   email:
     recipients:
-        secure: "f2Goc8YSBLEpeANExDtpfrcYlPZTouNgsytkR/t4XheS/hXVkWNb2mxterH/5BwjRgVHQYJCMqeZXE8vQPBDsnLRqQzDHV5AXa/M9aTkPNgpkMHK25NVxpudWULM/jtlHBsA4nIhDZwS2K01bIT8DlcAnoAXXhg8QH/QqYFDAIHd3qzsfjH+f45G4SFzo2xnG44tF3bokQegZw5+95HzTlNJzrDyQesXHstzXi8Nw6W+GMoYtAi4uls52U6ByUiKJBbIfhq1XdicT+gS2M2FAZTAZQqJnW1F1Kfc4yNcvRSujM0O+8MmK/5WvQY7hBaBRLPr2/94vkqEbgLEUCO/focliskBGGxPgt9i4+yUA3gwTiZ8wQ8exHTD0A2Yyy//12BVWdyyZQ3pa2l/Cw6ia0mX74B4dVn+m0t/5TD8+kYzu/cNfBqwA07VsNdVB8FCXRIPXNdgsFMj4YBC4bslYeNJ71PBfb6Zzdwq94JGjyc0t1/krJ+/II/wrEygxHrhOnomtWdzPkhhkn5MuLM3Y+21YRnn55/6cn/oIDPrp2NrwXIY0GNMfkBx24nXSZAbnA4wKIShRrBqHxYO/D6oGLy0t2nku0iEyZHZMXaL1kubZetGTU2MDt40PlWFT+ByeGr/mSM+gwFTf/Jq5fYQuGqG7iBo0nI83y70J57aywY="
+        secure: "khLHCEeK0yziQdyvMMWdQ4b6qeGvwG1T1Ph9t361tc0aPvyfR/lreHGJPbKRoOJSfe1F0E4mruigcWJPXUawVJFgzSgF1aybw5JWpAj7ricRniHy3kfbxG3eedlzYtnQU+Bkxdl9yKC/SxCuUvy+dESrEyegO1weRnesSwNefJ2VjtNAn7JZhCiGHQLh4mAHQy64AH/In9cRcoh7YOaBF3dedQkGYItA1hQ7bIsVbteJIwzNRnuPRaQUQhIkpwUUq0MrTsOhRWn7XFw5qZTEOA87TNu7rT5fn4Eqot+1zzEBr5S4PnDQJbzbAPPodldeWGdQY93ceKOvSm+qdSTpEFqyau2+CEYP6og5XXVt8hNTYc3BDECjsYtHgXiJaxeniiyUuR6e815t0oSyiAbwsE5leU5HiG0zVVPEx9hxzHSwWkjprrlQJE9U+8elhBUR73JYbactdDBkxklY5jcCQ/V5dAYcs+vXupojv6IkFdKM58o+HM9rduaHRaqIunDEoyBoma2CLLdyJP8O0nznrKLG8ViWROm6FFqaGfMitKZMFP3K9jSd9gq4P2LwGl05lRtPEUF21G9xT5mvux3Dfn56ea/ZqUM5zrsP3jSJNvadgu88jCEwnpdIeTeLaxsl1o/Wk+Kkc4OOnz2Ly3nnub71f/GrG3IaYKLXxMkuAvU="
     on_success: always
     on_failure: always  
