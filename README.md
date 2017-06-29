@@ -27,11 +27,7 @@ on the target computer. Then navigate to the root of the distribution folder and
 the *setup* script to install the Oracle Server JRE and the GDAL dependencies.
 Afterwards, you can launch GeoServer with the *run* script.
 
-#### a) Setup the GeoServer environment, (one time)
-Windows example:
-
-    C:\...> setup.bat
-    
+#### a) Setup the GeoServer environment, (one time, Linux only)    
 Linux example:
 
     $ ./setup.sh
@@ -119,10 +115,6 @@ through Web Processing Service (WPS) requests.
 ## GeoWebCache 
 The WWSK has integrated support the GeoWebCache (GWC) enabled by default.  Tile Caching
 options available on Layers are applicable.
-
-## SRS
-WMS supported SRS have been limited to the following EPSG codes mentioned in the NSG Profile: 
-4326, 3395, 4979, 5041, 5042, 5773, 5714, 5715
 
 
 ## Bugs
