@@ -7,6 +7,9 @@ application directory.
 <!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
 <beans>
     
+    <!--GeoPackageModuleStatus provides an entry in the "Server Status" > "Modules" page-->
+    <bean class="gov.nasa.worldwind.gs.geopkg.GeoPackageModuleStatus"/>  
+      
     <bean id="GeoPackageGetMapOutputFormat" class="gov.nasa.worldwind.gs.geopkg.GeoPackageGetMapOutputFormat">
         <constructor-arg ref="webMapService" />
         <constructor-arg ref="wms" />
@@ -35,5 +38,14 @@ application directory.
     
     <bean id="GeoPackageDataStoreFactoryInitializer" class="gov.nasa.worldwind.gs.geopkg.GeoPkgDataStoreFactoryInitializer">
         <property name="resourceLoader" ref="resourceLoader"/>
+    </bean>
+    
+    <!--UI Component for browsing to a GeoPackage file-->
+    <bean id="GeoPackageDataStorePanel" class="org.geoserver.web.data.resource.DataStorePanelInfo">
+        <property name="id" value="gpkgRaster"/>
+        <property name="factoryClass" value="gov.nasa.worldwind.geopkg.mosaic.GeoPackageFormat"/>
+        <property name="iconBase" value="org.geoserver.web.GeoServerApplication"/>
+        <property name="icon" value="img/icons/geosilk/page_white_raster.png"/>
+        <property name="componentClass" value="gov.nasa.worldwind.gs.geopkg.GeoPackageRasterEditPanel"/>
     </bean>
 </beans>

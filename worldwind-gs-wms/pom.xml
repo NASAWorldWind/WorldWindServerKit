@@ -2,13 +2,56 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>gov.nasa.worldwind</groupId>
+        <groupId>gov.nasa.worldwind.server</groupId>
         <artifactId>worldwind-serverkit</artifactId>
-        <version>0.2.1</version>
+        <version>0.3.0-RC</version>
     </parent>
     <artifactId>worldwind-gs-wms</artifactId>
     <packaging>jar</packaging>
+
+    <!--=====================================================================-->
+    <!--Project Information                                                  -->
+    <!--=====================================================================-->    
     <name>WorldWind GeoServer WMS Module</name>
+    <description>A custom Web Map Service module for GeoServer that provides specialized handling of JPEG image formats.</description>
+    <url>https://github.com/NASAWorldWind/WorldWindServerKit</url>
+    <organization>
+        <name>NASA World Wind</name>
+        <url>https://worldwind.arc.nasa.gov</url>
+    </organization>
+    <licenses>
+        <license>
+            <name>General Public License (GPL)</name>
+            <url>http://www.gnu.org/copyleft/gpl.txt</url>
+        </license>
+    </licenses>
+    <developers />
+    <contributors />
+    <mailingLists />
+    <prerequisites />    
+    
+    <!--=====================================================================-->
+    <!--Environment Settings                                                 -->
+    <!--=====================================================================-->    
+    <scm>
+        <url>https://github.com/NASAWorldWind/WorldWindServerKit</url>
+        <connection>scm:git:git://github.com/NASAWorldWind/WorldWindServerKit.git</connection>
+        <developerConnection>scm:git:https://github.com/NASAWorldWind/WorldWindServerKit.git</developerConnection>
+        <tag>HEAD</tag>
+    </scm>    
+    <issueManagement>
+        <system>GitHub Issues</system>
+        <url>https://github.com/NASAWorldWind/WorldWindServerKit/issues</url>
+    </issueManagement>
+    <ciManagement>
+        <system>Travis CI</system>
+        <url>https://travis-ci.org/NASAWorldWind/WorldWindServerKit</url>
+    </ciManagement>
+    <distributionManagement />    
+    
+    <!--=====================================================================-->
+    <!--The Basics                                                           -->
+    <!--=====================================================================-->
     <dependencies>
         <!--Dependencies common the GeoServer modules-->
         <dependency>
@@ -107,8 +150,12 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-    
+
+    <!--=====================================================================-->
+    <!--Build Settings                                                       -->
+    <!--=====================================================================-->
     <build>
+        <plugins />
         <resources>
             <resource>
                 <directory>${basedir}/src/main/java</directory>
@@ -123,6 +170,47 @@
                 <directory>src/test/resources</directory>
             </testResource>     
         </testResources>    
-    </build>
-    <description>A custom Web Map Service module for GeoServer that provides specialized handling of JPEG image formats.</description>
+    </build>    
+    <reporting /> 
+    <profiles>
+        <!--Generate the javadocs and sources jar files when the "release" profile is activated-->
+        <profile>
+            <id>release</id>
+            <activation>
+                <property>
+                    <name>release</name>
+                </property>
+            </activation>
+            <dependencies />
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>attach-javadocs</id>
+                                <goals>
+                                    <goal>jar</goal>
+                                </goals>
+                            </execution>
+                        </executions>            
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-source-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>attach-sources</id>
+                                <goals>
+                                    <goal>jar</goal>
+                                </goals>
+                            </execution>
+                        </executions>            
+                    </plugin>               
+                </plugins>
+            </build>
+            <modules />
+        </profile>
+    </profiles>
 </project>

@@ -6,22 +6,19 @@
             http://www.geotools.org/
 
 ======================================================================= -->
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
-                               http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>gov.nasa.worldwind</groupId>
+        <groupId>gov.nasa.worldwind.server</groupId>
         <artifactId>worldwind-serverkit</artifactId>
-        <version>0.2.1</version>
+        <version>0.3.0-RC</version>
     </parent>
 
     <!-- =========================================================== -->
     <!--     Module Description                                      -->
     <!-- =========================================================== -->
-    <groupId>gov.nasa.worldwind</groupId>
+    <groupId>gov.nasa.worldwind.server</groupId>
     <artifactId>worldwind-gt-geopkg</artifactId>
     <packaging>jar</packaging>
     <name>WorldWind GeoPackage Module</name>
@@ -179,5 +176,46 @@
             </plugin>
         </plugins>
     </build>
-
+    
+    <profiles>
+        <!--Generate the javadocs and sources jar files when the "release" profile is activated-->
+        <profile>
+            <id>release</id>
+            <activation>
+                <property>
+                    <name>release</name>
+                </property>
+            </activation>
+            <dependencies />
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>attach-javadocs</id>
+                                <goals>
+                                    <goal>jar</goal>
+                                </goals>
+                            </execution>
+                        </executions>            
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-source-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>attach-sources</id>
+                                <goals>
+                                    <goal>jar</goal>
+                                </goals>
+                            </execution>
+                        </executions>            
+                    </plugin>               
+                </plugins>
+            </build>
+            <modules />
+        </profile>
+    </profiles>
 </project>
