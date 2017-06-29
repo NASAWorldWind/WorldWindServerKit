@@ -4,12 +4,54 @@
     <parent>
         <groupId>gov.nasa.worldwind.server</groupId>
         <artifactId>worldwind-serverkit</artifactId>
-        <version>0.3.0-SNAPSHOT</version>
-    </parent>
-    
+        <version>0.3.0-RC</version>
+    </parent>    
     <artifactId>worldwind-geoserver</artifactId>
     <packaging>war</packaging>
+
+    <!--=====================================================================-->
+    <!--Project Information                                                  -->
+    <!--=====================================================================-->    
     <name>WorldWind GeoServer Application</name>
+    <description>The GeoServer map server application from the WorldWind Server Kit.</description>
+    <url>https://github.com/NASAWorldWind/WorldWindServerKit</url>
+    <organization>
+        <name>NASA World Wind</name>
+        <url>https://worldwind.arc.nasa.gov</url>
+    </organization>
+    <licenses>
+        <license>
+            <name>General Public License (GPL)</name>
+            <url>http://www.gnu.org/copyleft/gpl.txt</url>
+        </license>
+    </licenses>
+    <developers />
+    <contributors />
+    <mailingLists />
+    <prerequisites />    
+    
+    <!--=====================================================================-->
+    <!--Environment Settings                                                 -->
+    <!--=====================================================================-->    
+    <scm>
+        <url>https://github.com/NASAWorldWind/WorldWindServerKit</url>
+        <connection>scm:git:git://github.com/NASAWorldWind/WorldWindServerKit.git</connection>
+        <developerConnection>scm:git:https://github.com/NASAWorldWind/WorldWindServerKit.git</developerConnection>
+        <tag>HEAD</tag>
+    </scm>    
+    <issueManagement>
+        <system>GitHub Issues</system>
+        <url>https://github.com/NASAWorldWind/WorldWindServerKit/issues</url>
+    </issueManagement>
+    <ciManagement>
+        <system>Travis CI</system>
+        <url>https://travis-ci.org/NASAWorldWind/WorldWindServerKit</url>
+    </ciManagement>
+    <distributionManagement />    
+    
+    <!--=====================================================================-->
+    <!--The Basics                                                           -->
+    <!--=====================================================================-->
     
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
@@ -241,7 +283,9 @@
         </dependency>
     </dependencies>
     
-    
+    <!--=====================================================================-->
+    <!--Build Settings                                                       -->
+    <!--=====================================================================-->    
     <build>
         <plugins>
             <!--
@@ -398,5 +442,4 @@
             
         </plugins>
     </build>
-    <description>The GeoServer map server application from the WorldWind Server Kit.</description>
 </project>
