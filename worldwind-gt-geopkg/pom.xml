@@ -12,7 +12,7 @@
     <parent>
         <groupId>gov.nasa.worldwind.server</groupId>
         <artifactId>worldwind-serverkit</artifactId>
-        <version>0.3.0-RC</version>
+        <version>0.3.0</version>
     </parent>
 
     <!-- =========================================================== -->
