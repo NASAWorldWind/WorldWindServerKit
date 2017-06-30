@@ -1,8 +1,11 @@
 <img src="https://worldwind.arc.nasa.gov/css/images/nasa-logo.svg" height="100"/> 
 
-# WorldWindServerKit
+# WorldWindServerKit 
 
-The [NASA World Wind](https://worldwind.arc.nasa.gov) Server Kit (WWSK) is an open 
+[![Build Status](https://travis-ci.org/NASAWorldWind/WorldWindServerKit.svg?branch=develop)](https://travis-ci.org/NASAWorldWind/WorldWindServerKit)
+[![Download](https://api.bintray.com/packages/nasaworldwind/maven/WorldWindServerKit/images/download.svg)](https://bintray.com/nasaworldwind/maven/WorldWindServerKit/_latestVersion)
+
+The [NASA WorldWind](https://worldwind.arc.nasa.gov) Server Kit (WWSK) is an open 
 source Java project that assembles [GeoServer](http://geoserver.org/) for easy 
 distribution and implementation.
 
