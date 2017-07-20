@@ -143,7 +143,13 @@
             <groupId>xmlunit</groupId>
             <artifactId>xmlunit</artifactId>
             <scope>test</scope>
-        </dependency>  
+        </dependency>
+        <dependency>
+            <groupId>com.vividsolutions</groupId>
+            <artifactId>jts</artifactId>
+            <version>1.13</version>
+            <type>jar</type>
+        </dependency>
     </dependencies>
     
     <build>
