@@ -27,7 +27,6 @@ import com.vividsolutions.jts.io.ByteOrderDataInStream;
 import com.vividsolutions.jts.io.InStream;
 import com.vividsolutions.jts.io.InputStreamInStream;
 import com.vividsolutions.jts.io.ParseException;
-import com.vividsolutions.jts.io.WKBReader;
 
 /**
  * Translates a GeoPackage geometry BLOB to a vividsolutions Geometry.
@@ -85,7 +84,7 @@ public class GeoPkgGeomReader {
     protected Geometry read() throws IOException { //header must be read!      
         // read the geometry
         try {
-            WKBReader wkbReader = new WKBReader(factory);
+            GeoPkgWKBReader wkbReader = new GeoPkgWKBReader(factory);
             Geometry g = wkbReader.read(input);
             g.setSRID(header.getSrid());
             return g;
