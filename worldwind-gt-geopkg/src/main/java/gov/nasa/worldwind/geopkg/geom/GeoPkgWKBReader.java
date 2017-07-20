@@ -29,6 +29,10 @@
  *
  *     (250)385-6040
  *     www.vividsolutions.com
+ *
+ * The class is adapted from the WKBReader class found in the JTS Topology
+ * Suite. The original WKBReader class is found in the package
+ * com.vividsolutions.jts.io.
  */
 package gov.nasa.worldwind.geopkg.geom;
 

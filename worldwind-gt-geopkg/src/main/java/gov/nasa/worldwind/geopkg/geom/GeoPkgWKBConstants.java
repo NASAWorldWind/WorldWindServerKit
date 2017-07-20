@@ -29,6 +29,10 @@
  *
  *     (250)385-6040
  *     www.vividsolutions.com
+ *
+ * This class was adapted from the WKBConstants class in the JTS Topology Suite.
+ * The original WKBConstants class is found in the package 
+ * com.vividsolutions.jts.io.
  */
 package gov.nasa.worldwind.geopkg.geom;
 
