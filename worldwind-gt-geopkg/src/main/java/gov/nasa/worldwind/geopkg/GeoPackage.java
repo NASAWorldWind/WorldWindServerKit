@@ -1259,7 +1259,9 @@ public class GeoPackage {
                 q.add("tile_row <= " + highRow);
             }
 
-            StringBuffer sql = new StringBuffer("SELECT * FROM ").append(entry.getTableName());
+//            StringBuffer sql = new StringBuffer("SELECT * FROM ").append(entry.getTableName());
+            // Apply quoting to the tablename to allow keywords and special characters to be used
+            StringBuffer sql = new StringBuffer("SELECT * FROM ").append("[" + entry.getTableName() + "]");
             if (!q.isEmpty()) {
                 sql.append(" WHERE ");
                 for (String s : q) {
@@ -1402,7 +1404,9 @@ public class GeoPackage {
             int tileBounds = -1;
             
             StringBuffer sql = new StringBuffer("SELECT " + (isMax? "MAX" : "MIN") + "( " + (isRow? "tile_row" : "tile_column") + ") FROM ");
-            sql.append(entry.getTableName());
+//            sql.append(entry.getTableName());
+            // Apply quoting to the tablename to allow keywords and special characters to be used
+            sql.append("[" + entry.getTableName() + "]");
             sql.append(" WHERE zoom_level == ");
             sql.append(zoom);
             
