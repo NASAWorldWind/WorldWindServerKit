@@ -12,10 +12,11 @@ import gov.nasa.worldwind.geopkg.GeoPackage;
 import gov.nasa.worldwind.geopkg.Tile;
 import gov.nasa.worldwind.geopkg.TileEntry;
 import gov.nasa.worldwind.geopkg.TileMatrix;
-
 import gov.nasa.worldwind.gs.wms.map.MapResponseOutputStreamAdaptor;
-import java.io.ByteArrayOutputStream;
 
+import static java.lang.String.format;
+
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.Iterator;
@@ -24,6 +25,7 @@ import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
 import java.util.logging.Logger;
+import org.geoserver.catalog.CoverageInfo;
 
 import org.geoserver.catalog.ResourceInfo;
 import org.geoserver.gwc.GWC;
@@ -47,12 +49,15 @@ import org.geoserver.wms.map.RenderedImageMapResponse;
 
 import org.geotools.geometry.jts.ReferencedEnvelope;
 import org.geotools.referencing.CRS;
+import org.geotools.renderer.lite.RendererUtilities;
 import org.geotools.util.logging.Logging;
 
 import org.geowebcache.grid.Grid;
 import org.geowebcache.grid.GridSet;
 import org.geowebcache.grid.GridSubset;
 
+import org.opengis.coverage.grid.GridEnvelope;
+import org.opengis.coverage.grid.GridGeometry;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 /**
@@ -243,6 +248,65 @@ public class GeoPackageGetMapOutputFormat extends AbstractTilesGetMapOutputForma
 
         // The default interpolation method is established in server's WMS Settings
         return super.produceMap(mapContent);
+    }
+
+    /**
+     * Returns the zoom level, plus one, closest to the highest resolution
+     * coverage used in the map request. This is the ending value used in loops
+     * that process the levels, it is not the max zoom level in the GeoPackage.
+     *
+     * Overrides the base class behavior which returned a "zoom level + 1" where
+     * the zoom level contained at least 256 tiles.
+     *
+     * @param gridSubset the grid for the GeoPackage
+     * @param minZoom the starting zoom level
+     * @param request the map request containing the layer coverages
+     * @return the selected maximum zoom level + 1
+     */
+    @Override
+    protected Integer findMaxZoomAuto(GridSubset gridSubset, Integer minZoom, GetMapRequest request) {
+        // Get the maximum scale for the highest resolution layer:
+        // loop through the layer coverages associated with the request
+        // and compute the scale for each.
+        ReferencedEnvelope bounds = this.bounds(request);
+        List<MapLayerInfo> layers = request.getLayers();
+        double reqScaleDenominator = Double.MAX_VALUE;
+        for (MapLayerInfo layer : layers) {
+            try {
+                if (layer.getType() == MapLayerInfo.TYPE_RASTER) {
+                    CoverageInfo coverage = layer.getCoverage();
+                    GridGeometry grid = coverage.getGrid();
+                    GridEnvelope gridRange = grid.getGridRange();
+                    int imageWidth = gridRange.getSpan(0); // 0=cols, 1=rows
+                    double scale = RendererUtilities.calculateOGCScale(bounds, imageWidth, null);
+                    reqScaleDenominator = Math.min(scale, reqScaleDenominator);
+                }
+            } catch (Exception e) {
+                LOGGER.warning(
+                        format("Exception caught computing the scale for layer %s: %s",
+                                layer.getName(), e.toString()));
+            }
+        }
+        if (reqScaleDenominator < Double.MAX_VALUE) {
+            // Find the level with the closest scale denominator to the required scale
+            GridSet gridSet = gridSubset.getGridSet();
+            int i = minZoom;
+            double error = Math.abs(gridSet.getGrid(i).getScaleDenominator() - reqScaleDenominator);
+            while (i < gridSet.getNumLevels() - 1) {
+                Grid g = gridSet.getGrid(i + 1);
+                double e = Math.abs(g.getScaleDenominator() - reqScaleDenominator);
+                if (e > error) {
+                    break;
+                } else {
+                    error = e;
+                }
+                i++;
+            }
+            // Return the selected zoom level + 1; this is the ending value 
+            // used in loops, not the max zoom level in the GeoPackage
+            return Math.max(i + 1, 0);
+        }
+        return super.findMaxZoomAuto(gridSubset, minZoom, request);
     }
 
     /**
