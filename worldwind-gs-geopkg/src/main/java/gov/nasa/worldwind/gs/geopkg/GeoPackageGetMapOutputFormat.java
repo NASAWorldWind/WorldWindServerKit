@@ -25,7 +25,6 @@ import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
 import java.util.logging.Logger;
-import org.geoserver.catalog.CoverageInfo;
 
 import org.geoserver.catalog.ResourceInfo;
 import org.geoserver.gwc.GWC;
@@ -46,6 +45,7 @@ import org.geoserver.wms.map.PNGMapResponse;
 import org.geoserver.wms.map.RawMap;
 import org.geoserver.wms.map.RenderedImageMap;
 import org.geoserver.wms.map.RenderedImageMapResponse;
+import org.geotools.coverage.grid.io.GridCoverage2DReader;
 
 import org.geotools.geometry.jts.ReferencedEnvelope;
 import org.geotools.referencing.CRS;
@@ -57,7 +57,6 @@ import org.geowebcache.grid.GridSet;
 import org.geowebcache.grid.GridSubset;
 
 import org.opengis.coverage.grid.GridEnvelope;
-import org.opengis.coverage.grid.GridGeometry;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 /**
@@ -265,20 +264,23 @@ public class GeoPackageGetMapOutputFormat extends AbstractTilesGetMapOutputForma
      */
     @Override
     protected Integer findMaxZoomAuto(GridSubset gridSubset, Integer minZoom, GetMapRequest request) {
+
         // Get the maximum scale for the highest resolution layer:
         // loop through the layer coverages associated with the request
         // and compute the scale for each.
-        ReferencedEnvelope bounds = this.bounds(request);
         List<MapLayerInfo> layers = request.getLayers();
         double reqScaleDenominator = Double.MAX_VALUE;
         for (MapLayerInfo layer : layers) {
             try {
                 if (layer.getType() == MapLayerInfo.TYPE_RASTER) {
-                    CoverageInfo coverage = layer.getCoverage();
-                    GridGeometry grid = coverage.getGrid();
-                    GridEnvelope gridRange = grid.getGridRange();
-                    int imageWidth = gridRange.getSpan(0); // 0=cols, 1=rows
+                    // Get the width of the underlying coverage
+                    GridCoverage2DReader coverageReader = (GridCoverage2DReader) layer.getCoverageReader();
+                    GridEnvelope originalGridRange = coverageReader.getOriginalGridRange();
+                    int imageWidth = originalGridRange.getSpan(0); // 0=cols, 1=rows
+                    // Compute the scale demonimator 
+                    ReferencedEnvelope bounds = this.bounds(request);       
                     double scale = RendererUtilities.calculateOGCScale(bounds, imageWidth, null);
+                    // Select the largest scale (the smallest denominator)
                     reqScaleDenominator = Math.min(scale, reqScaleDenominator);
                 }
             } catch (Exception e) {
@@ -297,12 +299,11 @@ public class GeoPackageGetMapOutputFormat extends AbstractTilesGetMapOutputForma
                 double e = Math.abs(g.getScaleDenominator() - reqScaleDenominator);
                 if (e > error) {
                     break;
-                } else {
-                    error = e;
                 }
+                error = e;
                 i++;
             }
-            // Return the selected zoom level + 1; this is the ending value 
+            // Return the selected zoom level + 1; this is the ending index 
             // used in loops, not the max zoom level in the GeoPackage
             return Math.max(i + 1, 0);
         }
