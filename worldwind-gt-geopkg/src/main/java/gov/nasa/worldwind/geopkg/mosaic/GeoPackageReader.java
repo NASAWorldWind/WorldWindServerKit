@@ -110,7 +110,7 @@ public class GeoPackageReader extends AbstractGridCoverage2DReader {
                     coverageName = tileset.getTableName();
                 }
 
-                // TODO: compute the gridRange in the GeoPackage class
+                // TODO: Refactor this to compute the gridRange in the GeoPackage class
                 List<TileMatrix> matricies = tileset.getTileMatricies();
                 TileMatrix matrix = matricies.get(matricies.size() - 1);
                 int maxZoomLevel = matrix.getZoomLevel();
@@ -121,9 +121,11 @@ public class GeoPackageReader extends AbstractGridCoverage2DReader {
                 int numCols = (maxCol - minCol) + 1;
                 int numRows = (maxRow - minRow) + 1;
 
-                GridEnvelope2D gridRange = new GridEnvelope2D(new Rectangle(
+                GridEnvelope2D gridRange = new GridEnvelope2D(
+                        minCol * matrix.getTileWidth(),
+                        minRow * matrix.getTileHeight(),
                         numCols * matrix.getTileWidth(),
-                        numRows * matrix.getTileHeight()));
+                        numRows * matrix.getTileHeight());
                 
                 gridRanges.put(tileset.getTableName(), gridRange);
             }
