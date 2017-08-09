@@ -62,7 +62,7 @@ import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import org.opengis.referencing.crs.GeographicCRS;
 
 /**
- * GeoPackageProcess is responsible for processing a GeoPackageProcessRequest.
+ * GeoPackageProcess is responsible for processing a WPS GeoPackageProcessRequest.
  * GeoPackageProcess is registered as a Spring bean.
  */
 @DescribeProcess(title = "GeoPackage", description = "Geopackage Process")

@@ -10,11 +10,9 @@ import gov.nasa.worldwind.geopkg.GeoPkgDataStoreFactory;
 import org.geoserver.data.DataStoreFactoryInitializer;
 import org.geoserver.platform.GeoServerResourceLoader;
 
-
-
 /**
- * Initializes an GeoPkg data store factory setting its location to the geoserver
- *  data directory.
+ * Initializes an GeoPkg data store factory by setting its location to the
+ * GeoServer data directory.
  *
  * @author Justin Deoliveira, Boundless
  *
@@ -25,14 +23,15 @@ public class GeoPkgDataStoreFactoryInitializer extends
     GeoServerResourceLoader resourceLoader;
 
     public GeoPkgDataStoreFactoryInitializer() {
-        super( GeoPkgDataStoreFactory.class );
+        super(GeoPkgDataStoreFactory.class);
     }
 
     public void setResourceLoader(GeoServerResourceLoader resourceLoader) {
         this.resourceLoader = resourceLoader;
     }
 
+    @Override
     public void initialize(GeoPkgDataStoreFactory factory) {
-        factory.setBaseDirectory( resourceLoader.getBaseDirectory() );
+        factory.setBaseDirectory(resourceLoader.getBaseDirectory());
     }
 }
