@@ -69,10 +69,3 @@ deploy:
       branch: master
       #tags: true
       
-notifications:
-  # Notify the World Wind services mailing list on every build
-  email:
-    recipients:
-        secure: "khLHCEeK0yziQdyvMMWdQ4b6qeGvwG1T1Ph9t361tc0aPvyfR/lreHGJPbKRoOJSfe1F0E4mruigcWJPXUawVJFgzSgF1aybw5JWpAj7ricRniHy3kfbxG3eedlzYtnQU+Bkxdl9yKC/SxCuUvy+dESrEyegO1weRnesSwNefJ2VjtNAn7JZhCiGHQLh4mAHQy64AH/In9cRcoh7YOaBF3dedQkGYItA1hQ7bIsVbteJIwzNRnuPRaQUQhIkpwUUq0MrTsOhRWn7XFw5qZTEOA87TNu7rT5fn4Eqot+1zzEBr5S4PnDQJbzbAPPodldeWGdQY93ceKOvSm+qdSTpEFqyau2+CEYP6og5XXVt8hNTYc3BDECjsYtHgXiJaxeniiyUuR6e815t0oSyiAbwsE5leU5HiG0zVVPEx9hxzHSwWkjprrlQJE9U+8elhBUR73JYbactdDBkxklY5jcCQ/V5dAYcs+vXupojv6IkFdKM58o+HM9rduaHRaqIunDEoyBoma2CLLdyJP8O0nznrKLG8ViWROm6FFqaGfMitKZMFP3K9jSd9gq4P2LwGl05lRtPEUF21G9xT5mvux3Dfn56ea/ZqUM5zrsP3jSJNvadgu88jCEwnpdIeTeLaxsl1o/Wk+Kkc4OOnz2Ly3nnub71f/GrG3IaYKLXxMkuAvU="
-    on_success: always
-    on_failure: always  

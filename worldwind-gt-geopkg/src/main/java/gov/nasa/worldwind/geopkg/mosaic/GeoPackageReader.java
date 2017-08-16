@@ -90,6 +90,9 @@ public class GeoPackageReader extends AbstractGridCoverage2DReader {
     protected File sourceFile;
 
     protected Map<String, TileEntry> tiles = new HashMap<String, TileEntry>();
+    
+    // TODO: store these gridRanges in the TileEntry class
+    protected Map<String, GridEnvelope2D> gridRanges = new HashMap<String, GridEnvelope2D>();
 
     public GeoPackageReader(Object source, Hints hints) throws IOException {
         coverageFactory = CoverageFactoryFinder.getGridCoverageFactory(this.hints);
@@ -97,14 +100,36 @@ public class GeoPackageReader extends AbstractGridCoverage2DReader {
         GeoPackage file = new GeoPackage(sourceFile);
 
         try {
-            // Set the coverage name to the name of the the first raster tileset.
             coverageName = null;   // default value was "geotools_coverage"
-            for (TileEntry tile : file.tiles()) {
-                tiles.put(tile.getTableName(), tile);
+            for (TileEntry tileset : file.tiles()) {
+                // Map the tileset to the coverage name (table name)
+                tiles.put(tileset.getTableName(), tileset);
+
+                // Set the default coverage name to the name of the the first raster tileset.
                 if (coverageName == null) {
-                    coverageName = tile.getTableName();
+                    coverageName = tileset.getTableName();
                 }
+
+                // TODO: Refactor this to compute the gridRange in the GeoPackage class
+                List<TileMatrix> matricies = tileset.getTileMatricies();
+                TileMatrix matrix = matricies.get(matricies.size() - 1);
+                int maxZoomLevel = matrix.getZoomLevel();
+                int minCol = file.getTileBound(tileset, maxZoomLevel, false, false);   // booleans: isMax, isRow
+                int maxCol = file.getTileBound(tileset, maxZoomLevel, true, false);
+                int minRow = file.getTileBound(tileset, maxZoomLevel, false, true);  
+                int maxRow = file.getTileBound(tileset, maxZoomLevel, true, true);  
+                int numCols = (maxCol - minCol) + 1;
+                int numRows = (maxRow - minRow) + 1;
+
+                GridEnvelope2D gridRange = new GridEnvelope2D(
+                        minCol * matrix.getTileWidth(),
+                        minRow * matrix.getTileHeight(),
+                        numCols * matrix.getTileWidth(),
+                        numRows * matrix.getTileHeight());
+                
+                gridRanges.put(tileset.getTableName(), gridRange);
             }
+
         } finally {
             file.close();
         }
@@ -148,10 +173,8 @@ public class GeoPackageReader extends AbstractGridCoverage2DReader {
             throw new IllegalArgumentException("The specified coverageName " + coverageName
                     + "is not supported");
         }
-
-        List<TileMatrix> matrices = tiles.get(coverageName).getTileMatricies();
-        TileMatrix matrix = matrices.get(matrices.size() - 1);
-        return new GridEnvelope2D(new Rectangle(matrix.getMatrixWidth() * matrix.getTileWidth(), matrix.getMatrixHeight() * matrix.getTileHeight()));
+        // Return the envelope surrounding the tiles found in the maximum zoom level
+        return gridRanges.get(coverageName);
     }
 
     @Override
@@ -325,8 +348,7 @@ public class GeoPackageReader extends AbstractGridCoverage2DReader {
                     graphics.setStroke(new BasicStroke(thickness));
                     graphics.drawRect(0, 0, tileImage.getWidth(), tileImage.getHeight());
                 }
-                */
-                
+                 */
                 // Create the destination image that we draw into
                 if (image == null) {
                     image = getStartImage(width, height, inputTransparentColor);
@@ -349,7 +371,6 @@ public class GeoPackageReader extends AbstractGridCoverage2DReader {
             if (image == null) { // no tiles ??
                 image = getStartImage(width, height, inputTransparentColor);
             }
-
 
             // Apply the color transparency mask
             if (inputTransparentColor != null) {
