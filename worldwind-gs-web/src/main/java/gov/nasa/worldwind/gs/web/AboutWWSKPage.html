@@ -1,0 +1,30 @@
+<html>
+    <body>
+    <wicket:extend>
+        
+        <div wicket:id="hellolabel"></div>
+
+        <form>
+            <ul>
+                <li>
+                    <fieldset>
+                        <legend><span><wicket:message key="moreInformation">More Information</wicket:message></span></legend>
+                        <p>
+                        <wicket:message key="usefulLinks"></wicket:message>
+                        </p>
+                        <ul style="margin-left: 2em;">
+                            <li>
+                                <a href="https://worldwind.arc.nasa.gov/"><wicket:message key="documentation">Documentation</wicket:message></a>
+                            </li>
+                            <li>
+                                <a href="https://github.com/NASAWorldWind/WorldWindServerKit/issues"><wicket:message key="bugTracker">Bug Tracker</wicket:message></a>
+                            </li>
+                        </ul>
+                    </fieldset>
+                </li>  
+            </ul>
+        </form>
+
+    </wicket:extend>   
+    </body>
+</html>
