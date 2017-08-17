@@ -152,7 +152,7 @@ public class GeoPackageTest {
         Connection cx = geopkg.getDataSource().getConnection();
         Statement st = cx.createStatement();
         try {
-            st.execute(String.format("SELECT count(*) FROM %s;", table));
+            st.execute(String.format("SELECT count(*) FROM '%s';", table));
         }
         catch(Exception e) {
             fail(e.getMessage());
@@ -298,6 +298,36 @@ public class GeoPackageTest {
         geopkg.add(entry, shp.getFeatureSource(), null);
 
         assertTableExists("bugsites");
+
+        //check metadata contents
+        assertFeatureEntry(entry);
+        
+        SimpleFeatureReader re = Features.simple(shp.getFeatureReader());
+        SimpleFeatureReader ra = geopkg.reader(entry, null, null);
+
+        while(re.hasNext()) {
+            assertTrue(ra.hasNext());
+            assertSimilar(re.next(), ra.next());
+        }
+
+        re.close();
+        ra.close();
+    }
+    
+    /**
+     * Identical to {@link GeoPackageTest#testCreateFeatureEntry()} but uses a
+     * pattern which requires quotes in SQLite.
+     * 
+     * @throws Exception 
+     */
+    @Test
+    public void testCreateFeatureEntryKeywordConflict() throws Exception {
+        ShapefileDataStore shp = new ShapefileDataStore(setUpShapefileKeywordConflict());
+
+        FeatureEntry entry = new FeatureEntry();
+        geopkg.add(entry, shp.getFeatureSource(), null);
+
+        assertTableExists("bug-sites");
 
         //check metadata contents
         assertFeatureEntry(entry);
@@ -499,11 +529,73 @@ public class GeoPackageTest {
             assertFalse(sfr.hasNext());
         }
     }
+    
+    /**
+     * Identical to {@link GeoPackageTest#testSpatialIndexReading()} but uses a 
+     * pattern which requires quotes in SQLite.
+     * 
+     * @throws Exception 
+     */
+    @Test 
+    public void testSpatialIndexReadingKeywordConflict() throws Exception {
+        FilterFactory ff = CommonFactoryFinder.getFilterFactory();
+        
+        ShapefileDataStore shp = new ShapefileDataStore(setUpShapefileKeywordConflict());
+
+        FeatureEntry entry = new FeatureEntry();
+        geopkg.add(entry, shp.getFeatureSource(), null);
+        
+        assertFalse(geopkg.hasSpatialIndex(entry));
+        
+        geopkg.createSpatialIndex(entry);
+        
+        assertTrue(geopkg.hasSpatialIndex(entry));
+        
+        Set ids = geopkg.searchSpatialIndex(entry, 590230.0, 4915038.0, 590234.0, 4915040.0);
+        try(SimpleFeatureReader sfr = geopkg.reader(entry, ff.id(ids), null)) {
+            assertTrue(sfr.hasNext());
+            assertEquals("bugsites.1", sfr.next().getID().toString());
+            assertFalse(sfr.hasNext());
+        }
+    }
 
     @Test
     public void testCreateTileEntry() throws Exception {
         TileEntry e = new TileEntry();
         e.setTableName("foo");
+        e.setBounds(new ReferencedEnvelope(-180,180,-90,90,DefaultGeographicCRS.WGS84));
+        e.getTileMatricies().add(new TileMatrix(0, 1, 1, 256, 256, 0.1, 0.1));
+        e.getTileMatricies().add(new TileMatrix(1, 2, 2, 256, 256, 0.1, 0.1));
+
+        geopkg.create(e);
+        assertTileEntry(e);
+
+        List<Tile> tiles = new ArrayList();
+        tiles.add(new Tile(0,0,0,new byte[]{0}));
+        tiles.add(new Tile(1,0,0,new byte[]{1}));
+        tiles.add(new Tile(1,0,1,new byte[]{2}));
+        tiles.add(new Tile(1,1,0,new byte[]{3}));
+        tiles.add(new Tile(1,1,1,new byte[]{4}));
+
+        for (Tile t : tiles) {
+            geopkg.add(e, t);
+        }
+
+        try(TileReader r = geopkg.reader(e, null, null, null, null, null, null)) {
+            assertTiles(tiles, r);
+        }
+    }
+    
+    /**
+     * Identical to {@link GeoPackageTest#testCreateTileEntry()} but uses a 
+     * pattern which requires quotes in SQLite.
+     * 
+     * @throws Exception 
+     */
+    @Test
+    public void testCreateTileEntryKeywordConflict() throws Exception {
+        TileEntry e = new TileEntry();
+        e.setTableName("foo-table");
         e.setBounds(new ReferencedEnvelope(-180,180,-90,90,DefaultGeographicCRS.WGS84));
         e.getTileMatricies().add(new TileMatrix(0, 1, 1, 256, 256, 0.1, 0.1));
         e.getTileMatricies().add(new TileMatrix(1, 2, 2, 256, 256, 0.1, 0.1));
@@ -579,7 +671,7 @@ public class GeoPackageTest {
         assertEquals("foo", te.getTableName());
         assertEquals(2, te.getTileMatricies().size());
     }
-
+    
     void assertTiles(List<Tile> tiles, TileReader r) throws IOException {
         for (Tile t : tiles) {
             assertTrue(r.hasNext());
@@ -726,6 +818,32 @@ public class GeoPackageTest {
         }
         
         return DataUtilities.fileToURL(new File(d, "bugsites.shp"));
+    }
+    
+    /**
+     * A copy of the {@link GeoPackageTest#setUpShapefile()} method but 
+     * substitutes a table name requiring quotes in SQLite.
+     * 
+     * @return
+     * @throws Exception 
+     */
+    URL setUpShapefileKeywordConflict() throws Exception {
+        File d = File.createTempFile("bug-sites", "shp", new File("target"));
+        d.delete();
+        d.mkdirs();
+
+        String[] exts = new String[]{"shp", "shx", "dbf", "prj"};
+        for (String ext : exts) {
+            if("prj".equals(ext)) {
+                String wkt = CRS.decode("EPSG:26713", true).toWKT();
+                FileUtils.writeStringToFile(new File(d, "bug-sites.prj"), wkt);
+            } else {
+                FileUtils.copyURLToFile(TestData.url("shapes/bugsites." + ext), 
+                new File(d, "bug-sites." + ext));
+            }
+        }
+        
+        return DataUtilities.fileToURL(new File(d, "bug-sites.shp"));
     }
 
     URL setUpGeoTiff() throws IOException {
