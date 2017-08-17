@@ -554,7 +554,7 @@ public class GeoPackageTest {
         Set ids = geopkg.searchSpatialIndex(entry, 590230.0, 4915038.0, 590234.0, 4915040.0);
         try(SimpleFeatureReader sfr = geopkg.reader(entry, ff.id(ids), null)) {
             assertTrue(sfr.hasNext());
-            assertEquals("bugsites.1", sfr.next().getID().toString());
+            assertEquals("bug-sites.1", sfr.next().getID().toString());
             assertFalse(sfr.hasNext());
         }
     }
