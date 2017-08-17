@@ -1160,7 +1160,7 @@ public class GeoPackage {
                     close(st);
                 }
                 //create the tile table itself
-                st = cx.prepareStatement(format("CREATE TABLE %s (" +
+                st = cx.prepareStatement(format("CREATE TABLE '%s' (" +
                     "id INTEGER PRIMARY KEY AUTOINCREMENT," +
                     "zoom_level INTEGER NOT NULL DEFAULT 0," +
                     "tile_column INTEGER NOT NULL DEFAULT 0," +
@@ -1174,7 +1174,7 @@ public class GeoPackage {
                 
                 //create an index on the tile
                 st = cx.prepareStatement(format(
-                        "create index %s_zyx_idx on %s(zoom_level, tile_column, tile_row);", 
+                        "create index '%s_zyx_idx' on '%s' (zoom_level, tile_column, tile_row);", 
                         e.getTableName(),  e.getTableName()));
                 try {
                     st.execute();
@@ -1205,7 +1205,7 @@ public class GeoPackage {
         try {
             Connection cx = connPool.getConnection();
             try {
-                PreparedStatement ps = prepare(cx, format("INSERT INTO %s (zoom_level, tile_column,"
+                PreparedStatement ps = prepare(cx, format("INSERT INTO '%s' (zoom_level, tile_column,"
                     + " tile_row, tile_data) VALUES (?,?,?,?)", entry.getTableName()))
                     .set(tile.getZoom()).set(tile.getColumn()).set(tile.getRow()).set(tile.getData())
                     .log(Level.FINE).statement();
@@ -1260,8 +1260,7 @@ public class GeoPackage {
             }
 
 //            StringBuffer sql = new StringBuffer("SELECT * FROM ").append(entry.getTableName());
-            // Apply quoting to the tablename to allow keywords and special characters to be used
-            StringBuffer sql = new StringBuffer("SELECT * FROM ").append("[" + entry.getTableName() + "]");
+            StringBuffer sql = new StringBuffer(format("SELECT * FROM '%s'", entry.getTableName()));
             if (!q.isEmpty()) {
                 sql.append(" WHERE ");
                 for (String s : q) {
@@ -1347,7 +1346,7 @@ public class GeoPackage {
             q.add("maxy <= " + maxY);
         }
 
-        StringBuffer sql = new StringBuffer("SELECT id FROM ").append(getSpatialIndexName(entry));
+        StringBuffer sql = new StringBuffer(format("SELECT id FROM '%s'", getSpatialIndexName(entry)));
         if (!q.isEmpty()) {
             sql.append(" WHERE ");
             for (String s : q) {
@@ -1404,9 +1403,7 @@ public class GeoPackage {
             int tileBounds = -1;
             
             StringBuffer sql = new StringBuffer("SELECT " + (isMax? "MAX" : "MIN") + "( " + (isRow? "tile_row" : "tile_column") + ") FROM ");
-//            sql.append(entry.getTableName());
-            // Apply quoting to the tablename to allow keywords and special characters to be used
-            sql.append("[" + entry.getTableName() + "]");
+            sql.append(format("'%s'", entry.getTableName()));
             sql.append(" WHERE zoom_level == ");
             sql.append(zoom);
             
