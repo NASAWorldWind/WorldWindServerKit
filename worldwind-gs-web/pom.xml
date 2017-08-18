@@ -55,6 +55,33 @@
             <groupId>org.geoserver.web</groupId>
             <artifactId>gs-web-core</artifactId>
         </dependency>
+    
+        <!-- test dependencies -->
+        <dependency>
+            <groupId>org.geoserver.web</groupId>
+            <artifactId>gs-web-core</artifactId>
+            <classifier>tests</classifier>
+            <scope>test</scope>
+        </dependency>
+    
+        <dependency>
+            <groupId>org.geoserver</groupId>
+            <artifactId>gs-main</artifactId>
+            <classifier>tests</classifier>
+            <scope>test</scope>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+            <scope>test</scope>
+        </dependency>    
+        
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <scope>provided</scope>
+        </dependency>        
     </dependencies>  
     
     <!--=====================================================================-->
@@ -64,13 +91,17 @@
         <plugins />
         <resources>
             <resource>
+                <!--
+                Include applicationContext.xml Spring bean factory configuration,
+                Wicket html markup files and images.
+                -->
                 <directory>${basedir}/src/main/java</directory>
-                <includes>
-                    <!--Spring bean factory configuration-->
-                    <include>applicationContext.xml</include>
-                </includes>
-            </resource>
+                <excludes>
+                    <exclude>**/*.java</exclude>
+                </excludes>
+            </resource>        
             <resource>
+                <!--GeoServerApplication.properties-->
                 <directory>${basedir}/src/main/resources</directory>
                 <includes>
                     <include>**/*</include>
