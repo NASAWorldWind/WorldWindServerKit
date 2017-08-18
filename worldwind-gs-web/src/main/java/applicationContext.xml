@@ -34,12 +34,4 @@
     </bean>
 
 
-    <!--Implementing a Wicket UI Extension tutorial-->
-    <bean id="helloPage" class="org.geoserver.web.MenuPageInfo">
-      <property name="id" value="helloPage"/>
-      <property name="titleKey" value="HelloPage.page.title"/>
-      <property name="descriptionKey" value="HelloPage.page.description"/>
-      <property name="componentClass" value="org.geoserver.web.HelloPage"/>
-    </bean>
-
 </beans>
