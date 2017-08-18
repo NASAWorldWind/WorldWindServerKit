@@ -117,6 +117,12 @@ application directory.
             <version>${project.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>worldwind-gs-web</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
         <!--Module Dependencies--> 
         <dependency>
             <groupId>org.geoserver.web</groupId>
@@ -216,13 +222,19 @@ application directory.
         <plugins />
         <resources>
             <resource>
+                <!--
+                Include applicationContext.xml Spring bean factory configuration,
+                Wicket html markup files and images.
+                -->
                 <directory>${basedir}/src/main/java</directory>
-                <includes>
-                    <!--Spring bean factory configuration-->
-                    <include>applicationContext.xml</include>
-                </includes>
-            </resource>
+                <excludes>
+                    <exclude>**/*.java</exclude>
+                </excludes>
+            </resource>        
             <resource>
+                <!--
+                Include i8n GeoServerApplication.properties file(s)
+                -->
                 <directory>${basedir}/src/main/resources</directory>
                 <includes>
                     <include>**/*</include>

@@ -70,4 +70,25 @@ application directory.
         <property name="icon" value="img/icons/geosilk/page_white_raster.png"/>
         <property name="componentClass" value="gov.nasa.worldwind.gs.geopkg.GeoPackageRasterEditPanel"/>
     </bean>
+    
+    
+    <!--
+    Bean to create a link to the "Export GeoPackage" in the WWSK category.
+    -->
+    <bean id="exportGeoPackageLink" class="org.geoserver.web.MenuPageInfo">
+        <!-- An internal identifier for the link component -->
+        <property name="id" value="exportGeoPackage"/>
+        <!-- The i18n key for the link title -->
+        <property name="titleKey" value="ExportGeoPackagePage.page.title"/>
+        <!-- The i18n key for a longer description of the page used for a tooltip -->
+        <property name="descriptionKey" value="ExportGeoPackagePage.page.description"/>
+        <!-- The fully qualified name of the page class -->
+        <property name="componentClass" value="gov.nasa.worldwind.gs.geopkg.web.ExportGeoPackagePage"/>
+        <!-- Optional, an icon to display alongside the link. -->
+        <!--<property name="icon" value="img/icons/silk/help.png"/>-->
+        <!-- Optional, the bean id of the menu category in which the link should be grouped. -->
+        <property name="category" ref="wwskCategory"/>
+        <!-- Optional, a key used to order the links in the menu. -->
+        <property name="order" value="110"/>
+    </bean>    
 </beans>
