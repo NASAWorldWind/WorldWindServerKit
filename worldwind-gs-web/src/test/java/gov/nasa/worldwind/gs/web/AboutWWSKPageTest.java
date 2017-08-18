@@ -17,15 +17,9 @@
  */
 package gov.nasa.worldwind.gs.web;
 
-import java.util.Locale;
-import org.apache.wicket.Component;
-import org.apache.wicket.Page;
-import org.apache.wicket.markup.html.basic.Label;
 import org.geoserver.web.GeoServerWicketTestSupport;
 import static org.geoserver.web.GeoServerWicketTestSupport.tester;
-import org.junit.Before;
 import org.junit.Test;
-import static org.junit.Assert.*;
 
 /**
  *
@@ -45,9 +39,6 @@ public class AboutWWSKPageTest extends GeoServerWicketTestSupport {
         tester.startPage(new AboutWWSKPage());
         tester.assertRenderedPage(AboutWWSKPage.class);
         tester.assertNoErrorMessage();
-
-        tester.assertComponent("hellolabel", Label.class);
-        tester.assertVisible("hellolabel");
 
     }
 }
