@@ -33,7 +33,7 @@ import org.geoserver.web.GeoServerBasePage;
 public class AboutWWSKPage extends GeoServerBasePage {
 
     public AboutWWSKPage() {
-        add(new Label("hellolabel", "Hello WorldWind!"));
+
     }
 
 }
