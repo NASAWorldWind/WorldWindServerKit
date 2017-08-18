@@ -26,7 +26,7 @@
         <!-- The fully qualified name of the page class -->
         <property name="componentClass" value="gov.nasa.worldwind.gs.web.AboutWWSKPage"/>
         <!-- Optional, an icon to display alongside the link. -->
-        <!--<property name="icon" value="img/icons/silk/help.png"/>-->
+        <property name="icon" value="img/icons/silk/help.png"/>
         <!-- Optional, the bean id of the menu category in which the link should be grouped. -->
         <property name="category" ref="wwskCategory"/>
         <!-- Optional, a key used to order the links in the menu. -->
