@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans>
+
+    <!-- 
+    Define the WWSK menu category. 
+    The menu cateory's text is set in the GeoServerApplication.properties file.
+    GeoServer's menu categories are defined in it's Core UI Module applicationContext.xml
+    -->
+    <bean id="wwskCategory" class="org.geoserver.web.Category">
+        <property name="nameKey" value="category.wwsk" />
+        <property name="order" value="200" />
+    </bean>
+    
+    <!--
+    Create a link to the "About WWSK" page in the WWSK category.
+    -->
+    <bean id="aboutWWSKLink" class="org.geoserver.web.MenuPageInfo">
+        <!-- An internal identifier for the link component -->
+        <property name="id" value="aboutWWSK"/>
+        <!-- The i18n key for the link title -->
+        <property name="titleKey" value="AboutWWSKPage.page.title"/>
+        <!-- The i18n key for a longer description of the page used for a tooltip -->
+        <property name="descriptionKey" value="AboutWWSKPage.page.description"/>
+        <!-- The fully qualified name of the page class -->
+        <property name="componentClass" value="gov.nasa.worldwind.gs.web.AboutWWSKPage"/>
+        <!-- Optional, an icon to display alongside the link. -->
+        <property name="icon" value="img/icons/silk/help.png"/>
+        <!-- Optional, the bean id of the menu category in which the link should be grouped. -->
+        <property name="category" ref="wwskCategory"/>
+        <!-- Optional, a key used to order the links in the menu. -->
+        <property name="order" value="100"/>
+    </bean>
+
+
+</beans>
