@@ -16,14 +16,19 @@
  */
 package gov.nasa.worldwind.geopkg;
 
+import java.io.Serializable;
+import java.util.Objects;
+
 /**
  * A TileMatrix inside a Geopackage. Corresponds to the gpkg_tile_matrix table.
- * 
+ *
  * @author Justin Deoliveira
  * @author Niels Charlier
  *
  */
-public class TileMatrix {
+public class TileMatrix implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     Integer zoomLevel;
     Integer matrixWidth, matrixHeight;
@@ -34,8 +39,8 @@ public class TileMatrix {
     public TileMatrix() {
     }
 
-    public TileMatrix(Integer zoomLevel, Integer matrixWidth, Integer matrixHeight, 
-        Integer tileWidth, Integer tileHeight, Double xPixelSize, Double yPixelSize) {
+    public TileMatrix(Integer zoomLevel, Integer matrixWidth, Integer matrixHeight,
+            Integer tileWidth, Integer tileHeight, Double xPixelSize, Double yPixelSize) {
         super();
         this.zoomLevel = zoomLevel;
         this.matrixWidth = matrixWidth;
@@ -44,6 +49,55 @@ public class TileMatrix {
         this.tileHeight = tileHeight;
         this.xPixelSize = xPixelSize;
         this.yPixelSize = yPixelSize;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 31 * hash + Objects.hashCode(this.zoomLevel);
+        hash = 31 * hash + Objects.hashCode(this.matrixWidth);
+        hash = 31 * hash + Objects.hashCode(this.matrixHeight);
+        hash = 31 * hash + Objects.hashCode(this.tileWidth);
+        hash = 31 * hash + Objects.hashCode(this.tileHeight);
+        hash = 31 * hash + Objects.hashCode(this.xPixelSize);
+        hash = 31 * hash + Objects.hashCode(this.yPixelSize);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final TileMatrix other = (TileMatrix) obj;
+        if (!Objects.equals(this.zoomLevel, other.zoomLevel)) {
+            return false;
+        }
+        if (!Objects.equals(this.matrixWidth, other.matrixWidth)) {
+            return false;
+        }
+        if (!Objects.equals(this.matrixHeight, other.matrixHeight)) {
+            return false;
+        }
+        if (!Objects.equals(this.tileWidth, other.tileWidth)) {
+            return false;
+        }
+        if (!Objects.equals(this.tileHeight, other.tileHeight)) {
+            return false;
+        }
+        if (!Objects.equals(this.xPixelSize, other.xPixelSize)) {
+            return false;
+        }
+        if (!Objects.equals(this.yPixelSize, other.yPixelSize)) {
+            return false;
+        }
+        return true;
     }
 
     public Integer getZoomLevel() {
