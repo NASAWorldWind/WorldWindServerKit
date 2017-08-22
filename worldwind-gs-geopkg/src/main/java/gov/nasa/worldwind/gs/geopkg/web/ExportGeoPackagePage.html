@@ -1,8 +1,70 @@
 <html>
-<body>
+    <body>
     <wicket:extend>
         <form wicket:id="form">
             <ul>
+                <li>
+                    <label><wicket:message key="layer">Layer</wicket:message></label>
+                    <select wicket:id="layer" style="width: 260px;"></select>
+                </li>
+                <li>
+                    <label for="name"><wicket:message key="name">Name</wicket:message></label>
+                    <input id="name" class="text" type="text" wicket:id="name"/>
+                </li>
+                <li>
+                    <label for="identifier"><wicket:message key="identifier">Identifier</wicket:message></label>
+                    <input id="identifier" class="text" type="text" wicket:id="identifier"/>
+                </li>
+                <li>
+                    <label for="desc"><wicket:message key="desc">Description</wicket:message></label>
+                    <input id="desc" class="text" type="text" wicket:id="desc"/>
+                </li>
+                <li>
+                    <label for="styles"><wicket:message key="styles">Description</wicket:message></label>
+                    <input id="styles" class="text" type="text" wicket:id="styles"/>
+                </li>
+                <li>
+                    <label for="mimeType"><wicket:message key="mimeType">Mime Type</wicket:message></label>
+                    <input id="mimeType" class="text" type="text" wicket:id="mimeType"/>
+                </li>
+                <li>
+                    <label for="bkgdColor"><wicket:message key="bkgdColor">Background Color</wicket:message></label>
+                    <input id="bkgdColor" class="text" type="text" wicket:id="bkgdColor"/>
+                </li>
+                <li class="choiceItem">
+                    <input id="transparent" wicket:id="transparent" type="checkbox"/>
+                    <label for="transparent"><wicket:message key="transparent">Transparent</wicket:message></label>
+                </li>               
+                <li>
+                    <fieldset>
+                        <legend><span><wicket:message key="boundingBoxes">Bounding Boxes</wicket:message></span></legend>
+                        <ul>
+                            <!--                            <li>
+                                                            <label for="nativeBoundingBox"><wicket:message key="nativeBbox">Native BBox</wicket:message></label>
+                                                            <div id="nativeBoundingBox" wicket:id="nativeBoundingBox"></div>
+                                                            <div id="nativeBBoxControls" class="bounding-box-controls">
+                                                                <a href="#" wicket:id="computeNative">
+                                                                    <wicket:message key="computeFromData">Compute from data</wicket:message>
+                                                                </a>
+                                                                <a href="#" wicket:id="computeLatLonFromNativeSRS">
+                                                                    <wicket:message key="computeFromSRS">Compute from SRS bounds</wicket:message>
+                                                                </a>
+                                                            </div>
+                            
+                                                        </li>-->
+                            <li>
+                                <label for="latLonBoundingBox"><wicket:message key="latLonBbox">Lat/Lon BBOX</wicket:message></label>
+                                <div id="latLonBoundingBox" wicket:id="latLonBoundingBox"></div>
+                                <a href="#" wicket:id="computeLatLon" class="computeLink"><wicket:message key="computeFromNativeBounds">Compute from native bounds</wicket:message></a>
+                            </li>
+                        </ul>
+                    </fieldset>
+                </li>
+                <li>
+                    <label for="filename"><wicket:message key="filename">Name</wicket:message></label>
+                    <input id="filename" class="text" type="text" wicket:id="filename"/>
+                </li>
+                
                 <li class="button-group selfclear">
                     <button wicket:id="executeProcess" type="submit"><wicket:message key="execute">execute</wicket:message></button>
                     <button wicket:id="executeXML" type="submit"><wicket:message key="showXML">show xml</wicket:message></button>
