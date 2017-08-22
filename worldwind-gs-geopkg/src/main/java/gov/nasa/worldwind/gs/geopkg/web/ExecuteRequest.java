@@ -1,41 +1,40 @@
-/* (c) 2014 - 2016 Open Source Geospatial Foundation - all rights reserved
- * (c) 2001 - 2013 OpenPlans
- * This code is licensed under the GPL 2.0 license, available at the root
- * application directory.
+/*
+ * Copyright (C) 2017 NASA World Wind
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 package gov.nasa.worldwind.gs.geopkg.web;
 
+import gov.nasa.worldwind.geopkg.wps.GeoPackageProcessRequest;
 import java.io.Serializable;
 
 /**
- * Holds on the properties used as arguments for the TestWfsPost servlet
- * 
- * @author Gabriel Roldan (TOPP)
- * @version $Id$
- * @since 2.0.x
+ * A simple POD object that holds the properties used to build and Export
+ * GeoPackage WPS request.
+ *
  */
-public class ExportRequest implements Serializable {
-    private static final long serialVersionUID = -6605104556907827822L;
+public class ExecuteRequest implements Serializable {
 
-    /**
-     * The directory containing the demo files
-     */
-    private final String demoDir;
-
+    private static final long serialVersionUID = 1L;
+    
     private String requestFileName;
-
     private String requestUrl;
-
     private String requestBody;
-
     private String userName;
-
     private String password;
-
-    public ExportRequest(final String demoDir) {
-        this.demoDir = demoDir;
-    }
-
+   
     public String getUserName() {
         return userName;
     }
@@ -76,7 +75,4 @@ public class ExportRequest implements Serializable {
         this.requestBody = requestBody;
     }
 
-    public String getDemoDir() {
-        return demoDir;
-    }
 }
