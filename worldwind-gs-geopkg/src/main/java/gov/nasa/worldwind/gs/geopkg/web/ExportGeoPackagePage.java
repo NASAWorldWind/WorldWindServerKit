@@ -63,11 +63,16 @@ import org.apache.wicket.markup.html.form.FormComponent;
  */
 public class ExportGeoPackagePage extends GeoServerSecuredPage {
 
+    //choices in dropdown box
+    private static final List<String> FORMATS = Arrays.asList(new String[]{
+        "image/vnd.jpeg-png", "image/jpeg", "image/png"});
+
     // The default model object for this page
     private GeoPackageProcessRequest processRequest;
     private GeoPackageProcessRequest.TilesLayer tilesLayer;
 
     DropDownChoice<LayerInfo> layerChoice;
+    TextField<String> styles;
     TextField<String> tilesetName;
     TextField<String> filename;
     final BBoxPanel latLonPanel;
@@ -86,6 +91,9 @@ public class ExportGeoPackagePage extends GeoServerSecuredPage {
 
         layerChoice = initLayersDropDown("layer", form);
 
+        styles = new TextField<>("styles", new Model("raster")); // HACH until a style selection is implemented
+        form.add(styles);
+
         // Setup the tileset tilesetName field so that it can be updated by the layer choice
         tilesetName = new TextField<>("name", new PropertyModel(tilesLayer, "name"));
         tilesetName.setRequired(true);
@@ -100,8 +108,11 @@ public class ExportGeoPackagePage extends GeoServerSecuredPage {
 
         form.add(new TextField<>("identifier", new PropertyModel<>(tilesLayer, "identifier")));
         form.add(new TextField<>("desc", new PropertyModel<>(tilesLayer, "description")));
-        form.add(new TextField<>("styles", new PropertyModel<>(tilesLayer, "sldBody")));
-        form.add(new TextField<>("mimeType", new PropertyModel<>(tilesLayer, "format")));
+
+        DropDownChoice<String> formats = new DropDownChoice<String>("mimeType", 
+                new PropertyModel<>(tilesLayer, "format"), FORMATS);
+        form.add(formats);
+        
         form.add(new TextField<>("bkgdColor", new PropertyModel<>(tilesLayer, "bgColor")));
         form.add(new CheckBox("transparent", new PropertyModel<>(tilesLayer, "transparent")));
 
@@ -141,6 +152,7 @@ public class ExportGeoPackagePage extends GeoServerSecuredPage {
         }
         tilesLayer.setBbox(new Envelope());
         tilesLayer.setCoverage(new TilesCoverage());
+//        tilesLayer.setStyles(Arrays.asList("raster"));
 
         // Create the process request and initialize
         processRequest = new GeoPackageProcessRequest();
@@ -375,6 +387,11 @@ public class ExportGeoPackagePage extends GeoServerSecuredPage {
         LayerInfo layer = layerChoice.getModelObject();
         Envelope bbox = latLonPanel.getModelObject();
         TilesCoverage coverage = coveragePanel.getModelObject();
+        String stylesList = styles.getModelObject();
+        if (stylesList != null) {
+            List<String> list = Arrays.asList(stylesList.split(","));
+            tilesLayer.setStyles(list);
+        }
         tilesLayer.setLayers(Arrays.asList(new QName(layer.prefixedName())));
         tilesLayer.setBbox(bbox);
         tilesLayer.setCoverage(coverage);
