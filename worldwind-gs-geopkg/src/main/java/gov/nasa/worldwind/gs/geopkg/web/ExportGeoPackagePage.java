@@ -56,6 +56,7 @@ import java.util.Arrays;
 import java.util.Comparator;
 import javax.xml.namespace.QName;
 import org.apache.wicket.markup.html.form.FormComponent;
+import org.geoserver.web.wicket.ColorPickerField;
 
 /**
  *
@@ -113,7 +114,11 @@ public class ExportGeoPackagePage extends GeoServerSecuredPage {
                 new PropertyModel<>(tilesLayer, "format"), FORMATS);
         form.add(formats);
         
-        form.add(new TextField<>("bkgdColor", new PropertyModel<>(tilesLayer, "bgColor")));
+//        form.add(new ColorPickerField("bkgdColor", new PropertyModel<>(tilesLayer, "bgColor")));
+        TextField<Object> color = new TextField<>("bkgdColor", new PropertyModel<>(tilesLayer, "bgColor"));
+        color.setEnabled(false);  // Problematic -- disabled until solved.
+        form.add(color);
+        
         form.add(new CheckBox("transparent", new PropertyModel<>(tilesLayer, "transparent")));
 
         // lat/lon bbox
