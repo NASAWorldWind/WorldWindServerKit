@@ -29,7 +29,7 @@
     
     <groupId>gov.nasa.worldwind.server</groupId>
     <artifactId>worldwind-serverkit</artifactId>
-    <version>0.3.1</version> 
+    <version>0.4.0</version> 
     <packaging>pom</packaging>
 
     <!--=====================================================================-->
@@ -62,6 +62,7 @@
         <module>worldwind-gt-geopkg</module>
         <module>worldwind-gs-geopkg</module>
         <module>worldwind-gs-wms</module>
+        <module>worldwind-gs-web</module>
         <module>worldwind-geoserver</module>
         <module>worldwind-geoserver-dist</module>
     </modules>  

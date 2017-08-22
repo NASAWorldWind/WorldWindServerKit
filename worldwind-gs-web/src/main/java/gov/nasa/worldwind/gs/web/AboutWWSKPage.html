@@ -1,0 +1,50 @@
+<html>
+    <body>
+    <wicket:extend>
+        <div>
+            <form>
+                <ul>
+                    <li>
+                        <fieldset style="margin-top: 1em;">
+                            <legend>
+                                <span><wicket:message key="buildInformation">Build Information</wicket:message></span>
+                            </legend>
+                            <ul>
+                                <li>
+                                    <label for="version"><wicket:message key="wwskVersion">Version</wicket:message></label>
+                                    <span id="version"><wicket:message key="wwsk.version"></wicket:message></span>
+                                </li>
+                            </ul>
+                        </fieldset>
+                    </li>
+                    <li>
+                        <fieldset>
+                            <legend><span><wicket:message key="moreInformation">More Information</wicket:message></span></legend>
+                            <p>
+                            <wicket:message key="introduction"></wicket:message>
+                            </p>
+                            <p>
+                            <wicket:message key="usefulLinks"></wicket:message>
+                            </p>
+                            <ul style="margin-left: 2em;">
+                                <li>
+                                    <a href="https://worldwind.arc.nasa.gov/"><wicket:message key="website">NASA WorldWind</wicket:message></a>
+                                </li>
+                                <li>
+                                    <a href="https://github.com/NASAWorldWind/WorldWindServerKit/releases"><wicket:message key="releases">Releases</wicket:message></a>
+                                </li>
+                                <li>
+                                    <a href="https://github.com/NASAWorldWind/WorldWindServerKit/issues"><wicket:message key="bugTracker">Bug Tracker</wicket:message></a>
+                                </li>
+                                <li>
+                                    <a href="https://github.com/NASAWorldWind/WorldWindServerKit"><wicket:message key="project">Project</wicket:message></a>
+                                </li>
+                            </ul>
+                        </fieldset>
+                    </li>  
+                </ul>
+            </form>
+        </div>
+    </wicket:extend>   
+</body>
+</html>
