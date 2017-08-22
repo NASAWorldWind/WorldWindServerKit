@@ -17,8 +17,9 @@ import org.geotools.xml.Parser;
 import org.picocontainer.MutablePicoContainer;
 
 /**
- * GeoPackageProcessRequest process parameter input / output (PPIO) for data on
- * the {@code "text/xml; subtype=geoserver/geopackage"} mime type.
+ * GeoPackageProcessRequestPPIO is the GeoPackageProcessRequest WPS process
+ * parameter input / output (PPIO) for data on the
+ * {@code "text/xml; subtype=geoserver/geopackage"} mime type.
  * <p/>
  * GeoPackageProcessRequestPPIO is registered as a Spring bean.
  *

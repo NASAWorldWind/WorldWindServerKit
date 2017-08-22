@@ -135,6 +135,11 @@
             <version>${gt.version}</version>
         </dependency>
         <dependency>
+            <groupId>org.geotools.xsd</groupId>
+            <artifactId>gt-xsd-wps</artifactId>
+            <version>${gt.version}</version>
+        </dependency>
+        <dependency>
             <groupId>simple-jndi</groupId>
             <artifactId>simple-jndi</artifactId>
             <scope>test</scope>

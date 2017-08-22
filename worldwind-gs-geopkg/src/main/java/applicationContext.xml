@@ -7,19 +7,33 @@ application directory.
 <!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
 <beans>
     
-    <!--GeoPackageModuleStatus provides an entry in the "Server Status" > "Modules" page-->
+    <!--
+    GeoPackageModuleStatus provides an entry in the "Server Status | Modules" page.
+    -->
     <bean class="gov.nasa.worldwind.gs.geopkg.GeoPackageModuleStatus"/>  
       
+    <!--
+    The GeoPackageGetMapOutputFormat is a WFSGetFeatureOutputFormat subclass
+    that generates a response to a WFS GetFeature operation for a GeoPackage
+    mime type ("application/x-gpkg").
+    -->
     <bean id="GeoPackageGetMapOutputFormat" class="gov.nasa.worldwind.gs.geopkg.GeoPackageGetMapOutputFormat">
         <constructor-arg ref="webMapService" />
         <constructor-arg ref="wms" />
         <constructor-arg ref="gwcFacade" />
     </bean>
     
+    <!--
+    The GeoPackageGetFeatureOutputFormat is a GetMapOutputFormat implemenation that 
+    generates the WMS GetMap output for a GeoPackage mime type ("application/x-gpkg").
+    -->
     <bean id="GeoPackageGetFeatureOutputFormat" class="gov.nasa.worldwind.gs.geopkg.GeoPackageGetFeatureOutputFormat">
         <constructor-arg ref="geoServer" />
     </bean>
     
+    <!--    
+    The GeoPackageProcess is responsible for processing a WPS GeoPackageProcessRequest.
+    -->
     <bean id="GeoPackageProcess" class="gov.nasa.worldwind.gs.geopkg.wps.GeoPackageProcess">
         <constructor-arg index="0" ref="geoServer"/>
         <constructor-arg index="1" ref="GeoPackageGetMapOutputFormat" />
@@ -28,19 +42,27 @@ application directory.
     </bean>
     
     <!--    
-    Depends on the wpsXmlConfiguration-1.0.0 WPSConfiguration object registered in  
-    the wps-core module to execute WPS requests.
+    The GeoPackageProcessRequestPPIO is the WPS process parameter input/output 
+    for the GeoPackage mime type: "text/xml; subtype=geoserver/geopackage"  
+    It depends on the wpsXmlConfiguration-1.0.0 WPSConfiguration object 
+    registered in the wps-core module to execute WPS requests.
     -->
     <bean id="GeoPackageProcessRequestPPIO" class="gov.nasa.worldwind.gs.geopkg.wps.GeoPackageProcessRequestPPIO" >
         <constructor-arg index="0" ref="entityResolverProvider"/>
         <constructor-arg index="1" ref="wpsXmlConfiguration-1.0.0" />
     </bean>
     
+    <!--    
+    The GeoPackageDataStoreFactoryInitializer initializes GeoPkgDataStoreFactory.
+    -->
     <bean id="GeoPackageDataStoreFactoryInitializer" class="gov.nasa.worldwind.gs.geopkg.GeoPkgDataStoreFactoryInitializer">
         <property name="resourceLoader" ref="resourceLoader"/>
     </bean>
     
-    <!--UI Component for browsing to a GeoPackage file-->
+    <!-- 
+    The GeoPackageDataStorePanel is the UI Component for browsing to a GeoPackage 
+    file when creating a Data Store 
+    -->
     <bean id="GeoPackageDataStorePanel" class="org.geoserver.web.data.resource.DataStorePanelInfo">
         <property name="id" value="gpkgRaster"/>
         <property name="factoryClass" value="gov.nasa.worldwind.geopkg.mosaic.GeoPackageFormat"/>
@@ -48,4 +70,25 @@ application directory.
         <property name="icon" value="img/icons/geosilk/page_white_raster.png"/>
         <property name="componentClass" value="gov.nasa.worldwind.gs.geopkg.GeoPackageRasterEditPanel"/>
     </bean>
+    
+    
+    <!--
+    Bean to create a link to the "Export GeoPackage" in the WWSK category.
+    -->
+    <bean id="exportGeoPackageLink" class="org.geoserver.web.MenuPageInfo">
+        <!-- An internal identifier for the link component -->
+        <property name="id" value="exportGeoPackage"/>
+        <!-- The i18n key for the link title -->
+        <property name="titleKey" value="ExportGeoPackagePage.page.title"/>
+        <!-- The i18n key for a longer description of the page used for a tooltip -->
+        <property name="descriptionKey" value="ExportGeoPackagePage.page.description"/>
+        <!-- The fully qualified name of the page class -->
+        <property name="componentClass" value="gov.nasa.worldwind.gs.geopkg.web.ExportGeoPackagePage"/>
+        <!-- Optional, an icon to display alongside the link. -->
+        <!--<property name="icon" value="img/icons/silk/help.png"/>-->
+        <!-- Optional, the bean id of the menu category in which the link should be grouped. -->
+        <property name="category" ref="wwskCategory"/>
+        <!-- Optional, a key used to order the links in the menu. -->
+        <property name="order" value="110"/>
+    </bean>    
 </beans>

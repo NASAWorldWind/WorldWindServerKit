@@ -16,7 +16,6 @@
  */
 package gov.nasa.worldwind.geopkg.wps.xml;
 
-
 import java.awt.Color;
 import java.net.URI;
 import java.util.ArrayList;
@@ -29,7 +28,6 @@ import gov.nasa.worldwind.geopkg.wps.GeoPackageProcessRequest.Layer;
 import org.geotools.xml.*;
 import org.geotools.xs.bindings.XSQNameBinding;
 
-
 import javax.xml.namespace.NamespaceContext;
 import javax.xml.namespace.QName;
 
@@ -37,8 +35,9 @@ import javax.xml.namespace.QName;
  * Binding object for the type http://www.opengis.net/gpkg:geopkgtype_tiles.
  *
  * <p>
- *	<pre>
- *	 <code>
+ * <
+ * pre>
+ * <code>
  *  &lt;?xml version="1.0" encoding="UTF-8"?&gt;&lt;xs:complexType name="geopkgtype_tiles" xmlns:xs="http://www.w3.org/2001/XMLSchema"&gt;
  *            &lt;xs:complexContent&gt;
  *              &lt;xs:extension base="layertype"&gt;
@@ -57,66 +56,71 @@ import javax.xml.namespace.QName;
  *                &lt;/xs:sequence&gt;
  *              &lt;/xs:extension&gt;
  *            &lt;/xs:complexContent&gt;
- *          &lt;/xs:complexType&gt; 
- *		
- *	  </code>
- *	 </pre>
+ *          &lt;/xs:complexType&gt;
+ *
+ * </code>
+ * </pre>
  * </p>
  *
  * @generated
  */
 public class Geopkgtype_tilesBinding extends LayertypeBinding {
-    
-        NamespaceContext namespaceContext;
-    
-        public Geopkgtype_tilesBinding(NamespaceContext namespaceContext) {
-            this.namespaceContext = namespaceContext;
-        }
 
-	/**
-	 * @generated
-	 */
-	public QName getTarget() {
-		return GPKG.geopkgtype_tiles;
-	}
-	
-        @Override
-        public Layer parseLayer(ElementInstance instance, Node node, Object value) throws Exception {
-            XSQNameBinding nameBinding = new XSQNameBinding(namespaceContext);
-            
-            GeoPackageProcessRequest.TilesLayer layer = new GeoPackageProcessRequest.TilesLayer();
-            List<QName> layers = new ArrayList<QName>();
-            for (String layerName: Arrays.asList(((String) node.getChildValue("layers")).split(","))) {
-               layers.add((QName) nameBinding.parse(null, layerName.trim() ));
-            }
-            layer.setLayers(layers);
-            String styleNames = (String) node.getChildValue("styles");            
-            if (styleNames != null) {                
-                List<String> styles = new ArrayList<String>();
-                for (String styleName : Arrays.asList(styleNames.split(","))) {
-                    styles.add( styleName.trim() );
-                }                
-                layer.setStyles( styles );
-            }
-            layer.setSld((URI) node.getChildValue("sld"));
-            layer.setSldBody((String) node.getChildValue("sldBody"));
-            layer.setFormat((String) node.getChildValue("format"));
-            String bgColor = (String) node.getChildValue("bgcolor");
-            if (bgColor != null){
-                layer.setBgColor( Color.decode("#" + bgColor) );
-            }
-            Boolean transparent = (Boolean) node.getChildValue("transparent");
-            if (transparent != null){
-                layer.setTransparent(transparent);
-            }
-            layer.setCoverage((GeoPackageProcessRequest.TilesLayer.TilesCoverage) node.getChildValue("coverage"));
-            Object gridSet = node.getChildValue("gridset");
-            if (gridSet instanceof String){
-                layer.setGridSetName((String) gridSet);
-            } else if (gridSet instanceof List<?>){
-                layer.setGrids((List<TileMatrix>) gridSet);
-            }
-            return layer;
+    NamespaceContext namespaceContext;
+
+    public Geopkgtype_tilesBinding(NamespaceContext namespaceContext) {
+        this.namespaceContext = namespaceContext;
+    }
+
+    /**
+     * @generated
+     */
+    public QName getTarget() {
+        return GPKG.geopkgtype_tiles;
+    }
+
+    @Override
+    public Layer parseLayer(ElementInstance instance, Node node, Object value) throws Exception {
+        XSQNameBinding nameBinding = new XSQNameBinding(namespaceContext);
+
+        GeoPackageProcessRequest.TilesLayer layer = new GeoPackageProcessRequest.TilesLayer();
+        List<QName> layers = new ArrayList<QName>();
+        for (String layerName : Arrays.asList(((String) node.getChildValue("layers")).split(","))) {
+            layers.add((QName) nameBinding.parse(null, layerName.trim()));
         }
+        layer.setLayers(layers);
+        String styleNames = (String) node.getChildValue("styles");
+        if (styleNames != null) {
+            List<String> styles = new ArrayList<String>();
+            for (String styleName : Arrays.asList(styleNames.split(","))) {
+                styles.add(styleName.trim());
+            }
+            layer.setStyles(styles);
+        }
+        layer.setSld((URI) node.getChildValue("sld"));
+        layer.setSldBody((String) node.getChildValue("sldBody"));
+        layer.setFormat((String) node.getChildValue("format"));
+        String bgColor = (String) node.getChildValue("bgcolor");
+        if (bgColor != null) {
+            if (bgColor.length() == 6) {
+                layer.setBgColor(Color.decode("#" + bgColor));
+            } else if (bgColor.length() == 8) {
+                int rgba = Long.decode("#" + bgColor).intValue();
+                layer.setBgColor(new Color(rgba, /*has alpha*/ true));
+            }
+        }
+        Boolean transparent = (Boolean) node.getChildValue("transparent");
+        if (transparent != null) {
+            layer.setTransparent(transparent);
+        }
+        layer.setCoverage((GeoPackageProcessRequest.TilesLayer.TilesCoverage) node.getChildValue("coverage"));
+        Object gridSet = node.getChildValue("gridset");
+        if (gridSet instanceof String) {
+            layer.setGridSetName((String) gridSet);
+        } else if (gridSet instanceof List<?>) {
+            layer.setGrids((List<TileMatrix>) gridSet);
+        }
+        return layer;
+    }
 
 }

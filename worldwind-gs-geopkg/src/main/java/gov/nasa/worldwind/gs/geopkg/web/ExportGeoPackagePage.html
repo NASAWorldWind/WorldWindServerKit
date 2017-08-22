@@ -1,0 +1,99 @@
+<html>
+    <body>
+    <wicket:extend>
+        <form wicket:id="form">
+            <ul>
+                <li>
+                    <fieldset>
+                        <legend><span><wicket:message key="input">Input</wicket:message></span></legend>
+                        <ul>
+                            <li>
+                                <label><wicket:message key="layer">Layer</wicket:message></label>
+                                <select wicket:id="layer" style="width: 260px;"></select>
+                            </li>
+                            <li>
+                                <label for="styles"><wicket:message key="styles">Styles</wicket:message></label>
+                                <input id="styles" class="text" type="text" wicket:id="styles"/>
+                            </li>
+                        </ul>
+                    </fieldset>
+                </li>
+                <li>
+                    <fieldset>
+                        <legend><span><wicket:message key="layerContents">Tiles</wicket:message></span></legend>
+                        <ul>
+                            <li>
+                                <label for="name"><wicket:message key="name">Name</wicket:message></label>
+                                <input id="name" class="text" type="text" wicket:id="name"/>
+                            </li>
+                            <li>
+                                <label for="identifier"><wicket:message key="identifier">Identifier</wicket:message></label>
+                                <input id="identifier" class="text" type="text" wicket:id="identifier"/>
+                            </li>
+                            <li>
+                                <label for="desc"><wicket:message key="desc">Description</wicket:message></label>
+                                <input id="desc" class="text" type="text" wicket:id="desc"/>
+                            </li>
+                            <li>
+                                <label for="mimeType"><wicket:message key="mimeType">Mime Type</wicket:message></label>
+                                <select wicket:id="mimeType" style="width: 260px;"></select>
+                            </li>
+                            <li>
+                                <label for="bkgdColor"><wicket:message key="bkgdColor">Background Color</wicket:message></label>
+                                <input id="bkgdColor" class="text" type="text" wicket:id="bkgdColor"/>
+                            </li>
+                            <li class="choiceItem">
+                                <input id="transparent" wicket:id="transparent" type="checkbox"/>
+                                <label for="transparent"><wicket:message key="transparent">Transparent</wicket:message></label>
+                            </li>               
+                        </ul>
+                    </fieldset>
+                </li>
+                <li>
+                    <fieldset>
+                        <legend><span><wicket:message key="boundingBoxes">Bounding Boxes</wicket:message></span></legend>
+                        <ul>
+                            <li>
+                                <label for="latLonBoundingBox"><wicket:message key="latLonBbox">Lat/Lon BBOX</wicket:message></label>
+                                <div id="latLonBoundingBox" wicket:id="latLonBoundingBox"></div>
+                                <a href="#" wicket:id="computeLatLon" class="computeLink"><wicket:message key="computeFromNativeBounds">Compute from native bounds</wicket:message></a>
+                            </li>
+                        </ul>
+                    </fieldset>
+                </li>
+                <li>
+                    <fieldset>
+                        <legend><span><wicket:message key="coverage">Coverage</wicket:message></span></legend>
+                        <ul>
+                            <li>
+                                <label for="tilesCoverage"><wicket:message key="tiles">Tiles</wicket:message></label>
+                                <div id="tilesCoverage" wicket:id="tilesCoverage"></div>
+                                <!--<a href="#" wicket:id="computeCoverage" class="computeLink"><wicket:message key="computeFromLayer">Compute from native bounds</wicket:message></a>-->
+                            </li>
+                        </ul>
+                    </fieldset>
+                </li>
+                <li>
+                    <fieldset>
+                        <legend><span><wicket:message key="output">Outputs</wicket:message></span></legend>
+                        <ul>
+                            <li>
+                                <label for="filename"><wicket:message key="filename">Name</wicket:message></label>
+                                <input id="filename" class="text" type="text" wicket:id="filename"/>
+                            </li>
+                        </ul>
+                    </fieldset>
+                </li>
+
+                <li class="button-group selfclear">
+                    <button wicket:id="executeProcess" type="submit"><wicket:message key="execute">execute</wicket:message></button>
+                    <button wicket:id="executeXML" type="submit"><wicket:message key="showXML">show xml</wicket:message></button>
+                </li>
+            </ul>
+        </form>
+        <div wicket:id="xmlWindow"></div>
+        <div wicket:id="responseWindow"></div>
+
+    </wicket:extend>   
+</body>
+</html>
