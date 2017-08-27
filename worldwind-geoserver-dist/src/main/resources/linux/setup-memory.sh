@@ -65,7 +65,7 @@ if [ ! -z "${MEM_ALLOC}" ]; then
     ## The ^ and $ are beginning/end-of-line markers; .* matches anything.
     ## We're using the s;;; pattern instead of s/// to avoid conflicts with file paths.
     echo "Configuring the JVM to use $MEM_CHOICE (${MEM_ALLOC}) for the heap allocation"
-    sed -i 's;^HEAP=.*$;HEAP="-xms'${MEM_ALLOC}' -xmx'${MEM_ALLOC}'";' env.sh
+    sed -i 's;^HEAP=.*$;HEAP="-Xms'${MEM_ALLOC}' -Xmx'${MEM_ALLOC}'";' env.sh
 elif [ "${MEM_CHOICE}" = "Auto" ]; then
     sed -i 's;^HEAP=.*$;HEAP=;' env.sh
 fi
