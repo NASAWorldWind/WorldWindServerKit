@@ -1,4 +1,8 @@
 #!/usr/bin/env python
+#
+# Original script:
+#  http://svn.osgeo.org/osgeo/foss4g/benchmarking/wms/2010/scripts/wms_request.py
+#
 # ******************************************************************************
 #
 #  Project:  2009 Web Map Server Benchmarking
@@ -35,8 +39,8 @@ import sys
 
 # =============================================================================
 def Usage():
-    print 'Usage: wms_tile_request.py [-count <n> (default=100)]'
-    print '                    [-region <min_x> <min_y> <max_x> <max_y>]'
+    print 'Usage: wms_tile_request_zoom.py [-count <n> (default=100)]'
+    print '                    [-region <min_x> <min_y> <max_x> <max_y>] '
     print '                    [-minlevel <min_level>] [-maxlevel <max_level>] '
     print '                    [-tilesize <width_pixels> <height_pixels> (default=256,256)]'
     print '                    [-level0 <num_columns> <num_rows> (default=2,1)]'
@@ -48,6 +52,9 @@ def Usage():
 
 
 # =============================================================================
+# TODO: add window width/height used to determine number of tiles needed for a zoom level during load_test
+# TODO: add a "random" param, if true generate stress test; if false generate load_test
+#
 
 if __name__ == '__main__':
 
@@ -56,7 +63,9 @@ if __name__ == '__main__':
     max_level = None
     count = 100
     tile_size = (256, 256)  # width, height
-    level0 = (2, 1)  # cols, rows
+    screen_size = (2048, 1280)  # width, height 16:10 ratio
+    screen_tiles = (8, 5)  # columns, rows 1920x1200 screen size = 16:10 ratio ~= 8 x 5 tiles (2048x1280)
+    level0 = (2, 1)  # grid: cols, rows
 
     # filter
     filter_within = None
@@ -221,71 +230,97 @@ if __name__ == '__main__':
             output_filename2 = str(srs_output) + '.csv'
         output_file2 = open('./' + output_filename2, 'w')
 
+    # -------------------------------------------------------------------------
+
+
     first = True
-    while count > 0:
-        # compute the level set
-        level = random.randint(min_level, max_level)
-        num_cols = level0[0] * pow(2, level)
-        num_rows = level0[1] * pow(2, level)
-        width_deg = 360.0 / num_cols
-        height_deg = 180.0 / num_rows
+    done = False
+    while not done:
+        start_left = None
+        start_top = None
+        level = min_level
+        while level <= max_level and not done:
+            # Compute the grid set for the current level
+            num_cols = level0[0] * pow(2, level)
+            num_rows = level0[1] * pow(2, level)
+            width_deg = 360.0 / num_cols
+            height_deg = 180.0 / num_rows
 
-        # get a random tile from the level set within the region
-        random_x = random.random() * (region[2] - region[0]) + region[0]
-        random_y = random.random() * (region[3] - region[1]) + region[1]
-        left = math.floor(random_x / width_deg) * width_deg
-        top = math.floor(random_y / height_deg) * height_deg
-        right = left + width_deg
-        bottom = top - height_deg
+            # Get a random tile from the level set within the region
+            if start_left is None:
+                random_x = random.random() * (region[2] - region[0]) + region[0]
+                random_y = random.random() * (region[3] - region[1]) + region[1]
+                start_left = math.floor(random_x / width_deg) * width_deg
+                start_top = math.floor(random_y / height_deg) * height_deg
 
-        # wms parameters
-        width = tile_size[0]
-        height = tile_size[1]
-        bbox = (left, bottom, right, top)
+            # Build an array of tiles to fill the pseudo screen space
+            col = 0
+            while col < screen_tiles[0] and not done:
+                row = 0
+                while row < screen_tiles[1] and not done:
+                    # Determine the bounds and dimensions for this tile
+                    width = tile_size[0]
+                    height = tile_size[1]
+                    left = start_left + (width_deg * col)
+                    top = start_top - (height_deg * row)
+                    right = left + width_deg
+                    bottom = top - height_deg
+                    bbox = (left, bottom, right, top)
 
-        if filter_within is not None:
-            wkt = "POLYGON((" + str(bbox[0]) + " " + str(bbox[1]) + "," + str(bbox[2]) + " " + str(
-                bbox[1]) + "," + str(bbox[2]) + " " + str(bbox[3]) + "," + str(bbox[0]) + " " + str(
-                bbox[3]) + "," + str(bbox[0]) + " " + str(bbox[1]) + "))"
-            polygon = ogr.CreateGeometryFromWkt(wkt)
-            if geometry_collection.Contains(polygon) is False:
-                continue
+                    row += 1
 
-        if srs_output is not None:
-            # transform the bbox to srs2 mercator
-            srs2_bbox = coordinate_transformation.TransformPoints([(bbox[0], bbox[1]), (bbox[2], bbox[3])])
-            # compute the new width/height of the map to preserve square pixels
-            delta_original = ((bbox[2] - bbox[0]) / (bbox[3] - bbox[1]))
-            delta_transformed = ((srs2_bbox[1][0] - srs2_bbox[0][0]) / (srs2_bbox[1][1] - srs2_bbox[0][1]))
-            pixels = width * height
-            srs2_height = math.floor(math.sqrt(pixels / delta_transformed))
-            srs2_width = math.floor(delta_transformed * srs2_height)
+                    # Cull tiles that are not within the region[minx,miny,maxx,maxy]
+                    if left < region[0] or bottom < region[1] or right > region[2] or top > region[3]:
+                        continue
 
-        if first:
-            # Trick to have the command that created the csv file without making jmeter bomb (csv format has no notion of comments)
-            output_file.write(
-                '%d,%d,%.10g,%.10g,%.10g,%.10g;wms_tile_request.py -count %d -region %.8g %.8g %.8g %.8g -minlevel %d -maxlevel %d -tilesize %d %d -level0 %d %d\n' \
-                % (width, height, bbox[0], bbox[1], bbox[2], bbox[3],
-                   count, region[0], region[1], region[2], region[3], min_level, max_level,
-                   tile_size[0], tile_size[1], level0[0], level0[1]))
-            if srs_output is not None:
-                output_file2.write(
-                    '%d,%d,%.10g,%.10g,%.10g,%.10g;wms_tile_request.py -count %d -region %.8g %.8g %.8g %.8g -minlevel %d -maxlevel %d -tilesize %d %d -level0 %d %d\n' \
-                    % (srs2_width, srs2_height, srs2_bbox[0][0], srs2_bbox[0][1], srs2_bbox[1][0], srs2_bbox[1][1],
-                       count, region[0], region[1], region[2], region[3], min_level, max_level,
-                       tile_size[0], tile_size[1], level0[0], level0[1]))
+                    # Cull tiles that are not within the geometry filter
+                    if filter_within is not None:
+                        wkt = "POLYGON((" + str(bbox[0]) + " " + str(bbox[1]) + "," + str(bbox[2]) + " " + str(
+                            bbox[1]) + "," + str(bbox[2]) + " " + str(bbox[3]) + "," + str(bbox[0]) + " " + str(
+                            bbox[3]) + "," + str(bbox[0]) + " " + str(bbox[1]) + "))"
+                        polygon = ogr.CreateGeometryFromWkt(wkt)
+                        if geometry_collection.Contains(polygon) is False:
+                            continue
 
-            first = False
-        else:
-            output_file.write('%d,%d,%.10g,%.10g,%.10g,%.10g\n' \
-                              % (width, height, bbox[0], bbox[1], bbox[2], bbox[3]))
-            if srs_output is not None:
-                output_file2.write('%d,%d,%.10g,%.10g,%.10g,%.10g\n' \
-                                   % (srs2_width, srs2_height, srs2_bbox[0][0], srs2_bbox[0][1], srs2_bbox[1][0],
-                                      srs2_bbox[1][1]))
+                    if srs_output is not None:
+                        # transform the bbox to srs2 mercator
+                        srs2_bbox = coordinate_transformation.TransformPoints([(bbox[0], bbox[1]), (bbox[2], bbox[3])])
+                        # compute the new width/height of the map to preserve square pixels
+                        delta_original = ((bbox[2] - bbox[0]) / (bbox[3] - bbox[1]))
+                        delta_transformed = ((srs2_bbox[1][0] - srs2_bbox[0][0]) / (srs2_bbox[1][1] - srs2_bbox[0][1]))
+                        pixels = width * height
+                        srs2_height = math.floor(math.sqrt(pixels / delta_transformed))
+                        srs2_width = math.floor(delta_transformed * srs2_height)
 
-        count = count - 1
+                    # Output the first CSV row with a "trailer"
+                    if first:
+                        # Trick to have the command that created the csv file without making jmeter bomb (csv format has no notion of comments)
+                        output_file.write(
+                            '%d,%d,%.10g,%.10g,%.10g,%.10g,"wms_tile_request.py -count %d -region %.8g %.8g %.8g %.8g -minlevel %d -maxlevel %d -tilesize %d %d -level0 %d %d"\n' \
+                            % (width, height, bbox[0], bbox[1], bbox[2], bbox[3],
+                               count, region[0], region[1], region[2], region[3], min_level, max_level,
+                               tile_size[0], tile_size[1], level0[0], level0[1]))
+                        if srs_output is not None:
+                            output_file2.write(
+                                '%d,%d,%.10g,%.10g,%.10g,%.10g,"wms_tile_request.py -count %d -region %.8g %.8g %.8g %.8g -minlevel %d -maxlevel %d -tilesize %d %d -level0 %d %d"\n' \
+                                % (srs2_width, srs2_height, srs2_bbox[0][0], srs2_bbox[0][1], srs2_bbox[1][0],
+                                   srs2_bbox[1][1],
+                                   count, region[0], region[1], region[2], region[3], min_level, max_level,
+                                   tile_size[0], tile_size[1], level0[0], level0[1]))
 
+                        first = False
+                    else:
+                        output_file.write('%d,%d,%.10g,%.10g,%.10g,%.10g,"level %d"\n' \
+                                          % (width, height, bbox[0], bbox[1], bbox[2], bbox[3], level))
+                        if srs_output is not None:
+                            output_file2.write('%d,%d,%.10g,%.10g,%.10g,%.10g,"level %d"\n' \
+                                               % (srs2_width, srs2_height, srs2_bbox[0][0], srs2_bbox[0][1],
+                                                  srs2_bbox[1][0], srs2_bbox[1][1], level))
+
+                    count -= 1
+                    done = (count == 0)
+                col += 1
+            level += 1
     if dataset:
         dataset.Destroy()
 

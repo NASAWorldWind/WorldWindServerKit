@@ -1,9 +1,10 @@
 #!/usr/bin/env python
-# 
-# Original script:
+#
+# This script was derived from wms_request.py by Frank Warmerdam
 #  http://svn.osgeo.org/osgeo/foss4g/benchmarking/wms/2010/scripts/wms_request.py
 #
 # ******************************************************************************
+#
 #  Project:  2009 Web Map Server Benchmarking
 #  Purpose:  Generate WMS BBOX/size requests randomly over a defined dataset.
 #  Author:   Frank Warmerdam, warmerdam@pobox.com
@@ -38,11 +39,15 @@ import sys
 
 # =============================================================================
 def Usage():
-    print 'Usage: wms_request.py [-count n] [-region minx miny maxx maxy]'
-    print '                    [-minres minres] [-maxres maxres] '
-    print '                    [-maxsize width height] [-minsize width height]'
-    print '                    [-srs <epsg_code>] [-srs2 <epsg_code>]'
-    print '                    [-filter_within <filename>]'
+    print 'Usage: wms_tile_request.py [-count <n> (default=100)]'
+    print '                    [-region <min_x> <min_y> <max_x> <max_y>]'
+    print '                    [-minlevel <min_level>] [-maxlevel <max_level>] '
+    print '                    [-tilesize <width_pixels> <height_pixels> (default=256,256)]'
+    print '                    [-level0 <num_columns> <num_rows> (default=2,1)]'
+    print '                    [-srs <epsg_code> (default=4326)] [-srs2 <epsg_code> (optional)]'
+    print '                    [-filter_within <filename> (optional)]'
+    print '                    [-output <filename> (default=<srs epsg_code>.csv)]'
+    print '                    [-output <filename> (default=<srs2 epsg_code>.csv)]'
     sys.exit(1)
 
 
@@ -51,11 +56,11 @@ def Usage():
 if __name__ == '__main__':
 
     region = None
-    minres = None
-    maxres = None
-    count = 1000
-    minsize = (128, 128)
-    maxsize = (1024, 768)
+    min_level = None
+    max_level = None
+    count = 100
+    tile_size = (256, 256)  # width, height
+    level0 = (2, 1)  # cols, rows
 
     # filter
     filter_within = None
@@ -85,20 +90,20 @@ if __name__ == '__main__':
                       float(argv[i + 3]), float(argv[i + 4]))
             i = i + 4
 
-        elif arg == '-minsize' and i < len(argv) - 2:
-            minsize = (int(argv[i + 1]), int(argv[i + 2]))
+        elif arg == '-tilesize' and i < len(argv) - 2:
+            tile_size = (int(argv[i + 1]), int(argv[i + 2]))
             i = i + 2
 
-        elif arg == '-maxsize' and i < len(argv) - 2:
-            maxsize = (int(argv[i + 1]), int(argv[i + 2]))
+        elif arg == '-level0' and i < len(argv) - 2:
+            level0 = (int(argv[i + 1]), int(argv[i + 2]))
             i = i + 2
 
-        elif arg == '-minres' and i < len(argv) - 1:
-            minres = float(argv[i + 1])
+        elif arg == '-minlevel' and i < len(argv) - 1:
+            min_level = float(argv[i + 1])
             i = i + 1
 
-        elif arg == '-maxres' and i < len(argv) - 1:
-            maxres = float(argv[i + 1])
+        elif arg == '-maxlevel' and i < len(argv) - 1:
+            max_level = float(argv[i + 1])
             i = i + 1
 
         elif arg == '-count' and i < len(argv) - 1:
@@ -125,22 +130,39 @@ if __name__ == '__main__':
             srs_output = int(argv[i + 1])
             i = i + 1
 
+        elif arg == '-?':
+            Usage()
+            i = i + 1
+
         else:
             print 'Unable to process: %s' % arg
             Usage()
 
         i = i + 1
 
+    # Validate parameters
     if region is None:
         print '-region is required.'
         Usage()
 
-    if minres is None:
-        print '-minres is required.'
+    if min_level is None:
+        print '-minlevel is required.'
         Usage()
 
-    if maxres is None:
-        print '-maxres is required.'
+    if max_level is None:
+        print '-maxlevel is required.'
+        Usage()
+
+    if min_level > max_level:
+        print '-minlevel (' + str(min_level) + ') cannot be greater than -maxlevel (' + str(max_level) + ').'
+        Usage()
+
+    if region[0] >= region[2]:
+        print '-region <min_x> (' + str(region[0]) + ') must be less than <max_x> (' + str(region[2]) + ').'
+        Usage()
+
+    if region[1] >= region[3]:
+        print '-region <min_y> (' + str(region[1]) + ') must be less than <max_y> (' + str(region[3]) + ').'
         Usage()
 
     if filter_within is not None:
@@ -193,7 +215,7 @@ if __name__ == '__main__':
 
     # -------------------------------------------------------------------------
 
-    # create output file
+    # create output file(s)
     if output_filename is None:
         output_filename = str(srs_input) + '.csv'
     output_file = open('./' + output_filename, 'w')
@@ -205,72 +227,68 @@ if __name__ == '__main__':
 
     first = True
     while count > 0:
-        width = random.randint(minsize[0], maxsize[0])
-        height = random.randint(minsize[1], maxsize[1])
+        # compute the level set
+        level = random.randint(min_level, max_level)
+        num_cols = level0[0] * pow(2, level)
+        num_rows = level0[1] * pow(2, level)
+        width_deg = 360.0 / num_cols
+        height_deg = 180.0 / num_rows
 
-        center_x = random.random() * (region[2] - region[0]) + region[0]
-        center_y = random.random() * (region[3] - region[1]) + region[1]
+        # get a random tile from the level set within the region
+        random_x = random.random() * (region[2] - region[0]) + region[0]
+        random_y = random.random() * (region[3] - region[1]) + region[1]
+        left = math.floor(random_x / width_deg) * width_deg
+        top = math.floor(random_y / height_deg) * height_deg
+        right = left + width_deg
+        bottom = top - height_deg
 
-        base = 2
-        max_log = math.log(maxres, base)
-        min_log = math.log(minres, base)
-        random_log = random.random() * (max_log - min_log) + min_log
-        res = math.pow(base, random_log)
+        # wms parameters
+        width = tile_size[0]
+        height = tile_size[1]
+        bbox = (left, bottom, right, top)
 
-        bbox = (center_x - width * 0.5 * res,
-                center_y - height * 0.5 * res,
-                center_x + width * 0.5 * res,
-                center_y + height * 0.5 * res)
-        print '%d; %d; %.8g, %.8g, %.8g, %.8g' % (width, height, bbox[0], bbox[1], bbox[2], bbox[3])
+        if filter_within is not None:
+            wkt = "POLYGON((" + str(bbox[0]) + " " + str(bbox[1]) + "," + str(bbox[2]) + " " + str(
+                bbox[1]) + "," + str(bbox[2]) + " " + str(bbox[3]) + "," + str(bbox[0]) + " " + str(
+                bbox[3]) + "," + str(bbox[0]) + " " + str(bbox[1]) + "))"
+            polygon = ogr.CreateGeometryFromWkt(wkt)
+            if geometry_collection.Contains(polygon) is False:
+                continue
 
-        if bbox[0] >= region[0] \
-                and bbox[1] >= region[1] \
-                and bbox[2] <= region[2] \
-                and bbox[3] <= region[3]:
+        if srs_output is not None:
+            # transform the bbox to srs2 mercator
+            srs2_bbox = coordinate_transformation.TransformPoints([(bbox[0], bbox[1]), (bbox[2], bbox[3])])
+            # compute the new width/height of the map to preserve square pixels
+            delta_original = ((bbox[2] - bbox[0]) / (bbox[3] - bbox[1]))
+            delta_transformed = ((srs2_bbox[1][0] - srs2_bbox[0][0]) / (srs2_bbox[1][1] - srs2_bbox[0][1]))
+            pixels = width * height
+            srs2_height = math.floor(math.sqrt(pixels / delta_transformed))
+            srs2_width = math.floor(delta_transformed * srs2_height)
 
-            if filter_within is not None:
-                wkt = "POLYGON((" + str(bbox[0]) + " " + str(bbox[1]) + "," + str(bbox[2]) + " " + str(
-                    bbox[1]) + "," + str(bbox[2]) + " " + str(bbox[3]) + "," + str(bbox[0]) + " " + str(
-                    bbox[3]) + "," + str(bbox[0]) + " " + str(bbox[1]) + "))"
-                polygon = ogr.CreateGeometryFromWkt(wkt)
-                if geometry_collection.Contains(polygon) is False:
-                    continue
-
+        if first:
+            # Trick to have the command that created the csv file without making jmeter bomb (csv format has no notion of comments)
+            output_file.write(
+                '%d,%d,%.10g,%.10g,%.10g,%.10g;wms_tile_request.py -count %d -region %.8g %.8g %.8g %.8g -minlevel %d -maxlevel %d -tilesize %d %d -level0 %d %d\n' \
+                % (width, height, bbox[0], bbox[1], bbox[2], bbox[3],
+                   count, region[0], region[1], region[2], region[3], min_level, max_level,
+                   tile_size[0], tile_size[1], level0[0], level0[1]))
             if srs_output is not None:
-                # transform the bbox to srs2 mercator
-                srs2_bbox = coordinate_transformation.TransformPoints([(bbox[0], bbox[1]), (bbox[2], bbox[3])])
-                # compute the new width/height of the map to preserve square pixels
-                delta_original = ((bbox[2] - bbox[0]) / (bbox[3] - bbox[1]))
-                delta_transformed = ((srs2_bbox[1][0] - srs2_bbox[0][0]) / (srs2_bbox[1][1] - srs2_bbox[0][1]))
-                pixels = width * height
-                srs2_height = math.floor(math.sqrt(pixels / delta_transformed))
-                srs2_width = math.floor(delta_transformed * srs2_height)
+                output_file2.write(
+                    '%d,%d,%.10g,%.10g,%.10g,%.10g;wms_tile_request.py -count %d -region %.8g %.8g %.8g %.8g -minlevel %d -maxlevel %d -tilesize %d %d -level0 %d %d\n' \
+                    % (srs2_width, srs2_height, srs2_bbox[0][0], srs2_bbox[0][1], srs2_bbox[1][0], srs2_bbox[1][1],
+                       count, region[0], region[1], region[2], region[3], min_level, max_level,
+                       tile_size[0], tile_size[1], level0[0], level0[1]))
 
-            if first:
-                print '%d; %d; %.8g, %.8g, %.8g, %.8g, %d' % (width, height, bbox[0], bbox[1], bbox[2], bbox[3], count)
-                # Trick to have the command that created the csv file without making jmeter bomb (csv format has no notion of comments)
-                output_file.write(
-                    '%d;%d;%.8g,%.8g,%.8g,%.8g;wms_request.py -count %d -region %.8g %.8g %.8g %.8g -minsize %d %d -maxsize %d %d -minres %.8g -maxres %.8g\n' \
-                    % (width, height, bbox[0], bbox[1], bbox[2], bbox[3], count, region[0], region[1], region[2],
-                       region[3], minsize[0], minsize[1], maxsize[0], maxsize[1], minres, maxres))
-                if srs_output is not None:
-                    output_file2.write(
-                        '%d;%d;%.8g,%.8g,%.8g,%.8g;wms_request.py -count %d -region %.8g %.8g %.8g %.8g -minsize %d %d -maxsize %d %d -minres %.8g -maxres %.8g\n' \
-                        % (srs2_width, srs2_height, srs2_bbox[0][0], srs2_bbox[0][1], srs2_bbox[1][0], srs2_bbox[1][1],
-                           count, region[0], region[1], region[2], region[3], minsize[0], minsize[1], maxsize[0],
-                           maxsize[1], minres, maxres))
+            first = False
+        else:
+            output_file.write('%d,%d,%.10g,%.10g,%.10g,%.10g\n' \
+                              % (width, height, bbox[0], bbox[1], bbox[2], bbox[3]))
+            if srs_output is not None:
+                output_file2.write('%d,%d,%.10g,%.10g,%.10g,%.10g\n' \
+                                   % (srs2_width, srs2_height, srs2_bbox[0][0], srs2_bbox[0][1], srs2_bbox[1][0],
+                                      srs2_bbox[1][1]))
 
-                first = False
-            else:
-                print '%d; %d; %.8g, %.8g, %.8g, %.8g, %d' % (width, height, bbox[0], bbox[1], bbox[2], bbox[3], count)
-                output_file.write('%d;%d;%.8g,%.8g,%.8g,%.8g\n' \
-                                  % (width, height, bbox[0], bbox[1], bbox[2], bbox[3]))
-                if srs_output is not None:
-                    output_file2.write('%d;%d;%.8g,%.8g,%.8g,%.8g\n' \
-                                       % (srs2_width, srs2_height, srs2_bbox[0][0], srs2_bbox[0][1], srs2_bbox[1][0],
-                                          srs2_bbox[1][1]))
-
-            count = count - 1
+        count = count - 1
 
     if dataset:
         dataset.Destroy()
