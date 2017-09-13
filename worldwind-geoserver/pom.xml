@@ -173,6 +173,13 @@
             <version>${gs.version}</version>
         </dependency>
 
+        <!--WorldWind GeoServer Viewer module-->
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>worldwind-gs-viewer</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        
         <!--WorldWind GeoServer Core UI module-->
         <dependency>
             <groupId>${project.groupId}</groupId>
