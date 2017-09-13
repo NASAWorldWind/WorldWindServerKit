@@ -65,6 +65,7 @@
         <module>worldwind-gs-web</module>
         <module>worldwind-geoserver</module>
         <module>worldwind-geoserver-dist</module>
+        <module>worldwind-gs-viewer</module>
     </modules>  
       
     <!--=====================================================================-->
