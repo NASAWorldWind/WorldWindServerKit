@@ -42,7 +42,6 @@ require(['knockout', 'jquery', 'bootstrap', 'worldwind',
     'model/globe/Globe',
     'views/GlobeViewModel',
     'views/HeaderViewModel',
-    'views/HomeViewModel',
     'views/LayersViewModel',
     'views/MarkerEditor',
     'views/MarkersViewModel',
@@ -56,7 +55,6 @@ require(['knockout', 'jquery', 'bootstrap', 'worldwind',
         Globe,
         GlobeViewModel,
         HeaderViewModel,
-        HomeViewModel,
         LayersViewModel,
         MarkerEditor,
         MarkersViewModel,
@@ -89,17 +87,6 @@ require(['knockout', 'jquery', 'bootstrap', 'worldwind',
 
         // Define the Globe's layers and layer options
         globe.layerManager.loadDefaultLayers();
-//        globe.layerManager.addBaseLayer(new WorldWind.BMNGLayer(), {enabled: true, hideInMenu: true, detailControl: config.imagerydetailControl});
-//        globe.layerManager.addBaseLayer(new WorldWind.BMNGLandsatLayer(), {enabled: false, detailControl: config.imagerydetailControl});
-//        globe.layerManager.addBaseLayer(new WorldWind.BingAerialWithLabelsLayer(null), {enabled: true, detailControl: config.imagerydetailControl});
-//        globe.layerManager.addBaseLayer(new UsgsImageryTopoBaseMapLayer(), {enabled: false, detailControl: config.imagerydetailControl});
-//        globe.layerManager.addBaseLayer(new UsgsTopoBaseMapLayer(), {enabled: false, detailControl: config.imagerydetailControl});
-//        globe.layerManager.addBaseLayer(new WorldWind.BingRoadsLayer(null), {enabled: false, opacity: 0.7, detailControl: config.imagerydetailControl});
-        //globe.layerManager.addBaseLayer(new WorldWind.OpenStreetMapImageLayer(null), {enabled: false, opacity: 0.7, detailControl: config.imagerydetailControl});
-
-//        globe.layerManager.addOverlayLayer(new UsgsContoursLayer(), {enabled: false});
-
-//        globe.layerManager.addDataLayer(new WorldWind.RenderableLayer(constants.LAYER_NAME_MARKERS), {enabled: true, pickEnabled: true});
 
         // Initialize the Explorer object with a Globe to "explore"
         explorer.initialize(globe);
@@ -112,7 +99,6 @@ require(['knockout', 'jquery', 'bootstrap', 'worldwind',
         ko.applyBindings(new HeaderViewModel(), document.getElementById('header'));
         ko.applyBindings(new ProjectionsViewModel(globe), document.getElementById('projections'));
         ko.applyBindings(new SearchViewModel(globe), document.getElementById('search'));
-        ko.applyBindings(new HomeViewModel(globe), document.getElementById('home'));
         ko.applyBindings(new LayersViewModel(globe), document.getElementById('layers'));
         ko.applyBindings(new MarkersViewModel(globe, explorer.markerManager), document.getElementById('markers'));
         ko.applyBindings(new MarkerEditor(), document.getElementById('marker-editor'));

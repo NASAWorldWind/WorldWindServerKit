@@ -50,13 +50,15 @@
                         <span class="icon-bar"></span>
                     </button>
                     <a class="navbar-brand"
-                       href="https://github.com/NASAWorldWindResearch/WorldWindExplorer" target="_blank"
-                       data-bind="text:appName"></a>
+                       href="https://github.com/NASAWorldWindResearch/WorldWindExplorer" target="_blank">
+                        NASA WorldWind
+                    </a>
                 </div>
                 <!-- Navigation links, Projections and Search Box -->
                 <div class="collapse navbar-collapse" id="main-navbar">
                     <ul class="nav navbar-nav">
                         <!-- Home navigation button -->
+<!--                        
                         <li class="active left-sidebar-btn">
                             <a href="#home" role="tab" data-toggle="tab">
                                 <span class="glyphicon glyphicon-home visible-sm-block" aria-hidden="true"
@@ -64,6 +66,7 @@
                                 <span class="hidden-sm" aria-hidden="true">Home</span>
                             </a>
                         </li>
+                        -->
                         <!-- Layers navigation button -->
                         <li class="left-sidebar-btn">
                             <a href="#layers" role="tab" data-toggle="tab">
@@ -132,6 +135,7 @@
                 <!--
                 Home tab
                 -->
+<!--                
                 <div id="home" class="tab-pane active" role="tabpanel">
                     <div class="section-heading">
                         <h4 class="sub-header">
@@ -152,6 +156,7 @@
                         </div>
                     </div>
                 </div>
+                -->
 
                 <!--
                 Layers View (bound to LayersViewModel)
@@ -617,6 +622,9 @@
                 sizes: [70, 30],
                 gutterSize: 10
             });        
+            sidebarSplitter.collapse(0); // collapse the sidebar (left) panel
+            outputSplitter.collapse(1);  // collapse the output (bottom) panel
+            
             // Add a handler to collapse the left side panel
             $('#collapse-left-sidebar').on('click', sidebarSplitter, function (event) {
                 // Collapse the sidebar (1st item in splitter array
