@@ -48,10 +48,7 @@ require(['knockout', 'jquery', 'bootstrap', 'worldwind',
     'views/MarkersViewModel',
     'views/OutputViewModel',
     'views/ProjectionsViewModel',
-    'views/SearchViewModel',
-    'model/globe/layers/UsgsContoursLayer',
-    'model/globe/layers/UsgsImageryTopoBaseMapLayer',
-    'model/globe/layers/UsgsTopoBaseMapLayer'],
+    'views/SearchViewModel'],
     function (ko, $, bootstrap, ww,
         config,
         constants,
@@ -65,10 +62,7 @@ require(['knockout', 'jquery', 'bootstrap', 'worldwind',
         MarkersViewModel,
         OuputViewModel,
         ProjectionsViewModel,
-        SearchViewModel,
-        UsgsContoursLayer,
-        UsgsImageryTopoBaseMapLayer,
-        UsgsTopoBaseMapLayer) { // this callback gets executed when all required modules are loaded
+        SearchViewModel) { // this callback gets executed when all required modules are loaded
         "use strict";
         // ----------------
         // Setup the globe
@@ -94,17 +88,18 @@ require(['knockout', 'jquery', 'bootstrap', 'worldwind',
         globe = new Globe(new WorldWind.WorldWindow("canvasOne"), globeOptions);
 
         // Define the Globe's layers and layer options
-        globe.layerManager.addBaseLayer(new WorldWind.BMNGLayer(), {enabled: true, hideInMenu: true, detailControl: config.imagerydetailControl});
-        globe.layerManager.addBaseLayer(new WorldWind.BMNGLandsatLayer(), {enabled: false, detailControl: config.imagerydetailControl});
-        globe.layerManager.addBaseLayer(new WorldWind.BingAerialWithLabelsLayer(null), {enabled: true, detailControl: config.imagerydetailControl});
-        globe.layerManager.addBaseLayer(new UsgsImageryTopoBaseMapLayer(), {enabled: false, detailControl: config.imagerydetailControl});
-        globe.layerManager.addBaseLayer(new UsgsTopoBaseMapLayer(), {enabled: false, detailControl: config.imagerydetailControl});
-        globe.layerManager.addBaseLayer(new WorldWind.BingRoadsLayer(null), {enabled: false, opacity: 0.7, detailControl: config.imagerydetailControl});
+        globe.layerManager.loadDefaultLayers();
+//        globe.layerManager.addBaseLayer(new WorldWind.BMNGLayer(), {enabled: true, hideInMenu: true, detailControl: config.imagerydetailControl});
+//        globe.layerManager.addBaseLayer(new WorldWind.BMNGLandsatLayer(), {enabled: false, detailControl: config.imagerydetailControl});
+//        globe.layerManager.addBaseLayer(new WorldWind.BingAerialWithLabelsLayer(null), {enabled: true, detailControl: config.imagerydetailControl});
+//        globe.layerManager.addBaseLayer(new UsgsImageryTopoBaseMapLayer(), {enabled: false, detailControl: config.imagerydetailControl});
+//        globe.layerManager.addBaseLayer(new UsgsTopoBaseMapLayer(), {enabled: false, detailControl: config.imagerydetailControl});
+//        globe.layerManager.addBaseLayer(new WorldWind.BingRoadsLayer(null), {enabled: false, opacity: 0.7, detailControl: config.imagerydetailControl});
         //globe.layerManager.addBaseLayer(new WorldWind.OpenStreetMapImageLayer(null), {enabled: false, opacity: 0.7, detailControl: config.imagerydetailControl});
 
-        globe.layerManager.addOverlayLayer(new UsgsContoursLayer(), {enabled: false});
+//        globe.layerManager.addOverlayLayer(new UsgsContoursLayer(), {enabled: false});
 
-        globe.layerManager.addDataLayer(new WorldWind.RenderableLayer(constants.LAYER_NAME_MARKERS), {enabled: true, pickEnabled: true});
+//        globe.layerManager.addDataLayer(new WorldWind.RenderableLayer(constants.LAYER_NAME_MARKERS), {enabled: true, pickEnabled: true});
 
         // Initialize the Explorer object with a Globe to "explore"
         explorer.initialize(globe);
