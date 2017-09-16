@@ -83,6 +83,14 @@
                                 <span class="hidden-sm" aria-hidden="true">Markers</span>
                             </a>
                         </li>
+                        <!-- Output button -->
+                        <li class="output-panel-btn">
+                            <a href="#outputBtn" role="tab" data-toggle="tab">
+                                <span class="glyphicon glyphicon-map-marker visible-sm-block" aria-hidden="true"
+                                      style="padding-top:4px; padding-bottom:4px"></span>
+                                <span class="hidden-sm" aria-hidden="true">Output</span>
+                            </a>
+                        </li>
                         <!-- Search box and button (bound to SearchViewModel)-->
                         <form id="search" class="navbar-form navbar-left" role="search">
                             <div class="form-group">
@@ -649,6 +657,17 @@
                     }
                 }
             });
+            // Add a handler to restore the output panel
+            $('.output-panel-btn').on('click', outputSplitter, function (event) {
+                var splitter = event.data;
+                if ($('#output').height() < 100) {
+                    if (splitter.lastSizes === undefined) {
+                        splitter.setSizes([70, 30]);    // percentages
+                    } else {
+                        splitter.setSizes(splitter.lastSizes);
+                    }
+                }
+            });        
         </script>
     
     <!--Prototyping the jquery fancytree plugin-->
