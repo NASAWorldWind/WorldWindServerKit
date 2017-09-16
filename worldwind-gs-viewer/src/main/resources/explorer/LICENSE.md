@@ -1,4 +1,4 @@
-# World Wind Explorer
+# WorldWind Explorer
 
 The MIT License
 
