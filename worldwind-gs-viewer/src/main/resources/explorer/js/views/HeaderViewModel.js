@@ -19,7 +19,7 @@ define(['knockout'],
          */
         function OutputViewModel() {
             var self = this;
-            self.appName = ko.observable("World Wind Explorer");
+            self.appName = ko.observable("NASA WorldWind");
         }
 
         return OutputViewModel;
