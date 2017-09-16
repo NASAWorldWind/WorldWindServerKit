@@ -12,10 +12,8 @@
  * @returns {OutputViewModel}
  */
 define(['knockout', 
-    'jquery',
-    'views/WeatherScoutView'],
-    function (ko, $,
-        WeatherScoutView) {
+    'jquery'],
+    function (ko, $) {
 
         /**
          * The view model for the Output panel.
@@ -28,9 +26,6 @@ define(['knockout',
 
             // Get a reference to the SelectController's selectedItem observable
             this.selectedItem = this.globe.selectController.lastSelectedItem;
-
-            // Load the Knockout custom binding used in the #weather-scout-view-template
-            this.wxScoutView = new WeatherScoutView();
 
             // The viewTemplate defines the content displayed in the output pane.
             this.viewTemplateName = ko.observable(null);

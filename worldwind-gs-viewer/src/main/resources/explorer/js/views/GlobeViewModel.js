@@ -9,26 +9,23 @@ define(['knockout', 'jquery', 'jqueryui',
         'model/markers/BasicMarker',
         'model/Explorer',
         'model/util/WmtUtil',
-        'model/weather/WeatherScout',
         'worldwind'
     ],
     function (ko, $, jqueryui,
               BasicMarker,
               explorer,
               util,
-              WeatherScout,
               ww) {
         "use strict";
         /**
          *
          * @param {Globe} globe The globe object
-         * @param {Array} params Array containing markerManager and weatherManager objects
+         * @param {Array} params Array containing markerManager object
          * @constructor
          */
         function GlobeViewModel(globe, params) {
             var self = this,
-                markerManager = params.markerManager,
-                weatherManager = params.weatherManager;
+                markerManager = params.markerManager;
 
             // Save a reference to the auto-update time observable for the view view
             self.autoUpdateTime = explorer.autoUpdateTimeEnabled;
@@ -52,14 +49,6 @@ define(['knockout', 'jquery', 'jqueryui',
                 self.dropCallback = self.dropMarkerCallback;
                 self.dropObject = self.selectedMarkerTemplate();
             };
-            /**
-             * Arms the click-drop handler to add a weather scout to the globe. See: handleClick below.
-             */
-            self.armDropScout = function () {
-                self.dropIsArmed(true);
-                self.dropCallback = self.dropScoutCallback;
-                self.dropObject = null;
-            };
                         
             // Invoke armDropMarker when a template is selected from the palette
             self.selectedMarkerTemplate.subscribe(self.armDropMarker);
@@ -70,11 +59,6 @@ define(['knockout', 'jquery', 'jqueryui',
                 // Add the placemark to the layer and to the observable array
                 markerManager.addMarker(new BasicMarker(
                         markerManager, position, { imageSource: markerTemplate.imageSource }));
-            };
-            // This "Drop" action callback creates and adds a weather scout to the globe
-            // when the globe is clicked while dropIsArmed is true.
-            self.dropScoutCallback = function (position) {
-                weatherManager.addScout(new WeatherScout(weatherManager, position));
             };
             /**
              * Handles a click on the WorldWindow. If a "drop" action callback has been

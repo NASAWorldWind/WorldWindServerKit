@@ -24,7 +24,6 @@ define(['jquery',
     'model/util/Log',
     'model/markers/MarkerManager',
     'model/util/Settings',
-    'model/weather/WeatherScoutManager',
     'worldwind'],
     function (
         $,
@@ -32,8 +31,7 @@ define(['jquery',
         constants,
         log,
         MarkerManager,
-        settings,
-        WeatherScoutManager) {
+        settings) {
         "use strict";
         /**
          * This is the top-level Explorer singleton.
@@ -58,7 +56,6 @@ define(['jquery',
 
                 // Configure the manager of objects on the globe
                 this.markerManager = new MarkerManager(globe);
-                this.weatherManager = new WeatherScoutManager(globe);
 
                 // Configure the objects used to animate the globe when performing "go to" operations
                 this.goToAnimator = new WorldWind.GoToAnimator(this.wwd);
@@ -152,7 +149,6 @@ define(['jquery',
             restoreSession: function () {
                 log.info('Explorer', 'restoreSession', 'Restoring the model and view.');
                 this.markerManager.restoreMarkers();
-                this.weatherManager.restoreScouts();
                 this.restoreSessionView();
                 // Update all time sensitive objects
                 this.globe.updateDateTime(new Date());
@@ -172,7 +168,6 @@ define(['jquery',
                 log.info('Explorer', 'saveSession', 'Saving the model and view.');
                 this.saveSessionView();
                 this.markerManager.saveMarkers();
-                this.weatherManager.saveScouts();
             },
             // Internal method.
             saveSessionView: function () {
