@@ -30,6 +30,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
                 Use the classpathPublisher bean defined in the GeoServer Main Module 
                 to locate the viewer endpoint resources
                 -->
+                <prop key="/explorer">classpathPublisher</prop>
+                <prop key="/explorer/**">classpathPublisher</prop>
                 <prop key="/viewer">classpathPublisher</prop>
                 <prop key="/viewer/**">classpathPublisher</prop>
                 <prop key="/worldwind/**">classpathPublisher</prop>
