@@ -47,7 +47,8 @@ require(['knockout', 'jquery', 'bootstrap', 'worldwind',
     'views/MarkersViewModel',
     'views/OutputViewModel',
     'views/ProjectionsViewModel',
-    'views/SearchViewModel'],
+    'views/SearchViewModel',
+    'views/SettingsViewModel'],
     function (ko, $, bootstrap, ww,
         config,
         constants,
@@ -60,7 +61,8 @@ require(['knockout', 'jquery', 'bootstrap', 'worldwind',
         MarkersViewModel,
         OuputViewModel,
         ProjectionsViewModel,
-        SearchViewModel) { // this callback gets executed when all required modules are loaded
+        SearchViewModel,
+        SettingsViewModel) { // this callback gets executed when all required modules are loaded
         "use strict";
         // ----------------
         // Setup the globe
@@ -94,13 +96,13 @@ require(['knockout', 'jquery', 'bootstrap', 'worldwind',
         // --------------------------------------------------------
         // Bind view models to the corresponding HTML elements
         // --------------------------------------------------------
-        ko.applyBindings(new GlobeViewModel(globe, {
-            markerManager: explorer.markerManager}), document.getElementById('globe'));
+        ko.applyBindings(new GlobeViewModel(globe, {markerManager: explorer.markerManager}), document.getElementById('globe'));
         ko.applyBindings(new HeaderViewModel(), document.getElementById('header'));
         ko.applyBindings(new ProjectionsViewModel(globe), document.getElementById('projections'));
         ko.applyBindings(new SearchViewModel(globe), document.getElementById('search'));
         ko.applyBindings(new LayersViewModel(globe), document.getElementById('layers'));
         ko.applyBindings(new MarkersViewModel(globe, explorer.markerManager), document.getElementById('markers'));
+        ko.applyBindings(new SettingsViewModel(globe), document.getElementById('settings'));
         ko.applyBindings(new MarkerEditor(), document.getElementById('marker-editor'));
         ko.applyBindings(new OuputViewModel(globe), document.getElementById('output'));
 

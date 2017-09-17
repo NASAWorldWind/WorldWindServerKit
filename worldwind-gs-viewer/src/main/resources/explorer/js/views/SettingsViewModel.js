@@ -5,11 +5,11 @@
  */
 
 /**
- * Output content module
+ * Settings content module
  *
  * @param {type} ko
  * @param {type} $
- * @returns {HomeViewModel}
+ * @returns {SettingsViewModel}
  */
 define(['knockout',
         'jquery',
@@ -20,7 +20,7 @@ define(['knockout',
          * The view model for the Home panel.
          * @constructor
          */
-        function HomeViewModel(globe) {
+        function SettingsViewModel(globe) {
             var self = this;
             
             this.globe = globe;
@@ -29,6 +29,6 @@ define(['knockout',
 
         }
 
-        return HomeViewModel;
+        return SettingsViewModel;
     }
 );

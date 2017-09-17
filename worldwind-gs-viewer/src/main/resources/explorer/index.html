@@ -56,18 +56,8 @@
                 </div>
                 <!-- Navigation links, Projections and Search Box -->
                 <div class="collapse navbar-collapse" id="main-navbar">
-                    <ul class="nav navbar-nav">
-                        <!-- Home navigation button -->
-<!--                        
-                        <li class="active left-sidebar-btn">
-                            <a href="#home" role="tab" data-toggle="tab">
-                                <span class="glyphicon glyphicon-home visible-sm-block" aria-hidden="true"
-                                      style="padding-top:4px; padding-bottom:4px"></span>
-                                <span class="hidden-sm" aria-hidden="true">Home</span>
-                            </a>
-                        </li>
-                        -->
-                        <!-- Layers navigation button (the default active tab)-->
+                    <ul class="nav navbar-nav">                        
+                        <!-- Layers button (the default active tab)-->
                         <li class="left-sidebar-btn active">
                             <a href="#layers" role="tab" data-toggle="tab">
                                 <span class="glyphicon glyphicon-list visible-sm-block" aria-hidden="true"
@@ -75,7 +65,7 @@
                                 <span class="hidden-sm" aria-hidden="true">Layers</span>
                             </a>
                         </li>
-                        <!-- Markers navigation button -->
+                        <!-- Markers button -->
                         <li class="left-sidebar-btn">
                             <a href="#markers" role="tab" data-toggle="tab">
                                 <span class="glyphicon glyphicon-map-marker visible-sm-block" aria-hidden="true"
@@ -91,6 +81,14 @@
                                 <span class="hidden-sm" aria-hidden="true">Output</span>
                             </a>
                         </li>
+                        <!-- Settings button -->
+                        <li class="left-sidebar-btn">
+                            <a href="#settings" role="tab" data-toggle="tab">
+                                <span class="glyphicon glyphicon-cog visible-sm-block" aria-hidden="true"
+                                      style="padding-top:4px; padding-bottom:4px"></span>
+                                <span class="hidden-sm" aria-hidden="true">Settings</span>
+                            </a>
+                        </li>                        
                         <!-- Search box and button (bound to SearchViewModel)-->
                         <form id="search" class="navbar-form navbar-left" role="search">
                             <div class="form-group">
@@ -139,33 +137,7 @@
                         style="float: right;">
                     <span class="glyphicon glyphicon-minus" aria-hidden="true"></span>
                 </button>
-
-                <!--
-                Home tab
-                -->
-<!--                
-                <div id="home" class="tab-pane active" role="tabpanel">
-                    <div class="section-heading">
-                        <h4 class="sub-header">
-                            <span class="glyphicon glyphicon-home" aria-hidden="true" style="padding-right:5px;"></span>
-                            Home
-                            <a class="section-toggle" data-toggle="collapse" href="#home-body"></a>
-                        </h4>
-                    </div>
-                    <div id="home-body" class="section-body collapse in">
-                        <div class="panel panel-default">
-                            <div class="panel-heading">Date/Time Settings</div>
-                            <div class="panel-body">
-                                <text class="label">Auto Detect Time Zone:</text>
-                                <input type="checkbox" data-bind="checked: timeZoneDetectEnabled"/>
-                                <text class="label">Use 24 Time:</text>
-                                <input type="checkbox" data-bind="checked: use24Time"/>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                -->
-
+                
                 <!--
                 Layers View (bound to LayersViewModel)
                 This is the default "active" tab
@@ -246,7 +218,7 @@
                                 <div data-bind="template: { name: 'layer-template', foreach: widgetLayers}"></div>
                             </div>
                         </div>
-                    </div>
+                    </div>                  
                     <!--
                                             <div>
                                                 <button type="button"
@@ -312,6 +284,30 @@
                         <div data-bind="template: { name: 'marker-template', foreach: markers}"></div>
                     </div>
                 </div>
+                
+                <!--
+                Settings tab (bound to SettingsViewModel)
+                -->      
+                <div id="settings" class="tab-pane" role="tabpanel">
+                    <div class="section-heading">
+                        <h4 class="sub-header">
+                            <span class="glyphicon glyphicon-cog" aria-hidden="true" style="padding-right:5px;"></span>
+                            Settings
+                            <a class="section-toggle" data-toggle="collapse" href="#settings-body"></a>
+                        </h4>
+                    </div>
+                    <div id="settings-body" class="section-body collapse in">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">Date/Time Settings</div>
+                            <div class="panel-body">
+                                <text class="label">Auto Detect Time Zone:</text>
+                                <input type="checkbox" data-bind="checked: timeZoneDetectEnabled"/>
+                                <text class="label">Use 24 Time:</text>
+                                <input type="checkbox" data-bind="checked: use24Time"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>                  
             </div>
 
             <!--
