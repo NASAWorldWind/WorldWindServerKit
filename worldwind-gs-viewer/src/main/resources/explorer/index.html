@@ -50,7 +50,7 @@
                         <span class="icon-bar"></span>
                     </button>
                     <a class="navbar-brand"
-                       href="https://github.com/NASAWorldWindResearch/WorldWindExplorer" target="_blank">
+                       href="https://worldwind.arc.nasa.gov" target="_blank">
                         NASA WorldWind
                     </a>
                 </div>
@@ -67,8 +67,8 @@
                             </a>
                         </li>
                         -->
-                        <!-- Layers navigation button -->
-                        <li class="left-sidebar-btn">
+                        <!-- Layers navigation button (the default active tab)-->
+                        <li class="left-sidebar-btn active">
                             <a href="#layers" role="tab" data-toggle="tab">
                                 <span class="glyphicon glyphicon-list visible-sm-block" aria-hidden="true"
                                       style="padding-top:4px; padding-bottom:4px"></span>
@@ -168,8 +168,9 @@
 
                 <!--
                 Layers View (bound to LayersViewModel)
+                This is the default "active" tab
                 -->
-                <div id="layers" class="tab-pane" role="tabpanel">
+                <div id="layers" class="tab-pane active" role="tabpanel">
                     <div class="section-heading">
                         <h4 class="sub-header">
                             <span class="glyphicon glyphicon-list" aria-hidden="true" style="padding-right:5px;"></span>
@@ -630,7 +631,7 @@
                 sizes: [70, 30],
                 gutterSize: 10
             });        
-            sidebarSplitter.collapse(0); // collapse the sidebar (left) panel
+            //sidebarSplitter.collapse(0); // collapse the sidebar (left) panel
             outputSplitter.collapse(1);  // collapse the output (bottom) panel
             
             // Add a handler to collapse the left side panel
