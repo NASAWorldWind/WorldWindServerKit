@@ -64,13 +64,14 @@ define([
          * @param {KeyboardEvent} event
          */
         KeyboardControls.prototype.handleKeyDown = function (event) {
-            Log.info('KeyboardControls', 'handleKeyDown', event.keyCode + ' pressed.');
-            Log.info('KeyboardControls', 'handleKeyDown', "Target: " + event.target);
-
-            if (event.keyCode === 187) {        // + key
+//            Log.info('KeyboardControls', 'handleKeyDown', event.keyCode + ' pressed.');
+//            Log.info('KeyboardControls', 'handleKeyDown', "Target: " + event.target);
+            
+            // TODO: find a way to make this code portable for different keyboard layouts
+            if (event.keyCode === 187 || event.keyCode === 61) {        // + key || +/= key
                 this.handleZoom("zoomIn");
             }
-            else if (event.keyCode === 189) {   // - key
+            else if (event.keyCode === 189 || event.keyCode === 173) {  // - key || _/- key
                 this.handleZoom("zoomOut");
             }
             else if (event.keyCode === 37) {    // Left arrow
