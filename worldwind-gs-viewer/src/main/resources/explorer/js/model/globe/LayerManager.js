@@ -13,10 +13,17 @@
  * @param {WorldWind} ww
  * @returns {LayerManager}
  */
-define(['knockout', 'model/Config', 'model/Constants', 'worldwind'],
+define(['knockout', 
+    'model/Config', 
+    'model/Constants', 
+    'model/globe/layers/EnhancedWmsLayer', 
+    'model/globe/layers/SkyBackgroundLayer', 
+    'worldwind'],
         function (ko,
                 config,
                 constants,
+                EnhancedWmsLayer,
+                SkyBackgroundLayer, 
                 ww) {
             "use strict";
             /**
@@ -28,6 +35,9 @@ define(['knockout', 'model/Config', 'model/Constants', 'worldwind'],
                 var self = this;
 
                 this.globe = globe;
+                
+                /** WWSK GeoServer WMS endpoint */
+                this.localWmsServer = window.origin + "/geoserver/wms";
 
                 /** Background layers are always enabled and are not shown in the layer menu. */
                 this.backgroundLayers = ko.observableArray();
@@ -72,11 +82,25 @@ define(['knockout', 'model/Config', 'model/Constants', 'worldwind'],
              * Loads a set of default layers.
              */
             LayerManager.prototype.loadDefaultLayers = function () {
-                this.addBaseLayer(new WorldWind.BMNGLayer(), {
+                this.addBackgroundLayer(new SkyBackgroundLayer(this.globe.wwd), {
                     enabled: true,
                     hideInMenu: true,
                     detailControl: config.imagerydetailControl
                 });
+                
+                // Create a world background layer that's always visible using local resources
+                var bmngImageLayer = new WorldWind.BMNGOneImageLayer();
+                bmngImageLayer.minActiveAltitude = 0; // default setting is 3e6;
+                this.addBackgroundLayer(bmngImageLayer, {
+                    enabled: true,
+                    hideInMenu: true,
+                    detailControl: config.imagerydetailControl
+                });
+                
+//                this.addBaseLayer(new WorldWind.BMNGLayer(), {
+//                    enabled: true,
+//                    detailControl: config.imagerydetailControl
+//                });
 
                 this.addDataLayer(new WorldWind.RenderableLayer(constants.LAYER_NAME_MARKERS), {
                     enabled: true,
@@ -84,7 +108,7 @@ define(['knockout', 'model/Config', 'model/Constants', 'worldwind'],
                 });
 
                 // Load the WMS layers found in the WWSK GeoServer WMS
-                this.addWmsServer(window.origin + "/geoserver/wms");
+                this.addWmsServer(this.localWmsServer);
 
             };
 
@@ -428,7 +452,8 @@ define(['knockout', 'model/Config', 'model/Constants', 'worldwind'],
 //                        this.timeSeriesPlayer.layer = layer;
                         layer.timeSequence = timeSequence;
                     } else {
-                        layer = new WorldWind.WmsLayer(config, null);
+                        layer = new EnhancedWmsLayer(config, null);
+//                        layer = new WorldWind.WmsLayer(config, null);
 //                        this.timeSeriesPlayer.timeSequence = null;
 //                        this.timeSeriesPlayer.layer = null;
                     }
