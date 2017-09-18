@@ -95,7 +95,7 @@ require(['knockout', 'jquery', 'bootstrap', 'worldwind',
 
         // Check if this is a WWSK Viewer instance and add the available layers
         if (window.location.href.includes("geoserver")) {
-            globe.layerManager.populateAvailableWwskWmsLayers();
+            globe.layerManager.populateAvailableWwskLayers();
         }
 
         // --------------------------------------------------------

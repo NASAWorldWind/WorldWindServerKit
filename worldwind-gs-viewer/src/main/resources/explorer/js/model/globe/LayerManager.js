@@ -517,7 +517,7 @@ define(['knockout',
                 this.globe.redraw();
             };
 
-            LayerManager.prototype.populateAvailableWwskWmsLayers = function () {
+            LayerManager.prototype.populateAvailableWwskLayers = function () {
                 
                 // TODO configure for WMS version and custom url path
                 var requestUrl = window.origin + "/geoserver/wms?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetCapabilities";
