@@ -93,6 +93,11 @@ require(['knockout', 'jquery', 'bootstrap', 'worldwind',
         // Initialize the Explorer object with a Globe to "explore"
         explorer.initialize(globe);
 
+        // Check if this is a WWSK Viewer instance and add the available layers
+        if (window.location.href.includes("geoserver")) {
+            globe.layerManager.populateAvailableWwskWmsLayers();
+        }
+
         // --------------------------------------------------------
         // Bind view models to the corresponding HTML elements
         // --------------------------------------------------------

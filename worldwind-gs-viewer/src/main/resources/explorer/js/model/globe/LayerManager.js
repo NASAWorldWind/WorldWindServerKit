@@ -517,6 +517,37 @@ define(['knockout',
                 this.globe.redraw();
             };
 
+            LayerManager.prototype.populateAvailableWwskWmsLayers = function () {
+                
+                // TODO configure for WMS version and custom url path
+                var requestUrl = window.origin + "/geoserver/wms?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetCapabilities";
+                //var requestUrl = "https://worldwind25.arc.nasa.gov/wms?service=wms&request=GetCapabilities&version=1.3.0";
+    
+                var layerGenerator = function(myGlobe){
+                    var globe = myGlobe;
+                    return {
+                        addLayers: function(data, status, headers) {
+                            if (status === "success") {
+                                var wmsCapabilities = new WorldWind.WmsCapabilities(data);
+                                var namedLayers = wmsCapabilities.getNamedLayers();
+                                for (var i = 0, len = namedLayers.length; i < len; i++) {
+                                    var wmsLayerConfig = WorldWind.WmsLayer.formLayerConfiguration(namedLayers[i]);
+                                    globe.layerManager.addOverlayLayer(new WorldWind.WmsLayer(wmsLayerConfig));
+                                }
+                            }
+                        }
+                    }
+                }(this.globe);
+                            
+                $.get(requestUrl).done(
+                    layerGenerator.addLayers
+                ).fail(function(err){
+                    // TODO C Squared Error Alert
+                    console.error(err);
+                });
+    
+            };
+
             return LayerManager;
         }
 );
