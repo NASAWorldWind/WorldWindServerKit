@@ -80,23 +80,17 @@ require(['knockout', 'jquery', 'bootstrap', 'worldwind',
             includeTiltControls: true,
             includeZoomControls: true,
             includeExaggerationControls: config.showExaggerationControl,
-            includeFieldOfViewControls: config.showFieldOfViewControl
-        },
+            includeFieldOfViewControls: config.showFieldOfViewControl},
             globe;
 
         // Create the explorer's primary globe that's associated with the specified HTML5 canvas
         globe = new Globe(new WorldWind.WorldWindow("canvasOne"), globeOptions);
 
-        // Define the Globe's layers and layer options
-        globe.layerManager.loadDefaultLayers();
-
-        // Initialize the Explorer object with a Globe to "explore"
+        // Initialize the Explorer object with a basic Globe to "explore"
         explorer.initialize(globe);
 
-        // Check if this is a WWSK Viewer instance and add the available layers
-        if (window.location.href.includes("geoserver")) {
-            globe.layerManager.populateAvailableWwskWmsLayers();
-        }
+        // Load additional layers and layer options
+        globe.layerManager.loadDefaultLayers();
 
         // --------------------------------------------------------
         // Bind view models to the corresponding HTML elements
