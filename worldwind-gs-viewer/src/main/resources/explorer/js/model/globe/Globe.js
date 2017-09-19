@@ -148,17 +148,33 @@ define(['knockout',
                 includeZoomControls = options ? options.includeZoomControls : true,
                 includeExaggerationControls = options ? options.includeExaggerationControls : true,
                 includeFieldOfViewControls = options ? options.includeFieldOfViewControls : false,
+                bmngImageLayer,
                 controls,
                 widgets;
 
             // Add optional background layers
-            if (showBackground || showBackground === undefined) {
+            if (showBackground || showBackground === undefined) {              
+                // Set the background color to variable shade of blue
+                this.layerManager.addBackgroundLayer(new SkyBackgroundLayer(this.wwd), {
+                    enabled: true,
+                    hideInMenu: true
+                });
+                // Create a world layer that's always visible using a local Blue Marble image
+                bmngImageLayer = new WorldWind.BMNGOneImageLayer();
+                bmngImageLayer.minActiveAltitude = 0; // default setting is 3e6;
+                this.layerManager.addBackgroundLayer(bmngImageLayer, {
+                    enabled: true,
+                    hideInMenu: true,
+                    detailControl: config.imagerydetailControl
+                });                
                 // Add TimeZone support
                 this.timeZoneLayer = new TimeZoneLayer();
                 this.layerManager.addOverlayLayer(this.timeZoneLayer, {
                     enabled: true,
-                    pickEnabled: true
+                    pickEnabled: true,
+                    hideInMenu: true
                 });
+                // Add the optional Day/Night mode and Atmosphere effect
                 this.layerManager.addEffectLayer(new EnhancedAtmosphereLayer(this));
             }
 

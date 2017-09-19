@@ -13,17 +13,17 @@
  * @param {WorldWind} ww
  * @returns {LayerManager}
  */
-define(['knockout', 
-    'model/Config', 
-    'model/Constants', 
-    'model/globe/layers/EnhancedWmsLayer', 
-    'model/globe/layers/SkyBackgroundLayer', 
+define(['knockout',
+    'model/Config',
+    'model/Constants',
+    'model/globe/layers/EnhancedWmsLayer',
+    'model/globe/layers/SkyBackgroundLayer',
     'worldwind'],
         function (ko,
                 config,
                 constants,
                 EnhancedWmsLayer,
-                SkyBackgroundLayer, 
+                SkyBackgroundLayer,
                 ww) {
             "use strict";
             /**
@@ -35,9 +35,16 @@ define(['knockout',
                 var self = this;
 
                 this.globe = globe;
-                
-                /** WWSK GeoServer WMS endpoint */
+
+                /** WWSK GeoServer WMS endpoint
+                 * TODO: initialize from server REST settings
+                 */
                 this.localWmsServer = window.origin + "/geoserver/wms";
+
+                /** WWSK GeoServer WMS version
+                 * TODO: initialize from server REST settings
+                 */
+                this.localWmsVersion = "1.3.0";     // alternative: "1.1.1"
 
                 /** Background layers are always enabled and are not shown in the layer menu. */
                 this.backgroundLayers = ko.observableArray();
@@ -79,28 +86,9 @@ define(['knockout',
             };
 
             /**
-             * Loads a set of default layers.
+             * Loads a set of default layers that are not part the basic globe.
              */
             LayerManager.prototype.loadDefaultLayers = function () {
-                this.addBackgroundLayer(new SkyBackgroundLayer(this.globe.wwd), {
-                    enabled: true,
-                    hideInMenu: true,
-                    detailControl: config.imagerydetailControl
-                });
-                
-                // Create a world background layer that's always visible using local resources
-                var bmngImageLayer = new WorldWind.BMNGOneImageLayer();
-                bmngImageLayer.minActiveAltitude = 0; // default setting is 3e6;
-                this.addBackgroundLayer(bmngImageLayer, {
-                    enabled: true,
-                    hideInMenu: true,
-                    detailControl: config.imagerydetailControl
-                });
-                
-//                this.addBaseLayer(new WorldWind.BMNGLayer(), {
-//                    enabled: true,
-//                    detailControl: config.imagerydetailControl
-//                });
 
                 this.addDataLayer(new WorldWind.RenderableLayer(constants.LAYER_NAME_MARKERS), {
                     enabled: true,
@@ -108,7 +96,7 @@ define(['knockout',
                 });
 
                 // Load the WMS layers found in the WWSK GeoServer WMS
-                this.addWmsServer(this.localWmsServer);
+                this.populateAvailableWwskWmsLayers();
 
             };
 
@@ -116,11 +104,11 @@ define(['knockout',
              * Background layers are always enabled and are not shown in the layer menu.
              * @param {WorldWind.Layer} layer
              */
-            LayerManager.prototype.addBackgroundLayer = function (layer) {
+            LayerManager.prototype.addBackgroundLayer = function (layer, options) {
                 var index = this.backgroundLayers().length;
 
-                // Apply fixed options for a background layer
-                LayerManager.applyOptionsToLayer(layer, {
+                // Apply default options for a background layer if options are not supplied
+                LayerManager.applyOptionsToLayer(layer, options ? options : {
                     hideInMenu: true,
                     enabled: true
                 }, constants.LAYER_CATEGORY_BACKGROUND);
@@ -204,22 +192,27 @@ define(['knockout',
             };
 
             /**
-             * Widget layers are always enabled and are not shown in the layer menu.
+             * Widget layers are always enabled by default and are not shown in the layer menu.
              * @param {WorldWind.Layer} layer
              */
-            LayerManager.prototype.addWidgetLayer = function (layer) {
+            LayerManager.prototype.addWidgetLayer = function (layer, options) {
                 var index = this.backgroundLayers().length + this.baseLayers().length + this.overlayLayers().length + this.effectsLayers().length
                         + this.dataLayers().length + this.widgetLayers().length;
 
-                LayerManager.applyOptionsToLayer(layer, {
-                    hideInMenu: true,
+                LayerManager.applyOptionsToLayer(layer, options ? options : {
+                    hideInMenu: false,
                     enabled: true
-                }, constants.LAYER_CATEGORY_BACKGROUND);
+                }, constants.LAYER_CATEGORY_WIDGET);
 
                 this.globe.wwd.insertLayer(index, layer);
                 this.widgetLayers.push(LayerManager.createLayerViewModel(layer));
             };
 
+            /**
+             * Finds the first layer with a matching displayName attribute.
+             * @param {type} layerName The name to compare to the layer's displayName
+             * @returns A layer object or null if not found
+             */
             LayerManager.prototype.findLayer = function (layerName) {
                 var layers = this.globe.wwd.layers,
                         i, len;
@@ -239,14 +232,14 @@ define(['knockout',
 
             /**
              * Applys or adds the options to the given layer.
-             * @param {WorldWind.Layer} layer
-             * @param {Object} options
-             * @param {String} category
+             * @param {WorldWind.Layer} layer The layer to update
+             * @param {Object} options The options to apply
+             * @param {String} category The category the layer should be assigned to
              */
             LayerManager.applyOptionsToLayer = function (layer, options, category) {
                 var opt = (options === undefined) ? {} : options;
 
-                // WMT layer type
+                // Explorer layer type
                 layer.category = category;
 
                 // Propagate enabled and pick options to the layer object
@@ -271,9 +264,8 @@ define(['knockout',
                     layer.opacity = opt.opacity;
                 }
 
-                // Create the Knockout LayerViewModel for this layer
-                // =================================================
-                layer.showInMenu = ko.observable(opt.hideInMenu === undefined ? true : !opt.hideInMenu);
+                // Propagate (and invert) the visibilty of this layer in the UI
+                layer.showInMenu = opt.hideInMenu === undefined ? true : !opt.hideInMenu;
 
             };
 
@@ -291,7 +283,9 @@ define(['knockout',
                     name: ko.observable(layer.displayName),
                     enabled: ko.observable(layer.enabled),
                     legendUrl: ko.observable(layer.legendUrl ? layer.legendUrl.url : ''),
-                    opacity: ko.observable(layer.opacity)
+                    opacity: ko.observable(layer.opacity),
+                    showInMenu: ko.observable(layer.showInMenu)
+                    
                 };
                 // Forward changes from enabled and opacity observables to the the layer object
                 viewModel.enabled.subscribe(function (newValue) {
@@ -518,34 +512,37 @@ define(['knockout',
             };
 
             LayerManager.prototype.populateAvailableWwskWmsLayers = function () {
-                
-                // TODO configure for WMS version and custom url path
-                var requestUrl = window.origin + "/geoserver/wms?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetCapabilities";
-                //var requestUrl = "https://worldwind25.arc.nasa.gov/wms?service=wms&request=GetCapabilities&version=1.3.0";
-    
-                var layerGenerator = function(myGlobe){
+
+                var requestUrl = this.localWmsServer + "?SERVICE=WMS&VERSION=" + this.localWmsVersion + "&REQUEST=GetCapabilities";
+
+                var layerGenerator = function (myGlobe) {
                     var globe = myGlobe;
                     return {
-                        addLayers: function(data, status, headers) {
+                        addLayers: function (data, status, headers) {
                             if (status === "success") {
                                 var wmsCapabilities = new WorldWind.WmsCapabilities(data);
                                 var namedLayers = wmsCapabilities.getNamedLayers();
                                 for (var i = 0, len = namedLayers.length; i < len; i++) {
                                     var wmsLayerConfig = WorldWind.WmsLayer.formLayerConfiguration(namedLayers[i]);
-                                    globe.layerManager.addOverlayLayer(new WorldWind.WmsLayer(wmsLayerConfig));
+                                    
+                                    // Using the EnhancedWmsLayer which uses GeoServer vendor params in the GetMap URL
+                                    globe.layerManager.addBaseLayer(new EnhancedWmsLayer(wmsLayerConfig, null), {
+                                        enabled: false,
+                                        detailControl: config.imagerydetailControl
+                                    });
                                 }
                             }
                         }
                     }
                 }(this.globe);
-                            
+
                 $.get(requestUrl).done(
-                    layerGenerator.addLayers
-                ).fail(function(err){
+                        layerGenerator.addLayers
+                        ).fail(function (err) {
                     // TODO C Squared Error Alert
                     console.error(err);
                 });
-    
+
             };
 
             return LayerManager;
