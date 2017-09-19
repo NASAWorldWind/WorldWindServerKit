@@ -435,41 +435,44 @@
         This script renders the individual layer view model items in the Layers panel.
         -->
         <script type="text/html" id="layer-template">
-            <div class="btn-group btn-block">
-                <!--Layer name and visibility button-->
-                <button type="button"
-                        class="btn btn-default layer-name wrap-panel-heading"
-                        style="display: block; width: 70%;"
-                        data-bind="click: $root.onToggleLayer, css: {active: $data.enabled()}">
-                    <span class="glyphicon pull-left"
-                          data-bind="css: {'glyphicon-eye-open': $data.enabled(), 'glyphicon-eye-close': !$data.enabled()}"></span>
-                    <span class="layer" data-bind="text: $data.name()"></span>
-                </button>
-                <!--Display legend button-->
-                <button type="button"
-                        class="btn btn-default collapse"
-                        style="display: block; width: 15%;"
-                        data-toggle="collapse"
-                        data-bind="css: {active: $data.enabled(), in: $data.enabled()},
-                            attr: {
-                        'data-target': '#collapse-layer-' + $data.id(),
-                        'aria-controls': 'collapse-layer-' + $data.id(),
-                        'aria-expanded': $data.enabled() ? 'true' : 'false'}">
-                    <span class="glyphicon glyphicon-stats"></span>
-                </button>
-                <!--Settings button-->
-                <button type="button"
-                        class="btn btn-default"
-                        style="display: block; width: 15%;"
-                        data-bind="css: {active: $data.enabled()}, click: $root.onEditSettings">
-                    <span class="glyphicon glyphicon-cog"></span>
-                </button>
-            </div>
-            <div class="collapse" data-bind="attr: {id: 'collapse-layer-' + $data.id()}">
-                <div class="well">
-                    <!--Controls and Legend-->
-                    <div>
-                        <img data-bind="attr: {src: legendUrl}"/>
+            <!--Conditionally show the layer if showInMenu is true-->
+            <div data-bind="if: $data.showInMenu()">
+                <div class="btn-group btn-block">
+                    <!--Layer name and visibility button-->
+                    <button type="button"
+                            class="btn btn-default layer-name wrap-panel-heading"
+                            style="display: block; width: 70%;"
+                            data-bind="click: $root.onToggleLayer, css: {active: $data.enabled()}">
+                        <span class="glyphicon pull-left"
+                              data-bind="css: {'glyphicon-eye-open': $data.enabled(), 'glyphicon-eye-close': !$data.enabled()}"></span>
+                        <span class="layer" data-bind="text: $data.name()"></span>
+                    </button>
+                    <!--Conditionally display a legend button-->
+                    <button type="button"
+                            class="btn btn-default collapse"
+                            style="display: block; width: 15%;"
+                            data-toggle="collapse"
+                            data-bind="css: {active: $data.enabled(), in: $data.enabled()},
+                                attr: {
+                                    'data-target': '#collapse-layer-' + $data.id(),
+                                    'aria-controls': 'collapse-layer-' + $data.id(),
+                                    'aria-expanded': $data.enabled() ? 'true' : 'false'}">
+                        <span class="glyphicon glyphicon-stats"></span>
+                    </button>
+                    <!--Settings button-->
+                    <button type="button"
+                            class="btn btn-default"
+                            style="display: block; width: 15%;"
+                            data-bind="css: {active: $data.enabled()}, click: $root.onEditSettings">
+                        <span class="glyphicon glyphicon-cog"></span>
+                    </button>
+                </div>
+                <div class="collapse" data-bind="attr: {id: 'collapse-layer-' + $data.id()}">
+                    <div class="well">
+                        <!--Controls and Legend-->
+                        <div>
+                            <img data-bind="attr: {src: legendUrl}"/>
+                        </div>
                     </div>
                 </div>
             </div>
