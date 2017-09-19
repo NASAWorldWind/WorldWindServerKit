@@ -86,7 +86,8 @@ define(['knockout',
             };
 
             /**
-             * Loads a set of default layers that are not part the basic globe.
+             * Loads a set of application specific default layers.
+             * See the Globe constructor's handling of showBackground for the  basic globe layers.
              */
             LayerManager.prototype.loadDefaultLayers = function () {
 
@@ -95,7 +96,7 @@ define(['knockout',
                     pickEnabled: true
                 });
 
-                // Load the WMS layers found in the WWSK GeoServer WMS
+                // Asynchronysly load the WMS layers found in the WWSK GeoServer WMS
                 this.populateAvailableWwskWmsLayers();
 
             };
