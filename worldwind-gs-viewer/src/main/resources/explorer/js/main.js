@@ -19,6 +19,7 @@ requirejs.config({
         'bootstrap': 'libs/bootstrap/v3.3.6/bootstrap',
         'moment': 'libs/moment/moment-2.14.1',
         'd3': 'libs/d3/d3',
+        'url-search-params': 'libs/url-search-params/url-search-params.max.amd',
         'vis': 'libs/vis/v4.16.1/vis',
         'worldwind': 'libs/webworldwind/worldwind',
         'model': 'model' // root application path
