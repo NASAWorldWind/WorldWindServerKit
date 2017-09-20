@@ -41,10 +41,20 @@ define(['knockout',
                  */
                 this.localWmsServer = window.origin + "/geoserver/wms";
 
+                /** WWSK GeoServer WFS endpoint
+                 * TODO: initialize from server REST settings
+                 */
+                this.localWfsServer = window.origin + "/geoserver/ows";
+
                 /** WWSK GeoServer WMS version
                  * TODO: initialize from server REST settings
                  */
                 this.localWmsVersion = "1.3.0";     // alternative: "1.1.1"
+
+                /** WWSK GeoServer WMS version
+                 * TODO: initialize from server REST settings
+                 */
+                this.localWfsVersion = "1.0.0";
 
                 /** Background layers are always enabled and are not shown in the layer menu. */
                 this.backgroundLayers = ko.observableArray();
@@ -97,7 +107,9 @@ define(['knockout',
                 });
 
                 // Asynchronysly load the WMS layers found in the WWSK GeoServer WMS
-                this.populateAvailableWwskWmsLayers();
+                this.populateAvailableWmsLayers();
+                // Asynchronysly load the WFS layers found in the WWSK GeoServer WFS
+                this.populateAvailableWfsLayers();
 
             };
 
@@ -286,7 +298,7 @@ define(['knockout',
                     legendUrl: ko.observable(layer.legendUrl ? layer.legendUrl.url : ''),
                     opacity: ko.observable(layer.opacity),
                     showInMenu: ko.observable(layer.showInMenu)
-                    
+
                 };
                 // Forward changes from enabled and opacity observables to the the layer object
                 viewModel.enabled.subscribe(function (newValue) {
@@ -516,9 +528,9 @@ define(['knockout',
             };
 
             LayerManager.prototype.saveLayers = function () {
-    
+
                 // Iterate through all of the layer types and gather the properties of interest
-                var saveLayersToLocalStorage = function(layerArray, layerType) {
+                var saveLayersToLocalStorage = function (layerArray, layerType) {
                     var i = 0, len = layerArray.length, typeInfo = [], layerInfo;
                     for (i; i < len; i++) {
                         layerInfo = {};
@@ -540,7 +552,7 @@ define(['knockout',
                 } else {
                     console.log("a local storage object was not found, layer state will not persist");
                 }
-                
+
             };
 
             LayerManager.applyRestoreState = function (viewModel) {
@@ -557,27 +569,27 @@ define(['knockout',
                             // enabled: ko.observable(layer.enabled),
                             // legendUrl: ko.observable(layer.legendUrl ? layer.legendUrl.url : ''),
                             // opacity: ko.observable(layer.opacity)
-                            viewModel.enabled(layerSettings.enabled);                            
+                            viewModel.enabled(layerSettings.enabled);
                             viewModel.opacity(layerSettings.opacity);
                         }
                     }
                 }
             };
 
-            LayerManager.prototype.populateAvailableWwskWmsLayers = function () {
-
+            LayerManager.prototype.populateAvailableWmsLayers = function () {
                 var requestUrl = this.localWmsServer + "?SERVICE=WMS&VERSION=" + this.localWmsVersion + "&REQUEST=GetCapabilities";
-
                 var layerGenerator = function (myGlobe) {
                     var globe = myGlobe;
                     return {
                         addLayers: function (data, status, headers) {
                             if (status === "success") {
-                                var wmsCapabilities = new WorldWind.WmsCapabilities(data);
-                                var namedLayers = wmsCapabilities.getNamedLayers();
-                                for (var i = 0, len = namedLayers.length; i < len; i++) {
-                                    var wmsLayerConfig = WorldWind.WmsLayer.formLayerConfiguration(namedLayers[i]);
-                                    
+                                var wmsCapabilities = new WorldWind.WmsCapabilities(data),
+                                        namedLayers = wmsCapabilities.getNamedLayers(),
+                                        i, len = namedLayers.length,
+                                        wmsLayerConfig;
+                                for (i = 0; i < len; i++) {
+                                    wmsLayerConfig = WorldWind.WmsLayer.formLayerConfiguration(namedLayers[i]);
+
                                     // Using the EnhancedWmsLayer which uses GeoServer vendor params in the GetMap URL
                                     globe.layerManager.addBaseLayer(new EnhancedWmsLayer(wmsLayerConfig, null), {
                                         enabled: false,
@@ -597,6 +609,80 @@ define(['knockout',
                 });
 
             };
+
+            LayerManager.prototype.populateAvailableWfsLayers = function () {
+                var wfsGetCapabilitiesUrl = this.localWfsServer + "?SERVICE=WFS&VERSION=" + this.localWfsVersion + "&REQUEST=DescribeFeatureType",
+                        wfsCapabilitiesRetriever,
+                        wfsFeatureUrl,
+                        self = this;
+
+                wfsCapabilitiesRetriever = function (myGlobe) {
+                    var globe = myGlobe;
+                    return {
+                        process: function (xml, status, headers) {
+                            if (status === "success") {
+                                var features = {},
+                                        availableFeatures = xml.children[0].children,
+                                        i, numAvailable,
+                                        attributesList,
+                                        j, numAttributes,
+                                        featureName,
+                                        keys,
+                                        z, numKeys,
+                                        layerName,
+                                        wfsLayerGenerator;
+
+                                numAvailable = availableFeatures.length;
+                                for (i = 0; i < numAvailable; i++) {
+                                    attributesList = availableFeatures[i].attributes;
+                                    numAttributes = attributesList.length;
+                                    for (j = 0; j < numAttributes; j++) {
+                                        featureName = attributesList[j].name;
+                                        // TODO Better Document Parsing
+                                        if (featureName === "name" && !attributesList[j].value.includes("Type")) {
+                                            features[attributesList[j].value] = "true";
+                                        }
+                                    }
+                                }
+
+                                keys = Object.keys(features);
+                                numKeys = keys.length;
+                                for (z = 0; z < numKeys; z++) {
+                                    layerName = keys[z];
+                                    wfsLayerGenerator = function (theGlobe, myName) {
+                                        var globe = theGlobe,
+                                            name = myName;
+                                    
+                                        return {
+                                            addLayer: function (kmlFile) {
+                                                var renderableLayer = new WorldWind.RenderableLayer(name);
+                                                
+                                                renderableLayer.addRenderable(kmlFile);
+                                                globe.layerManager.addOverlayLayer(renderableLayer);
+                                            }
+                                        }
+                                    }(globe, layerName);
+
+                                    wfsFeatureUrl = self.localWfsServer
+                                            + "?SERVICE=WFS&VERSION=" + self.localWfsVersion
+                                            + "&REQUEST=GetFeature&typename=" + layerName
+                                            + "&maxFeatures=50&outputFormat=application%2Fvnd.google-earth.kml%2Bxml";
+                                    
+                                    // Create a KmlFile object for the feature and add a RenderableLayer 
+                                    new WorldWind.KmlFile(wfsFeatureUrl).then(wfsLayerGenerator.addLayer);
+                                }
+
+                            }
+                        }
+                    }
+                }(this.globe);
+
+                $.get(wfsGetCapabilitiesUrl)
+                        .done(wfsCapabilitiesRetriever.process)
+                        .fail(console.error);
+
+            };
+
 
             return LayerManager;
         }
