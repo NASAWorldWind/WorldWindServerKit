@@ -683,6 +683,53 @@ define(['knockout',
 
             };
 
+            /**
+             * Moves the provided layer to the provided index of the layer category the layer belongs.
+             * @param {WorldWind.Layer} layer the layer to be moved
+             * @param {int} index the index to move the layer to 
+             */
+            LayerManager.prototype.moveLayer = function(layer, index) {
+                var initialIndex;
+
+                var moveLayerInArray = function(layer, index, layers) {
+                    var initialIndex = layers().indexOf(layer);
+                    if (initialIndex < 0) {
+                        // TODO - it didn't find it, what does this mean...
+                        console.log('TODO - index not found');
+                    }
+
+                    if (initialIndex === index) {
+                        // no need to move
+                        return;
+                    }
+
+                    layers.splice(index, 0, layer);
+                    if (initialIndex > index) {
+                        // layer moved 'up' the following indices are off by one
+                        layers.splice(initialIndex + 1, 1);
+                    } else {
+                        layers.splice(initialIndex, 1);
+                    }
+                }
+
+                switch (layer.category()) {
+                    case constants.LAYER_CATEGORY_BACKGROUND:
+                        moveLayerInArray(layer, index, this.backgroundLayers);
+                        break;
+                    case constants.LAYER_CATEGORY_BASE:
+                        moveLayerInArray(layer, index, this.baseLayers);
+                        break;
+                    case constants.LAYER_CATEGORY_OVERLAY:
+                        moveLayerInArray(layer, index, this.overlayLayers);
+                        break;
+                    case constants.LAYER_CATEGORY_DATA:
+                        moveLayerInArray(layer, index, this.dataLayers);
+                        break;
+                    default:
+                        console.log("moving the layer isn't support for " + layer.category());
+                        break;
+                }
+            };
 
             return LayerManager;
         }
