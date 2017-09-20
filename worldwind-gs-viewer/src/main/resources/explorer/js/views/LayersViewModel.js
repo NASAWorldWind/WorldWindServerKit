@@ -99,6 +99,14 @@ define(['knockout', 'jquery', 'jqueryui', 'bootstrap', 'model/Constants', 'model
                     return true;
                 };
 
+                self.onMoveLayerUp = function (layer) {
+                    layerManager.moveLayer(layer, "up");
+                };
+
+                self.onMoveLayerDown = function (layer) {
+                    layerManager.moveLayer(layer, "down");
+                }
+
                 /**
                  * Add the supplied layer from the server's capabilities to the active layers
                  */

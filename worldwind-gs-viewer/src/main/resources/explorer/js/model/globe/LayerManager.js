@@ -719,6 +719,18 @@ define(['knockout',
                 wwTopLayerIndex, wwMoveToIndex;
                 
                 wwTopLayerIndex = this.globe.wwd.layers.indexOf(wwTopCategoryLayer);
+                if (index === "up") {
+                    index = index - 1;
+                }
+
+                if (index === "down") {
+                    index = index + 2;
+                }
+
+                if (index < 0) {
+                    return;
+                }
+
                 wwMoveToIndex = wwTopLayerIndex + index;
 
                 LayerManager.moveLayerInArray(wwLayer, wwMoveToIndex, this.globe.wwd.layers);
@@ -729,6 +741,18 @@ define(['knockout',
                 if (initialIndex < 0) {
                     // TODO - it didn't find it, what does this mean...
                     console.log('TODO - index not found');
+                    return;
+                }
+
+                if (moveToIndex === "up") {
+                    moveToIndex = initialIndex - 1;
+                }
+
+                if (moveToIndex === "down") {
+                    moveToIndex = initialIndex + 2;
+                }
+
+                if (moveToIndex < 0) {
                     return;
                 }
 
