@@ -296,6 +296,9 @@ define(['knockout',
                     layer.opacity = newValue;
                 });
 
+                // Check if the layer has existing persistance properties
+                LayerManager.applyRestoreState(viewModel);
+
                 return viewModel;
             };
 
@@ -510,6 +513,55 @@ define(['knockout',
                 }
 
                 this.globe.redraw();
+            };
+
+            LayerManager.prototype.saveLayers = function () {
+    
+                // Iterate through all of the layer types and gather the properties of interest
+                var saveLayersToLocalStorage = function(layerArray, layerType) {
+                    var i = 0, len = layerArray.length, typeInfo = [], layerInfo;
+                    for (i; i < len; i++) {
+                        layerInfo = {};
+                        layerInfo["name"] = layerArray[i].name();
+                        layerInfo["opacity"] = layerArray[i].opacity();
+                        layerInfo["enabled"] = layerArray[i].enabled();
+                        typeInfo.push(layerInfo);
+                    }
+                    localStorage.setItem(layerType, ko.toJSON(typeInfo));
+                };
+
+                if (localStorage) {
+                    saveLayersToLocalStorage(this.backgroundLayers(), constants.LAYER_CATEGORY_BACKGROUND);
+                    saveLayersToLocalStorage(this.baseLayers(), constants.LAYER_CATEGORY_BASE);
+                    saveLayersToLocalStorage(this.overlayLayers(), constants.LAYER_CATEGORY_OVERLAY);
+                    saveLayersToLocalStorage(this.effectsLayers(), constants.LAYER_CATEGORY_EFFECT);
+                    // marker state should be handled by the marker manager
+                    // saveLayersToLocalStorage(this.widgetLayers(), Constants.L);
+                } else {
+                    console.log("a local storage object was not found, layer state will not persist");
+                }
+                
+            };
+
+            LayerManager.applyRestoreState = function (viewModel) {
+                var persistSettingsString = localStorage.getItem(viewModel.category()), persistSettings, layerSettings;
+                if (persistSettingsString) {
+                    persistSettings = JSON.parse(persistSettingsString);
+                    for (var i = 0; i < persistSettings.length; i++) {
+                        layerSettings = persistSettings[i];
+                        if (layerSettings.name == viewModel.name()) {
+                            // a matching layer was found, the persisted settings will provided to the layer
+                            // id: ko.observable(LayerManager.nextLayerId++),
+                            // category: ko.observable(layer.category),
+                            // name: ko.observable(layer.displayName),
+                            // enabled: ko.observable(layer.enabled),
+                            // legendUrl: ko.observable(layer.legendUrl ? layer.legendUrl.url : ''),
+                            // opacity: ko.observable(layer.opacity)
+                            viewModel.enabled(layerSettings.enabled);                            
+                            viewModel.opacity(layerSettings.opacity);
+                        }
+                    }
+                }
             };
 
             LayerManager.prototype.populateAvailableWwskWmsLayers = function () {

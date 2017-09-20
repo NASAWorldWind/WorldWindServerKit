@@ -168,6 +168,7 @@ define(['jquery',
                 log.info('Explorer', 'saveSession', 'Saving the model and view.');
                 this.saveSessionView();
                 this.markerManager.saveMarkers();
+                this.globe.layerManager.saveLayers();
             },
             // Internal method.
             saveSessionView: function () {
