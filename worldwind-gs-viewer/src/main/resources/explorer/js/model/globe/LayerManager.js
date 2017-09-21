@@ -17,13 +17,13 @@ define(['knockout',
     'model/Config',
     'model/Constants',
     'model/globe/layers/EnhancedWmsLayer',
-    'model/globe/layers/SkyBackgroundLayer',
+    'model/util/Log',
     'worldwind'],
         function (ko,
                 config,
                 constants,
                 EnhancedWmsLayer,
-                SkyBackgroundLayer,
+                log,
                 ww) {
             "use strict";
             /**
@@ -100,11 +100,6 @@ define(['knockout',
              * See the Globe constructor's handling of showBackground for the  basic globe layers.
              */
             LayerManager.prototype.loadDefaultLayers = function () {
-
-                this.addDataLayer(new WorldWind.RenderableLayer(constants.LAYER_NAME_MARKERS), {
-                    enabled: true,
-                    pickEnabled: true
-                });
 
                 // Asynchronysly load the WMS layers found in the WWSK GeoServer WMS
                 this.populateAvailableWmsLayers();
@@ -183,7 +178,7 @@ define(['knockout',
 
                 this.globe.wwd.insertLayer(index, layer);
 
-                // Add a proxy for this layer to the list of overlays
+                // Add a proxy for this layer to the list of effects
                 this.effectsLayers.push(LayerManager.createLayerViewModel(layer));
             };
 
@@ -652,7 +647,8 @@ define(['knockout',
                                     wfsLayerGenerator = function (theGlobe, myName) {
                                         var globe = theGlobe,
                                             name = myName;
-                                    
+                                        log.info('LayerManager', 'wfsLayerGenerator', 'name: ' + name);
+
                                         return {
                                             addLayer: function (kmlFile) {
                                                 var renderableLayer = new WorldWind.RenderableLayer(name);
@@ -666,7 +662,9 @@ define(['knockout',
                                     wfsFeatureUrl = self.localWfsServer
                                             + "?SERVICE=WFS&VERSION=" + self.localWfsVersion
                                             + "&REQUEST=GetFeature&typename=" + layerName
-                                            + "&maxFeatures=50&outputFormat=application%2Fvnd.google-earth.kml%2Bxml";
+                                            + "&outputFormat=application%2Fvnd.google-earth.kml%2Bxml";
+                                    
+                                    log.info('LayerManager', 'wfsCapabilitiesRetriever.process', wfsFeatureUrl);
                                     
                                     // Create a KmlFile object for the feature and add a RenderableLayer 
                                     new WorldWind.KmlFile(wfsFeatureUrl).then(wfsLayerGenerator.addLayer);
