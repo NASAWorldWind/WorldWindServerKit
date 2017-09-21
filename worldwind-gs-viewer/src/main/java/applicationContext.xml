@@ -32,9 +32,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
                 -->
                 <prop key="/explorer">classpathPublisher</prop>
                 <prop key="/explorer/**">classpathPublisher</prop>
-                <prop key="/viewer">classpathPublisher</prop>
-                <prop key="/viewer/**">classpathPublisher</prop>
-                <prop key="/worldwind/**">classpathPublisher</prop>
             </props>
         </property>
     </bean>
