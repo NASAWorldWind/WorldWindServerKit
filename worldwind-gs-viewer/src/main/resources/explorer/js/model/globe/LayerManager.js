@@ -689,51 +689,40 @@ define(['knockout',
              * @param {int} index the index to move the layer to 
              */
             LayerManager.prototype.moveLayer = function(layer, index) {
-                var exployerLayerArray;
+                var explorerLayerArray, wwTopLayerInCategory, wwTopLayerInCategoryIndex, wwLayer;
                 
                 switch (layer.category()) {
                     case constants.LAYER_CATEGORY_BACKGROUND:
-                        exployerLayerArray = this.backgroundLayers;
+                        explorerLayerArray = this.backgroundLayers;
                         break;
                     case constants.LAYER_CATEGORY_BASE:
-                        exployerLayerArray = this.baseLayers;
+                        explorerLayerArray = this.baseLayers;
                         break;
                     case constants.LAYER_CATEGORY_OVERLAY:
-                        exployerLayerArray = this.overlayLayers;
+                        explorerLayerArray = this.overlayLayers;
                         break;
                     case constants.LAYER_CATEGORY_DATA:
-                        exployerLayerArray = this.dataLayers;
+                        explorerLayerArray = this.dataLayers;
                         break;
                     default:
                         console.log("moving the layer isn't support for " + layer.category());
                         return;
                 }
-                LayerManager.moveLayerInArray(layer, index, exployerLayerArray);
-                this.globe.layerManager.moveLayerInWorldWind(layer, index, exployerLayerArray);
-            };
 
-            LayerManager.prototype.moveLayerInWorldWind = function (layer, index, layers) {
-                // Get the top most layer index for this layer category
-                var wwTopCategoryLayer = this.globe.layerManager.findLayer(layers()[0].name()), 
-                wwLayer = this.globe.layerManager.findLayer(layer.name()), 
-                wwTopLayerIndex, wwMoveToIndex;
-                
-                wwTopLayerIndex = this.globe.wwd.layers.indexOf(wwTopCategoryLayer);
+                wwTopLayerInCategory = this.globe.layerManager.findLayer(explorerLayerArray()[0].name());
+                wwTopLayerInCategoryIndex = this.globe.wwd.layers.indexOf(wwTopLayerInCategory);
+                wwLayer = this.globe.layerManager.findLayer(layer.name());
+
                 if (index === "up") {
-                    index = index - 1;
+                    index = explorerLayerArray.indexOf(layer) - 1;
                 }
 
                 if (index === "down") {
-                    index = index + 2;
+                    index = explorerLayerArray.indexOf(layer) + 2;
                 }
 
-                if (index < 0) {
-                    return;
-                }
-
-                wwMoveToIndex = wwTopLayerIndex + index;
-
-                LayerManager.moveLayerInArray(wwLayer, wwMoveToIndex, this.globe.wwd.layers);
+                LayerManager.moveLayerInArray(layer, index, explorerLayerArray);
+                LayerManager.moveLayerInArray(wwLayer, index + wwTopLayerInCategoryIndex, this.globe.wwd.layers);
             };
 
             LayerManager.moveLayerInArray = function (layer, moveToIndex, layers) {
@@ -742,14 +731,6 @@ define(['knockout',
                     // TODO - it didn't find it, what does this mean...
                     console.log('TODO - index not found');
                     return;
-                }
-
-                if (moveToIndex === "up") {
-                    moveToIndex = initialIndex - 1;
-                }
-
-                if (moveToIndex === "down") {
-                    moveToIndex = initialIndex + 2;
                 }
 
                 if (moveToIndex < 0) {
