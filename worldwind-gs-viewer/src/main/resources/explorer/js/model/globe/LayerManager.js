@@ -149,7 +149,7 @@ define(['knockout',
                 this.globe.wwd.insertLayer(index, layer);
 
                 // Add a proxy the the base layer observables
-                this.baseLayers.push(LayerManager.createLayerViewModel(layer));
+                this.baseLayers.unshift(LayerManager.createLayerViewModel(layer));
             };
 
             /**
@@ -684,13 +684,26 @@ define(['knockout',
             };
 
             /**
-             * Moves the provided layer to the provided index of the layer category the layer belongs.
-             * @param {WorldWind.Layer} layer the layer to be moved
-             * @param {int} index the index to move the layer to 
+             * Moves the provided layer to the provided index of the layer category the layer belongs. Moves the
+             * WorldWind layer in concert to maintain list synchronisity between the order layers are displayed 
+             * in the layer manager and WorldWind.
+             * @param layer the Explorer layer manager layer to be moved
+             * @param index the index to move the layer to in its specific layer category, or "up" and "down" to
+             * move the layer above or below its neighbor
              */
             LayerManager.prototype.moveLayer = function(layer, index) {
-                var explorerLayerArray, wwTopLayerInCategory, wwTopLayerInCategoryIndex, wwLayer;
+                var explorerLayerArray, wwLayer, wwLayersStartIndex, i, len,
+                    wwLayersSubset;
+
+                if (!layer) {
+                    return;
+                }
+
+                if (!index || index < 0) {
+                    return;
+                }
                 
+                // Determine the corresponding layer array
                 switch (layer.category()) {
                     case constants.LAYER_CATEGORY_BACKGROUND:
                         explorerLayerArray = this.backgroundLayers;
@@ -709,10 +722,7 @@ define(['knockout',
                         return;
                 }
 
-                wwTopLayerInCategory = this.globe.layerManager.findLayer(explorerLayerArray()[0].name());
-                wwTopLayerInCategoryIndex = this.globe.wwd.layers.indexOf(wwTopLayerInCategory);
-                wwLayer = this.globe.layerManager.findLayer(layer.name());
-
+                // Convert the up and down indices to a numerical index
                 if (index === "up") {
                     index = explorerLayerArray.indexOf(layer) - 1;
                 }
@@ -721,8 +731,40 @@ define(['knockout',
                     index = explorerLayerArray.indexOf(layer) + 2;
                 }
 
+                // Index bounds check
+                if (index < 0 || index >= explorerLayerArray().length) {
+                    console.error("layer move outside of bounds");
+                    return;
+                }
+
+                // Create a copy of the WorldWindow layers for this category (a subset of all the WorldWind layers)
+                // First get the lowest index value for taking the splice
+                wwLayersStartIndex = this.globe.wwd.layers.length - 1;
+                for (i = 0, len = explorerLayerArray().length; i < len; i++) {
+                    wwLayer = this.globe.layerManager.findLayer(explorerLayerArray()[i].name());
+                    wwLayersStartIndex = Math.min(wwLayersStartIndex, this.globe.wwd.layers.indexOf(wwLayer));
+                }
+                // Splice into a copy
+                wwLayersSubset = this.globe.wwd.layers.splice(wwLayersStartIndex, explorerLayerArray().length);
+                // Reverse the array - it should now match the explorerArray order
+                wwLayersSubset.reverse();
+                // Asign the layer of interest to the wwLayer variable
+                for (i = 0, len = wwLayersSubset.length; i < len; i++) {
+                    if (layer.name() === wwLayersSubset[i].displayName) {
+                        wwLayer = wwLayersSubset[i];
+                        break;
+                    }
+                }
+
+                // Update the layer manager order
                 LayerManager.moveLayerInArray(layer, index, explorerLayerArray);
-                LayerManager.moveLayerInArray(wwLayer, index + wwTopLayerInCategoryIndex, this.globe.wwd.layers);
+                // Update the WorldWind layer subset array order
+                LayerManager.moveLayerInArray(wwLayer, index, wwLayersSubset);
+
+                // Traverse the subset WorldWind layer array layers backwards and splice into WorldWind's layer array
+                for (i = (wwLayersSubset.length -1); i >= 0; i--) {
+                    this.globe.wwd.layers.splice(wwLayersStartIndex++, 0, wwLayersSubset[i]);
+                }
             };
 
             LayerManager.moveLayerInArray = function (layer, moveToIndex, layers) {
