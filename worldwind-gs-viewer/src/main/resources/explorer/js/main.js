@@ -86,15 +86,12 @@ require(['knockout', 'jquery', 'bootstrap', 'worldwind',
         // Create the explorer's primary globe that's associated with the specified HTML5 canvas
         globe = new Globe(new WorldWind.WorldWindow("canvasOne"), globeOptions);
 
-        // Load additional layers and layer options
-        globe.layerManager.loadDefaultLayers();
-
         // Initialize the Explorer object with a basic Globe to "explore"
         explorer.initialize(globe);
 
-//        // Load the WMS layers after the explorer is initialized for a better user experience
-//        globe.populateAvailableWwskWmsLayers();
-        
+        // Load additional layers and layer options
+        globe.layerManager.loadDefaultLayers();
+
         // --------------------------------------------------------
         // Bind view models to the corresponding HTML elements
         // --------------------------------------------------------
