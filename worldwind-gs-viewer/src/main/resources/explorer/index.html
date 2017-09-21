@@ -441,7 +441,7 @@
                     <!--Layer name and visibility button-->
                     <button type="button"
                             class="btn btn-default layer-name wrap-panel-heading"
-                            style="display: block; width: 70%;"
+                            style="display: block; width: 50%;"
                             data-bind="click: $root.onToggleLayer, css: {active: $data.enabled()}">
                         <span class="glyphicon pull-left"
                               data-bind="css: {'glyphicon-eye-open': $data.enabled(), 'glyphicon-eye-close': !$data.enabled()}"></span>
@@ -465,6 +465,18 @@
                             style="display: block; width: 15%;"
                             data-bind="css: {active: $data.enabled()}, click: $root.onEditSettings">
                         <span class="glyphicon glyphicon-cog"></span>
+                    </button>
+                    <button type="button"
+                            class="btn btn-default"
+                            style="display: block; width: 10%;"
+                            data-bind="css: {active: $data.enabled()}, click: $root.onMoveLayerUp">
+                        <span class="glyphicon glyphicon-arrow-up"></span>
+                    </button>
+                    <button type="button"
+                            class="btn btn-default"
+                            style="display: block; width: 10%;"
+                            data-bind="css: {active: $data.enabled()}, click: $root.onMoveLayerDown">
+                        <span class="glyphicon glyphicon-arrow-down"></span>
                     </button>
                 </div>
                 <div class="collapse" data-bind="attr: {id: 'collapse-layer-' + $data.id()}">
