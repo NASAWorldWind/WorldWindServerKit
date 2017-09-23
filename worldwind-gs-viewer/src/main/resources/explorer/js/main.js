@@ -41,6 +41,7 @@ require(['knockout', 'jquery', 'bootstrap', 'worldwind',
     'model/Constants',
     'model/Explorer',
     'model/globe/Globe',
+    'views/BookmarkViewModel',
     'views/GlobeViewModel',
     'views/HeaderViewModel',
     'views/LayersViewModel',
@@ -55,6 +56,7 @@ require(['knockout', 'jquery', 'bootstrap', 'worldwind',
         constants,
         explorer,
         Globe,
+        BookmarkViewModel,
         GlobeViewModel,
         HeaderViewModel,
         LayersViewModel,
@@ -105,6 +107,7 @@ require(['knockout', 'jquery', 'bootstrap', 'worldwind',
         ko.applyBindings(new SettingsViewModel(globe), document.getElementById('settings'));
         ko.applyBindings(new MarkerEditor(), document.getElementById('marker-editor'));
         ko.applyBindings(new OuputViewModel(globe), document.getElementById('output'));
+        ko.applyBindings(new BookmarkViewModel(globe), document.getElementById('bookmark'));
 
         // -----------------------------------------------------------
         // Add handlers to auto-expand/collapse the menus
