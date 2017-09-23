@@ -759,9 +759,31 @@ define(['knockout',
 
             };
 
+
+            /**
+             * Moves the World Window camera to the center coordinates of the layer, and then zooms in (or out)
+             * to provide a view of the layer as complete as possible.
+             * @param layer the layer from the layer manager that the user selected for zooming in
+             */
+            LayerManager.prototype.zoomToLayer = function(layer){
+
+                console.log('Taking you to your layer, sir');
+
+                var findLayerCenter = function (layer){
+                    var layerCenter = new WorldWind.Position();
+                    // TODO: Calculate center
+                    return layerCenter
+                }
+
+                var defineZoomLevel = function(layer){
+
+                }
+
+            }
+
             /**
              * Moves the provided layer to the provided index of the layer category the layer belongs. Moves the
-             * WorldWind layer in concert to maintain list synchronisity between the order layers are displayed 
+             * WorldWind layer in concert to maintain list synchronicity between the order layers are displayed
              * in the layer manager and WorldWind.
              * @param layer the Explorer layer manager layer to be moved
              * @param index the index to move the layer to in its specific layer category, or "up" and "down" to

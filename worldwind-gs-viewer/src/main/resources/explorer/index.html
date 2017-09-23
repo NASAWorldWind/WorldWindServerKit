@@ -461,7 +461,7 @@
                     <!--Conditionally display a legend button-->
                     <button type="button"
                             class="btn btn-default collapse"
-                            style="display: block; width: 15%;"
+                            style="display: block; width: 10%;"
                             data-toggle="collapse"
                             data-bind="css: {active: $data.enabled(), in: $data.enabled()},
                                 attr: {
@@ -473,10 +473,18 @@
                     <!--Settings button-->
                     <button type="button"
                             class="btn btn-default"
-                            style="display: block; width: 15%;"
+                            style="display: block; width: 10%;"
                             data-bind="css: {active: $data.enabled()}, click: $root.onEditSettings">
                         <span class="glyphicon glyphicon-cog"></span>
                     </button>
+                    <!--Zoom to layer button-->
+                    <button type="button"
+                            class="btn btn-default"
+                            style="display: block; width: 10%;"
+                            data-bind="css: {active: $data.enabled()}, click: $root.onZoomToLayer">
+                        <span class="glyphicon glyphicon-zoom-in"></span>
+                    </button>
+                    <!--Layer ordering buttons-->
                     <button type="button"
                             class="btn btn-default"
                             style="display: block; width: 10%;"
