@@ -13,8 +13,8 @@
     <!--=====================================================================-->
     <!--Project Information                                                  -->
     <!--=====================================================================-->    
-    <name>WorldWind GeoServer Viewer</name>
-    <description>A viewer for GeoServer WMS layers that displays the layers on a 3D virtual globe.</description>
+    <name>WorldWind GeoServer Explorer</name>
+    <description>The NASA WebWorldWind Explorer for viewing GeoServer WMS layers that displays the layers on a 3D virtual globe.</description>
     <url>https://github.com/NASAWorldWind/WorldWindServerKit</url>
     <organization>
         <name>NASA World Wind</name>
