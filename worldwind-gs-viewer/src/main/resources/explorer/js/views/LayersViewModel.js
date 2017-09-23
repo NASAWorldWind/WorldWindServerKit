@@ -99,6 +99,10 @@ define(['knockout', 'jquery', 'jqueryui', 'bootstrap', 'model/Constants', 'model
                     return true;
                 };
 
+                self.onZoomToLayer = function (layer){
+                    layerManager.zoomToLayer(layer);
+                };
+
                 self.onMoveLayerUp = function (layer) {
                     layerManager.moveLayer(layer, "up");
                 };
