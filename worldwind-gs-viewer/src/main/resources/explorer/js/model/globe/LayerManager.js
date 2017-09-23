@@ -101,6 +101,8 @@ define(['knockout',
              */
             LayerManager.prototype.loadDefaultLayers = function () {
 
+                // Check if there's a layer in the URL search string and load it
+                this.populateWmsLayerFromUrl();
                 // Asynchronysly load the WMS layers found in the WWSK GeoServer WMS
                 this.populateAvailableWmsLayers();
                 // Asynchronysly load the WFS layers found in the WWSK GeoServer WFS
@@ -570,6 +572,82 @@ define(['knockout',
                     }
                 }
             };
+
+            LayerManager.prototype.populateWmsLayerFromUrl = function () {
+
+                /** Store URL parameters from the web browser
+                 *
+                 * Proposed values in the URL:
+                 *
+                 * layer
+                 * latitude
+                 * longitude
+                 * altitude
+                 * bounding_box
+                 *
+                 * These can be repeated (e.g. '?&layer=bmng&layer=landsat&layer=sentinel')
+                 *
+                 * see: https://developer.mozilla.org/en-US/docs/Web/API/URLSearchParams
+                 */
+
+                // The '.slice(1)' operation removes the question mark separator.
+                var urlParameters = new URLSearchParams(window.location.search.slice(1));
+
+                // Check if URL string has a layer associated
+                // e.g. http://127.0.0.1:8080/?layer=layerName
+                if(urlParameters.has("layer")){
+
+                    // TODO: Unnnecesary going through the whole GetCapabilities document. Abbreviate request for a single layer?
+                    var requestUrl = this.localWmsServer + "?SERVICE=WMS&VERSION=" + this.localWmsVersion + "&REQUEST=GetCapabilities";
+                    var layerGenerator = function (myGlobe) {
+                        var globe = myGlobe;
+                        return {
+                            addLayers: function (data, status) {
+                                // Assuming a single layer value, store desired layer name in a string
+                                var requestedLayer = urlParameters.get("layer");
+
+                                if (status === "success") {
+                                    var wmsCapabilities = new WorldWind.WmsCapabilities(data),
+                                        namedLayers = wmsCapabilities.getNamedLayers(),
+                                        wmsLayerConfig;
+
+                                        // Looking for the requested layer in the URL inside wmsCapabilities
+                                        var layerIndex = searchLayerName(namedLayers, requestedLayer, "name");
+
+                                        if (layerIndex === -1){
+                                            console.log("Layer requested in URL not found in local resource");
+                                        } else {
+                                            wmsLayerConfig = WorldWind.WmsLayer.formLayerConfiguration(namedLayers[layerIndex]);
+                                            // Using the EnhancedWmsLayer which uses GeoServer vendor params in the GetMap URL
+                                            globe.layerManager.addBaseLayer(new EnhancedWmsLayer(wmsLayerConfig, null), {
+                                                enabled: false,
+                                                detailControl: config.imagerydetailControl
+                                            });
+                                        }
+                                }
+                            }
+                        }
+                    }(this.globe);
+
+                    $.get(requestUrl).done(
+                        layerGenerator.addLayers
+                    ).fail(function (err) {
+                        // TODO C Squared Error Alert
+                        console.error(err);
+                    });
+
+                } else {
+                    console.log("No layer requested in URL");
+                }
+
+                // Generic function to look for a value inside an object using a particular key (property)
+                var searchLayerName = function (wmsLayers, searchTerm, property) {
+                    for(var i = 0, len = wmsLayers.length; i < len; i++) {
+                        if (wmsLayers[i][property] === searchTerm) return i;
+                    }
+                    return -1;
+                }
+            }
 
             LayerManager.prototype.populateAvailableWmsLayers = function () {
                 var requestUrl = this.localWmsServer + "?SERVICE=WMS&VERSION=" + this.localWmsVersion + "&REQUEST=GetCapabilities";
