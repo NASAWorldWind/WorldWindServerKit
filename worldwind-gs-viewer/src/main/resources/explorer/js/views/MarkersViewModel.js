@@ -18,7 +18,7 @@ define(['knockout', 'model/Constants'],
                 var self = this,
                         wwd = globe.wwd;
 
-                self.markersLayer = globe.layerManager.findLayer(constants.LAYER_NAME_MARKERS);
+                self.markersLayer = globe.findLayer(constants.LAYER_NAME_MARKERS);
                 self.markers = markerManager.markers;   // observable array
 
                 /** "Goto" function centers the globe on a selected marker */
