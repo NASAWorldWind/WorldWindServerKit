@@ -31,7 +31,7 @@ define(['knockout', 'jquery', 'views/BookmarkDialog'],
 
                 self.onBookmark = function () {
                     // Genrate a bookmark for the current scene
-                    var bookmark = "anywhere-but-here";
+                    var bookmark = window.origin + "/geoserver/explorer/index.html?" + globe.layerManager.getWmsLayersParam();
 
                     // Open the  copy-bookmark dialog
                     self.dialog.open(bookmark);
