@@ -5,12 +5,17 @@
 
 /*global WorldWind*/
 
+/**
+ * BookmarkDialog presents a dialog that displays a given url and 
+ * provides a button that copies it to the clipboard.
+ *  
+ * @returns {BookmarkDialog}
+ */
 define(['knockout', 'jquery', 'jquery-growl',
 ],
         function (ko, $, growl) {
             "use strict";
             /**
-             *
              * @constructor
              */
             function BookmarkDialog() {
@@ -53,11 +58,12 @@ define(['knockout', 'jquery', 'jquery-growl',
                                 message: "The link was copied to the clipboard"});
                         } else {
                             $.growl.warning({
-                                title: "Bookmark Not Copied",
+                                title: "Bookmark Not Copied!",
                                 message: "The link could not be copied"});
 
                         }
                     } catch (err) {
+                        console.error('Unable to copy bookmark link.', err.message);
                         $.growl.error({
                             title: "Error",
                             message: "Unable to copy link"});
