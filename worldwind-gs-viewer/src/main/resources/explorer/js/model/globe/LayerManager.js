@@ -7,10 +7,12 @@
  * The LayerManager manages categorical, observable lists of Layer objects. It itself observable,
  * and it injects some observable properties into the individual Layer objects.
  *
- * @param {Knockout} ko
- * @param {Config} config
- * @param {Constants} constants
- * @param {WorldWind} ww
+ * @param {Knockout} ko object
+ * @param {Config} config object
+ * @param {Constants} constants object
+ * @param {EnhancedWmsLayer} EnhancedWmsLayer class
+ * @param {Log} log object
+ * @param {WorldWind} ww object
  * @returns {LayerManager}
  */
 define(['knockout',
@@ -101,27 +103,30 @@ define(['knockout',
              */
             LayerManager.prototype.loadDefaultLayers = function () {
 
-                // Check if there's a layer in the URL search string and load it
-                this.populateWmsLayerFromUrl();
                 // Asynchronysly load the WMS layers found in the WWSK GeoServer WMS
                 this.populateAvailableWmsLayers();
                 // Asynchronysly load the WFS layers found in the WWSK GeoServer WFS
                 this.populateAvailableWfsLayers();
+
+                // Check if there's a layer in the URL search string and enable it
+                this.setWmsLayersFromUrl();
 
             };
 
             /**
              * Background layers are always enabled and are not shown in the layer menu.
              * @param {WorldWind.Layer} layer
+             * @param {Object} options Optional
              */
             LayerManager.prototype.addBackgroundLayer = function (layer, options) {
-                var index = this.backgroundLayers().length;
+                var index = this.backgroundLayers().length,
+                        defaultOptions = {
+                            hideInMenu: true,
+                            enabled: true
+                        };
 
                 // Apply default options for a background layer if options are not supplied
-                LayerManager.applyOptionsToLayer(layer, options ? options : {
-                    hideInMenu: true,
-                    enabled: true
-                }, constants.LAYER_CATEGORY_BACKGROUND);
+                LayerManager.applyOptionsToLayer(layer, options ? options : defaultOptions, constants.LAYER_CATEGORY_BACKGROUND);
 
                 // Add the layer to the WorldWindow
                 this.globe.wwd.insertLayer(index, layer);
@@ -133,7 +138,7 @@ define(['knockout',
             /**
              * Base layers are opaque and should be shown exclusive of other base layers.
              * @param {WorldWind.Layer} layer
-             * @param {Object} options
+             * @param {Object} options Optional
              */
             LayerManager.prototype.addBaseLayer = function (layer, options) {
                 // Determine the index of this layer within the WorldWindow
@@ -219,27 +224,26 @@ define(['knockout',
             };
 
             /**
-             * Finds the first layer with a matching displayName attribute.
-             * @param {type} layerName The name to compare to the layer's displayName
-             * @returns A layer object or null if not found
+             * Finds the first layer with a matching name (displayName) attribute.
+             * @param {string} name The name to compare to the layer's displayName
+             * @returns A layer view model object or null if not found
              */
-            LayerManager.prototype.findLayer = function (layerName) {
-                var layers = this.globe.wwd.layers,
+            LayerManager.prototype.findLayerViewModel = function (name) {
+                var layerViewModels = this.baseLayers,
                         i, len;
 
-                if (!layerName) {
+                if (!name) {
                     return null;
                 }
 
-                for (i = 0, len = layers.length; i < len; i++) {
-                    if (layers[i].displayName === layerName) {
-                        return layers[i];
+                for (i = 0, len = layerViewModels().length; i < len; i++) {
+                    if (layerViewModels()[i].name() === name) {
+                        return layerViewModels()[i];
                     }
                 }
                 return null;
             };
-
-
+            
             /**
              * Applys or adds the options to the given layer.
              * @param {WorldWind.Layer} layer The layer to update
@@ -288,6 +292,7 @@ define(['knockout',
             LayerManager.nextLayerId = 0;
             LayerManager.createLayerViewModel = function (layer) {
                 var viewModel = {
+                    wwLayer: layer,
                     id: ko.observable(LayerManager.nextLayerId++),
                     category: ko.observable(layer.category),
                     name: ko.observable(layer.displayName),
@@ -524,6 +529,9 @@ define(['knockout',
                 this.globe.redraw();
             };
 
+            /**
+             * saves the managed layers to local storage as JSON objects. 
+             */
             LayerManager.prototype.saveLayers = function () {
 
                 // Iterate through all of the layer types and gather the properties of interest
@@ -552,13 +560,17 @@ define(['knockout',
 
             };
 
-            LayerManager.applyRestoreState = function (viewModel) {
-                var persistSettingsString = localStorage.getItem(viewModel.category()), persistSettings, layerSettings;
+            /**
+             * Restores the state for a layer from local storage.
+             * @param {type} layerViewModel An individual layer view model object.
+             */
+            LayerManager.applyRestoreState = function (layerViewModel) {
+                var persistSettingsString = localStorage.getItem(layerViewModel.category()), persistSettings, layerSettings;
                 if (persistSettingsString) {
                     persistSettings = JSON.parse(persistSettingsString);
                     for (var i = 0; i < persistSettings.length; i++) {
                         layerSettings = persistSettings[i];
-                        if (layerSettings.name == viewModel.name()) {
+                        if (layerSettings.name == layerViewModel.name()) {
                             // a matching layer was found, the persisted settings will provided to the layer
                             // id: ko.observable(LayerManager.nextLayerId++),
                             // category: ko.observable(layer.category),
@@ -566,11 +578,75 @@ define(['knockout',
                             // enabled: ko.observable(layer.enabled),
                             // legendUrl: ko.observable(layer.legendUrl ? layer.legendUrl.url : ''),
                             // opacity: ko.observable(layer.opacity)
-                            viewModel.enabled(layerSettings.enabled);
-                            viewModel.opacity(layerSettings.opacity);
+                            layerViewModel.enabled(layerSettings.enabled);
+                            layerViewModel.opacity(layerSettings.opacity);
                         }
                     }
                 }
+            };
+            
+            /**
+             * Returns a "layers=name 1,name 2,name n" string suituable for a url parameter.
+             * @returns {String} layer=... 
+             */
+            LayerManager.prototype.getWmsLayersParam = function () {
+                var param = "layers=",
+                        i, len;
+                
+                for (i = 0, len = this.baseLayers().length; i < len; i++) {
+                    if (this.baseLayers()[i].enabled()) {
+                        param  = param + (i > 0 ? "," : "") + this.baseLayers()[i].name();
+                    }
+                }
+                return param;
+            };
+            
+
+            LayerManager.prototype.setWmsLayersFromUrl = function () {
+
+                /** Store URL parameters from the web browser
+                 *
+                 * Proposed values in the URL:
+                 *
+                 * layer
+                 * latitude
+                 * longitude
+                 * altitude
+                 * bounding_box
+                 *
+                 * These can be repeated (e.g. '?&layer=bmng&layer=landsat&layer=sentinel')
+                 *
+                 * see: https://developer.mozilla.org/en-US/docs/Web/API/URLSearchParams
+                 */
+
+                // The '.slice(1)' operation removes the question mark separator.
+                var urlParameters = new URLSearchParams(window.location.search.slice(1)),
+                        layersParam,
+                        requestedLayers,
+                        i, len,
+                        layerViewModel;
+
+                // Check if URL string has a layer associated
+                // e.g. http://127.0.0.1:8080/?layer=layerName
+                if (urlParameters.has("layers")) {
+                    layersParam = urlParameters.get("layers");
+                    
+                    // Disable all base layer observables in preparation for enabling URL's layers
+                    for (i = 0, len = this.baseLayers().length; i < len; i++) {
+                        this.baseLayers()[i].enabled(false);
+                    }
+                    
+                    requestedLayers=layersParam.split(",");
+                    for (i = 0, len = requestedLayers.length; i < len; i++) {
+                        layerViewModel = this.findLayerViewModel(requestedLayers[i]);
+                        if (layerViewModel) {
+                            layerViewModel.enabled(true);
+                        }
+                    }
+                } else {
+                    console.log("No layer requested in URL");
+                }
+
             };
 
             LayerManager.prototype.populateWmsLayerFromUrl = function () {
@@ -595,7 +671,7 @@ define(['knockout',
 
                 // Check if URL string has a layer associated
                 // e.g. http://127.0.0.1:8080/?layer=layerName
-                if(urlParameters.has("layer")){
+                if (urlParameters.has("layer")) {
 
                     // TODO: Unnnecesary going through the whole GetCapabilities document. Abbreviate request for a single layer?
                     var requestUrl = this.localWmsServer + "?SERVICE=WMS&VERSION=" + this.localWmsVersion + "&REQUEST=GetCapabilities";
@@ -608,30 +684,30 @@ define(['knockout',
 
                                 if (status === "success") {
                                     var wmsCapabilities = new WorldWind.WmsCapabilities(data),
-                                        namedLayers = wmsCapabilities.getNamedLayers(),
-                                        wmsLayerConfig;
+                                            namedLayers = wmsCapabilities.getNamedLayers(),
+                                            wmsLayerConfig;
 
-                                        // Looking for the requested layer in the URL inside wmsCapabilities
-                                        var layerIndex = searchLayerName(namedLayers, requestedLayer, "name");
+                                    // Looking for the requested layer in the URL inside wmsCapabilities
+                                    var layerIndex = searchLayerName(namedLayers, requestedLayer, "name");
 
-                                        if (layerIndex === -1){
-                                            console.log("Layer requested in URL not found in local resource");
-                                        } else {
-                                            wmsLayerConfig = WorldWind.WmsLayer.formLayerConfiguration(namedLayers[layerIndex]);
-                                            // Using the EnhancedWmsLayer which uses GeoServer vendor params in the GetMap URL
-                                            globe.layerManager.addBaseLayer(new EnhancedWmsLayer(wmsLayerConfig, null), {
-                                                enabled: false,
-                                                detailControl: config.imagerydetailControl
-                                            });
-                                        }
+                                    if (layerIndex === -1) {
+                                        console.log("Layer requested in URL not found in local resource");
+                                    } else {
+                                        wmsLayerConfig = WorldWind.WmsLayer.formLayerConfiguration(namedLayers[layerIndex]);
+                                        // Using the EnhancedWmsLayer which uses GeoServer vendor params in the GetMap URL
+                                        globe.layerManager.addBaseLayer(new EnhancedWmsLayer(wmsLayerConfig, null), {
+                                            enabled: false,
+                                            detailControl: config.imagerydetailControl
+                                        });
+                                    }
                                 }
                             }
                         }
                     }(this.globe);
 
                     $.get(requestUrl).done(
-                        layerGenerator.addLayers
-                    ).fail(function (err) {
+                            layerGenerator.addLayers
+                            ).fail(function (err) {
                         // TODO C Squared Error Alert
                         console.error(err);
                     });
@@ -642,12 +718,13 @@ define(['knockout',
 
                 // Generic function to look for a value inside an object using a particular key (property)
                 var searchLayerName = function (wmsLayers, searchTerm, property) {
-                    for(var i = 0, len = wmsLayers.length; i < len; i++) {
-                        if (wmsLayers[i][property] === searchTerm) return i;
+                    for (var i = 0, len = wmsLayers.length; i < len; i++) {
+                        if (wmsLayers[i][property] === searchTerm)
+                            return i;
                     }
                     return -1;
-                }
-            }
+                };
+            };
 
             LayerManager.prototype.populateAvailableWmsLayers = function () {
                 var requestUrl = this.localWmsServer + "?SERVICE=WMS&VERSION=" + this.localWmsVersion + "&REQUEST=GetCapabilities";
@@ -724,13 +801,13 @@ define(['knockout',
                                     layerName = keys[z];
                                     wfsLayerGenerator = function (theGlobe, myName) {
                                         var globe = theGlobe,
-                                            name = myName;
+                                                name = myName;
                                         log.info('LayerManager', 'wfsLayerGenerator', 'name: ' + name);
 
                                         return {
                                             addLayer: function (kmlFile) {
                                                 var renderableLayer = new WorldWind.RenderableLayer(name);
-                                                
+
                                                 renderableLayer.addRenderable(kmlFile);
                                                 globe.layerManager.addOverlayLayer(renderableLayer);
                                             }
@@ -741,9 +818,9 @@ define(['knockout',
                                             + "?SERVICE=WFS&VERSION=" + self.localWfsVersion
                                             + "&REQUEST=GetFeature&typename=" + layerName
                                             + "&outputFormat=application%2Fvnd.google-earth.kml%2Bxml";
-                                    
+
                                     log.info('LayerManager', 'wfsCapabilitiesRetriever.process', wfsFeatureUrl);
-                                    
+
                                     // Create a KmlFile object for the feature and add a RenderableLayer 
                                     new WorldWind.KmlFile(wfsFeatureUrl).then(wfsLayerGenerator.addLayer);
                                 }
@@ -765,17 +842,17 @@ define(['knockout',
              * to provide a view of the layer as complete as possible.
              * @param layer the layer from the layer manager that the user selected for zooming in
              */
-            LayerManager.prototype.zoomToLayer = function(layer){
+            LayerManager.prototype.zoomToLayer = function (layer) {
 
                 console.log('Taking you to your layer, sir');
 
-                var findLayerCenter = function (layer){
+                var findLayerCenter = function (layer) {
                     var layerCenter = new WorldWind.Position();
                     // TODO: Calculate center
                     return layerCenter
                 }
 
-                var defineZoomLevel = function(layer){
+                var defineZoomLevel = function (layer) {
 
                 }
 
@@ -789,9 +866,9 @@ define(['knockout',
              * @param index the index to move the layer to in its specific layer category, or "up" and "down" to
              * move the layer above or below its neighbor
              */
-            LayerManager.prototype.moveLayer = function(layer, index) {
+            LayerManager.prototype.moveLayer = function (layer, index) {
                 var explorerLayerArray, wwLayer, wwLayersStartIndex, i, len,
-                    wwLayersSubset;
+                        wwLayersSubset;
 
                 if (!layer) {
                     return;
@@ -800,7 +877,7 @@ define(['knockout',
                 if (!index || index < 0) {
                     return;
                 }
-                
+
                 // Determine the corresponding layer array
                 switch (layer.category()) {
                     case constants.LAYER_CATEGORY_BACKGROUND:
@@ -839,7 +916,7 @@ define(['knockout',
                 // First get the lowest index value for taking the splice
                 wwLayersStartIndex = this.globe.wwd.layers.length - 1;
                 for (i = 0, len = explorerLayerArray().length; i < len; i++) {
-                    wwLayer = this.globe.layerManager.findLayer(explorerLayerArray()[i].name());
+                    wwLayer = this.globe.findLayer(explorerLayerArray()[i].name());
                     wwLayersStartIndex = Math.min(wwLayersStartIndex, this.globe.wwd.layers.indexOf(wwLayer));
                 }
                 // Splice into a copy
@@ -860,7 +937,7 @@ define(['knockout',
                 LayerManager.moveLayerInArray(wwLayer, index, wwLayersSubset);
 
                 // Traverse the subset WorldWind layer array layers backwards and splice into WorldWind's layer array
-                for (i = (wwLayersSubset.length -1); i >= 0; i--) {
+                for (i = (wwLayersSubset.length - 1); i >= 0; i--) {
                     this.globe.wwd.layers.splice(wwLayersStartIndex++, 0, wwLayersSubset[i]);
                 }
             };
