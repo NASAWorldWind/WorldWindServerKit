@@ -907,7 +907,7 @@ define(['knockout',
                 }
 
                 // Index bounds check
-                if (index < 0 || index >= explorerLayerArray().length) {
+                if (index < 0 || index > explorerLayerArray().length) {
                     console.error("layer move outside of bounds");
                     return;
                 }
