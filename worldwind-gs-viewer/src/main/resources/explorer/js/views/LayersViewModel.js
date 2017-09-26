@@ -40,7 +40,9 @@ define(['knockout', 'jquery', 'jqueryui', 'bootstrap', 'model/Constants', 'model
                  */
                 this.servers = layerManager.servers;
                 // Setting a default server address to some interesting data
-                self.serverAddress = ko.observable("http://neowms.sci.gsfc.nasa.gov/wms/wms");
+                self.serverAddress = ko.observable("http://neowms.sci.gsfc.nasa.gov/wms/wms"); // CORS is disabled now in here
+                // self.serverAddress = ko.observable("https://worldwind25.arc.nasa.gov/wms");
+
 
                 /**
                  * Toggles the selected layer's visibility on/off
