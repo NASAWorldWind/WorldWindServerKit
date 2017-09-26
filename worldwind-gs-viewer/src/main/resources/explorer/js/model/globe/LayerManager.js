@@ -843,20 +843,23 @@ define(['knockout',
              * @param layer the layer from the layer manager that the user selected for zooming in
              */
             LayerManager.prototype.zoomToLayer = function (layer) {
-                
-                var centerPosition = findLayerCenter(layer);
-                this.globe.goto(centerPosition.latitude, centerPosition.longitude);
 
-                var findLayerCenter = function (layer){
-                    var layerSector = layer.wwLayer.levels.sector;
-                    var centerLatitude = layerSector.maxLatitude - layerSector.minLatitude;
-                    var centerLongitude = layerSector.maxLongitude - layerSector.minLongitude;
+                var layerSector = layer.wwLayer.levels.sector;
+                var layerCenterPosition = findLayerCenter(layerSector);
+                var zoomLevel = defineZoomLevel(layerSector);
+
+                this.globe.goto(layerCenterPosition.latitude, layerCenterPosition.longitude);
+
+                function findLayerCenter (layerSector){
+
+                    var centerLatitude = (layerSector.maxLatitude + layerSector.minLatitude) / 2;
+                    var centerLongitude = (layerSector.maxLongitude + layerSector.minLongitude) / 2;
                     var layerCenter = new WorldWind.Position(centerLatitude, centerLongitude);
                     console.log(layerCenter);
                     return layerCenter
                 }
 
-                var defineZoomLevel = function (layer) {
+                function defineZoomLevel (layerSector) {
                     // Calculate camera zoom according to layer sector (bounding box in 2D terms).
                 }
 
