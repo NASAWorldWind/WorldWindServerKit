@@ -108,9 +108,6 @@ define(['knockout',
                 // Asynchronysly load the WFS layers found in the WWSK GeoServer WFS
                 this.populateAvailableWfsLayers();
 
-                // Check if there's a layer in the URL search string and enable it
-                this.setWmsLayersFromUrl();
-
             };
 
             /**
@@ -243,7 +240,7 @@ define(['knockout',
                 }
                 return null;
             };
-            
+
             /**
              * Applys or adds the options to the given layer.
              * @param {WorldWind.Layer} layer The layer to update
@@ -584,23 +581,27 @@ define(['knockout',
                     }
                 }
             };
-            
+
             /**
-             * Returns a "layers=name 1,name 2,name n" string suituable for a url parameter.
+             * Returns a "layers=name 1,name 2,name n" URI conponent suituable for a url parameter.
              * @returns {String} layer=... 
              */
             LayerManager.prototype.getWmsLayersParam = function () {
                 var param = "layers=",
-                        i, len;
-                
+                        layerName,
+                        i, len, isFirstParam = true;
+
                 for (i = 0, len = this.baseLayers().length; i < len; i++) {
                     if (this.baseLayers()[i].enabled()) {
-                        param  = param + (i > 0 ? "," : "") + this.baseLayers()[i].name();
+                        // Encode the layer name to prevent special chars from corrupting a URL
+                        layerName = encodeURIComponent(this.baseLayers()[i].name());
+                        param = param + (isFirstParam ? "" : ",") + layerName;
+                        isFirstParam = false;
                     }
                 }
                 return param;
             };
-            
+
 
             LayerManager.prototype.setWmsLayersFromUrl = function () {
 
@@ -623,24 +624,32 @@ define(['knockout',
                 var urlParameters = new URLSearchParams(window.location.search.slice(1)),
                         layersParam,
                         requestedLayers,
-                        i, len,
-                        layerViewModel;
+                        i, len, n,
+                        layerViewModel,
+                        layerName;
 
                 // Check if URL string has a layer associated
                 // e.g. http://127.0.0.1:8080/?layer=layerName
                 if (urlParameters.has("layers")) {
                     layersParam = urlParameters.get("layers");
-                    
-                    // Disable all base layer observables in preparation for enabling URL's layers
+
+                    // Disable default base layers in preparation for enabling the URL's layers
                     for (i = 0, len = this.baseLayers().length; i < len; i++) {
                         this.baseLayers()[i].enabled(false);
                     }
-                    
-                    requestedLayers=layersParam.split(",");
+
+                    // Enable the URL's layers
+                    requestedLayers = layersParam.split(",");
+                    n = 0;
                     for (i = 0, len = requestedLayers.length; i < len; i++) {
-                        layerViewModel = this.findLayerViewModel(requestedLayers[i]);
+                        // Layer names are URI encoded to allow special chars in the URL
+                        layerName = decodeURIComponent(requestedLayers[i]);
+                        layerViewModel = this.findLayerViewModel(layerName);
+
                         if (layerViewModel) {
                             layerViewModel.enabled(true);
+                            // Sort the layers in the order they were give in the URL
+                            this.moveLayer(layerViewModel, n++);
                         }
                     }
                 } else {
@@ -728,6 +737,7 @@ define(['knockout',
 
             LayerManager.prototype.populateAvailableWmsLayers = function () {
                 var requestUrl = this.localWmsServer + "?SERVICE=WMS&VERSION=" + this.localWmsVersion + "&REQUEST=GetCapabilities";
+                var self = this;
                 var layerGenerator = function (myGlobe) {
                     var globe = myGlobe;
                     return {
@@ -746,6 +756,8 @@ define(['knockout',
                                         detailControl: config.imagerydetailControl
                                     });
                                 }
+                                // Check if there are layers in the URL search string and enable them
+                                self.setWmsLayersFromUrl();
                             }
                         }
                     }
@@ -862,24 +874,24 @@ define(['knockout',
              * Moves the provided layer to the provided index of the layer category the layer belongs. Moves the
              * WorldWind layer in concert to maintain list synchronicity between the order layers are displayed
              * in the layer manager and WorldWind.
-             * @param layer the Explorer layer manager layer to be moved
+             * @param layerViewModel the Explorer layer manager layer to be moved
              * @param index the index to move the layer to in its specific layer category, or "up" and "down" to
              * move the layer above or below its neighbor
              */
-            LayerManager.prototype.moveLayer = function (layer, index) {
+            LayerManager.prototype.moveLayer = function (layerViewModel, index) {
                 var explorerLayerArray, wwLayer, wwLayersStartIndex, i, len,
                         wwLayersSubset;
 
-                if (!layer) {
+                if (!layerViewModel) {
                     return;
                 }
 
-                if (!index || index < 0) {
+                if (index == null || index < 0) {
                     return;
                 }
 
                 // Determine the corresponding layer array
-                switch (layer.category()) {
+                switch (layerViewModel.category()) {
                     case constants.LAYER_CATEGORY_BACKGROUND:
                         explorerLayerArray = this.backgroundLayers;
                         break;
@@ -893,17 +905,17 @@ define(['knockout',
                         explorerLayerArray = this.dataLayers;
                         break;
                     default:
-                        console.log("moving the layer isn't support for " + layer.category());
+                        console.log("moving the layer isn't support for " + layerViewModel.category());
                         return;
                 }
 
                 // Convert the up and down indices to a numerical index
                 if (index === "up") {
-                    index = explorerLayerArray.indexOf(layer) - 1;
+                    index = explorerLayerArray.indexOf(layerViewModel) - 1;
                 }
 
                 if (index === "down") {
-                    index = explorerLayerArray.indexOf(layer) + 2;
+                    index = explorerLayerArray.indexOf(layerViewModel) + 2;
                 }
 
                 // Index bounds check
@@ -925,14 +937,14 @@ define(['knockout',
                 wwLayersSubset.reverse();
                 // Asign the layer of interest to the wwLayer variable
                 for (i = 0, len = wwLayersSubset.length; i < len; i++) {
-                    if (layer.name() === wwLayersSubset[i].displayName) {
+                    if (layerViewModel.name() === wwLayersSubset[i].displayName) {
                         wwLayer = wwLayersSubset[i];
                         break;
                     }
                 }
 
                 // Update the layer manager order
-                LayerManager.moveLayerInArray(layer, index, explorerLayerArray);
+                LayerManager.moveLayerInArray(layerViewModel, index, explorerLayerArray);
                 // Update the WorldWind layer subset array order
                 LayerManager.moveLayerInArray(wwLayer, index, wwLayersSubset);
 
