@@ -42,6 +42,7 @@ define(['knockout',
                  * TODO: initialize from server REST settings
                  */
                 this.localWmsServer = window.origin + "/geoserver/wms";
+//                this.localWmsServer = window.origin + "/geoserver/gwc/service/wms";
 
                 /** WWSK GeoServer WFS endpoint
                  * TODO: initialize from server REST settings
@@ -856,7 +857,15 @@ define(['knockout',
              */
             LayerManager.prototype.zoomToLayer = function (layer) {
 
-                var layerSector = layer.wwLayer.levels.sector;
+                var layerSector = layer.wwLayer.bbox; // property of EnhancedWmsLayer
+                if (layerSector == null) { // null or undefined.  
+                    // TODO: growl warning
+                    return;
+                }
+                if (layerSector === WorldWind.Sector.FULL_SPHERE) { 
+                    // TODO: growl info .... no where to go
+                    return;
+                }
                 var layerCenterPosition = findLayerCenter(layerSector);
                 var zoomLevel = defineZoomLevel(layerSector);
 
@@ -868,7 +877,7 @@ define(['knockout',
                     var centerLongitude = (layerSector.maxLongitude + layerSector.minLongitude) / 2;
                     var layerCenter = new WorldWind.Position(centerLatitude, centerLongitude);
                     console.log(layerCenter);
-                    return layerCenter
+                    return layerCenter;
                 }
 
                 function defineZoomLevel (layerSector) {
