@@ -458,18 +458,6 @@
                               data-bind="css: {'glyphicon-eye-open': $data.enabled(), 'glyphicon-eye-close': !$data.enabled()}"></span>
                         <span class="layer" data-bind="text: $data.name()"></span>
                     </button>
-                    <!--Conditionally display a legend button-->
-                    <button type="button"
-                            class="btn btn-default collapse"
-                            style="display: block; width: 10%;"
-                            data-toggle="collapse"
-                            data-bind="css: {active: $data.enabled(), in: $data.enabled()},
-                                attr: {
-                                    'data-target': '#collapse-layer-' + $data.id(),
-                                    'aria-controls': 'collapse-layer-' + $data.id(),
-                                    'aria-expanded': $data.enabled() ? 'true' : 'false'}">
-                        <span class="glyphicon glyphicon-stats"></span>
-                    </button>
                     <!--Settings button-->
                     <button type="button"
                             class="btn btn-default"
@@ -497,12 +485,18 @@
                             data-bind="css: {active: $data.enabled()}, click: $root.onMoveLayerDown">
                         <span class="glyphicon glyphicon-arrow-down"></span>
                     </button>
+                    <button type="button"
+                            class="btn btn-default"
+                            style="display: block; width: 10%;"
+                            data-bind="css: {active: $data.enabled()}, click: $root.onMoveLayerToTop">
+                        <span class="glyphicon glyphicon-circle-arrow-up"></span>
+                    </button>
                 </div>
                 <div class="collapse" data-bind="attr: {id: 'collapse-layer-' + $data.id()}">
                     <div class="well">
                         <!--Controls and Legend-->
                         <div>
-                            <img data-bind="attr: {src: legendUrl}"/>
+                            <img data-bind="attr: {src: $data.legendUrl}"/>
                         </div>
                     </div>
                 </div>
@@ -516,6 +510,10 @@
             <div id="layer-settings-dialog">
                 Opacity
                 <div id="opacity-slider" auto-focus></div>
+                <div>
+                    <!-- TODO not binding the url -->
+                    <img data-bind="attr: {src: $data.legendUrl}"/>
+                </div>
             </div>
         </div>
 

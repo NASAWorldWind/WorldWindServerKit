@@ -109,6 +109,10 @@ define(['knockout', 'jquery', 'jqueryui', 'bootstrap', 'model/Constants', 'model
                     layerManager.moveLayer(layer, "up");
                 };
 
+                self.onMoveLayerToTop = function(layer) {
+                    layerManager.moveLayer(layer, 0);
+                };
+
                 self.onMoveLayerDown = function (layer) {
                     layerManager.moveLayer(layer, "down");
                 }
