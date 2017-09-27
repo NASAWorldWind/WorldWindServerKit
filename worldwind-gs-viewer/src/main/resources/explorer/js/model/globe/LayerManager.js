@@ -856,16 +856,23 @@ define(['knockout',
              */
             LayerManager.prototype.zoomToLayer = function (layer) {
 
-                console.log('Taking you to your layer, sir');
+                var layerSector = layer.wwLayer.levels.sector;
+                var layerCenterPosition = findLayerCenter(layerSector);
+                var zoomLevel = defineZoomLevel(layerSector);
 
-                var findLayerCenter = function (layer) {
-                    var layerCenter = new WorldWind.Position();
-                    // TODO: Calculate center
+                this.globe.goto(layerCenterPosition.latitude, layerCenterPosition.longitude);
+
+                function findLayerCenter (layerSector){
+
+                    var centerLatitude = (layerSector.maxLatitude + layerSector.minLatitude) / 2;
+                    var centerLongitude = (layerSector.maxLongitude + layerSector.minLongitude) / 2;
+                    var layerCenter = new WorldWind.Position(centerLatitude, centerLongitude);
+                    console.log(layerCenter);
                     return layerCenter
                 }
 
-                var defineZoomLevel = function (layer) {
-
+                function defineZoomLevel (layerSector) {
+                    // Calculate camera zoom according to layer sector (bounding box in 2D terms).
                 }
 
             }
@@ -919,7 +926,7 @@ define(['knockout',
                 }
 
                 // Index bounds check
-                if (index < 0 || index >= explorerLayerArray().length) {
+                if (index < 0 || index > explorerLayerArray().length) {
                     console.error("layer move outside of bounds");
                     return;
                 }

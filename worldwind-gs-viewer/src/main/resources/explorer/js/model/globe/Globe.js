@@ -640,7 +640,7 @@ define(['knockout',
              * @param {Function} callback Optional.
              */
             Globe.prototype.goto = function (latitude, longitude, range, callback) {
-                if (!latitude || !longitude || isNaN(latitude) || isNaN(longitude)) {
+                if (typeof latitude !== "number" || typeof longitude !== "number" || isNaN(latitude) || isNaN(longitude)) {
                     log.error("Globe", "gotoLatLon", "Invalid Latitude and/or Longitude.");
                     return;
                 }
