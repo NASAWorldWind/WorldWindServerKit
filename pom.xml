@@ -1504,6 +1504,11 @@
                     <groupId>org.codehaus.mojo</groupId>
                     <version>2.4</version>
                 </plugin>
+                <plugin>
+                    <groupId>org.eclipse.jetty</groupId>
+                    <artifactId>jetty-maven-plugin</artifactId>
+                    <version>9.4.7.v20170914</version>
+                </plugin>
             </plugins>              
         </pluginManagement>
         <!-- Define the plugin goals and executions -->
