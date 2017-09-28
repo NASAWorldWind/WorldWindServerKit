@@ -276,33 +276,34 @@
                     <execution>
                         <phase>install</phase>
                         <configuration>
+                            <tarLongFileMode>posix</tarLongFileMode>
                             <descriptors>
 
                                 <!--Binary distibution content-->
                                 <descriptor>src/assembly/bin-assembly.xml</descriptor>
-                                
+
                                 <!--Windows x64 distribution-->
                                 <descriptor>src/assembly/win64-assembly.xml</descriptor>
-                                
+
                                 <!--Linux/Ubuntu x64 distirbution-->
                                 <descriptor>src/assembly/ubuntu64-assembly.xml</descriptor>
-                                
+
                                 <!--Linux/CentOS x64) distribution-->
                                 <descriptor>src/assembly/centos64-assembly.xml</descriptor>
-                                
+
                                 <!--WAR file distibution content -->
                                 <descriptor>src/assembly/war-assembly.xml</descriptor>
-                                
+
                             </descriptors>
-                            
+
                             <!-- Output file and location -->
                             <finalName>worldwind-geoserver-${project.version}</finalName>
                             <outputDirectory>${project.build.directory}</outputDirectory>    
-                                                    
+
                         </configuration>
                         <goals>
                             <goal>single</goal>
-                        </goals>                        
+                        </goals>
                     </execution>
                 </executions>
             </plugin>
