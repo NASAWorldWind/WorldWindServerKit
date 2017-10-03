@@ -130,7 +130,7 @@ define(['knockout',
                 this.globe.wwd.insertLayer(index, layer);
 
                 // Add a proxy to the background layer observables
-                this.backgroundLayers.push(LayerManager.createLayerViewModel(layer));
+                this.backgroundLayers.unshift(LayerManager.createLayerViewModel(layer));
             };
 
             /**
@@ -167,7 +167,7 @@ define(['knockout',
                 this.globe.wwd.insertLayer(index, layer);
 
                 // Add a proxy for this layer to the list of overlays
-                this.overlayLayers.push(LayerManager.createLayerViewModel(layer));
+                this.overlayLayers.unshift(LayerManager.createLayerViewModel(layer));
             };
 
             /**
@@ -298,7 +298,6 @@ define(['knockout',
                     legendUrl: ko.observable(layer.legendUrl ? layer.legendUrl.url : ''),
                     opacity: ko.observable(layer.opacity),
                     showInMenu: ko.observable(layer.showInMenu)
-
                 };
                 // Forward changes from enabled and opacity observables to the the layer object
                 viewModel.enabled.subscribe(function (newValue) {
@@ -916,9 +915,6 @@ define(['knockout',
                         break;
                     case constants.LAYER_CATEGORY_OVERLAY:
                         explorerLayerArray = this.overlayLayers;
-                        break;
-                    case constants.LAYER_CATEGORY_DATA:
-                        explorerLayerArray = this.dataLayers;
                         break;
                     default:
                         console.log("moving the layer isn't support for " + layerViewModel.category());

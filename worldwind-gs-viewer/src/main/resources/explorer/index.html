@@ -200,7 +200,7 @@
                                 </h5>
                             </div>
                             <div class="panel-collapse collapse" id="data-layers-panel">
-                                <div data-bind="template: { name: 'layer-template', foreach: dataLayers}"></div>
+                                <div data-bind="template: { name: 'unsorted-layer-template', foreach: dataLayers}"></div>
                             </div>
                         </div>
                         <div class="panel panel-default">
@@ -213,7 +213,7 @@
                                 </h5>
                             </div>
                             <div class="panel-collapse collapse" id="effect-layers-panel">
-                                <div data-bind="template: { name: 'layer-template', foreach: effectsLayers}"></div>
+                                <div data-bind="template: { name: 'unsorted-layer-template', foreach: effectsLayers}"></div>
                             </div>
                         </div>
                         <div class="panel panel-default">
@@ -226,7 +226,7 @@
                                 </h5>
                             </div>
                             <div class="panel-collapse collapse" id="widget-layers-panel">
-                                <div data-bind="template: { name: 'layer-template', foreach: widgetLayers}"></div>
+                                <div data-bind="template: { name: 'unsorted-layer-template', foreach: widgetLayers}"></div>
                             </div>
                         </div>
                     </div>                  
@@ -442,7 +442,7 @@
         <!-- ------------------------------------------------------------------>
 
         <!-- 
-        Layer Template
+        Sortable Layer Template
         This script renders the individual layer view model items in the Layers panel.
         -->
         <script type="text/html" id="layer-template">
@@ -490,6 +490,49 @@
                             style="display: block; width: 10%;"
                             data-bind="css: {active: $data.enabled()}, click: $root.onMoveLayerToTop">
                         <span class="glyphicon glyphicon-circle-arrow-up"></span>
+                    </button>
+                </div>
+                <div class="collapse" data-bind="attr: {id: 'collapse-layer-' + $data.id()}">
+                    <div class="well">
+                        <!--Controls and Legend-->
+                        <div>
+                            <img data-bind="attr: {src: $data.legendUrl}"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </script>
+        
+        <!-- 
+        Non-Sortable Layer Template
+        This script renders the individual layer view model items in the Layers panel.
+        -->
+        <script type="text/html" id="unsorted-layer-template">
+            <!--Conditionally show the layer if showInMenu is true-->
+            <div data-bind="if: $data.showInMenu()">
+                <div class="btn-group btn-block">
+                    <!--Layer name and visibility button-->
+                    <button type="button"
+                            class="btn btn-default layer-name wrap-panel-heading"
+                            style="display: block; width: 80%;"
+                            data-bind="click: $root.onToggleLayer, css: {active: $data.enabled()}">
+                        <span class="glyphicon pull-left"
+                              data-bind="css: {'glyphicon-eye-open': $data.enabled(), 'glyphicon-eye-close': !$data.enabled()}"></span>
+                        <span class="layer" data-bind="text: $data.name()"></span>
+                    </button>
+                    <!--Settings button-->
+                    <button type="button"
+                            class="btn btn-default"
+                            style="display: block; width: 10%;"
+                            data-bind="css: {active: $data.enabled()}, click: $root.onEditSettings">
+                        <span class="glyphicon glyphicon-cog"></span>
+                    </button>
+                    <!--Zoom to layer button-->
+                    <button type="button"
+                            class="btn btn-default"
+                            style="display: block; width: 10%;"
+                            data-bind="css: {active: $data.enabled()}, click: $root.onZoomToLayer">
+                        <span class="glyphicon glyphicon-zoom-in"></span>
                     </button>
                 </div>
                 <div class="collapse" data-bind="attr: {id: 'collapse-layer-' + $data.id()}">
