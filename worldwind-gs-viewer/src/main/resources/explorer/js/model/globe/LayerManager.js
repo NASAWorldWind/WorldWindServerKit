@@ -850,37 +850,56 @@ define(['knockout',
 
 
             /**
-             * Moves the World Window camera to the center coordinates of the layer, and then zooms in (or out)
+             * Moves the WorldWindow camera to the center coordinates of the layer, and then zooms in (or out)
              * to provide a view of the layer as complete as possible.
-             * @param layer the layer from the layer manager that the user selected for zooming in
+             * @param layer the layer from the layer manager that the user selected for zooming in.
              */
             LayerManager.prototype.zoomToLayer = function (layer) {
 
+                // Verify layer sector (bounding box in 2D terms) existence and
+                // do not center the camera if layer covers the whole globe.
+
                 var layerSector = layer.wwLayer.bbox; // property of EnhancedWmsLayer
-                if (layerSector == null) { // null or undefined.  
-                    // TODO: growl warning
+                if (layerSector == null) { // null or undefined.
+                    $.growl.error({ message: "No Layer sector / bounding box defined!" });
                     return;
                 }
-                if (layerSector === WorldWind.Sector.FULL_SPHERE) { 
-                    // TODO: growl info .... no where to go
+
+                // Comparing each boundary of the sector to verify layer global coverage.
+                if (layerSector.maxLatitude === 90 &&
+                    layerSector.minLatitude === -90 &&
+                    layerSector.maxLongitude === 180 &&
+                    layerSector.minLongitude === -180) {
+                    $.growl.notice({ message: "The selected layer covers the full globe. No camera centering needed." });
                     return;
                 }
+
+                // If the layer is not covering the whole globe, find its center and
+                // zoom the camera to coincide with its boundaries.
+
                 var layerCenterPosition = findLayerCenter(layerSector);
                 var zoomLevel = defineZoomLevel(layerSector);
 
+                // Move camera to position
+                // this.globe.goto(layerCenterPosition.latitude, layerCenterPosition.longitude, zoomLevel);
                 this.globe.goto(layerCenterPosition.latitude, layerCenterPosition.longitude);
 
                 function findLayerCenter (layerSector){
-
                     var centerLatitude = (layerSector.maxLatitude + layerSector.minLatitude) / 2;
                     var centerLongitude = (layerSector.maxLongitude + layerSector.minLongitude) / 2;
                     var layerCenter = new WorldWind.Position(centerLatitude, centerLongitude);
-                    console.log(layerCenter);
                     return layerCenter;
                 }
 
                 function defineZoomLevel (layerSector) {
-                    // Calculate camera zoom according to layer sector (bounding box in 2D terms).
+                    // TODO: Calculate camera range according to layer sector (bounding box in 2D terms).
+                    // var earthRadius = WorldWind.WWMath.max(this.globe.equatorialRadius, this.globe.polarRadius);
+                    // var radiusToHorizon = Math.abs(WorldWind.horizonDistanceForGlobeRadius(
+                    //     earthRadius,
+                    //     altitude));
+                    // if (radiusToHorizon > earthRadius) {
+                    //     radiusToHorizon = earthRadius;
+                    //}
                 }
 
             }
