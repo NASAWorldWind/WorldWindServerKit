@@ -150,6 +150,8 @@ define(['knockout',
 
                 // Add a proxy the the base layer observables
                 this.baseLayers.unshift(LayerManager.createLayerViewModel(layer));
+
+                this.globe.layerManager.sortLayers();
             };
 
             /**
@@ -539,6 +541,7 @@ define(['knockout',
                         layerInfo["name"] = layerArray[i].name();
                         layerInfo["opacity"] = layerArray[i].opacity();
                         layerInfo["enabled"] = layerArray[i].enabled();
+                        layerInfo["order"] = i;
                         typeInfo.push(layerInfo);
                     }
                     localStorage.setItem(layerType, ko.toJSON(typeInfo));
@@ -570,6 +573,9 @@ define(['knockout',
                         if (layerSettings.name == layerViewModel.name()) {
                             layerViewModel.enabled(layerSettings.enabled);
                             layerViewModel.opacity(layerSettings.opacity);
+                            if (!isNaN(layerSettings.order)) {
+                                layerViewModel.order = ko.observable(layerSettings.order);
+                            }
                         }
                     }
                 }
@@ -876,6 +882,31 @@ define(['knockout',
                     // Calculate camera zoom according to layer sector (bounding box in 2D terms).
                 }
 
+            };
+
+            LayerManager.prototype.sortLayers = function () {
+                var explorerLayerCategories = [
+                    this.backgroundLayers, 
+                    this.baseLayers, 
+                    this.overlayLayers, 
+                    this.dataLayers,
+                    this.widgetLayers,
+                    this.effectsLayers
+                ], i, len = explorerLayerCategories.length, 
+                byOrderValue = function (a, b) {
+                    // if an order value is provided use it
+                    if (a.order && !isNaN(a.order()) && b.order && !isNaN(b.order())) {
+                        return a.order() - b.order();
+                    } else {
+                        return a.name().localeCompare(b.name());
+                    }
+                };
+
+                for (i = 0; i < len; i++) {
+                    explorerLayerCategories[i].sort(byOrderValue);
+                }
+
+                this.globe.layerManager.synchronizeLayers;
             };
 
             /**
