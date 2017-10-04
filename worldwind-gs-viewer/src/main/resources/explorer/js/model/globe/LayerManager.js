@@ -131,6 +131,8 @@ define(['knockout',
 
                 // Add a proxy to the background layer observables
                 this.backgroundLayers.unshift(LayerManager.createLayerViewModel(layer));
+
+                this.globe.layerManager.sortLayers();
             };
 
             /**
@@ -170,6 +172,8 @@ define(['knockout',
 
                 // Add a proxy for this layer to the list of overlays
                 this.overlayLayers.unshift(LayerManager.createLayerViewModel(layer));
+
+                this.globe.layerManager.sortLayers();
             };
 
             /**
@@ -187,6 +191,8 @@ define(['knockout',
 
                 // Add a proxy for this layer to the list of effects
                 this.effectsLayers.push(LayerManager.createLayerViewModel(layer));
+
+                this.globe.layerManager.sortLayers();
             };
 
             /**
@@ -204,6 +210,8 @@ define(['knockout',
 
                 // Add a proxy for this layer to the list of data layers
                 this.dataLayers.push(LayerManager.createLayerViewModel(layer));
+
+                this.globe.layerManager.sortLayers();
             };
 
             /**
@@ -221,6 +229,8 @@ define(['knockout',
 
                 this.globe.wwd.insertLayer(index, layer);
                 this.widgetLayers.push(LayerManager.createLayerViewModel(layer));
+
+                this.globe.layerManager.sortLayers();
             };
 
             /**
@@ -299,6 +309,7 @@ define(['knockout',
                     enabled: ko.observable(layer.enabled),
                     legendUrl: ko.observable(layer.legendUrl ? layer.legendUrl.url : ''),
                     opacity: ko.observable(layer.opacity),
+                    order: ko.observable(),
                     showInMenu: ko.observable(layer.showInMenu)
                 };
                 // Forward changes from enabled and opacity observables to the the layer object
@@ -526,6 +537,8 @@ define(['knockout',
                 }
 
                 this.globe.redraw();
+
+                this.globe.layerManager.sortLayers();
             };
 
             /**
@@ -573,9 +586,7 @@ define(['knockout',
                         if (layerSettings.name == layerViewModel.name()) {
                             layerViewModel.enabled(layerSettings.enabled);
                             layerViewModel.opacity(layerSettings.opacity);
-                            if (!isNaN(layerSettings.order)) {
-                                layerViewModel.order = ko.observable(layerSettings.order);
-                            }
+                            layerViewModel.order(layerSettings.order);
                         }
                     }
                 }
@@ -884,6 +895,10 @@ define(['knockout',
 
             };
 
+            /**
+             * Sorts the layers by their provided order (if specified) and then synchronizes the Explorer layers
+             * with the WorldWind layers.
+             */
             LayerManager.prototype.sortLayers = function () {
                 var explorerLayerCategories = [
                     this.backgroundLayers, 
@@ -906,7 +921,7 @@ define(['knockout',
                     explorerLayerCategories[i].sort(byOrderValue);
                 }
 
-                this.globe.layerManager.synchronizeLayers;
+                this.globe.layerManager.synchronizeLayers();
             };
 
             /**
@@ -937,6 +952,10 @@ define(['knockout',
                 var i, explorerLayerLength = layerCategory().length, wwStartIndex = Number.MAX_SAFE_INTEGER, 
                     explorerLayer, wwInsertionIndex;
 
+                if (explorerLayerLength === 0) {
+                    return; // there is nothing to sort in this layer
+                }
+
                 // Find the minimum index for this layer category in the WorldWind layer array
                 for (i = 0; i < explorerLayerLength; i++) {
                     wwStartIndex = Math.min(wwStartIndex, this.globe.wwd.layers.indexOf(layerCategory()[i].wwLayer));
@@ -944,7 +963,7 @@ define(['knockout',
 
                 // Stop and log an error if a start index was not found
                 if (isNaN(wwStartIndex) || wwStartIndex === Number.MAX_SAFE_INTEGER) {
-                    console.error('Unable to determine initial index ')
+                    console.error('Unable to determine initial index ');
                     return;
                 }
                 
