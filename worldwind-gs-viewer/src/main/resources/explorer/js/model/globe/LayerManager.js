@@ -568,13 +568,6 @@ define(['knockout',
                     for (var i = 0; i < persistSettings.length; i++) {
                         layerSettings = persistSettings[i];
                         if (layerSettings.name == layerViewModel.name()) {
-                            // a matching layer was found, the persisted settings will provided to the layer
-                            // id: ko.observable(LayerManager.nextLayerId++),
-                            // category: ko.observable(layer.category),
-                            // name: ko.observable(layer.displayName),
-                            // enabled: ko.observable(layer.enabled),
-                            // legendUrl: ko.observable(layer.legendUrl ? layer.legendUrl.url : ''),
-                            // opacity: ko.observable(layer.opacity)
                             layerViewModel.enabled(layerSettings.enabled);
                             layerViewModel.opacity(layerSettings.opacity);
                         }
@@ -883,7 +876,7 @@ define(['knockout',
                     // Calculate camera zoom according to layer sector (bounding box in 2D terms).
                 }
 
-            }
+            };
 
             /**
              * Synchronizes the Explorer layer arrays with the WorldWind layers. This method will reverse the ordering
