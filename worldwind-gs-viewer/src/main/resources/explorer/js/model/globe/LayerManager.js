@@ -131,6 +131,8 @@ define(['knockout',
 
                 // Add a proxy to the background layer observables
                 this.backgroundLayers.unshift(LayerManager.createLayerViewModel(layer));
+
+                this.globe.layerManager.sortLayers();
             };
 
             /**
@@ -150,6 +152,8 @@ define(['knockout',
 
                 // Add a proxy the the base layer observables
                 this.baseLayers.unshift(LayerManager.createLayerViewModel(layer));
+
+                this.globe.layerManager.sortLayers();
             };
 
             /**
@@ -168,6 +172,8 @@ define(['knockout',
 
                 // Add a proxy for this layer to the list of overlays
                 this.overlayLayers.unshift(LayerManager.createLayerViewModel(layer));
+
+                this.globe.layerManager.sortLayers();
             };
 
             /**
@@ -185,6 +191,8 @@ define(['knockout',
 
                 // Add a proxy for this layer to the list of effects
                 this.effectsLayers.push(LayerManager.createLayerViewModel(layer));
+
+                this.globe.layerManager.sortLayers();
             };
 
             /**
@@ -202,6 +210,8 @@ define(['knockout',
 
                 // Add a proxy for this layer to the list of data layers
                 this.dataLayers.push(LayerManager.createLayerViewModel(layer));
+
+                this.globe.layerManager.sortLayers();
             };
 
             /**
@@ -219,6 +229,8 @@ define(['knockout',
 
                 this.globe.wwd.insertLayer(index, layer);
                 this.widgetLayers.push(LayerManager.createLayerViewModel(layer));
+
+                this.globe.layerManager.sortLayers();
             };
 
             /**
@@ -297,6 +309,7 @@ define(['knockout',
                     enabled: ko.observable(layer.enabled),
                     legendUrl: ko.observable(layer.legendUrl ? layer.legendUrl.url : ''),
                     opacity: ko.observable(layer.opacity),
+                    order: ko.observable(),
                     showInMenu: ko.observable(layer.showInMenu)
                 };
                 // Forward changes from enabled and opacity observables to the the layer object
@@ -524,6 +537,8 @@ define(['knockout',
                 }
 
                 this.globe.redraw();
+
+                this.globe.layerManager.sortLayers();
             };
 
             /**
@@ -539,6 +554,7 @@ define(['knockout',
                         layerInfo["name"] = layerArray[i].name();
                         layerInfo["opacity"] = layerArray[i].opacity();
                         layerInfo["enabled"] = layerArray[i].enabled();
+                        layerInfo["order"] = i;
                         typeInfo.push(layerInfo);
                     }
                     localStorage.setItem(layerType, ko.toJSON(typeInfo));
@@ -568,15 +584,9 @@ define(['knockout',
                     for (var i = 0; i < persistSettings.length; i++) {
                         layerSettings = persistSettings[i];
                         if (layerSettings.name == layerViewModel.name()) {
-                            // a matching layer was found, the persisted settings will provided to the layer
-                            // id: ko.observable(LayerManager.nextLayerId++),
-                            // category: ko.observable(layer.category),
-                            // name: ko.observable(layer.displayName),
-                            // enabled: ko.observable(layer.enabled),
-                            // legendUrl: ko.observable(layer.legendUrl ? layer.legendUrl.url : ''),
-                            // opacity: ko.observable(layer.opacity)
                             layerViewModel.enabled(layerSettings.enabled);
                             layerViewModel.opacity(layerSettings.opacity);
+                            layerViewModel.order(layerSettings.order);
                         }
                     }
                 }
@@ -902,7 +912,101 @@ define(['knockout',
                     //}
                 }
 
-            }
+            };
+
+            /**
+             * Sorts the layers by their provided order (if specified) and then synchronizes the Explorer layers
+             * with the WorldWind layers.
+             */
+            LayerManager.prototype.sortLayers = function () {
+                var explorerLayerCategories = [
+                    this.backgroundLayers, 
+                    this.baseLayers, 
+                    this.overlayLayers, 
+                    this.dataLayers,
+                    this.widgetLayers,
+                    this.effectsLayers
+                ], i, len = explorerLayerCategories.length, 
+                byOrderValue = function (a, b) {
+                    // if an order value is provided use it
+                    if (a.order && !isNaN(a.order()) && b.order && !isNaN(b.order())) {
+                        return a.order() - b.order();
+                    } else {
+                        return a.name().localeCompare(b.name());
+                    }
+                };
+
+                for (i = 0; i < len; i++) {
+                    explorerLayerCategories[i].sort(byOrderValue);
+                }
+
+                this.globe.layerManager.synchronizeLayers();
+            };
+
+            /**
+             * Synchronizes the Explorer layer arrays with the WorldWind layers. This method will reverse the ordering
+             * of the base, background, and overlay arrays in order to match the expected visibility.
+             */
+            LayerManager.prototype.synchronizeLayers = function () {
+                var explorerLayerCategories = [
+                    this.backgroundLayers, 
+                    this.baseLayers, 
+                    this.overlayLayers, 
+                    this.dataLayers,
+                    this.widgetLayers,
+                    this.effectsLayers
+                ], i, len = explorerLayerCategories.length;
+
+                for (i = 0; i < len; i++) {
+                    this.globe.layerManager.synchronizeLayerCategory(explorerLayerCategories[i]);
+                }
+            };
+
+            /**
+             * Synchronizes the provided Explorer layer category with corresponding WorldWind layers. The method
+             * will reverse the ordering of the base, background, and overlay arrays in order to match expected 
+             * visibility.
+             */
+            LayerManager.prototype.synchronizeLayerCategory = function(layerCategory) {
+                var i, explorerLayerLength = layerCategory().length, wwStartIndex = Number.MAX_SAFE_INTEGER, 
+                    explorerLayer, wwInsertionIndex;
+
+                if (explorerLayerLength === 0) {
+                    return; // there is nothing to sort in this layer
+                }
+
+                // Find the minimum index for this layer category in the WorldWind layer array
+                for (i = 0; i < explorerLayerLength; i++) {
+                    wwStartIndex = Math.min(wwStartIndex, this.globe.wwd.layers.indexOf(layerCategory()[i].wwLayer));
+                }
+
+                // Stop and log an error if a start index was not found
+                if (isNaN(wwStartIndex) || wwStartIndex === Number.MAX_SAFE_INTEGER) {
+                    console.error('Unable to determine initial index ');
+                    return;
+                }
+                
+                // Remove all of the layers of this layer category from the WorldWindow layers
+                for (i = 0; i < explorerLayerLength; i++) {
+                    this.globe.wwd.removeLayer(layerCategory()[i].wwLayer);
+                }
+
+                // Iterate through the layer category layers and populate the ordered WorldWind layer array
+                for (i = 0; i < explorerLayerLength; i++) {
+                    explorerLayer = layerCategory()[i];
+                 
+                    // The category type determines if the layer should be added to the end or beginning of the
+                    // WorldWind layers
+                    if (explorerLayer.category() === constants.LAYER_CATEGORY_BACKGROUND ||
+                        explorerLayer.category() === constants.LAYER_CATEGORY_BASE ||
+                        explorerLayer.category() === constants.LAYER_CATEGORY_OVERLAY) {
+                        wwInsertionIndex = wwStartIndex; // index expression of the unshift method
+                    } else {
+                        wwInsertionIndex = wwStartIndex + i; // index expression of the push method
+                    }
+                    this.globe.wwd.insertLayer(wwInsertionIndex, explorerLayer.wwLayer);
+                }
+            };
 
             /**
              * Moves the provided layer to the provided index of the layer category the layer belongs. Moves the
@@ -913,8 +1017,7 @@ define(['knockout',
              * move the layer above or below its neighbor
              */
             LayerManager.prototype.moveLayer = function (layerViewModel, index) {
-                var explorerLayerArray, wwLayer, wwLayersStartIndex, i, len,
-                        wwLayersSubset;
+                var explorerLayerArray, i, len;
 
                 if (!layerViewModel) {
                     return;
@@ -955,34 +1058,11 @@ define(['knockout',
                     return;
                 }
 
-                // Create a copy of the WorldWindow layers for this category (a subset of all the WorldWind layers)
-                // First get the lowest index value for taking the splice
-                wwLayersStartIndex = this.globe.wwd.layers.length - 1;
-                for (i = 0, len = explorerLayerArray().length; i < len; i++) {
-                    wwLayer = this.globe.findLayer(explorerLayerArray()[i].name());
-                    wwLayersStartIndex = Math.min(wwLayersStartIndex, this.globe.wwd.layers.indexOf(wwLayer));
-                }
-                // Splice into a copy
-                wwLayersSubset = this.globe.wwd.layers.splice(wwLayersStartIndex, explorerLayerArray().length);
-                // Reverse the array - it should now match the explorerArray order
-                wwLayersSubset.reverse();
-                // Asign the layer of interest to the wwLayer variable
-                for (i = 0, len = wwLayersSubset.length; i < len; i++) {
-                    if (layerViewModel.name() === wwLayersSubset[i].displayName) {
-                        wwLayer = wwLayersSubset[i];
-                        break;
-                    }
-                }
-
                 // Update the layer manager order
                 LayerManager.moveLayerInArray(layerViewModel, index, explorerLayerArray);
-                // Update the WorldWind layer subset array order
-                LayerManager.moveLayerInArray(wwLayer, index, wwLayersSubset);
-
-                // Traverse the subset WorldWind layer array layers backwards and splice into WorldWind's layer array
-                for (i = (wwLayersSubset.length - 1); i >= 0; i--) {
-                    this.globe.wwd.layers.splice(wwLayersStartIndex++, 0, wwLayersSubset[i]);
-                }
+                
+                // Synchronize the layer ordering
+                this.globe.layerManager.synchronizeLayers();
             };
 
             LayerManager.moveLayerInArray = function (layer, moveToIndex, layers) {
