@@ -869,8 +869,8 @@ define(['knockout',
 
                 // Verify layer sector (bounding box in 2D terms) existence and
                 // do not center the camera if layer covers the whole globe.
-
                 var layerSector = layer.wwLayer.bbox; // property of EnhancedWmsLayer
+                // layerSector = setTestSector(layerSector, "hawaii"); // Test with known sectors
                 if (layerSector == null) { // null or undefined.
                     $.growl.error({ message: "No Layer sector / bounding box defined!" });
                     return;
@@ -885,55 +885,46 @@ define(['knockout',
                     return;
                 }
 
-                // If the layer sector exists and is not covering the whole globe, find its center and
-                // zoom the camera to coincide with its boundaries.
-
                 // Obtain layer center
                 var layerCenterPosition = findLayerCenter(layerSector);
                 // Move camera to position
                 this.globe.goto(layerCenterPosition.latitude, layerCenterPosition.longitude, defineZoomLevel(layerSector));
 
+                // Classical formula to obtain middle point between two coordinates
                 function findLayerCenter (layerSector){
-                    // layerSector = setTestSector(layerSector, "madagascar");
-
-                    // Classical formula to obtain middle point between two coordinates
                     var centerLatitude = (layerSector.maxLatitude + layerSector.minLatitude) / 2;
                     var centerLongitude = (layerSector.maxLongitude + layerSector.minLongitude) / 2;
                     var layerCenter = new WorldWind.Position(centerLatitude, centerLongitude);
                     return layerCenter;
                 }
 
+                // Zoom level is obtained following this simple method: Calculate approx arc length of the
+                // sectors' diagonal, and set that as the range (altitude) of the camera.
                 function defineZoomLevel (layerSector) {
-                    // layerSector = setTestSector(layerSector, "madagascar");
-
-                    // Zoom level is obtained following this simple method: Find bigger sector boundary,
-                    // (the horizontal or vertical one), calculate its arc length in meters and set that
-                    // as the range (altitude) of the camera, multiplying it by an arbitrary factor that increases
-                    // the quantity in order to have a full view of the layer.
-                    // TODO: Consider calculating diagonal length with haversine formula
-
                     var verticalBoundary = layerSector.maxLatitude - layerSector.minLatitude;
                     var horizontalBoundary = layerSector.maxLongitude - layerSector.minLongitude;
 
-                    // Choose bigger boundary of bounding box to calculate its arc length.
-                    var maxBoundary = Math.max(verticalBoundary, horizontalBoundary);
+                    // Calculate diagonal angle between boundaries (simple pythagoras formula, we don't need to
+                    // consider vectors or great circles).
+                    var diagonalAngle = Math.sqrt(Math.pow(verticalBoundary, 2) + Math.pow(horizontalBoundary, 2));
 
-                    // Gross approximation of longitude of arc in km
-                    // (assuming spherical Earth with radius of 6,371 km. We don't need accuracy here).
-                    var approxArcLength = (maxBoundary/360) * (2 * 3.1416 * 6371000);
-                    if (approxArcLength >= 20000000){
-                        // If arc is lengthier than approx. half the circumference of Earth, don't change zoom level
+                    // If the diagonal angle is equal or more than an hemisphere (180°) don't change zoom level.
+                    // Else, use the diagonal arc length as camera altitude.
+                    if (diagonalAngle >= 180){
                         return null;
                     } else {
-                        return approxArcLength * 1.25;
+                        // Gross approximation of longitude of arc in km
+                        // (assuming spherical Earth with radius of 6,371 km. Accuracy is not needed for this).
+                        var diagonalArcLength = (diagonalAngle/360) * (2 * 3.1416 * 6371000);
+                        return diagonalArcLength;
                     }
                 }
 
-                // Predefined known bounding boxes. For testing purposes only
+                // Predefined known sectors. For testing purposes only
+                // obtained with: http://boundingbox.klokantech.com/
                 function setTestSector(layerSector, place){
                     switch(place){
                         case "switzerland":
-                            // Bounding box of Switzerland
                             layerSector.maxLatitude = 47.8084;
                             layerSector.minLatitude = 45.818;
                             layerSector.maxLongitude = 10.4921;
@@ -941,7 +932,6 @@ define(['knockout',
                             break;
 
                         case "mexico":
-                            // Bounding box of Mexico
                             layerSector.maxLatitude = 33.1;
                             layerSector.minLatitude = 12.0;
                             layerSector.maxLongitude = -85.8;
@@ -949,7 +939,6 @@ define(['knockout',
                             break;
 
                         case "new zealand":
-                            // Bounding box of New Zealand
                             layerSector.maxLatitude = -34.65;
                             layerSector.minLatitude = -47.31;
                             layerSector.maxLongitude = 178.75;
@@ -957,7 +946,6 @@ define(['knockout',
                             break;
 
                         case "hawaii":
-                            // Bounding box of Hawaii
                             layerSector.maxLatitude = 22.95;
                             layerSector.minLatitude = 18.07;
                             layerSector.maxLongitude = -154.3;
@@ -965,7 +953,6 @@ define(['knockout',
                             break;
 
                         case "madagascar":
-                            // Bounding box of Madagascar
                             layerSector.maxLatitude = -11.97;
                             layerSector.minLatitude = -25.9;
                             layerSector.maxLongitude = 51.28;
