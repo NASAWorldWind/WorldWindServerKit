@@ -984,6 +984,10 @@ define(['knockout',
                     // if an order value is provided use it
                     if (a.order && !isNaN(a.order()) && b.order && !isNaN(b.order())) {
                         return a.order() - b.order();
+                    } else if (a.order && !isNaN(a.order())) {
+                        return -1;
+                    } else if (b.order && !isNaN(b.order())) {
+                        return 1;
                     } else {
                         return a.name().localeCompare(b.name());
                     }
