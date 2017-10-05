@@ -891,10 +891,17 @@ define(['knockout',
                 var zoomLevel = defineZoomLevel(layerSector);
 
                 // Move camera to position
-                // this.globe.goto(layerCenterPosition.latitude, layerCenterPosition.longitude, zoomLevel);
-                this.globe.goto(layerCenterPosition.latitude, layerCenterPosition.longitude);
+                this.globe.goto(layerCenterPosition.latitude, layerCenterPosition.longitude, zoomLevel);
+                // this.globe.goto(layerCenterPosition.latitude, layerCenterPosition.longitude);
 
                 function findLayerCenter (layerSector){
+                    // Bounding box of Switzerland
+                    // 5.9559,45.818,10.4921,47.8084
+                    layerSector.maxLatitude = 5.9559;
+                    layerSector.minLatitude = 45.818;
+                    layerSector.maxLongitude = 10.4921;
+                    layerSector.minLongitude = 47.8084;
+
                     var centerLatitude = (layerSector.maxLatitude + layerSector.minLatitude) / 2;
                     var centerLongitude = (layerSector.maxLongitude + layerSector.minLongitude) / 2;
                     var layerCenter = new WorldWind.Position(centerLatitude, centerLongitude);
@@ -902,14 +909,27 @@ define(['knockout',
                 }
 
                 function defineZoomLevel (layerSector) {
+                    // Bounding box of Switzerland
+                    // 5.9559,45.818,10.4921,47.8084
+                    layerSector.maxLatitude = 5.9559;
+                    layerSector.minLatitude = 45.818;
+                    layerSector.maxLongitude = 10.4921;
+                    layerSector.minLongitude = 47.8084;
+
                     // TODO: Calculate camera range according to layer sector (bounding box in 2D terms).
-                    // var earthRadius = WorldWind.WWMath.max(this.globe.equatorialRadius, this.globe.polarRadius);
-                    // var radiusToHorizon = Math.abs(WorldWind.horizonDistanceForGlobeRadius(
-                    //     earthRadius,
-                    //     altitude));
-                    // if (radiusToHorizon > earthRadius) {
-                    //     radiusToHorizon = earthRadius;
-                    //}
+                    var verticalBoundary = layerSector.maxLatitude - layerSector.minLatitude;
+                    var horizontalBoundary = layerSector.maxLongitude - layerSector.minLongitude;
+                    // Choose bigger boundary of bounding box to calclulate its arc length.
+                    var maxBoundary = Math.max(verticalBoundary, horizontalBoundary);
+                    // Gross approximation of longitude of arc in km
+                    // (assuming spherical Earth with radius of 6,371 km. We don't need accuracy here).
+                    var approxArcLength = (maxBoundary/360) * (2 * 3.1416 * 6371000);
+                    if (approxArcLength >= 20000000){
+                        // If arc is lengthier than approx. half the circumference of Earth, don't change zoom
+                        return;
+                    } else {
+                        return approxArcLength;
+                    }
                 }
 
             };
