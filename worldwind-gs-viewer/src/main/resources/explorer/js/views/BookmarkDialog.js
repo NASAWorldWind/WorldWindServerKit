@@ -46,7 +46,9 @@ define(['knockout', 'jquery', 'jquery-growl',
                  */
                 self.copyUrlToClipboard = function () {
                     // 
-                    var $bookmarkUrl = $("#bookmark-url");
+                    var $bookmarkUrl = $("#bookmark-url"),
+                        $bookmarkDialog = $("#bookmark-dialog");
+                
                     $bookmarkUrl.select();
 
                     try {
@@ -56,6 +58,7 @@ define(['knockout', 'jquery', 'jquery-growl',
                             $.growl({
                                 title: "Bookmark Copied",
                                 message: "The link was copied to the clipboard"});
+                            $bookmarkDialog.dialog("close");
                         } else {
                             $.growl.warning({
                                 title: "Bookmark Not Copied!",
