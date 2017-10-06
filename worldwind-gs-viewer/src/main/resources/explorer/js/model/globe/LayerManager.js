@@ -1014,12 +1014,12 @@ define(['dragula',
              */
             LayerManager.prototype.synchronizeLayers = function () {
                 var explorerLayerCategories = [
-                    self.backgroundLayers, 
-                    self.baseLayers, 
-                    self.overlayLayers, 
-                    self.dataLayers,
-                    self.widgetLayers,
-                    self.effectsLayers
+                    this.backgroundLayers, 
+                    this.baseLayers, 
+                    this.overlayLayers, 
+                    this.dataLayers,
+                    this.widgetLayers,
+                    this.effectsLayers
                 ], i, len = explorerLayerCategories.length;
                 console.log("synchronizing layers!!!");
                 for (i = 0; i < len; i++) {
@@ -1159,9 +1159,16 @@ define(['dragula',
             LayerManager.prototype.setupDragging = function () {
                 var el = document.getElementById('layer-item-container');
                 this.drake.containers.push(el);
-                this.drake.on('drop', function () {
-                    console.log('what is my context???');
-                });
+
+                var updateLayers = function (layerManager) {
+                    var lm = layerManager;
+                    return {
+                        update: function (el, target, source, sibling) {
+                            lm.synchronizeLayers();
+                        }
+                    }
+                } (this.globe.layerManager);
+                this.drake.on('drop', updateLayers.update);
             };
 
             return LayerManager;
