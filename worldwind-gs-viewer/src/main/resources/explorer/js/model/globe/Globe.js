@@ -152,6 +152,9 @@ define(['knockout',
                         controls,
                         widgets;
 
+                // Setup the layer manager dragger
+                this.layerManager.setupDragging();
+
                 // Add a BlueMarble world layer that's always visible
                 bmngImageLayer = new WorldWind.BMNGOneImageLayer();
                 bmngImageLayer.minActiveAltitude = 0; // default setting is 3e6;

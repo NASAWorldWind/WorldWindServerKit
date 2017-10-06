@@ -30,6 +30,8 @@
         <link rel="stylesheet" type="text/css" href="css/libs/fa/v4.6.2/font-awesome.min.css"/>
         <!-- Vis.js provides graphs and charting -->
         <link rel="stylesheet" type="text/css" href="css/libs/vis/vis.css"/>
+        <!-- Dragula provides layer dragging -->
+        <link rel="stylesheet" type="text/css" href="css/libs/dragula/dragula.css">
         <!-- Custom application specific styling -->
         <link rel="stylesheet" type="text/css" href="css/override.css"/>
 
@@ -174,7 +176,7 @@
                                 </h5>
                             </div>
                             <div class="panel-collapse collapse in" id="base-layers-panel">
-                                <div data-bind="template: { name: 'layer-template', foreach: baseLayers}"></div>
+                                <div data-bind="template: { name: 'layer-template', foreach: baseLayers}" id="layer-item-container"></div>
                             </div>
                         </div>
                         <div class="panel panel-default">

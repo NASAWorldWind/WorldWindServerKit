@@ -15,13 +15,15 @@
  * @param {WorldWind} ww object
  * @returns {LayerManager}
  */
-define(['knockout',
+define(['dragula',
+    'knockout',
     'model/Config',
     'model/Constants',
     'model/globe/layers/EnhancedWmsLayer',
     'model/util/Log',
     'worldwind'],
-        function (ko,
+        function (dragula,
+                ko,
                 config,
                 constants,
                 EnhancedWmsLayer,
@@ -96,6 +98,12 @@ define(['knockout',
 
                     self.globe.redraw();
                 };
+
+                /**
+                 * Register the dragging containers
+                 */
+                this.drake = dragula();
+
             };
 
             /**
@@ -1006,14 +1014,14 @@ define(['knockout',
              */
             LayerManager.prototype.synchronizeLayers = function () {
                 var explorerLayerCategories = [
-                    this.backgroundLayers, 
-                    this.baseLayers, 
-                    this.overlayLayers, 
-                    this.dataLayers,
-                    this.widgetLayers,
-                    this.effectsLayers
+                    self.backgroundLayers, 
+                    self.baseLayers, 
+                    self.overlayLayers, 
+                    self.dataLayers,
+                    self.widgetLayers,
+                    self.effectsLayers
                 ], i, len = explorerLayerCategories.length;
-
+                console.log("synchronizing layers!!!");
                 for (i = 0; i < len; i++) {
                     this.globe.layerManager.synchronizeLayerCategory(explorerLayerCategories[i]);
                 }
@@ -1146,6 +1154,14 @@ define(['knockout',
                 } else {
                     layers.splice(initialIndex, 1);
                 }
+            };
+
+            LayerManager.prototype.setupDragging = function () {
+                var el = document.getElementById('layer-item-container');
+                this.drake.containers.push(el);
+                this.drake.on('drop', function () {
+                    console.log('what is my context???');
+                });
             };
 
             return LayerManager;
