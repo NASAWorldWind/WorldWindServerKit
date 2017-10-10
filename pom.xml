@@ -63,9 +63,9 @@
         <module>worldwind-gs-geopkg</module>
         <module>worldwind-gs-wms</module>
         <module>worldwind-gs-web</module>
+        <module>worldwind-gs-explorer</module>
         <module>worldwind-geoserver</module>
         <module>worldwind-geoserver-dist</module>
-        <module>worldwind-gs-viewer</module>
     </modules>  
       
     <!--=====================================================================-->
