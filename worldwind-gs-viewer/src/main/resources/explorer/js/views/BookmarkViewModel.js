@@ -6,18 +6,20 @@
 /*global WorldWind*/
 
 /**
- * * The BookmarkViewModel opens dialog with a bookmark URL.
+ * * The BookmarkViewModel opens dialog with a bookmark URL ready for copying to the clipboard.
  * 
- * @param {type} ko
- * @param {type} $
- * @param {type} BookmarkDialog
- * @returns {BookmarkViewModelL#12.BookmarkViewModel}
+ * @param {object} ko  
+ * @param {object} $ JQuery
+ * @param {class} BookmarkDialog 
+ * @returns {BookmarkViewModel}
  */
 define(['knockout', 'jquery', 'views/BookmarkDialog'],
         function (ko, $, BookmarkDialog) {
             "use strict";
             /**
              * @constructor
+             * @param {Globe} globe
+             * @returns BookmarkViewModel
              */
             function BookmarkViewModel(globe) {
                 var self = this;
@@ -30,10 +32,14 @@ define(['knockout', 'jquery', 'views/BookmarkDialog'],
 
 
                 self.onBookmark = function () {
-                    // Genrate a bookmark for the current scene
-                    var bookmark = window.origin + "/geoserver/explorer/index.html?" + globe.layerManager.getWmsLayersParam();
+                    
+                    // Generate a bookmark for the current scene
+                    var bookmark = window.origin + "/geoserver/explorer/index.html?" 
+                            + globe.layerManager.getWmsLayersParam() + "&"
+                            + globe.getCameraParams();
+                    // TODO: The bookmark should be generated from Bookmark class
 
-                    // Open the  copy-bookmark dialog
+                    // Open the copy-bookmark dialog
                     self.dialog.open(bookmark);
                 };
 
