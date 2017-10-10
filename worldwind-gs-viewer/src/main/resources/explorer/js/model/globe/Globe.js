@@ -174,7 +174,7 @@ define(['knockout',
                     pickEnabled: true,
                     hideInMenu: true
                 });
-                
+
                 // Add optional background layers
                 if (showBackground || showBackground === undefined) {
                     // Set the background color to variable shade of blue
@@ -554,6 +554,24 @@ define(['knockout',
                     }
                 }
             };
+
+            /**
+             * 
+             * @returns {String}
+             */
+            Globe.prototype.getCameraParams = function () {
+                // TODO: Move this to a Bookmark class similar to Settings
+                var target = this.viewpoint().target,
+                        pos = new WorldWind.Location(target.latitude, target.longitude),
+                        alt = this.wwd.navigator.range,
+                        heading = this.wwd.navigator.heading,
+                        tilt = this.wwd.navigator.tilt,
+                        roll = this.wwd.navigator.roll;
+
+                return "lat=" + target.latitude.toFixed(7) + "&lon=" + target.longitude.toFixed(7) + "&alt=" + alt.toFixed(2)
+                        + "&heading=" + heading + "&tilt=" + tilt + "&roll=" + roll;
+            };
+
 
             /**
              * Gets terrain at the given latitude and longitude.
