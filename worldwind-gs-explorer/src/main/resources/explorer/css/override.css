@@ -1,0 +1,241 @@
+/*
+Copyright (c) 2016, Bruce Schubert.
+The Modified BSD License (3-clause license)
+*/
+body {
+    /*padding-top: 50px;*/
+    /* Move the content down because we have a fixed navbar that is 50px tall */
+}
+
+.container-split {
+    /*maximum size, excluding the nav-bar*/
+    position: fixed;
+    top: 54px;
+    height: calc(100vh - 54px);
+    width: 100vw;
+}
+
+.container-full {
+    margin: 0 auto;
+    width: 100%;
+    height: 100%;
+    min-height:100%;
+}
+
+.globe-button {
+    background:rgba(255,255,255,0.3);
+}
+/*.globe-button:hover {
+    background: rgba(255,255,255,0.7);
+    color:rgba(255,255,255,0.8);
+}*/
+
+#globe {
+    overflow: hidden;
+}
+
+#globe canvas {
+    top: 0;
+    left: 0;
+    z-index: 0 !important;
+    width: 100%;
+    height: 100%;
+    padding-left: 0;
+    padding-right: 0;
+    background-color: rgb(0,0,0);
+    /*border:1px solid #000000;*/
+}
+
+/* Controls the style of enabled and disabled layers */
+.layer-name {
+    font-style: italic;
+    font-weight: lighter;
+}
+
+.layer-name.active {
+    font-style: normal;
+    font-weight: normal;
+}
+
+.main {
+    padding: 0px;
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-bottom: 15px;
+}
+
+.non-interactive {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    -o-user-select: none;
+    pointer-events: none;
+}
+
+.interactive {
+    -webkit-touch-callout: auto !important;
+    -webkit-user-select: auto !important;
+    -khtml-user-select: auto !important;
+    -moz-user-select: auto !important;
+    -ms-user-select: auto !important;
+    -o-user-select: auto !important;
+    pointer-events: auto !important;
+}
+
+.noselect {
+    -webkit-touch-callout: none;
+    /* -webkit-user-select: none; */
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.section-heading {
+}
+
+/*split window container class*/
+.split {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.gutter {
+    background-color: #aaa;
+    background-repeat: no-repeat;
+    background-position: 50%;
+}
+
+.gutter.gutter-horizontal {
+    background-image: url('images/grips/vertical.png');
+    cursor: ew-resize;
+}
+
+.gutter.gutter-vertical {
+    background-image: url('images/grips/horizontal.png');
+    cursor: ns-resize;
+}
+
+.split.split-horizontal, .gutter.gutter-horizontal {
+    height: 100%;
+    float: left;
+}
+.split.split-vertical {
+}
+
+.sub-header {
+    padding-bottom: 10px;
+    border-bottom: 1px solid #eee;
+    cursor: default;
+    -webkit-user-select: none; /* Chrome all / Safari all */
+    -moz-user-select: none; /* Firefox all */
+    -ms-user-select: none; /* IE 10+ */
+    user-select: none; /* Likely future */
+}
+
+/*Ensure JQuery UI dialogs are above other ui elements*/
+.ui-dialog { z-index: 1000 !important ;}
+
+
+/*vis.js library*/
+.vis-time-axis .vis-text {
+  color: #AAA;
+}
+
+.wrap-panel-heading {
+    white-space: normal;
+    -ms-word-wrap: break-word;
+    word-wrap: break-word;
+}
+
+
+#canvas-wrap canvas {
+    position: relative;
+    top: 0;
+    left: 0;
+    z-index: 0 !important;
+    width: 100%;
+    height: 100%;
+    padding-left: 0;
+    padding-right: 0
+}
+
+
+#timeControlButtons {
+    position: absolute;  /*sets it's position relative to the document instead of the container. Allows the bottom property to be used to force the element to the bottom of the view.  */
+    bottom: 35px;
+    left: calc(50% - 98px);
+}
+
+#timeControlSlider {
+    position: absolute;  /*sets it's position relative to the document instead of the container. Allows the bottom property to be used to force the element to the bottom of the view.  */
+    bottom: 20px;
+    left: calc(50% - 98px);
+}
+
+#timeControlSlider .ui-slider-handle {
+    background:#3e444c;
+    top:3px;
+}
+
+
+/*Desktop or laptop*/
+@media (min-width: 768px) {
+    /*desktop sidebar*/
+    .sidebar-left {
+        position: fixed;
+        top: 51px;
+        bottom: 0;
+        left: 0;
+        z-index: 1000;
+        display: block;
+        padding-top: 0px;
+        padding-left: 20px;
+        padding-right: 20px;
+        padding-bottom: 20px;
+        overflow-x: hidden;
+        overflow-y: auto;
+        border-right: 1px solid #eee;
+    }
+    .main {
+        top: 51px;
+        position: fixed;
+        height: calc(100vh - 51px);
+    }
+    .section-heading .section-toggle:after {
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+}
+
+/*Mobile phone or table*/
+@media (max-width: 767px) {
+    .main {
+        height: calc(100vh - 71px);
+    }
+    /* symbol for opening sections */
+    /*.section-heading .section-toggle:after {*/
+        /*font-family: 'Glyphicons Halflings';*/
+        /*content: "\e114";*/
+        /*float: none;*/
+        /*color: lightgrey;*/
+    /*}*/
+
+    /* symbol for closing sections */
+    /*.section-heading .section-toggle.collapsed:after {*/
+        /*content: "\e080";*/
+    /*}*/
+
+    a.section-toggle {
+        text-decoration: none;
+    }
+}
+
+
+
