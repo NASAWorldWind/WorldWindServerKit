@@ -183,8 +183,10 @@ define(['jquery',
                                 this.wwd.navigator.roll = roll;     
                                 this.wwd.redraw();
                             }
-                            this.globe.lookAt(lat, lon, alt);
-                            this.globe.updateEyePosition(); // update time widget
+                            // FIX THIS: viewpoint is not updating!
+//                            this.globe.lookAt(lat, lon, alt);
+//                            this.globe.updateEyePosition(); // update time widget
+                            this.lookAtLatLon(lat,lon,alt);
                             return;
                         }
                     }
