@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="200" height="200" viewBox="-48 -33 50 50">
+<desc id="en">Observed wind speed: 98–102 knots</desc>
+<g style="fill:black; stroke:none; stroke-width:0;">
+	<path d="M -44,1 L -44,0 L -39,-17.25 L -34,0 L -34,1"/>
+	<path d="M -34,1 L -34,0 L -29,-17.25 L -24,0 L -24,1"/>
+</g>
+<g style="fill:none; stroke:black; stroke-width:2;">
+	<path d="M 0,0 h -40"/>
+</g>
+</svg>
