@@ -176,7 +176,7 @@
         <!--WorldWind GeoServer Viewer module-->
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>worldwind-gs-viewer</artifactId>
+            <artifactId>worldwind-gs-explorer</artifactId>
             <version>${project.version}</version>
         </dependency>
         
