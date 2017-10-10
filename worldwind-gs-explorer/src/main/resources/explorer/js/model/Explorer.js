@@ -184,6 +184,7 @@ define(['jquery',
                                 this.wwd.redraw();
                             }
                             this.globe.lookAt(lat, lon, alt);
+                            this.globe.updateEyePosition(); // update time widget
                             return;
                         }
                     }
