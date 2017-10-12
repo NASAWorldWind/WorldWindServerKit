@@ -306,6 +306,23 @@
                     </execution>
                 </executions>
             </plugin>
+            
+            
+            
+            <plugin>
+                <artifactId>jmeter-maven-plugin</artifactId>
+                <groupId>com.lazerycode.jmeter</groupId>
+                <executions>
+                    <execution>
+                        <id>jmeter-tests</id>
+                        <goals>
+                            <goal>jmeter</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>          
+            
+                    
         </plugins>
     </build>
 </project>

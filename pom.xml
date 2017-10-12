@@ -1505,6 +1505,11 @@
                     <groupId>org.codehaus.mojo</groupId>
                     <version>2.4</version>
                 </plugin>
+                <plugin>
+                    <artifactId>jmeter-maven-plugin</artifactId>
+                    <groupId>com.lazerycode.jmeter</groupId>
+                    <version>2.2.0</version>
+                </plugin>                
             </plugins>              
         </pluginManagement>
         <!-- Define the plugin goals and executions -->
