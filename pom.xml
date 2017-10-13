@@ -1509,7 +1509,17 @@
                     <artifactId>jmeter-maven-plugin</artifactId>
                     <groupId>com.lazerycode.jmeter</groupId>
                     <version>2.2.0</version>
-                </plugin>                
+                </plugin> 
+                <plugin>
+                    <artifactId>jmeter-analysis-maven-plugin</artifactId> 
+                    <groupId>com.lazerycode.jmeter</groupId>
+                    <version>1.0.6</version>
+                </plugin>
+                <plugin>          
+                    <artifactId>port-allocator-maven-plugin</artifactId>
+                    <groupId>org.sonatype.plugins</groupId>
+                    <version>1.2</version> 
+                </plugin>                          
             </plugins>              
         </pluginManagement>
         <!-- Define the plugin goals and executions -->
