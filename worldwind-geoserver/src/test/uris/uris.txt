@@ -1,0 +1,5 @@
+/index.html
+/geoserver/index.html
+/geoserver/web/
+/geoserver/ows?service=wms&version=1.1.1&request=GetCapabilities
+/geoserver/ows?service=wms&version=1.3.0&request=GetCapabilities
