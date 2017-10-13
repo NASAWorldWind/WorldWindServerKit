@@ -65,7 +65,7 @@
         <jetty.run.daemon>false</jetty.run.daemon>       
         
         <webapp.protocol>http</webapp.protocol>
-        <webapp.host>cobra</webapp.host>
+        <webapp.host>localhost</webapp.host>
         <webapp.uris>${project.basedir}/src/test/uris/uris.txt</webapp.uris>
         <!-- dataConfigId : typically "minimal"
         dataConfigId defines the data folder template. It should match a subfolder
