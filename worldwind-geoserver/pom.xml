@@ -419,30 +419,7 @@
                     </execution>
                 </executions>
             </plugin>
-
-            <!--Allocate random unassigned ports to be used during build process (for integration tests)-->
-            <plugin>
-                <groupId>org.sonatype.plugins</groupId>
-                <artifactId>port-allocator-maven-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <phase>validate</phase>
-                        <goals>
-                            <goal>allocate-ports</goal>
-                        </goals>
-                        <configuration>
-                            <ports>
-                                <port>
-                                    <name>jetty.port</name>
-                                </port>
-                                <port>
-                                    <name>stop.jetty.port</name>
-                                </port>
-                            </ports>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>                        
+                      
             <!--
             The Jetty Maven plugin is useful for rapid development and testing.
             To start Jetty and serve up your project execute: 
@@ -482,121 +459,201 @@
                             <value>${project.build.directory}/worldwind-geoserver/data</value> 
                         </systemProperty> 
                     </systemProperties>
-                    <!-- Make sure it's not looking for annotations everywhere -->
+                    <!--The path to a context xml file that is applied to your webapp AFTER the webApp element.-->
+                    <!--Make sure it's not looking for Java annotations everywhere-->
+                    <!--<contextXml>${project.basedir}/src/test/resources/jetty-context.xml</contextXml>-->
                     <contextXml>${project.build.testOutputDirectory}/jetty-context.xml</contextXml>
                 </configuration>
-                <executions>
-                    <execution>
-                        <id>start-jetty</id>
-                        <phase>pre-integration-test</phase>
-                        <goals>
-                            <!--<goal>deploy-war</goal>-->
-                            <goal>start</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>stop-jetty</id>
-                        <phase>post-integration-test</phase>
-                        <goals>
-                            <goal>stop</goal>
-                        </goals>
-                    </execution>
-                </executions>                
             </plugin>
-
-            <!--
-            Run the JMeter integration tests on the Jetty server.
-            See: http://jmeter.lazerycode.com/
-            See: https://github.com/jmeter-maven-plugin
-            -->
-            <plugin>
-                <artifactId>jmeter-maven-plugin</artifactId>
-                <groupId>com.lazerycode.jmeter</groupId>
-                <executions>
-                    <execution>
-                        <id>integration-test</id>
-                        <phase>integration-test</phase>
-                        <goals>
-                            <goal>jmeter</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <!--Creates the user.properties file-->
-                    <propertiesUser>
-                        <!--A user which accesses all URLs-->
-                        <threadgroup00.name>test</threadgroup00.name>
-                        <!--number of threads to use-->
-                        <threadgroup00.numberOfThreads>10</threadgroup00.numberOfThreads>
-                        <!--delay of the test in seconds-->
-                        <threadgroup00.scheduledDelay>0</threadgroup00.scheduledDelay>
-                        <!--duration of the test in seconds-->
-                        <threadgroup00.scheduledDuration>30</threadgroup00.scheduledDuration>
-                        <!--how long till all threads are up and running in seconds-->
-                        <threadgroup00.rampUp>1</threadgroup00.rampUp>
-                        <!--target throughput of all threads of the group per minute-->
-                        <threadgroup00.throughput>100000000</threadgroup00.throughput>
-                        <!-- use uris from given file -->
-                        <threadgroup00.dataFile>${webapp.uris}</threadgroup00.dataFile>
-                        <protocol>${webapp.protocol}</protocol>
-                        <server>${webapp.host}</server>
-                        <port>${jetty.port}</port>
-                    </propertiesUser>
-                    <!--Sets whether build should fail if there are failed requests found in the JMeter result file-->
-                    <ignoreResultFailures>true</ignoreResultFailures>
-                    <!--Overrides all log levels used by JMeter. Valid log levels are: ERROR, WARN, INFO, DEBUG (They are not case sensitive);-->
-                    <overrideRootLogLevel>info</overrideRootLogLevel>
-                </configuration>
-            </plugin>             
-
-            <!--
-            Generate reports and charts from the JMeter output.
-            See https://github.com/afranken/jmeter-analysis-maven-plugin
-            -->
-            <plugin>
-                <groupId>com.lazerycode.jmeter</groupId>
-                <artifactId>jmeter-analysis-maven-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <phase>post-integration-test</phase>
-                        <goals>
-                            <goal>analyze</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <!--
-                    source file that contains jmeter result data. Needs to be XML format or a GZIPed XML format
-                    -->
-                    <source>${project.build.directory}/jmeter/results/*</source>
-
-                    <!--
-                    directory where to store analysis report files. At least a file "summary.txt" will be stored here.
-                    -->
-                    <targetDirectory>${project.build.directory}/reports</targetDirectory>
-                    
-                    <!--
-                    Defines groups of requests by URL patterns,
-                    e.g. URIs starting with /mock/page are associated with group "pages". All analysis results are
-                    If there is no such mapping then the threadgroups from the jmeter.xml are used.
-                    -->
-                    <!--<requestGroups>-->
-                    <!--<test>/en-US/firefox/**</test>-->
-                    <!--</requestGroups>-->
-
-                    <!--
-                    Mapping from resource URL to file name. Every resource will be downloaded and stored in 'targetDirectory'
-                    with the given filename. Tokens "_FROM_" and "_TO_" can be used as placeholders. These placeholders will
-                    be replaced by timestamps of execution interval (formatted as ISO8601, e.g. '20111216T145509+0100').
-                    -->
-                    <!--<remoteResources>-->
-                    <!--<property>-->
-                    <!--<name>http://yourhost/path?from=_FROM_&amp;to=_TO_</name>-->
-                    <!--<value>my_resource.txt</value>-->
-                    <!--</property>-->
-                    <!--</remoteResources>-->
-                </configuration>
-            </plugin>                                                                        
         </plugins>
     </build>
+    
+    <!--=====================================================================-->
+    <!-- Profiles                                                            -->
+    <!--=====================================================================-->    
+    <profiles>
+        <profile>
+            <id>integration-test</id>
+            <build>               
+                <plugins>
+                    <!--
+                    Allocate random unassigned ports to be used during build process
+                    -->
+                    <plugin>
+                        <groupId>org.sonatype.plugins</groupId>
+                        <artifactId>port-allocator-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <phase>validate</phase>
+                                <goals>
+                                    <goal>allocate-ports</goal>
+                                </goals>
+                                <configuration>
+                                    <ports>
+                                        <port>
+                                            <name>jetty.port</name>
+                                        </port>
+                                        <port>
+                                            <name>stop.jetty.port</name>
+                                        </port>
+                                    </ports>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>   
+                    <!--
+                    Configure the Jetty server to run GeoServer with the integration test data
+                    --> 
+                    <plugin>
+                        <groupId>org.eclipse.jetty</groupId>
+                        <artifactId>jetty-maven-plugin</artifactId>
+                        <version>${jetty.version}</version>
+                        <!-- 
+                        These configuration elements set up the Jetty environment in which your webapp executes.
+                        See: http://www.eclipse.org/jetty/documentation/current/jetty-maven-plugin.html
+                        -->
+                        <configuration>
+                            <webApp>
+                                <contextPath>/geoserver</contextPath>
+                            </webApp>
+                            <connectors>
+                                <connector implementation="org.mortbay.jetty.nio.SelectChannelConnector">
+                                    <port>${jetty.port}</port>
+                                    <maxIdleTime>10000</maxIdleTime>
+                                </connector>
+                            </connectors>
+                            <!--A port number for Jetty to listen on to receive a stop command to cause it to shutdown-->
+                            <stopPort>${stop.jetty.port}</stopPort>
+                            <!--A string value sent to the stopPort to validate the stop command-->
+                            <stopKey>geoserver</stopKey>
+                            <!--The maximum time in seconds that the plugin will wait for confirmation that Jetty has stopped--> 
+                            <stopWait>10</stopWait>
+                            <!--If daemon is true, the plugin should continue and not block-->
+                            <daemon>false</daemon>
+                            <!-- Set the GEOSERVER_DATA_DIR for the Jetty run -->
+                            <systemProperties> 
+                                <systemProperty> 
+                                    <name>GEOSERVER_DATA_DIR</name>
+                                    <value>${project.basedir}/src/test/data_dir</value> 
+                                </systemProperty> 
+                            </systemProperties>
+                            <!--The path to a context xml file that is applied to your webapp AFTER the webApp element.-->
+                            <contextXml>${project.basedir}/src/test/resources/jetty-context.xml</contextXml>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>start-jetty</id>
+                                <phase>pre-integration-test</phase>
+                                <goals>
+                                    <!--<goal>deploy-war</goal>-->
+                                    <goal>start</goal>
+                                </goals>
+                            </execution>
+                            <execution>
+                                <id>stop-jetty</id>
+                                <phase>post-integration-test</phase>
+                                <goals>
+                                    <goal>stop</goal>
+                                </goals>
+                            </execution>
+                        </executions>                
+                    </plugin>
+
+                    <!--
+                    Run the JMeter integration tests on the Jetty server.
+                    See: http://jmeter.lazerycode.com/
+                    See: https://github.com/jmeter-maven-plugin
+                    -->
+                    <plugin>
+                        <artifactId>jmeter-maven-plugin</artifactId>
+                        <groupId>com.lazerycode.jmeter</groupId>
+                        <executions>
+                            <execution>
+                                <id>integration-test</id>
+                                <phase>integration-test</phase>
+                                <goals>
+                                    <goal>jmeter</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <!--Creates the user.properties file-->
+                            <propertiesUser>
+                                <!--A user which accesses all URLs-->
+                                <threadgroup00.name>test</threadgroup00.name>
+                                <!--number of threads to use-->
+                                <threadgroup00.numberOfThreads>10</threadgroup00.numberOfThreads>
+                                <!--delay of the test in seconds-->
+                                <threadgroup00.scheduledDelay>0</threadgroup00.scheduledDelay>
+                                <!--duration of the test in seconds-->
+                                <threadgroup00.scheduledDuration>30</threadgroup00.scheduledDuration>
+                                <!--how long till all threads are up and running in seconds-->
+                                <threadgroup00.rampUp>1</threadgroup00.rampUp>
+                                <!--target throughput of all threads of the group per minute-->
+                                <threadgroup00.throughput>100000000</threadgroup00.throughput>
+                                <!-- use uris from given file -->
+                                <threadgroup00.dataFile>${webapp.uris}</threadgroup00.dataFile>
+                                <protocol>${webapp.protocol}</protocol>
+                                <server>${webapp.host}</server>
+                                <port>${jetty.port}</port>
+                            </propertiesUser>
+                            <!--Sets whether build should fail if there are failed requests found in the JMeter result file-->
+                            <ignoreResultFailures>false</ignoreResultFailures>
+                            <!--Overrides all log levels used by JMeter. Valid log levels are: ERROR, WARN, INFO, DEBUG (They are not case sensitive);-->
+                            <overrideRootLogLevel>info</overrideRootLogLevel>
+                        </configuration>
+                    </plugin>             
+
+                    <!--
+                    Generate reports and charts from the JMeter output.
+                    See https://github.com/afranken/jmeter-analysis-maven-plugin
+                    -->
+                    <plugin>
+                        <groupId>com.lazerycode.jmeter</groupId>
+                        <artifactId>jmeter-analysis-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <phase>post-integration-test</phase>
+                                <goals>
+                                    <goal>analyze</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <!--
+                            source file that contains jmeter result data. Needs to be XML format or a GZIPed XML format
+                            -->
+                            <source>${project.build.directory}/jmeter/results/*</source>
+
+                            <!--
+                            directory where to store analysis report files. At least a file "summary.txt" will be stored here.
+                            -->
+                            <targetDirectory>${project.build.directory}/reports</targetDirectory>
+                    
+                            <!--
+                            Defines groups of requests by URL patterns,
+                            e.g. URIs starting with /mock/page are associated with group "pages". All analysis results are
+                            If there is no such mapping then the threadgroups from the jmeter.xml are used.
+                            -->
+                            <!--<requestGroups>-->
+                            <!--<test>/en-US/firefox/**</test>-->
+                            <!--</requestGroups>-->
+
+                            <!--
+                            Mapping from resource URL to file name. Every resource will be downloaded and stored in 'targetDirectory'
+                            with the given filename. Tokens "_FROM_" and "_TO_" can be used as placeholders. These placeholders will
+                            be replaced by timestamps of execution interval (formatted as ISO8601, e.g. '20111216T145509+0100').
+                            -->
+                            <!--<remoteResources>-->
+                            <!--<property>-->
+                            <!--<name>http://yourhost/path?from=_FROM_&amp;to=_TO_</name>-->
+                            <!--<value>my_resource.txt</value>-->
+                            <!--</property>-->
+                            <!--</remoteResources>-->
+                        </configuration>
+                    </plugin>                                                                        
+                </plugins>
+            </build>
+        </profile>
+    </profiles>    
 </project>
