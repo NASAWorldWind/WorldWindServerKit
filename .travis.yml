@@ -68,5 +68,11 @@ deploy:
     skip_cleanup: true
     on:
       branch: master
-      #tags: true
       
+  # Upload the integration test report(s) to the GitHub pages branch
+  - provider: pages
+    api_key: $GITHUB_API_KEY
+    local_dir: worldwind-geoserver/target/reports
+    skip_cleanup: true
+#    on:
+#        tags: true      
