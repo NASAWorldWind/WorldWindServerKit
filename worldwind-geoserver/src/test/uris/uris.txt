@@ -1,4 +1,17 @@
-/geoserver/index.html
-/geoserver/web/
-/geoserver/ows?service=wms&version=1.1.1&request=GetCapabilities
-/geoserver/ows?service=wms&version=1.3.0&request=GetCapabilities
+requestPath|contentType
+/geoserver/index.html|Content-Type: text/html
+/geoserver/web/|Content-Type: text/html
+/geoserver/explorer/index.html|Content-Type: text/html
+/geoserver/ows?service=wms&version=1.1.1&request=GetCapabilities|Content-Type: application/vnd.ogc.wms_xml
+/geoserver/ows?service=wms&version=1.3.0&request=GetCapabilities|Content-Type: text/xml
+/geoserver/ows?service=wfs&version=1.0.0&request=GetCapabilities|Content-Type: application/xml
+/geoserver/ows?service=wfs&version=1.1.0&request=GetCapabilities|Content-Type: application/xml
+/geoserver/ows?service=wfs&version=2.0.0&request=GetCapabilities|Content-Type: application/xml
+/geoserver/ows?service=WCS&version=1.0.0&request=GetCapabilities|Content-Type: application/xml
+/geoserver/ows?service=WCS&version=1.1.0&request=GetCapabilities|Content-Type: text/xml
+/geoserver/ows?service=WCS&version=1.1.1&request=GetCapabilities|Content-Type: text/xml
+/geoserver/ows?service=WCS&version=1.1&request=GetCapabilities|Content-Type: text/xml
+/geoserver/ows?service=wps&version=1.0.0&request=GetCapabilities|Content-Type: application/xml
+/geoserver/gwc/service/wmts?REQUEST=GetCapabilities|Content-Type: application/vnd.ogc.wms_xml
+/geoserver/gwc/service/tms/1.0.0|Content-Type: text/xml
+/geoserver/gwc/service/wms?request=GetCapabilities&version=1.1.1&tiled=true|application/vnd.ogc.wms_xml
