@@ -66,7 +66,7 @@
         
         <webapp.protocol>http</webapp.protocol>
         <webapp.host>localhost</webapp.host>
-        <webapp.uris>${project.basedir}/src/test/uris/uris.txt</webapp.uris>
+        <webapp.core.uris>${project.basedir}/src/test/uris/uris.txt</webapp.core.uris>
         <!-- dataConfigId : typically "minimal"
         dataConfigId defines the data folder template. It should match a subfolder
         under the parent folder's data folder.  Its contents will be copied into
@@ -491,10 +491,10 @@
                                 <configuration>
                                     <ports>
                                         <port>
-                                            <name>jetty.port</name>
+                                            <name>jetty.port.test</name>
                                         </port>
                                         <port>
-                                            <name>stop.jetty.port</name>
+                                            <name>stop.jetty.port.test</name>
                                         </port>
                                     </ports>
                                 </configuration>
@@ -518,12 +518,16 @@
                             </webApp>
                             <connectors>
                                 <connector implementation="org.mortbay.jetty.nio.SelectChannelConnector">
-                                    <port>${jetty.port}</port>
+                                    <port>${jetty.port.test}</port>
                                     <maxIdleTime>10000</maxIdleTime>
                                 </connector>
                             </connectors>
+                            <httpConnector>
+                                <!--The port number for the connector to listen on. By default it is 8080.-->
+                                <port>${jetty.port.test}</port>
+                            </httpConnector>
                             <!--A port number for Jetty to listen on to receive a stop command to cause it to shutdown-->
-                            <stopPort>${stop.jetty.port}</stopPort>
+                            <stopPort>${stop.jetty.port.test}</stopPort>
                             <!--A string value sent to the stopPort to validate the stop command-->
                             <stopKey>geoserver</stopKey>
                             <!--The maximum time in seconds that the plugin will wait for confirmation that Jetty has stopped--> 
@@ -578,9 +582,13 @@
                         </executions>
                         <configuration>
                             <!--Creates the user.properties file-->
-                            <propertiesUser>
+                            <propertiesUser>                                
+                                <protocol>${webapp.protocol}</protocol>
+                                <server>${webapp.host}</server>
+                                <port>${jetty.port}</port>
+
                                 <!--A user which accesses all URLs-->
-                                <threadgroup00.name>test</threadgroup00.name>
+                                <threadgroup00.name>core</threadgroup00.name>
                                 <!--number of threads to use-->
                                 <threadgroup00.numberOfThreads>10</threadgroup00.numberOfThreads>
                                 <!--delay of the test in seconds-->
@@ -592,15 +600,18 @@
                                 <!--target throughput of all threads of the group per minute-->
                                 <threadgroup00.throughput>100000000</threadgroup00.throughput>
                                 <!-- use uris from given file -->
-                                <threadgroup00.dataFile>${webapp.uris}</threadgroup00.dataFile>
-                                <protocol>${webapp.protocol}</protocol>
-                                <server>${webapp.host}</server>
-                                <port>${jetty.port}</port>
+                                <threadgroup00.dataFile>${webapp.core.uris}</threadgroup00.dataFile>
+                                <!-- assertion results file -->
+                                <threadgroup00.errorLog>${project.build.directory}/jmeter/logs/error.log</threadgroup00.errorLog>
                             </propertiesUser>
                             <!--Sets whether build should fail if there are failed requests found in the JMeter result file-->
                             <ignoreResultFailures>false</ignoreResultFailures>
                             <!--Overrides all log levels used by JMeter. Valid log levels are: ERROR, WARN, INFO, DEBUG (They are not case sensitive);-->
                             <overrideRootLogLevel>info</overrideRootLogLevel>
+                            <!--Adds a timestamp added to each results file (default true)-->
+                            <testResultsTimestamp>true</testResultsTimestamp>
+                            
+                            <!--<resultsFileNameDateFormat>MMMM, yyyy</resultsFileNameDateFormat>-->
                         </configuration>
                     </plugin>             
 
@@ -678,24 +689,35 @@
 
                             Default: not set.
                             -->
+                            <!--
                             <requestGroups>
                                 <requestGroup>
-                                    <name>pages</name>
-                                    <pattern>/page/**</pattern>
-                                    <!-- Optional -->
+                                    <name>services</name>
+                                    <pattern>/geoserver/ows?service*</pattern>
                                     <checkResult>
-                                        <!-- As above -->
+                                        <throughput>
+                                            <threshold>-1</threshold>
+                                        </throughput>
+                                        <errors>
+                                            <threshold>0</threshold>
+                                            <toleranceDirection>EQUALS</toleranceDirection>
+                                            <tolerance>5</tolerance>
+                                        </errors>                                    
                                     </checkResult>
                                 </requestGroup>
                                 <requestGroup>
-                                    <name>binaries</name>
-                                    <pattern>/binary/**</pattern>
-                                    <!-- Optional -->
+                                    <name>core</name>
+                                    <pattern>/geoserver/**</pattern>
                                     <checkResult>
-                                        <!-- As above -->
+                                        <errors>
+                                            <threshold>0</threshold>
+                                            <toleranceDirection>EQUALS</toleranceDirection>
+                                            <tolerance>5</tolerance>
+                                        </errors>                                    
                                     </checkResult>
-                                </requestGroup>
+                                </requestGroup>                            
                             </requestGroups>
+                            -->
 
                             <!--
                             Change default value for generating charts.
@@ -740,7 +762,7 @@
 
                             Default: false
                             -->
-                            <processAllFilesFound>false</processAllFilesFound>
+                            <processAllFilesFound>true</processAllFilesFound>
 
                             <!--
                             Template directory where custom freemarker templates are stored.
