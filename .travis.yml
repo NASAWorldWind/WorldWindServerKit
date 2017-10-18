@@ -37,7 +37,7 @@ script:
   # -B (--batch-mode) Run in non-interactive model
   # -U (--update-snapshots) Forces a check for missing releases and updated snapshots on remote repos
   # -P (--activate-profiles <arg>) Comma-delimited list of profiles to activate
-  - mvn clean install -B -U -Prelease,integration-test --debug
+  - mvn clean install -B -U -Prelease,integration-test -e
   
 after_success:
   # Conditionally create a draft release on GitHub in preparation for deploy
