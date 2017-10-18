@@ -60,8 +60,8 @@
         <!--Configuration for Jetty-->
         <webappSourceDirectory>${project.basedir}/src/main/webapp</webappSourceDirectory>
         <sde.version>9.3</sde.version>
-        <jetty.port>8080</jetty.port>
-        <stop.jetty.port>8079</stop.jetty.port>
+        <std.jetty.port>8080</std.jetty.port>
+        <std.stop.jetty.port>8079</std.stop.jetty.port>
         <jetty.run.daemon>false</jetty.run.daemon>       
         
         <webapp.protocol>http</webapp.protocol>
@@ -440,12 +440,12 @@
                     </webApp>
                     <connectors>
                         <connector implementation="org.mortbay.jetty.nio.SelectChannelConnector">
-                            <port>${jetty.port}</port>
+                            <port>${std.jetty.port}</port>
                             <maxIdleTime>10000</maxIdleTime>
                         </connector>
                     </connectors>
                     <!--A port number for Jetty to listen on to receive a stop command to cause it to shutdown-->
-                    <stopPort>${stop.jetty.port}</stopPort>
+                    <stopPort>${std.stop.jetty.port}</stopPort>
                     <!--A string value sent to the stopPort to validate the stop command-->
                     <stopKey>geoserver</stopKey>
                     <!--The maximum time in seconds that the plugin will wait for confirmation that Jetty has stopped--> 
@@ -491,10 +491,10 @@
                                 <configuration>
                                     <ports>
                                         <port>
-                                            <name>jetty.port.test</name>
+                                            <name>random.jetty.port</name>
                                         </port>
                                         <port>
-                                            <name>stop.jetty.port.test</name>
+                                            <name>random.stop.jetty.port</name>
                                         </port>
                                     </ports>
                                 </configuration>
@@ -518,16 +518,16 @@
                             </webApp>
                             <connectors>
                                 <connector implementation="org.mortbay.jetty.nio.SelectChannelConnector">
-                                    <port>${jetty.port.test}</port>
+                                    <port>${random.jetty.port}</port>
                                     <maxIdleTime>10000</maxIdleTime>
                                 </connector>
                             </connectors>
                             <httpConnector>
                                 <!--The port number for the connector to listen on. By default it is 8080.-->
-                                <port>${jetty.port.test}</port>
+                                <port>${random.jetty.port}</port>
                             </httpConnector>
                             <!--A port number for Jetty to listen on to receive a stop command to cause it to shutdown-->
-                            <stopPort>${stop.jetty.port.test}</stopPort>
+                            <stopPort>${random.stop.jetty.port}</stopPort>
                             <!--A string value sent to the stopPort to validate the stop command-->
                             <stopKey>geoserver</stopKey>
                             <!--The maximum time in seconds that the plugin will wait for confirmation that Jetty has stopped--> 
@@ -585,7 +585,7 @@
                             <propertiesUser>                                
                                 <protocol>${webapp.protocol}</protocol>
                                 <server>${webapp.host}</server>
-                                <port>${jetty.port}</port>
+                                <port>${random.jetty.port}</port>
 
                                 <!--A user which accesses all URLs-->
                                 <threadgroup00.name>core</threadgroup00.name>
