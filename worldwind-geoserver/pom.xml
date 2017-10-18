@@ -594,7 +594,7 @@
                                 <!--delay of the test in seconds-->
                                 <threadgroup00.scheduledDelay>0</threadgroup00.scheduledDelay>
                                 <!--duration of the test in seconds-->
-                                <threadgroup00.scheduledDuration>5</threadgroup00.scheduledDuration>
+                                <threadgroup00.scheduledDuration>30</threadgroup00.scheduledDuration>
                                 <!--how long till all threads are up and running in seconds-->
                                 <threadgroup00.rampUp>1</threadgroup00.rampUp>
                                 <!--target throughput of all threads of the group per minute-->
