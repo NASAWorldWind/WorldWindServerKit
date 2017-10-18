@@ -67,6 +67,8 @@
         <webapp.protocol>http</webapp.protocol>
         <webapp.host>localhost</webapp.host>
         <webapp.core.uris>${project.basedir}/src/test/uris/uris.txt</webapp.core.uris>
+        <webapp.getmap.uris>${project.basedir}/src/test/uris/getmap_uris.txt</webapp.getmap.uris>
+        
         <!-- dataConfigId : typically "minimal"
         dataConfigId defines the data folder template. It should match a subfolder
         under the parent folder's data folder.  Its contents will be copied into
@@ -603,6 +605,25 @@
                                 <threadgroup00.dataFile>${webapp.core.uris}</threadgroup00.dataFile>
                                 <!-- assertion results file -->
                                 <threadgroup00.errorLog>${project.build.directory}/jmeter/logs/error.log</threadgroup00.errorLog>
+
+                                <!--A user which accesses all URLs-->
+                                <threadgroup01.name>getmap</threadgroup01.name>
+                                <!--number of threads to use-->
+                                <threadgroup01.numberOfThreads>10</threadgroup01.numberOfThreads>
+                                <!--delay of the test in seconds-->
+                                <threadgroup01.scheduledDelay>0</threadgroup01.scheduledDelay>
+                                <!--duration of the test in seconds-->
+                                <threadgroup01.scheduledDuration>30</threadgroup01.scheduledDuration>
+                                <!--how long till all threads are up and running in seconds-->
+                                <threadgroup01.rampUp>1</threadgroup01.rampUp>
+                                <!--target throughput of all threads of the group per minute-->
+                                <threadgroup01.throughput>100000000</threadgroup01.throughput>
+                                <!-- use uris from given file -->
+                                <threadgroup01.dataFile>${webapp.getmap.uris}</threadgroup01.dataFile>
+                                <!-- assertion results file -->
+                                <threadgroup01.errorLog>${project.build.directory}/jmeter/logs/error.log</threadgroup01.errorLog>
+
+
                             </propertiesUser>
                             <!--Sets whether build should fail if there are failed requests found in the JMeter result file-->
                             <ignoreResultFailures>false</ignoreResultFailures>
