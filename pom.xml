@@ -1372,7 +1372,14 @@
         </dependency> 
     </dependencies>
     
+    <!--Maven searches repositories for artifacts in the order given-->  
     <repositories>
+        <!--Maven Central-->
+        <repository>
+            <id>maven-central</id>
+            <name>Maven Central repository</name>
+            <url>https://repo.maven.apache.org/maven2/</url>
+        </repository>
         <!--GeoServer-->
         <repository>
             <id>boundless</id>
