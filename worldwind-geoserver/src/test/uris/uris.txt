@@ -14,4 +14,4 @@ requestPath|contentType
 /geoserver/ows?service=wps&version=1.0.0&request=GetCapabilities|Content-Type: application/xml
 /geoserver/gwc/service/wmts?REQUEST=GetCapabilities|Content-Type: application/vnd.ogc.wms_xml
 /geoserver/gwc/service/tms/1.0.0|Content-Type: text/xml
-/geoserver/gwc/service/wms?request=GetCapabilities&version=1.1.1&tiled=true|application/vnd.ogc.wms_xml
+/geoserver/gwc/service/wms?request=GetCapabilities&version=1.1.1&tiled=true|Content-Type: application/vnd.ogc.wms_xml
