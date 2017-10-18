@@ -74,6 +74,6 @@ deploy:
     github_token: $GITHUB_API_KEY
     local_dir: worldwind-geoserver/target/reports
     skip_cleanup: true
-    all_branches: true
-#    on:
-#        branch: develop
+    on:
+        all_branches: true
+        #branch: develop
