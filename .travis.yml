@@ -69,10 +69,11 @@ deploy:
     on:
       branch: master
       
-  # Upload the integration test report(s) to the GitHub pages branch
+  # Upload the integration test report(s) to the GitHub pages branch (gh-pages)
   - provider: pages
     github_token: $GITHUB_API_KEY
     local_dir: worldwind-geoserver/target/reports
     skip_cleanup: true
-    on:
-        branch: feature/#128-jmeter_maven_plugin      
+    all_branches: true
+#    on:
+#        branch: develop
