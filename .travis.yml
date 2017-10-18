@@ -74,5 +74,5 @@ deploy:
     api_key: $GITHUB_API_KEY
     local_dir: worldwind-geoserver/target/reports
     skip_cleanup: true
-#    on:
-#        tags: true      
+    on:
+        branch: feature/#128-jmeter_maven_plugin      
