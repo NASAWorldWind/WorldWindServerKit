@@ -613,7 +613,34 @@
                             
                             <!--<resultsFileNameDateFormat>MMMM, yyyy</resultsFileNameDateFormat>-->
                         </configuration>
-                    </plugin>             
+                    </plugin>    
+                             
+                    <!--
+                    Use ant to display the error log.
+                    -->         
+                    <plugin>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>outputErrors</id>
+                                <phase>post-integration-test</phase>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                                <configuration>
+                                    <target>
+                                        <available file="${project.build.directory}/jmeter/logs/error.log" property="errorLogIsAvailable" />
+                                        <echo message="-------------------------------------------------------" />
+                                        <echo message=" P E R F O R M A N C E    T E S T    E R R O R S" />
+                                        <echo message="-------------------------------------------------------" />
+                                        <concat >
+                                            <fileset file="${project.build.directory}/jmeter/logs/error.log" />
+                                        </concat>
+                                    </target>
+                                </configuration>
+                            </execution>                                                
+                        </executions>
+                    </plugin>                
 
                     <!--
                     Generate reports and charts from the JMeter output.
