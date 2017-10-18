@@ -1372,7 +1372,14 @@
         </dependency> 
     </dependencies>
     
+    <!--Maven searches repositories for artifacts in the order given-->  
     <repositories>
+        <!--Maven Central-->
+        <repository>
+            <id>maven-central</id>
+            <name>Maven Central repository</name>
+            <url>https://repo.maven.apache.org/maven2/</url>
+        </repository>
         <!--GeoServer-->
         <repository>
             <id>boundless</id>
@@ -1505,6 +1512,21 @@
                     <groupId>org.codehaus.mojo</groupId>
                     <version>2.4</version>
                 </plugin>
+                <plugin>
+                    <artifactId>jmeter-maven-plugin</artifactId>
+                    <groupId>com.lazerycode.jmeter</groupId>
+                    <version>2.4.0</version>
+                </plugin> 
+                <plugin>
+                    <artifactId>jmeter-analysis-maven-plugin</artifactId> 
+                    <groupId>com.lazerycode.jmeter</groupId>
+                    <version>1.0.6</version>
+                </plugin>
+                <plugin>          
+                    <artifactId>port-allocator-maven-plugin</artifactId>
+                    <groupId>org.sonatype.plugins</groupId>
+                    <version>1.2</version> 
+                </plugin>                          
             </plugins>              
         </pluginManagement>
         <!-- Define the plugin goals and executions -->
