@@ -209,10 +209,10 @@
                         <phase>package</phase>
                         <configuration>
                             <tasks>
-                                <unzip src="${project.basedir}/src/main/resources/gdal/geoserver-${gs.version}-gdal-plugin.zip" dest="${project.build.directory}/gdal/geoserver-${gs.version}-gdal-plugin" />
-                                <unzip src="${project.basedir}/src/main/resources/gdal/imageio-ext-${imageio-ext.version}-jars.zip" dest="${project.build.directory}/gdal/imageio-ext-${imageio-ext.version}-jars" />
-                                <unzip src="${project.basedir}/src/main/resources/gdal/gdal-1.9.2-MSVC2010-x64.zip" dest="${project.build.directory}/gdal/win64" />
-                                <unzip src="${project.basedir}/src/main/resources/gdal/gdal-data.zip" dest="${project.build.directory}/gdal" />
+                                <unzip src="${project.basedir}/../resources/gdal/geoserver-${gs.version}-gdal-plugin.zip" dest="${project.build.directory}/gdal/geoserver-${gs.version}-gdal-plugin" />
+                                <unzip src="${project.basedir}/../resources/gdal/imageio-ext-${imageio-ext.version}-jars.zip" dest="${project.build.directory}/gdal/imageio-ext-${imageio-ext.version}-jars" />
+                                <unzip src="${project.basedir}/../resources/gdal/gdal-1.9.2-MSVC2010-x64.zip" dest="${project.build.directory}/gdal/win64" />
+                                <unzip src="${project.basedir}/../resources/gdal/gdal-data.zip" dest="${project.build.directory}/gdal" />
                             </tasks>                            
                         </configuration>
                         <goals>
@@ -229,13 +229,13 @@
                         <configuration>
                             <tasks>
                                 <tar destfile="${project.build.directory}/gdal/geoserver-${gs.version}-gdal-plugin.tgz" compression="gzip">
-                                    <zipfileset src="${project.basedir}/src/main/resources/gdal/geoserver-${gs.version}-gdal-plugin.zip" />
+                                    <zipfileset src="${project.basedir}/../resources/gdal/geoserver-${gs.version}-gdal-plugin.zip" />
                                 </tar>
                                 <tar destfile="${project.build.directory}/gdal/imageio-ext-${imageio-ext.version}-jars.tgz" compression="gzip">
-                                    <zipfileset src="${project.basedir}/src/main/resources/gdal/imageio-ext-${imageio-ext.version}-jars.zip" />
+                                    <zipfileset src="${project.basedir}/../resources/gdal/imageio-ext-${imageio-ext.version}-jars.zip" />
                                 </tar>
                                 <tar destfile="${project.build.directory}/gdal/gdal-data.tgz" compression="gzip">
-                                    <zipfileset src="${project.basedir}/src/main/resources/gdal/gdal-data.zip" />
+                                    <zipfileset src="${project.basedir}/../resources/gdal/gdal-data.zip" />
                                 </tar>
                             </tasks>                            
                         </configuration>
@@ -249,7 +249,7 @@
                         <configuration>
                             <tasks>
                                 <!--Copy scripts to build dir for editing-->
-                                <copy todir="${project.build.directory}/gdal" file="${project.basedir}/src/main/resources/gdal/setup-gdal.sh" />
+                                <copy todir="${project.build.directory}/gdal" file="${project.basedir}/../resources/gdal/setup-gdal.sh" />
                                 <!--Edit the version numbers in the scripts-->
                                 <replace token="GEOSERVER_VER=" value="GEOSERVER_VER=${gs.version} #Set by ant-task. was: " dir="${project.build.directory}/gdal">                                 
                                     <include name="**/*.sh" />
