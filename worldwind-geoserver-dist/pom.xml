@@ -190,7 +190,7 @@
                         <phase>package</phase>
                         <configuration>
                             <tasks>
-                                <untar src="${project.basedir}/src/main/resources/java/server-jre-8u121-windows-x64.tar.gz" dest="${project.build.directory}/java-win64" compression="gzip" />
+                                <untar src="${project.basedir}/../resources/java/server-jre-8u121-windows-x64.tar.gz" dest="${project.build.directory}/java-win64" compression="gzip" />
                             </tasks>                            
                         </configuration>
                         <goals>
