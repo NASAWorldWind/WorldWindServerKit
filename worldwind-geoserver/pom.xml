@@ -438,12 +438,12 @@
                     <webApp>
                         <contextPath>/geoserver</contextPath>
                     </webApp>
-                    <connectors>
-                        <connector implementation="org.mortbay.jetty.nio.SelectChannelConnector">
-                            <port>${std.jetty.port}</port>
-                            <maxIdleTime>10000</maxIdleTime>
-                        </connector>
-                    </connectors>
+                    <httpConnector>
+                        <!--The port number for the connector to listen on (default is 8080).-->
+                        <port>${std.jetty.port}</port>
+                        <!--Maximum idle time for a connection.--> 
+                        <idleTimeout>10000</idleTimeout>
+                    </httpConnector>                    
                     <!--A port number for Jetty to listen on to receive a stop command to cause it to shutdown-->
                     <stopPort>${std.stop.jetty.port}</stopPort>
                     <!--A string value sent to the stopPort to validate the stop command-->
@@ -516,15 +516,11 @@
                             <webApp>
                                 <contextPath>/geoserver</contextPath>
                             </webApp>
-                            <connectors>
-                                <connector implementation="org.mortbay.jetty.nio.SelectChannelConnector">
-                                    <port>${random.jetty.port}</port>
-                                    <maxIdleTime>10000</maxIdleTime>
-                                </connector>
-                            </connectors>
                             <httpConnector>
-                                <!--The port number for the connector to listen on. By default it is 8080.-->
+                                <!--The port number for the connector to listen on, assigned by the port-allocator-maven-plugin-->
                                 <port>${random.jetty.port}</port>
+                                <!--Maximum idle time for a connection.--> 
+                                <idleTimeout>10000</idleTimeout>
                             </httpConnector>
                             <!--A port number for Jetty to listen on to receive a stop command to cause it to shutdown-->
                             <stopPort>${random.stop.jetty.port}</stopPort>
