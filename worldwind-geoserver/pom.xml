@@ -545,15 +545,25 @@
                             </systemProperties>
                             <!--The path to a context xml file that is applied to your webapp AFTER the webApp element.-->
                             <contextXml>${project.basedir}/src/test/resources/jetty-context.xml</contextXml>
+                            <!--Root directory for all html/jsp etc files (default: /src/main/webapp)-->
+                            <webAppSourceDirectory>${project.basedir}/src/main/webapp</webAppSourceDirectory>
                         </configuration>
                         <executions>
                             <execution>
                                 <id>start-jetty</id>
                                 <phase>pre-integration-test</phase>
                                 <goals>
-                                    <!--<goal>deploy-war</goal>-->
                                     <goal>start</goal>
                                 </goals>
+                                <configuration>
+                                    <!-- Set the GEOSERVER_DATA_DIR for the integration tests -->
+                                    <systemProperties> 
+                                        <systemProperty> 
+                                            <name>GEOSERVER_DATA_DIR</name>
+                                            <value>${project.basedir}/src/test/data_dir</value> 
+                                        </systemProperty> 
+                                    </systemProperties>                                    
+                                </configuration>
                             </execution>
                             <execution>
                                 <id>stop-jetty</id>
