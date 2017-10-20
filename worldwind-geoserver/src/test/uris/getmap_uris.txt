@@ -1,3 +1,9 @@
-name|requestPath|format|mimeType
-world|/geoserver/nasa/wms?service=WMS&version=1.1.0&request=GetMap&layers=nasa:world_topo_bathy_lowres&styles=&bbox=-180.0,-90.0,180.0,90.0&width=768&height=384&srs=EPSG:4326|image/jpeg|image/jpeg
-world|/geoserver/nasa/wms?service=WMS&version=1.1.0&request=GetMap&layers=nasa:world_topo_bathy_lowres&styles=&bbox=-180.0,-90.0,180.0,90.0&width=768&height=384&srs=EPSG:4326|image/png|image/png
+name|requestPath|mimeType
+world_topo_bathy_lowres|/geoserver/nasa/wms?service=WMS&version=1.1.0&request=GetMap&layers=nasa:world_topo_bathy_lowres&styles=&bbox=-180.0,-90.0,180.0,90.0&width=768&height=384&srs=EPSG:4326&format=image/jpeg|image/jpeg
+world_topo_bathy_lowres|/geoserver/nasa/wms?service=WMS&version=1.1.0&request=GetMap&layers=nasa:world_topo_bathy_lowres&styles=&bbox=-180.0,-90.0,180.0,90.0&width=768&height=384&srs=EPSG:4326&format=image/png|image/png
+gpkg|/geoserver/test/wms?service=WMS&version=1.1.0&request=GetMap&layers=test:virginia_beach&styles=&bbox=-76.06376510615117,36.79759555184851,-76.00144129748112,36.83033995950232&width=768&height=403&srs=EPSG:4326&format=image/jpeg|image/jpeg
+gpkg|/geoserver/test/wms?service=WMS&version=1.1.0&request=GetMap&layers=test:virginia_beach&styles=&bbox=-76.06376510615117,36.79759555184851,-76.00144129748112,36.83033995950232&width=768&height=403&srs=EPSG:4326&format=image/png|image/png
+png|/geoserver/test/wms?service=WMS&version=1.1.0&request=GetMap&layers=test:1_png_worldfile&styles=&bbox=-122.1655826861795,42.9040773122965,-122.04988848652951,42.9794516278795&width=768&height=500&srs=EPSG:4326&format=image/jpeg|image/jpeg
+png|/geoserver/test/wms?service=WMS&version=1.1.0&request=GetMap&layers=test:1_png_worldfile&styles=&bbox=-122.1655826861795,42.9040773122965,-122.04988848652951,42.9794516278795&width=768&height=500&srs=EPSG:4326&format=image/png|image/png
+jpeg|/geoserver/test/wms?service=WMS&version=1.1.0&request=GetMap&layers=test:2_jpeg_worldfile&styles=&bbox=135.21392298692416,-18.604888946313725,142.72498419152924,-10.420687977747352&width=704&height=768&srs=EPSG:4326&format=image%2Fjpeg|image/jpeg
+jpeg|/geoserver/test/wms?service=WMS&version=1.1.0&request=GetMap&layers=test:2_jpeg_worldfile&styles=&bbox=135.21392298692416,-18.604888946313725,142.72498419152924,-10.420687977747352&width=704&height=768&srs=EPSG:4326&format=image%2Fpng|image/png
