@@ -25,7 +25,7 @@
             </includes>            
         </fileSet>        
         <fileSet>
-            <directory>src/main/resources/gdal</directory>
+            <directory>../resources/gdal</directory>
             <outputDirectory>worldwind-geoserver-${project.version}/gdal</outputDirectory>
             <includes>
                 <!-- ECW and MrSID license notes -->
