@@ -1,0 +1,15 @@
+<layer>
+  <name>ecw_image</name>
+  <id>LayerInfoImpl--69e2ff68:15f55175fb2:-7ffe</id>
+  <type>RASTER</type>
+  <defaultStyle>
+    <id>StyleInfoImpl-78ff667e:12476299803:-7ffb</id>
+  </defaultStyle>
+  <resource class="coverage">
+    <id>CoverageInfoImpl--69e2ff68:15f55175fb2:-7fff</id>
+  </resource>
+  <attribution>
+    <logoWidth>0</logoWidth>
+    <logoHeight>0</logoHeight>
+  </attribution>
+</layer>

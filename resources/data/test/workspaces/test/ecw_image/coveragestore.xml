@@ -1,0 +1,12 @@
+<coverageStore>
+  <id>CoverageStoreInfoImpl--5a83e780:15f5505e2d5:-7ff7</id>
+  <name>ecw_image</name>
+  <description>ECW Coverage Format</description>
+  <type>ECW</type>
+  <enabled>true</enabled>
+  <workspace>
+    <id>WorkspaceInfoImpl-1af99ad8:15b7cb87324:-7fff</id>
+  </workspace>
+  <__default>false</__default>
+  <url>file:data/test/ecw/ecw_image.ecw</url>
+</coverageStore>
