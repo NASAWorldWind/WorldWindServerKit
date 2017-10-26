@@ -32,15 +32,16 @@ before_script:
 
 script:
   # Build WWSK with Maven using the "release" profile (generates javadoc and sources) 
-  # and integration-test profile (runs JMeter) 
   ## Maven Commands
   # -B (--batch-mode) Run in non-interactive model
   # -U (--update-snapshots) Forces a check for missing releases and updated snapshots on remote repos
   # -P (--activate-profiles <arg>) Comma-delimited list of profiles to activate
-  - mvn clean install -B -U -Prelease,integration-test -e
+  - mvn clean install -B -U -P release
+  ## Run the JMeter integration tests and output results to the reports folder
+  - ./travis/run_integration_tests.sh
   
 after_success:
-  # Conditionally create a draft release on GitHub in preparation for deploy
+  # Conditionally creates a draft release on GitHub in preparation for deploy
   - ./travis/create_draft_release.sh
 
 deploy: 
