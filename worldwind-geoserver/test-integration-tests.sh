@@ -1,5 +1,5 @@
 #!/bin/bash
-set -x # echo
+set +x # echo
 
 ## ============================================================================
 ## Runs the JMeter integration tests on a Ubuntu system
@@ -27,12 +27,17 @@ popd
 echo "Running the integration tests"
 mvn verify -P integration-test
 
+
 ## --------------------------------------------------
 # Run the tests again with GDAL 
 ## --------------------------------------------------
+# Setup
 GEOSERVER_VER=2.11.1
 IMAGEIO_EXT_VER=1.1.17
 PROJECT_FOLDER=$(pwd)
+OLD_GDAL_LIB_PATH=${GDAL_LIB_PATH}
+OLD_GDAL_DATA_PATH=${GDAL_DATA_PATH}
+OLD_LD_LIBRARY_PATH=${LD_LIBRARY_PATH}
 # Paths
 GEOSERVER_LIB_PATH=${PROJECT_FOLDER}"/target/worldwind-geoserver/WEB-INF/lib"
 GDAL_HOME_PATH=${PROJECT_FOLDER}"/target/gdal"
@@ -45,11 +50,17 @@ GDAL_PLUGIN_ZIP=${PROJECT_FOLDER}"/../resources/gdal/geoserver-${GEOSERVER_VER}-
 GDAL_DATA_ZIP=${PROJECT_FOLDER}"/../resources/gdal/gdal-data.tgz"
 GDAL_NATIVES_ZIP=${PROJECT_FOLDER}"/../resources/gdal/gdal192-Ubuntu12-gcc4.6.3-x86_64.tar.gz"
 GDAL_BINDINGS_ARTIFACT="imageio-ext-gdal-bindings-1.9.2.jar"
+#   Through functional testing it was discovered that GeoTIFF's with JPEG
+#   compression don't work if imageio-ext-gdalgeotiff and imageio-ext-gdaljpeg
+#   jars are included.
+PROBLEM_ARTIFACTS="imageio-ext-gdalgeotiff-${IMAGEIO_EXT_VER}.jar imageio-ext-gdaljpeg-${IMAGEIO_EXT_VER}.jar"
 ## Install the gdal-plugin jars
 echo "Installing the GeoServer GDAL coverage format extension"
 TEMP_DIR=$(mktemp -d)
 pushd $TEMP_DIR
 tar -xzf $GDAL_PLUGIN_ZIP 
+# Delete the problem jars
+for file in $PROBLEM_ARTIFACTS; do rm $file; done
 cp *.jar $GEOSERVER_LIB_PATH
 popd; rm -rf $TEMP_DIR
 ## Install the imageio-ext jars
@@ -63,6 +74,7 @@ popd; rm -rf $TEMP_DIR
 echo "Installing the GDAL natives"
 mkdir -p $GDAL_LIB_PATH
 tar -xzf $GDAL_NATIVES_ZIP -C $GDAL_LIB_PATH
+for file in $PROBLEM_ARTIFACTS; do rm $file; done
 # Copy the bindings jar from the javainfo folder to the geoserver/lib folder
 cp ${GDAL_LIB_PATH}/javainfo/${GDAL_BINDINGS_ARTIFACT} $GEOSERVER_LIB_PATH
 ## Install GDAL data
@@ -70,6 +82,14 @@ echo "Installing the GDAL data"
 mkdir -p $GDAL_DATA_PATH
 tar -xzf $GDAL_DATA_ZIP -C $GDAL_DATA_PATH
 chmod a+rw -R ${GDAL_DATA_PATH}/*
+## HACK for JP2ECW and ECW crash (defines an environment var used by the ECW driver)
+if [ -z "${NCS_USER_PREFS}" ]; then
+    if [ ! -z "${HOME}" ]; then
+        export NCS_USER_PREFS=${HOME}/.erm/ncsuserprefs.xml
+    else
+        export NCS_USER_PREFS=/etc/erm/ncsuserprefs.xml
+    fi
+fi
 
 echo "Running the integration tests with GDAL"
 mvn verify -P integration-test-gdal
@@ -91,6 +111,15 @@ popd
 echo "Running the integration tests with GDAL and JAI"
 mvn verify -P integration-test-jai
 
-# Uncomment to run WWSK in order validate JAI in the Web Admin interface
+## --------------------------------------------------
+# Uncomment to run WWSK in order validate JAI 
+## --------------------------------------------------
 #mvn jetty:run -P integration-test-jai
 
+
+## --------------------------------------------------
+# Cleanup
+## --------------------------------------------------
+GDAL_LIB_PATH=${OLD_GDAL_LIB_PATH}
+GDAL_DATA_PATH=${OLD_GDAL_DATA_PATH}
+LD_LIBRARY_PATH=${OLD_LD_LIBRARY_PATH}
