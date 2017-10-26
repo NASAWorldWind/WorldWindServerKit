@@ -1,0 +1,17 @@
+<PAMDataset>
+  <Metadata>
+    <MDI key="AREA_OR_POINT">Area</MDI>
+  </Metadata>
+  <Metadata domain="IMAGE_STRUCTURE">
+    <MDI key="COMPRESSION">JPEG</MDI>
+  </Metadata>
+  <PAMRasterBand band="1">
+    <ColorInterp>Red</ColorInterp>
+  </PAMRasterBand>
+  <PAMRasterBand band="2">
+    <ColorInterp>Green</ColorInterp>
+  </PAMRasterBand>
+  <PAMRasterBand band="3">
+    <ColorInterp>Blue</ColorInterp>
+  </PAMRasterBand>
+</PAMDataset>

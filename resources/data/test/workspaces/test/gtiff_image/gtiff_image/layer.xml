@@ -1,0 +1,15 @@
+<layer>
+  <name>gtiff_image</name>
+  <id>LayerInfoImpl--1fc8d4a3:15f54126b94:-7ff7</id>
+  <type>RASTER</type>
+  <defaultStyle>
+    <id>StyleInfoImpl-78ff667e:12476299803:-7ffb</id>
+  </defaultStyle>
+  <resource class="coverage">
+    <id>CoverageInfoImpl--1fc8d4a3:15f54126b94:-7ff8</id>
+  </resource>
+  <attribution>
+    <logoWidth>0</logoWidth>
+    <logoHeight>0</logoHeight>
+  </attribution>
+</layer>

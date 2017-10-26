@@ -1,0 +1,26 @@
+<settings>
+  <id>SettingsInfoImpl-2c87d886:15f315b8a68:-7f59</id>
+  <workspace>
+    <id>WorkspaceInfoImpl-1af99ad8:15b7cb87324:-7fff</id>
+    <name>test</name>
+  </workspace>
+  <contact>
+    <id>contact</id>
+    <contactOrganization>NASA WorldWind</contactOrganization>
+    <contactPerson>Patrick Hogan</contactPerson>
+  </contact>
+  <charset>UTF-8</charset>
+  <numDecimals>8</numDecimals>
+  <onlineResource>http://geoserver.org</onlineResource>
+  <verbose>false</verbose>
+  <verboseExceptions>false</verboseExceptions>
+  <metadata>
+    <map>
+      <entry>
+        <string>quietOnNotFound</string>
+        <boolean>false</boolean>
+      </entry>
+    </map>
+  </metadata>
+  <localWorkspaceIncludesPrefix>false</localWorkspaceIncludesPrefix>
+</settings>

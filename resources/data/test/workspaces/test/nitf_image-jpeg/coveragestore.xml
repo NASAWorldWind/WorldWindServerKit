@@ -1,0 +1,12 @@
+<coverageStore>
+  <id>CoverageStoreInfoImpl--69e2ff68:15f55175fb2:-7ff1</id>
+  <name>nitf_image-jpeg</name>
+  <description>NITF Coverage Format with JPEG compression</description>
+  <type>NITF</type>
+  <enabled>true</enabled>
+  <workspace>
+    <id>WorkspaceInfoImpl-1af99ad8:15b7cb87324:-7fff</id>
+  </workspace>
+  <__default>false</__default>
+  <url>file:data/test/nitf/nitf_image-jpeg.ntf</url>
+</coverageStore>
