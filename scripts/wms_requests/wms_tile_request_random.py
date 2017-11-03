@@ -268,25 +268,25 @@ if __name__ == '__main__':
         if first:
             # Trick to have the command that created the csv file without making jmeter bomb (csv format has no notion of comments)
             output_file.write(
-                '%d,%d,%.10g,%.10g,%.10g,%.10g;wms_tile_request.py -count %d -region %.8g %.8g %.8g %.8g -minlevel %d -maxlevel %d -tilesize %d %d -level0 %d %d\n' \
+                '%d,%d,%.10g,%.10g,%.10g,%.10g,"wms_tile_request.py -count %d -region %.8g %.8g %.8g %.8g -minlevel %d -maxlevel %d -tilesize %d %d -level0 %d %d"\n' \
                 % (width, height, bbox[0], bbox[1], bbox[2], bbox[3],
                    count, region[0], region[1], region[2], region[3], min_level, max_level,
                    tile_size[0], tile_size[1], level0[0], level0[1]))
             if srs_output is not None:
                 output_file2.write(
-                    '%d,%d,%.10g,%.10g,%.10g,%.10g;wms_tile_request.py -count %d -region %.8g %.8g %.8g %.8g -minlevel %d -maxlevel %d -tilesize %d %d -level0 %d %d\n' \
-                    % (srs2_width, srs2_height, srs2_bbox[0][0], srs2_bbox[0][1], srs2_bbox[1][0], srs2_bbox[1][1],
+                    '%d,%d,%.10g,%.10g,%.10g,%.10g,"wms_tile_request.py -count %d -region %.8g %.8g %.8g %.8g -minlevel %d -maxlevel %d -tilesize %d %d -level0 %d %d"\n' \
+                    % (srs2_width, srs2_height, srs2_bbox[0][0], srs2_bbox[0][1], srs2_bbox[1][0],
+                       srs2_bbox[1][1],
                        count, region[0], region[1], region[2], region[3], min_level, max_level,
                        tile_size[0], tile_size[1], level0[0], level0[1]))
-
             first = False
         else:
-            output_file.write('%d,%d,%.10g,%.10g,%.10g,%.10g\n' \
-                              % (width, height, bbox[0], bbox[1], bbox[2], bbox[3]))
+            output_file.write('%d,%d,%.10g,%.10g,%.10g,%.10g,"level %d"\n' \
+                              % (width, height, bbox[0], bbox[1], bbox[2], bbox[3], level))
             if srs_output is not None:
-                output_file2.write('%d,%d,%.10g,%.10g,%.10g,%.10g\n' \
-                                   % (srs2_width, srs2_height, srs2_bbox[0][0], srs2_bbox[0][1], srs2_bbox[1][0],
-                                      srs2_bbox[1][1]))
+                output_file2.write('%d,%d,%.10g,%.10g,%.10g,%.10g,"level %d"\n' \
+                                   % (srs2_width, srs2_height, srs2_bbox[0][0], srs2_bbox[0][1],
+                                      srs2_bbox[1][0], srs2_bbox[1][1], level))
 
         count = count - 1
 

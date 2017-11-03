@@ -17,8 +17,8 @@
             <stringProp name="Argument.value">192.168.2.3</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
-          <elementProp name="MFOCS" elementType="Argument">
-            <stringProp name="Argument.name">MFOCS</stringProp>
+          <elementProp name="DEVICE" elementType="Argument">
+            <stringProp name="Argument.name">DEVICE</stringProp>
             <stringProp name="Argument.value">192.168.2.4</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
@@ -84,13 +84,13 @@
             </elementProp>
             <elementProp name="format" elementType="Argument">
               <stringProp name="Argument.name">format</stringProp>
-              <stringProp name="Argument.value">image/jpeg</stringProp>
+              <stringProp name="Argument.value">image/png</stringProp>
               <stringProp name="Argument.desc">Response image format</stringProp>
               <stringProp name="Argument.metadata">=</stringProp>
             </elementProp>
             <elementProp name="layers" elementType="Argument">
               <stringProp name="Argument.name">layers</stringProp>
-              <stringProp name="Argument.value">MCGS:auto-best</stringProp>
+              <stringProp name="Argument.value">wsec:autoselect</stringProp>
               <stringProp name="Argument.desc">Layer(s) to request</stringProp>
               <stringProp name="Argument.metadata">=</stringProp>
             </elementProp>
@@ -120,15 +120,15 @@
           <CSVDataSet guiclass="TestBeanGUI" testclass="CSVDataSet" testname="CSV Data Set Config" enabled="true">
             <stringProp name="delimiter">,</stringProp>
             <stringProp name="fileEncoding"></stringProp>
-            <stringProp name="filename">desw_13-19_4326_zoom.csv</stringProp>
+            <stringProp name="filename">ft_biggs_10-19_4326_zoom.csv</stringProp>
             <boolProp name="quotedData">false</boolProp>
             <boolProp name="recycle">false</boolProp>
             <stringProp name="shareMode">shareMode.all</stringProp>
             <boolProp name="stopThread">true</boolProp>
-            <stringProp name="variableNames">width,height,left,bottom,right,top</stringProp>
+            <stringProp name="variableNames">width,height,left,bottom,right,top,level</stringProp>
           </CSVDataSet>
           <hashTree/>
-          <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="GetMap HTTP Request" enabled="true">
+          <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="GetMap ${level}" enabled="true">
             <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
               <collectionProp name="Arguments.arguments">
                 <elementProp name="service" elementType="HTTPArgument">
@@ -216,7 +216,7 @@
                 </elementProp>
               </collectionProp>
             </elementProp>
-            <stringProp name="HTTPSampler.domain">${MFOCS}</stringProp>
+            <stringProp name="HTTPSampler.domain">${COBRA}</stringProp>
             <stringProp name="HTTPSampler.port">${JETTY}</stringProp>
             <stringProp name="HTTPSampler.connect_timeout"></stringProp>
             <stringProp name="HTTPSampler.response_timeout"></stringProp>
@@ -234,9 +234,10 @@
           </HTTPSamplerProxy>
           <hashTree>
             <SizeAssertion guiclass="SizeAssertionGui" testclass="SizeAssertion" testname="Size Assertion" enabled="true">
-              <stringProp name="Assertion.test_field">SizeAssertion.response_network_size</stringProp>
+              <stringProp name="Assertion.test_field">SizeAssertion.response_data</stringProp>
               <stringProp name="SizeAssertion.size">1500</stringProp>
               <intProp name="SizeAssertion.operator">5</intProp>
+              <stringProp name="TestPlan.comments">PNG size assersion</stringProp>
             </SizeAssertion>
             <hashTree/>
             <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">

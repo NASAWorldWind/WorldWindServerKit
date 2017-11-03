@@ -20,5 +20,6 @@
 ##  python wms_tile_request_zoom.py -count 1000 -region "-120" 34 "-119" 35 -level0 10 5  -minlevel 0 -maxlevel 23 -output ventura_wwj.csv
 ##
 #python  wms_tile_request_zoom.py -count 100 -region "-120" 30 "-110" 40  -minlevel 7 -maxlevel 12 -output psw_7-12_4326_zoom.csv
-python  wms_tile_request_zoom.py -count 5000 -region 7.5 47.5 11 48.5  -minlevel 13 -maxlevel 17 -output desw_13-17_4326_zoom.csv
-python  wms_tile_request_zoom.py -count 5000 -region 7.5 47.5 11 48.5  -minlevel 13 -maxlevel 19 -output desw_13-19_4326_zoom.csv
+#python  wms_tile_request_zoom.py -count 5000 -region 7.5 47.5 11 48.5  -minlevel 13 -maxlevel 17 -output desw_13-17_4326_zoom.csv
+#python  wms_tile_request_zoom.py -count 5000 -region 7.5 47.5 11 48.5  -minlevel 13 -maxlevel 19 -output desw_13-19_4326_zoom.csv
+python  wms_tile_request_zoom.py -count 5000 -region "-106.6" 31.6 "-105.6" 32.6 -minlevel 10 -maxlevel 19 -output ft_biggs_10-19_4326_zoom.csv
