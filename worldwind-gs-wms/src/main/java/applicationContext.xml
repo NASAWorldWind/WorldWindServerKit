@@ -8,38 +8,49 @@ application directory.
 
 <beans>
     
+    <!-- ProxyGetMapCallback is a GetMapCallback extension point -->
+    <bean id="testProxyCallback" class="gov.nasa.worldwind.gs.wms.ProxyGetMapCallback">    
+        <constructor-arg>
+            <description>The dummy/proxy layer name</description>
+            <value>proxy</value>
+        </constructor-arg>
+        <constructor-arg>
+            <description>The delegate layer name</description>
+            <value>spearfish</value>
+        </constructor-arg>
+    </bean>
     <!--WmsModuleStatus provides an entry in the "Server Status" > "Modules" page-->
     <bean class="gov.nasa.worldwind.gs.wms.map.WmsModuleStatus"/>  
         
     <bean id="PNGMapProducer" class="gov.nasa.worldwind.gs.wms.map.CustomRenderedImageMapOutputFormat">
-      <constructor-arg>
-        <description>The prescribed output format MIME-Type</description>
-        <value>image/png</value>
-      </constructor-arg>
-      <constructor-arg>
-        <description>The declared output format MIME-Types in the capabilities document</description>
-        <list>
-          <value>image/png</value>
-        </list>
-      </constructor-arg>
-      <constructor-arg ref="wms" />
-      <property name="extension" value="png"/>
+        <constructor-arg>
+            <description>The prescribed output format MIME-Type</description>
+            <value>image/png</value>
+        </constructor-arg>
+        <constructor-arg>
+            <description>The declared output format MIME-Types in the capabilities document</description>
+            <list>
+                <value>image/png</value>
+            </list>
+        </constructor-arg>
+        <constructor-arg ref="wms" />
+        <property name="extension" value="png"/>
     </bean>
     
     <bean id="PNG8MapProducer" class="gov.nasa.worldwind.gs.wms.map.CustomRenderedImageMapOutputFormat">
-      <constructor-arg>
-        <description>The prescribed output format MIME-Type</description>
-        <value>image/png; mode=8bit</value>
-      </constructor-arg>
-      <constructor-arg>
-        <description>The declared output format MIME-Types in the capabilities document</description>
-        <list>
-          <value>image/png8</value>
-          <value>image/png; mode=8bit</value>
-        </list>
-      </constructor-arg>
-      <constructor-arg ref="wms" />
-      <property name="extension" value="png"/>
+        <constructor-arg>
+            <description>The prescribed output format MIME-Type</description>
+            <value>image/png; mode=8bit</value>
+        </constructor-arg>
+        <constructor-arg>
+            <description>The declared output format MIME-Types in the capabilities document</description>
+            <list>
+                <value>image/png8</value>
+                <value>image/png; mode=8bit</value>
+            </list>
+        </constructor-arg>
+        <constructor-arg ref="wms" />
+        <property name="extension" value="png"/>
     </bean>
 
     <bean id="GeoTiffMapProducer" class="gov.nasa.worldwind.gs.wms.map.CustomRenderedImageMapOutputFormat">
