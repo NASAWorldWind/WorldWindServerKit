@@ -32,7 +32,8 @@ define(['worldwind'],
                         256);
 
                 // "tiled=true" is a hint for the GeoServer WMS to use the GeoWebCache
-                this.vendorParms = '&tiled=true';
+                this.vendorParms = '';
+                //this.vendorParms = '&tiled=true&tilesOrigin=-180,-90';
 
             };
 
