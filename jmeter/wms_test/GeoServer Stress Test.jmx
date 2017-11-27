@@ -2,7 +2,7 @@
 <jmeterTestPlan version="1.2" properties="3.1" jmeter="3.1 r1770033">
   <hashTree>
     <TestPlan guiclass="TestPlanGui" testclass="TestPlan" testname="GeoServer Stress Test" enabled="true">
-      <stringProp name="TestPlan.comments">Tutorial</stringProp>
+      <stringProp name="TestPlan.comments">Common variables used elsewhere are defined here.  See the GetMap [HTTP Request] for usage.</stringProp>
       <boolProp name="TestPlan.functional_mode">false</boolProp>
       <boolProp name="TestPlan.serialize_threadgroups">false</boolProp>
       <elementProp name="TestPlan.user_defined_variables" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
@@ -19,17 +19,17 @@
           </elementProp>
           <elementProp name="DEVICE" elementType="Argument">
             <stringProp name="Argument.name">DEVICE</stringProp>
-            <stringProp name="Argument.value">192.168.2.4</stringProp>
-            <stringProp name="Argument.metadata">=</stringProp>
-          </elementProp>
-          <elementProp name="TOMCAT" elementType="Argument">
-            <stringProp name="Argument.name">TOMCAT</stringProp>
-            <stringProp name="Argument.value">8084</stringProp>
+            <stringProp name="Argument.value">localhost</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
           <elementProp name="JETTY" elementType="Argument">
             <stringProp name="Argument.name">JETTY</stringProp>
             <stringProp name="Argument.value">8080</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="TOMCAT" elementType="Argument">
+            <stringProp name="Argument.name">TOMCAT</stringProp>
+            <stringProp name="Argument.value">8084</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
           <elementProp name="WMS_ENDPOINT" elementType="Argument">
@@ -60,6 +60,7 @@
         <boolProp name="ThreadGroup.scheduler">false</boolProp>
         <stringProp name="ThreadGroup.duration"></stringProp>
         <stringProp name="ThreadGroup.delay"></stringProp>
+        <stringProp name="TestPlan.comments">Each thread reads the &quot;next&quot; row from the CSV file</stringProp>
       </ThreadGroup>
       <hashTree>
         <Arguments guiclass="ArgumentsPanel" testclass="Arguments" testname="WMS Request Defaults" enabled="true">
@@ -78,7 +79,7 @@
             </elementProp>
             <elementProp name="version" elementType="Argument">
               <stringProp name="Argument.name">version</stringProp>
-              <stringProp name="Argument.value">1.1.1</stringProp>
+              <stringProp name="Argument.value">1.3.0</stringProp>
               <stringProp name="Argument.desc">WMS version to use</stringProp>
               <stringProp name="Argument.metadata">=</stringProp>
             </elementProp>
@@ -90,7 +91,7 @@
             </elementProp>
             <elementProp name="layers" elementType="Argument">
               <stringProp name="Argument.name">layers</stringProp>
-              <stringProp name="Argument.value">wsec:autoselect</stringProp>
+              <stringProp name="Argument.value">proxy-auto-sensor</stringProp>
               <stringProp name="Argument.desc">Layer(s) to request</stringProp>
               <stringProp name="Argument.metadata">=</stringProp>
             </elementProp>
@@ -100,8 +101,8 @@
               <stringProp name="Argument.desc">Styles to apply</stringProp>
               <stringProp name="Argument.metadata">=</stringProp>
             </elementProp>
-            <elementProp name="srs" elementType="Argument">
-              <stringProp name="Argument.name">srs</stringProp>
+            <elementProp name="crs" elementType="Argument">
+              <stringProp name="Argument.name">crs</stringProp>
               <stringProp name="Argument.value">EPSG:4326</stringProp>
               <stringProp name="Argument.desc">CRS for bounding box</stringProp>
               <stringProp name="Argument.metadata">=</stringProp>
@@ -154,7 +155,7 @@
                 </elementProp>
                 <elementProp name="bbox" elementType="HTTPArgument">
                   <boolProp name="HTTPArgument.always_encode">false</boolProp>
-                  <stringProp name="Argument.value">${left},${bottom},${right},${top}</stringProp>
+                  <stringProp name="Argument.value">${bottom},${left},${top},${right}</stringProp>
                   <stringProp name="Argument.metadata">=</stringProp>
                   <boolProp name="HTTPArgument.use_equals">true</boolProp>
                   <stringProp name="Argument.name">bbox</stringProp>
@@ -194,12 +195,12 @@
                   <boolProp name="HTTPArgument.use_equals">true</boolProp>
                   <stringProp name="Argument.name">styles</stringProp>
                 </elementProp>
-                <elementProp name="srs" elementType="HTTPArgument">
+                <elementProp name="crs" elementType="HTTPArgument">
                   <boolProp name="HTTPArgument.always_encode">false</boolProp>
-                  <stringProp name="Argument.value">${srs}</stringProp>
+                  <stringProp name="Argument.value">${crs}</stringProp>
                   <stringProp name="Argument.metadata">=</stringProp>
                   <boolProp name="HTTPArgument.use_equals">true</boolProp>
-                  <stringProp name="Argument.name">srs</stringProp>
+                  <stringProp name="Argument.name">crs</stringProp>
                 </elementProp>
                 <elementProp name="tiled" elementType="HTTPArgument">
                   <boolProp name="HTTPArgument.always_encode">false</boolProp>
@@ -233,14 +234,14 @@
             <stringProp name="TestPlan.comments">Path: use ${WMS_ENDPOINT} [geoserver/wms]   or    ${GWC_ENDPOINT} [geoserver/gwc/service/wms]</stringProp>
           </HTTPSamplerProxy>
           <hashTree>
-            <SizeAssertion guiclass="SizeAssertionGui" testclass="SizeAssertion" testname="Size Assertion" enabled="true">
+            <SizeAssertion guiclass="SizeAssertionGui" testclass="SizeAssertion" testname="Size Assertion" enabled="false">
               <stringProp name="Assertion.test_field">SizeAssertion.response_data</stringProp>
-              <stringProp name="SizeAssertion.size">1500</stringProp>
-              <intProp name="SizeAssertion.operator">5</intProp>
+              <stringProp name="SizeAssertion.size">1325</stringProp>
+              <intProp name="SizeAssertion.operator">3</intProp>
               <stringProp name="TestPlan.comments">PNG size assersion</stringProp>
             </SizeAssertion>
             <hashTree/>
-            <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
+            <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Assert Response Code 200" enabled="true">
               <collectionProp name="Asserion.test_strings">
                 <stringProp name="49586">200</stringProp>
               </collectionProp>
@@ -249,45 +250,19 @@
               <intProp name="Assertion.test_type">2</intProp>
             </ResponseAssertion>
             <hashTree/>
+            <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Assert Content-Type: ${format}" enabled="true">
+              <collectionProp name="Asserion.test_strings">
+                <stringProp name="1815351611">Content-Type: ${format}</stringProp>
+              </collectionProp>
+              <stringProp name="TestPlan.comments">Ensure an image was returned and not an XML error response.</stringProp>
+              <stringProp name="Assertion.test_field">Assertion.response_headers</stringProp>
+              <boolProp name="Assertion.assume_success">false</boolProp>
+              <intProp name="Assertion.test_type">16</intProp>
+            </ResponseAssertion>
+            <hashTree/>
           </hashTree>
         </hashTree>
-        <ResultCollector guiclass="GraphVisualizer" testclass="ResultCollector" testname="Graph Results" enabled="true">
-          <boolProp name="ResultCollector.error_logging">false</boolProp>
-          <objProp>
-            <name>saveConfig</name>
-            <value class="SampleSaveConfiguration">
-              <time>true</time>
-              <latency>true</latency>
-              <timestamp>true</timestamp>
-              <success>true</success>
-              <label>true</label>
-              <code>true</code>
-              <message>true</message>
-              <threadName>true</threadName>
-              <dataType>true</dataType>
-              <encoding>false</encoding>
-              <assertions>true</assertions>
-              <subresults>true</subresults>
-              <responseData>false</responseData>
-              <samplerData>false</samplerData>
-              <xml>false</xml>
-              <fieldNames>true</fieldNames>
-              <responseHeaders>false</responseHeaders>
-              <requestHeaders>false</requestHeaders>
-              <responseDataOnError>false</responseDataOnError>
-              <saveAssertionResultsFailureMessage>true</saveAssertionResultsFailureMessage>
-              <assertionsResultsToSave>0</assertionsResultsToSave>
-              <bytes>true</bytes>
-              <sentBytes>true</sentBytes>
-              <threadCounts>true</threadCounts>
-              <idleTime>true</idleTime>
-              <connectTime>true</connectTime>
-            </value>
-          </objProp>
-          <stringProp name="filename"></stringProp>
-        </ResultCollector>
-        <hashTree/>
-        <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree" enabled="true">
+        <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="Request and Response data" enabled="true">
           <boolProp name="ResultCollector.error_logging">false</boolProp>
           <objProp>
             <name>saveConfig</name>
@@ -358,9 +333,44 @@
           </objProp>
           <stringProp name="filename"></stringProp>
           <boolProp name="useGroupName">true</boolProp>
+          <stringProp name="TestPlan.comments">Ignore the Throughput column in indivdual rows. Read the JMeter help for the Summary Report to understand how the &quot;Throughput&quot; column as it relates to the &quot;Label&quot; rows and threads.</stringProp>
         </ResultCollector>
         <hashTree/>
-        <Summariser guiclass="SummariserGui" testclass="Summariser" testname="Generate Summary Results" enabled="true"/>
+        <ResultCollector guiclass="GraphVisualizer" testclass="ResultCollector" testname="Graph Results" enabled="true">
+          <boolProp name="ResultCollector.error_logging">false</boolProp>
+          <objProp>
+            <name>saveConfig</name>
+            <value class="SampleSaveConfiguration">
+              <time>true</time>
+              <latency>true</latency>
+              <timestamp>true</timestamp>
+              <success>true</success>
+              <label>true</label>
+              <code>true</code>
+              <message>true</message>
+              <threadName>true</threadName>
+              <dataType>true</dataType>
+              <encoding>false</encoding>
+              <assertions>true</assertions>
+              <subresults>true</subresults>
+              <responseData>false</responseData>
+              <samplerData>false</samplerData>
+              <xml>false</xml>
+              <fieldNames>true</fieldNames>
+              <responseHeaders>false</responseHeaders>
+              <requestHeaders>false</requestHeaders>
+              <responseDataOnError>false</responseDataOnError>
+              <saveAssertionResultsFailureMessage>true</saveAssertionResultsFailureMessage>
+              <assertionsResultsToSave>0</assertionsResultsToSave>
+              <bytes>true</bytes>
+              <sentBytes>true</sentBytes>
+              <threadCounts>true</threadCounts>
+              <idleTime>true</idleTime>
+              <connectTime>true</connectTime>
+            </value>
+          </objProp>
+          <stringProp name="filename"></stringProp>
+        </ResultCollector>
         <hashTree/>
         <ResultCollector guiclass="RespTimeGraphVisualizer" testclass="ResultCollector" testname="Response Time Graph" enabled="true">
           <boolProp name="ResultCollector.error_logging">false</boolProp>
@@ -398,7 +408,9 @@
           <stringProp name="filename"></stringProp>
         </ResultCollector>
         <hashTree/>
-        <ResultSaver guiclass="ResultSaverGui" testclass="ResultSaver" testname="Save Responses to a file" enabled="true">
+        <Summariser guiclass="SummariserGui" testclass="Summariser" testname="Generate Summary Results" enabled="true"/>
+        <hashTree/>
+        <ResultSaver guiclass="ResultSaverGui" testclass="ResultSaver" testname="Save Error Responses to a file" enabled="true">
           <stringProp name="FileSaver.filename">D:/temp/test</stringProp>
           <boolProp name="FileSaver.errorsonly">true</boolProp>
           <boolProp name="FileSaver.skipautonumber">false</boolProp>
