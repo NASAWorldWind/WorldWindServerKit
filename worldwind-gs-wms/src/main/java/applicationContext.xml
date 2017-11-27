@@ -9,17 +9,25 @@ application directory.
 <beans>
     
     <!-- ProxyGetMapCallback is a GetMapCallback extension point -->
-    <bean id="dummyProxyCallback" class="gov.nasa.worldwind.gs.wms.DelegatingGetMapCallback">    
+    <bean id="proxyGetMapCallback" class="gov.nasa.worldwind.gs.wms.DelegatingGetMapCallback">    
         <constructor-arg>
-            <description>The dummy layer to be replaced by the delegate</description>
-            <value>dummy-layer</value>
-        </constructor-arg>
-        <constructor-arg>
-            <description>The name of the delegated layer/group to replace the dummy layer</description>
-            <value>actual-layer-group</value>
+            <map>
+                <entry>
+                    <key>
+                        <value>proxy-layer</value>
+                    </key>
+                    <value>complex-layer</value>
+                </entry>
+                <entry>
+                    <key>
+                        <value>proxy-layer2</value>
+                    </key>
+                    <value>complex-layer2</value>
+                </entry>
+            </map>        
         </constructor-arg>
     </bean>
-
+        
     <!--WmsModuleStatus provides an entry in the "Server Status" > "Modules" page-->
     <bean class="gov.nasa.worldwind.gs.wms.map.WmsModuleStatus"/>  
         
