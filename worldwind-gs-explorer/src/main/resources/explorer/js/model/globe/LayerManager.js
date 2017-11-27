@@ -488,7 +488,7 @@ define(['knockout',
                     }
 
                     // TODO: pass in category; add to selected category
-                    layer.enabled = true;
+                    layer.enabled = false;
                     if (category === constants.LAYER_CATEGORY_BASE) {
                         this.addBaseLayer(layer);
                     } else if (category === constants.LAYER_CATEGORY_OVERLAY) {
@@ -831,7 +831,7 @@ define(['knockout',
                                                 var renderableLayer = new WorldWind.RenderableLayer(name);
 
                                                 renderableLayer.addRenderable(kmlFile);
-                                                globe.layerManager.addOverlayLayer(renderableLayer);
+                                                globe.layerManager.addOverlayLayer(renderableLayer, { enabled: false });
                                             }
                                         }
                                     }(globe, layerName);
