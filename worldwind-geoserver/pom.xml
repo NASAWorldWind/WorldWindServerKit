@@ -618,7 +618,7 @@
                                 <!--number of threads to use-->
                                 <threadgroup00.numberOfThreads>10</threadgroup00.numberOfThreads>
                                 <!--delay of the test in seconds-->
-                                <threadgroup00.scheduledDelay>0</threadgroup00.scheduledDelay>
+                                <threadgroup00.scheduledDelay>5</threadgroup00.scheduledDelay>
                                 <!--duration of the test in seconds-->
                                 <threadgroup00.scheduledDuration>30</threadgroup00.scheduledDuration>
                                 <!--how long till all threads are up and running in seconds-->
@@ -1079,7 +1079,7 @@
                                 <!--number of threads to use-->
                                 <threadgroup00.numberOfThreads>10</threadgroup00.numberOfThreads>
                                 <!--delay of the test in seconds-->
-                                <threadgroup00.scheduledDelay>0</threadgroup00.scheduledDelay>
+                                <threadgroup00.scheduledDelay>5</threadgroup00.scheduledDelay>
                                 <!--duration of the test in seconds-->
                                 <threadgroup00.scheduledDuration>30</threadgroup00.scheduledDuration>
                                 <!--how long till all threads are up and running in seconds-->
@@ -1096,7 +1096,7 @@
                                 <!--number of threads to use-->
                                 <threadgroup01.numberOfThreads>10</threadgroup01.numberOfThreads>
                                 <!--delay of the test in seconds-->
-                                <threadgroup01.scheduledDelay>0</threadgroup01.scheduledDelay>
+                                <threadgroup01.scheduledDelay>5</threadgroup01.scheduledDelay>
                                 <!--duration of the test in seconds-->
                                 <threadgroup01.scheduledDuration>30</threadgroup01.scheduledDuration>
                                 <!--how long till all threads are up and running in seconds-->
@@ -1113,7 +1113,7 @@
                                 <!--number of threads to use-->
                                 <threadgroup02.numberOfThreads>10</threadgroup02.numberOfThreads>
                                 <!--delay of the test in seconds-->
-                                <threadgroup02.scheduledDelay>0</threadgroup02.scheduledDelay>
+                                <threadgroup02.scheduledDelay>5</threadgroup02.scheduledDelay>
                                 <!--duration of the test in seconds-->
                                 <threadgroup02.scheduledDuration>30</threadgroup02.scheduledDuration>
                                 <!--how long till all threads are up and running in seconds-->
@@ -1379,7 +1379,7 @@
                                 <!--number of threads to use-->
                                 <threadgroup00.numberOfThreads>10</threadgroup00.numberOfThreads>
                                 <!--delay of the test in seconds-->
-                                <threadgroup00.scheduledDelay>0</threadgroup00.scheduledDelay>
+                                <threadgroup00.scheduledDelay>5</threadgroup00.scheduledDelay>
                                 <!--duration of the test in seconds-->
                                 <threadgroup00.scheduledDuration>30</threadgroup00.scheduledDuration>
                                 <!--how long till all threads are up and running in seconds-->
@@ -1396,7 +1396,7 @@
                                 <!--number of threads to use-->
                                 <threadgroup01.numberOfThreads>10</threadgroup01.numberOfThreads>
                                 <!--delay of the test in seconds-->
-                                <threadgroup01.scheduledDelay>0</threadgroup01.scheduledDelay>
+                                <threadgroup01.scheduledDelay>5</threadgroup01.scheduledDelay>
                                 <!--duration of the test in seconds-->
                                 <threadgroup01.scheduledDuration>30</threadgroup01.scheduledDuration>
                                 <!--how long till all threads are up and running in seconds-->
@@ -1413,7 +1413,7 @@
                                 <!--number of threads to use-->
                                 <threadgroup02.numberOfThreads>10</threadgroup02.numberOfThreads>
                                 <!--delay of the test in seconds-->
-                                <threadgroup02.scheduledDelay>0</threadgroup02.scheduledDelay>
+                                <threadgroup02.scheduledDelay>5</threadgroup02.scheduledDelay>
                                 <!--duration of the test in seconds-->
                                 <threadgroup02.scheduledDuration>30</threadgroup02.scheduledDuration>
                                 <!--how long till all threads are up and running in seconds-->
