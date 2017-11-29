@@ -3,6 +3,7 @@ set -x # echo
 
 ## ============================================================================
 ## Runs the JMeter integration tests on a Ubuntu system
+## This script should be run from the root of the WWSK project
 ## ============================================================================
 ROOT_FOLDER=$(pwd)
 PROJECT_FOLDER=${ROOT_FOLDER}/worldwind-geoserver
@@ -52,25 +53,25 @@ GDAL_BINDINGS_ARTIFACT="imageio-ext-gdal-bindings-1.9.2.jar"
 #   Through functional testing it was discovered that GeoTIFF's with JPEG
 #   compression don't work if imageio-ext-gdalgeotiff and imageio-ext-gdaljpeg
 #   jars are included.
-PROBLEM_ARTIFACTS="imageio-ext-gdalgeotiff-${IMAGEIO_EXT_VER}.jar imageio-ext-gdaljpeg-${IMAGEIO_EXT_VER}.jar"
+#PROBLEM_ARTIFACTS="imageio-ext-gdalgeotiff-${IMAGEIO_EXT_VER}.jar imageio-ext-gdaljpeg-${IMAGEIO_EXT_VER}.jar"
 ## Install the gdal-plugin jars
 echo "Installing the GeoServer GDAL coverage format extension"
 TEMP_DIR=$(mktemp -d)
 pushd $TEMP_DIR
 tar -xzf $GDAL_PLUGIN_ZIP 
 # Delete the problem jars
-for file in $PROBLEM_ARTIFACTS; do rm $file; done
+#for file in $PROBLEM_ARTIFACTS; do rm $file; done
 cp *.jar $GEOSERVER_LIB_PATH
 popd; rm -rf $TEMP_DIR
 ## Install the imageio-ext jars
-echo "Installing the ImageIO-Ext extension"
-TEMP_DIR=$(mktemp -d)
-pushd $TEMP_DIR
-tar -xzf $IMAGEIO_EXT_ZIP
-# Delete the problem jars
-for file in $PROBLEM_ARTIFACTS; do rm $file; done
-cp *.jar $GEOSERVER_LIB_PATH
-popd; rm -rf $TEMP_DIR
+#echo "Installing the ImageIO-Ext extension"
+#TEMP_DIR=$(mktemp -d)
+#pushd $TEMP_DIR
+#tar -xzf $IMAGEIO_EXT_ZIP
+## Delete the problem jars
+#for file in $PROBLEM_ARTIFACTS; do rm $file; done
+#cp *.jar $GEOSERVER_LIB_PATH
+#popd; rm -rf $TEMP_DIR
 ## Install GDAL natives (platform specific)
 echo "Installing the GDAL natives"
 mkdir -p $GDAL_LIB_PATH
@@ -109,10 +110,10 @@ mv jai_imageio-1_1/lib/*.jar $JAVA_HOME/lib/ext/ && \
 mv jai_imageio-1_1/lib/*.so $JAVA_HOME/lib/amd64/ 
 popd
 
-#echo "Running the integration tests with GDAL and JAI"
-#pushd $PROJECT_FOLDER
-#mvn verify -P integration-test-jai
-#popd
+echo "Running the integration tests with GDAL and JAI"
+pushd $PROJECT_FOLDER
+mvn verify -P integration-test-jai
+popd
 
 ## --------------------------------------------------
 # Cleanup
