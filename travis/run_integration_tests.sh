@@ -115,20 +115,23 @@ GDAL_DATA_PATH=${OLD_GDAL_DATA_PATH}
 LD_LIBRARY_PATH=${OLD_LD_LIBRARY_PATH}
 
 
-## --------------------------------------------------------
-# Fail the build (in Travis) if the integration tests fail
-## --------------------------------------------------------
+## --------------------------------------------------
+# Fail the build if any of the integration tests fail
+## --------------------------------------------------
 exit_status=0
 if [ $basic_exit_status -ne 0 ]; then
-    echo "The basic integration tests failed."
+    echo "*** The basic integration tests failed."
+    grep httpSample worldwind-geoserver/target/jmeter/logs/error.log     
     exit_status=1
 fi
 if [ $gdal_exit_status -ne 0 ]; then
-    echo "The GDAL integration tests failed."
+    echo "*** The GDAL integration tests failed."
+    grep httpSample worldwind-geoserver/target/jmeter/logs/error-gdal.log     
     exit_status=1
 fi
 if [ $jai_exit_status -ne 0 ]; then
-    echo "The JAI integration tests failed."
+    echo "*** The JAI integration tests failed."
+    grep httpSample worldwind-geoserver/target/jmeter/logs/error-jai.log     
     exit_status=1
 fi
 exit $exit_status
