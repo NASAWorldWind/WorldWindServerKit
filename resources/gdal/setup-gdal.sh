@@ -5,8 +5,8 @@
 # -----------------------------------------------------------------------------
 
 # GEOSERVER_VER and IMAGEIO_EXT_VER will be updated by an ant-task during the build
-GEOSERVER_VER=2.10.0
-IMAGEIO_EXT_VER=1.1.16
+GEOSERVER_VER=2.11.1
+IMAGEIO_EXT_VER=1.1.17
 # Paths
 PWD=$(pwd)
 GDAL_HOME_PATH=${PWD}"/gdal"
@@ -14,7 +14,6 @@ GDAL_LIB_PATH=${GDAL_HOME_PATH}"/lib"
 GDAL_DATA_PATH=${GDAL_HOME_PATH}"/data"
 GEOSERVER_LIB_PATH=${PWD}"/webapps/geoserver/WEB-INF/lib"
 # Zip files
-IMAGEIO_EXT_ZIP=${PWD}"/gdal/imageio-ext-${IMAGEIO_EXT_VER}-jars.tgz"
 GDAL_PLUGIN_ZIP=${PWD}"/gdal/geoserver-${GEOSERVER_VER}-gdal-plugin.tgz"
 GDAL_DATA_ZIP=${PWD}"/gdal/gdal-data.tgz"
 GDAL_UBUNTU_NATIVES_ZIP=${PWD}"/gdal/gdal192-Ubuntu12-gcc4.6.3-x86_64.tar.gz"
@@ -26,22 +25,16 @@ elif [[ -f $GDAL_CENTOS_NATIVES_ZIP ]]; then
 fi  
 # Artifacts requiring special treatment:
 #
-#   Through functional testing it was discovered that GeoTIFF's with JPEG
-#   compression don't work if imageio-ext-gdalgeotiff and imageio-ext-gdaljpeg
-#   jars are included and ECW and MrSID artifacts are excluded from the install.
-# 
 #   The ECW and MrSID artifacts are excluded from general GDAL install and
-#   explicitly added layer in the script.
+#   explicitly added later in the script.
 #
 GDAL_BINDINGS_ARTIFACT="imageio-ext-gdal-bindings-1.9.2.jar"
-PROBLEM_ARTIFACTS="imageio-ext-gdalgeotiff-${IMAGEIO_EXT_VER}.jar imageio-ext-gdaljpeg-${IMAGEIO_EXT_VER}.jar"
 ECW_ARTIFACTS="imageio-ext-gdalecw-${IMAGEIO_EXT_VER}.jar imageio-ext-gdalecwjp2-${IMAGEIO_EXT_VER}.jar"
 MRSID_ARTIFACTS="imageio-ext-gdalmrsid-${IMAGEIO_EXT_VER}.jar imageio-ext-gdalmrsidjp2-${IMAGEIO_EXT_VER}.jar"
-IGNORED_ARTIFACTS=${ECW_ARTIFACTS}' '${MRSID_ARTIFACTS}' '${PROBLEM_ARTIFACTS}
+IGNORED_ARTIFACTS=${ECW_ARTIFACTS}' '${MRSID_ARTIFACTS}
 
 
-## Install the ImageIO-Ext extention and the GDAL native binaries.
-## E.g., unzip geoserver-2.10.0-gdal-plugin.zip and imageio-ext-1.1.16-jars.zip
+## Install the GDAL extention and the GDAL native binaries.
 if [[ ! -d gdal/lib || $1 == "reinstall" ]]; then    
     # Display a simple menu to install or skip GDAL
     echo
@@ -71,19 +64,6 @@ if [[ ! -d gdal/lib || $1 == "reinstall" ]]; then
             # Delete the proprietary and problem jars
             for file in $IGNORED_ARTIFACTS; do rm $file; done
             # Copy remaining jars to GeoServer 
-            cp *.jar $GEOSERVER_LIB_PATH
-            # Clean up
-            popd; rm -rf $TEMP_DIR
-
-            ## Install the imageio-ext jars
-            echo "Installing the ImageIO-Ext extension (excluding ECW and MrSID)"
-            # Unzip the files into a temp folder
-            TEMP_DIR=$(mktemp -d)
-            pushd $TEMP_DIR
-            tar -xzf $IMAGEIO_EXT_ZIP
-            # Delete the proprietary and problem jars
-            for file in $IGNORED_ARTIFACTS; do rm $file; done
-            # Copy remaining jars to GeoServer
             cp *.jar $GEOSERVER_LIB_PATH
             # Clean up
             popd; rm -rf $TEMP_DIR
@@ -187,7 +167,7 @@ if [[ ! -d gdal/lib || $1 == "reinstall" ]]; then
                     echo "Installing the MRSID support from LizardTech"
                     TEMP_DIR=$(mktemp -d)
                     pushd $TEMP_DIR
-                    tar -xzf $IMAGEIO_EXT_ZIP
+                    tar -xzf $GDAL_PLUGIN_ZIP
                     for file in $MRSID_ARTIFACTS; do cp $file $GEOSERVER_LIB_PATH; done
                     popd; rm -rf $TEMP_DIR
                     break ;;
@@ -250,7 +230,7 @@ if [[ ! -d gdal/lib || $1 == "reinstall" ]]; then
                     echo "Accepted. Installing the ECW/JP2 support from Erdas"
                     TEMP_DIR=$(mktemp -d)
                     pushd $TEMP_DIR
-                    tar -xzf $IMAGEIO_EXT_ZIP
+                    tar -xzf $GDAL_PLUGIN_ZIP
                     for file in $ECW_ARTIFACTS; do cp $file $GEOSERVER_LIB_PATH; done
                     popd; rm -rf $TEMP_DIR
                     break ;;
