@@ -252,13 +252,4 @@ if [[ ! -d gdal/lib || $1 == "reinstall" ]]; then
     fi
 fi
 
-## Create a 'wwsk' symbolic link to this distribution
-if [ -L ../wwsk ]; then
-    rm ../wwsk
-fi
-ln -s $(pwd) ../wwsk
-
-## Create a flag (hidden file) that indicates the setup has already been run
-touch .setup
-
 echo  "GDAL setup complete"
