@@ -1,12 +1,14 @@
 #!/bin/bash
+set +x
 
 # -----------------------------------------------------------------------------
 # Setup GDAL for the World Wind Server Kit (WWSK) - Linux 
 # -----------------------------------------------------------------------------
 
 # GEOSERVER_VER and IMAGEIO_EXT_VER will be updated by an ant-task during the build
-GEOSERVER_VER=2.11.1
-IMAGEIO_EXT_VER=1.1.17
+GEOSERVER_VER=2.11.1 #Set by ant-task. was: 2.11.1
+IMAGEIO_EXT_VER=1.1.17 #Set by ant-task. was: 1.1.17
+
 # Paths
 PWD=$(pwd)
 GDAL_HOME_PATH=${PWD}"/gdal"
@@ -33,9 +35,85 @@ ECW_ARTIFACTS="imageio-ext-gdalecw-${IMAGEIO_EXT_VER}.jar imageio-ext-gdalecwjp2
 MRSID_ARTIFACTS="imageio-ext-gdalmrsid-${IMAGEIO_EXT_VER}.jar imageio-ext-gdalmrsidjp2-${IMAGEIO_EXT_VER}.jar"
 IGNORED_ARTIFACTS=${ECW_ARTIFACTS}' '${MRSID_ARTIFACTS}
 
+## Usage instructions
+usage() { 
+    echo "Usage:"
+    echo "  $0            Interactive install"
+    echo "  $0 reinstall  Interactive install; removes previous GDAL installation"
+    echo "  $0 <options>  Headless install"
+    echo "Options:"
+    echo "  -g  install GDAL support"
+    echo "  -e  install ECW/ECWJP2 support, implies -g"
+    echo "  -m  install MRSID support, implies -g"
+    echo "  -r  removes a previous GDAL installation and reinstalls"
+    echo "  -h  display this help and exit"
+}
 
-## Install the GDAL extention and the GDAL native binaries.
-if [[ ! -d gdal/lib || $1 == "reinstall" ]]; then    
+# Validate command line options.
+# Each time getopts is invoked, it will place the next option in the shell variable $opt.
+# If the first character of OPTSTRING is a colon, getopts uses silent error reporting.
+# If an invalid option is seen, getopts places the option character found into $OPTARG.
+while getopts :gemrh opt; do
+    case $opt in
+    g)  # Install GDAL support
+        INSTALL_GDAL=yes
+        ;;
+    e)  # Install ECW, implies GDAL
+        INSTALL_GDAL=yes
+        INSTALL_ECW=yes
+        ;;
+    m)  # Install MrSID, implies GDAL
+        INSTALL_GDAL=yes
+        INSTALL_MRSID=yes
+        ;;
+    r)  # Reinstall; removes previous install
+        REINSTALL=yes
+        ;;
+    h)  # Help!
+        usage 
+        exit 0
+        ;;
+    \?) # Invalid syntax
+        echo "Invalid option: -${OPTARG}" >&2
+        usage
+        exit 1
+        ;;
+    :)  # If no command line args
+        echo "Option: -${OPTARG} requires an argument." >$2
+        ;;
+    esac
+done
+
+# Place in interactive mode if no command line arguments
+if [[ ! "$*" ]]; then
+    INTERACTIVE=yes
+fi
+
+# Check if "reinstall" is contained in the command line arguments
+if [[ "$*" =~ "reinstall"  ]]; then
+    REINSTALL=yes
+    INTERACTIVE=yes
+fi
+    
+# -----------------------------
+# Handle previous installation
+# -----------------------------
+if [[ -d $GDAL_LIB_PATH ]]; then 
+    if [[ $REINSTALL ]]; then
+        # Remove previous installation
+        echo "Removing previous GDAL installation"
+        rm -r $GDAL_LIB_PATH
+    else     
+        # Otherwise exit here if GDAL is already installed 
+        echo "GDAL already setup!"
+        exit 0
+    fi
+fi
+
+# ----------------------------
+# Display interactive menus
+# ---------------------------- 
+if [[ $INTERACTIVE ]]; then  
     # Display a simple menu to install or skip GDAL
     echo
     echo "GDAL Image Formats:"
@@ -44,46 +122,10 @@ if [[ ! -d gdal/lib || $1 == "reinstall" ]]; then
     do 
         case "$GDAL_CHOICE" in
         (Install) 
-            if [[ $1 == "reinstall" && -d $GDAL_LIB_PATH ]]; then
-                echo "Removing previous GDAL installation"
-                rm -r $GDAL_LIB_PATH
-            fi
-
-            # -----------------------------------------------------------------
-            # Proceed with installation, as documented here: 
-            #   http://docs.geoserver.org/latest/en/user/data/raster/gdal.html,
-            # but exclude the ECW or MrSID support at this stage.
-            # -----------------------------------------------------------------
-
-            ## Install the gdal-plugin jars
-            echo "Installing the GeoServer GDAL coverage format extension (excluding ECW and MrSID)"
-            # Unzip the files into a temp folder
-            TEMP_DIR=$(mktemp -d)
-            pushd $TEMP_DIR
-            tar -xzf $GDAL_PLUGIN_ZIP 
-            # Delete the proprietary and problem jars
-            for file in $IGNORED_ARTIFACTS; do rm $file; done
-            # Copy remaining jars to GeoServer 
-            cp *.jar $GEOSERVER_LIB_PATH
-            # Clean up
-            popd; rm -rf $TEMP_DIR
-
-            ## Install GDAL natives (platform specific)
-            echo "Installing the GDAL natives"
-            mkdir -p $GDAL_LIB_PATH
-            # Unzip to the gdal/lib folder
-            tar -xzf $GDAL_NATIVES_ZIP -C $GDAL_LIB_PATH
-            # Copy the bindings jar from the javainfo folder to the geoserver/lib folder
-            cp ${GDAL_LIB_PATH}/javainfo/${GDAL_BINDINGS_ARTIFACT} $GEOSERVER_LIB_PATH
-
+            INSTALL_GDAL=yes
             break 
             ;;
         (Skip) 
-            echo "Skipping GDAL installation"
-            # Create an empty gdal/lib folder to indicate the skipped installation
-            if [[ ! -d $GDAL_DATA_PATH ]]; then
-                mkdir -p $GDAL_LIB_PATH
-            fi
             break 
             ;;
         (Help) 
@@ -112,24 +154,10 @@ if [[ ! -d gdal/lib || $1 == "reinstall" ]]; then
             echo "Invalid selection. Try again (1..3)!" 
             ;;
         esac
-    done  
+    done         
+    if [[ $INSTALL_GDAL ]]; then
 
-    ## Install the GDAL data to the gdal/data folder
-    if [[ $GDAL_CHOICE == Install ]]; then
-        if [[ ! -d $GDAL_DATA_PATH  || $1 == "reinstall" ]]; then
-            if [[ $1 == "reinstall" && -d $GDAL_DATA_PATH ]]; then
-                echo "Removing previous GDAL data"
-                rm -rf $GDAL_DATA_PATH
-            fi
-            echo "Installing the GDAL data"
-            mkdir -p $GDAL_DATA_PATH
-            tar -xzf $GDAL_DATA_ZIP -C $GDAL_DATA_PATH
-            chmod a+rw -R ${GDAL_DATA_PATH}/*
-        fi    
-    fi
-
-    ## Optionally add MrSID support from LizardTech
-    if [[ $GDAL_CHOICE == Install ]]; then
+        ## Optionally add MrSID support from LizardTech
         echo
         echo "MrSID Support from LizardTech:"
         PS3="Install MrSID drivers? "
@@ -162,14 +190,8 @@ if [[ ! -d gdal/lib || $1 == "reinstall" ]]; then
             do 
                 case "$LICENSE_CHOICE" in
                 (Accept) 
-                    # Proceed with installation. MrSID support is already in the natives.
-                    # Here we simply add the jars to enable the MrSID support.
-                    echo "Installing the MRSID support from LizardTech"
-                    TEMP_DIR=$(mktemp -d)
-                    pushd $TEMP_DIR
-                    tar -xzf $GDAL_PLUGIN_ZIP
-                    for file in $MRSID_ARTIFACTS; do cp $file $GEOSERVER_LIB_PATH; done
-                    popd; rm -rf $TEMP_DIR
+                    # Will proceed with MrSID installation
+                    INSTALL_MRSID=yes
                     break ;;
                 (Decline) 
                     echo "Skipping MRSID installation"
@@ -188,10 +210,8 @@ if [[ ! -d gdal/lib || $1 == "reinstall" ]]; then
                 esac
             done  
         fi
-    fi
 
-    ## Optionally add ERDAS Compressed Wavelets (ECW) support 
-    if [[ $GDAL_CHOICE == Install ]]; then
+        ## Optionally add ERDAS Compressed Wavelets (ECW) support 
         echo
         echo "ERDAS Compressed Wavelets (ECW) Support:"
         PS3="Install ECW drivers? "
@@ -225,14 +245,8 @@ if [[ ! -d gdal/lib || $1 == "reinstall" ]]; then
             do 
                 case "$LICENSE_CHOICE" in
                 (Accept) 
-                    # Proceed with installation. ECW/JP2 support is already in the natives.
-                    # Here we simply add the jars that enable the ECW support.
-                    echo "Accepted. Installing the ECW/JP2 support from Erdas"
-                    TEMP_DIR=$(mktemp -d)
-                    pushd $TEMP_DIR
-                    tar -xzf $GDAL_PLUGIN_ZIP
-                    for file in $ECW_ARTIFACTS; do cp $file $GEOSERVER_LIB_PATH; done
-                    popd; rm -rf $TEMP_DIR
+                    # Will proceed with ECW installation
+                    INSTALL_ECW=yes
                     break ;;
                 (Decline) 
                     echo "Declined. Skipping ECW installation"
@@ -251,5 +265,84 @@ if [[ ! -d gdal/lib || $1 == "reinstall" ]]; then
         fi
     fi
 fi
+    
 
-echo  "GDAL setup complete"
+# -----------------------------
+# Perform the GDAL installation
+# -----------------------------
+if [[ $INSTALL_GDAL ]]; then
+    ## Install the GDAL extention and the GDAL native binaries.
+
+    # -----------------------------------------------------------------
+    # Proceed with installation, as documented here: 
+    #   http://docs.geoserver.org/latest/en/user/data/raster/gdal.html,
+    # but exclude the ECW or MrSID support at this stage.
+    # -----------------------------------------------------------------
+
+    ## Install the gdal-plugin jars
+    echo "Installing the GeoServer GDAL coverage format extension (excluding ECW and MrSID)"
+    # Unzip the files into a temp folder
+    TEMP_DIR=$(mktemp -d)
+    pushd $TEMP_DIR > /dev/null
+    tar -xzf $GDAL_PLUGIN_ZIP 
+    # Delete the proprietary and problem jars
+    for file in $IGNORED_ARTIFACTS; do rm $file; done
+    # Copy remaining jars to GeoServer 
+    cp *.jar $GEOSERVER_LIB_PATH
+    # Clean up
+    popd > /dev/null; rm -rf $TEMP_DIR
+
+    ## Install GDAL natives (platform specific)
+    echo "Installing the GDAL natives"
+    mkdir -p $GDAL_LIB_PATH
+    # Unzip to the gdal/lib folder
+    tar -xzf $GDAL_NATIVES_ZIP -C $GDAL_LIB_PATH
+    # Copy the bindings jar from the javainfo folder to the geoserver/lib folder
+    cp ${GDAL_LIB_PATH}/javainfo/${GDAL_BINDINGS_ARTIFACT} $GEOSERVER_LIB_PATH
+
+
+    ## Install the GDAL data to the gdal/data folder
+    if [[ ! -d $GDAL_DATA_PATH  || $REINSTALL ]]; then
+        if [[ $1 == "reinstall" && -d $GDAL_DATA_PATH ]]; then
+            echo "Removing previous GDAL data"
+            rm -rf $GDAL_DATA_PATH
+        fi
+        echo "Installing the GDAL data"
+        mkdir -p $GDAL_DATA_PATH
+        tar -xzf $GDAL_DATA_ZIP -C $GDAL_DATA_PATH
+        chmod a+rw -R ${GDAL_DATA_PATH}/*
+    fi    
+
+    ## Optionally add MrSID support from LizardTech
+    if [[ $INSTALL_MRSID ]]; then
+        # MrSID support is already in the GDAL natives.
+        # Here we simply add the jars to enable the MrSID support.
+        echo "You have accepted the MrSID license. Installing the MRSID support from LizardTech"
+        TEMP_DIR=$(mktemp -d)
+        pushd $TEMP_DIR > /dev/null
+        tar -xzf $GDAL_PLUGIN_ZIP
+        for file in $MRSID_ARTIFACTS; do cp $file $GEOSERVER_LIB_PATH; done
+        popd > /dev/null; rm -rf $TEMP_DIR
+    fi
+
+    ## Optionally add ERDAS Compressed Wavelets (ECW) support 
+    if [[ $INSTALL_ECW ]]; then
+        # ECW/JP2 support is already in the GDAL natives.
+        # Here we simply add the jars that enable the ECW support.
+        echo "You have accepted the ECW license. Installing the ECW/JP2 support from Erdas"
+        TEMP_DIR=$(mktemp -d)
+        pushd $TEMP_DIR > /dev/null
+        tar -xzf $GDAL_PLUGIN_ZIP
+        for file in $ECW_ARTIFACTS; do cp $file $GEOSERVER_LIB_PATH; done
+        popd > /dev/null; rm -rf $TEMP_DIR
+    fi
+    echo  "GDAL setup complete"
+else
+    echo  "GDAL setup skipped"
+    # Create an empty gdal/lib folder to indicate the skipped installation
+    if [[ ! -d $GDAL_LIB_PATH ]]; then
+        mkdir -p $GDAL_LIB_PATH
+    fi
+fi
+
+
