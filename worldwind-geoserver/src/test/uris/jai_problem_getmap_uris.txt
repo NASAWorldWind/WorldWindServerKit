@@ -1,0 +1,4 @@
+name|requestPath|mimeType
+jpeg_image|/geoserver/test/wms?service=WMS&version=1.1.1&request=GetMap&layers=test:jpeg_image&styles=&bbox=-180.0,-90.0,180.0,90.0&width=768&height=384&srs=EPSG:4326&format=image%2Fjpeg|image/jpeg
+jpeg_image|/geoserver/test/wms?service=WMS&version=1.1.1&request=GetMap&layers=test:jpeg_image&styles=&bbox=-180.0,-90.0,180.0,90.0&width=768&height=384&srs=EPSG:4326&format=image%2Fpng|image/png
+jpeg_image|/geoserver/test/wms?service=WMS&version=1.1.1&request=GetMap&layers=test:jpeg_image&styles=&bbox=-180.0,-90.0,180.0,90.0&width=768&height=384&srs=EPSG:4326&format=image%2Fgeotiff|image/geotiff

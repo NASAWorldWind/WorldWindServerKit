@@ -971,9 +971,9 @@
                                 </goals>
                                 <configuration>
                                     <target>
-                                        <echo message="-------------------------------------------------------" />
-                                        <echo message=" P E R F O R M A N C E    T E S T    E R R O R S" />
-                                        <echo message="-------------------------------------------------------" />
+                                        <echo message="-----------------------------------------------------------" />
+                                        <echo message=" G D A L   P E R F O R M A N C E    T E S T    E R R O R S" />
+                                        <echo message="-----------------------------------------------------------" />
                                         <concat >
                                             <fileset file="${project.build.directory}/jmeter/logs/error-gdal.log" />
                                         </concat>
@@ -1271,9 +1271,9 @@
                                 </goals>
                                 <configuration>
                                     <target>
-                                        <echo message="-------------------------------------------------------" />
-                                        <echo message=" P E R F O R M A N C E    T E S T    E R R O R S" />
-                                        <echo message="-------------------------------------------------------" />
+                                        <echo message="---------------------------------------------------------" />
+                                        <echo message=" J A I   P E R F O R M A N C E    T E S T    E R R O R S" />
+                                        <echo message="---------------------------------------------------------" />
                                         <concat >
                                             <fileset file="${project.build.directory}/jmeter/logs/error-jai.log" />
                                         </concat>
@@ -1404,7 +1404,7 @@
                                 <!--target throughput of all threads of the group per minute-->
                                 <threadgroup01.throughput>100000000</threadgroup01.throughput>
                                 <!-- use uris from given file -->
-                                <threadgroup01.dataFile>${project.basedir}/src/test/uris/core_getmap_uris.txt</threadgroup01.dataFile>
+                                <threadgroup01.dataFile>${project.basedir}/src/test/uris/jai_core_getmap_uris.txt</threadgroup01.dataFile>
                                 <!-- assertion results file -->
                                 <threadgroup01.errorLog>${project.build.directory}/jmeter/logs/error-jai.log</threadgroup01.errorLog>
 
