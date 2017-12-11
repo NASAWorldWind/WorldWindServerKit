@@ -13,7 +13,7 @@ JDK_ZIP="server-jre-8u"${JDK_MIN_VER}"-linux-x64.tar.gz"
 
 ## Remove the Java installation if this is a reinstall
 if [[ -d $JDK_FOLDER && $1 == "reinstall" ]]; then    
-    rm -r ${JDK_FOLDER}
+    rm -rf ${JDK_FOLDER}
     # Remove the symbolic link too
     rm java
 fi
