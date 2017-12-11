@@ -45,15 +45,16 @@ usage() {
     echo "  -g  install GDAL support"
     echo "  -e  install ECW/ECWJP2 support, implies -g"
     echo "  -m  install MRSID support, implies -g"
-    echo "  -r  removes a previous GDAL installation and reinstalls"
-    echo "  -h  display this help and exit"
+    echo "  -r  removes previous GDAL installation"
+    echo "  -f  GeoServer library folder (defaults to './webapps/geoserver/WEB-INF/lib')"
+    echo "  -h  display this help text and exit"
 }
 
 # Validate command line options.
 # Each time getopts is invoked, it will place the next option in the shell variable $opt.
 # If the first character of OPTSTRING is a colon, getopts uses silent error reporting.
 # If an invalid option is seen, getopts places the option character found into $OPTARG.
-while getopts :gemrh opt; do
+while getopts :gemrhf: opt; do
     case $opt in
     g)  # Install GDAL support
         INSTALL_GDAL=yes
@@ -70,8 +71,12 @@ while getopts :gemrh opt; do
         REINSTALL=yes
         ;;
     h)  # Help!
+        echo "Installs the Geospatial Data Abstraction Library (GDAL)"
         usage 
         exit 0
+        ;;
+    f) # GeoServer library folder
+        GEOSERVER_LIB_PATH=$OPTARG
         ;;
     \?) # Invalid syntax
         echo "Invalid option: -${OPTARG}" >&2
