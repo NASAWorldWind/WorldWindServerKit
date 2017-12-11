@@ -210,7 +210,6 @@
                         <configuration>
                             <tasks>
                                 <unzip src="${project.basedir}/../resources/gdal/geoserver-${gs.version}-gdal-plugin.zip" dest="${project.build.directory}/gdal/geoserver-${gs.version}-gdal-plugin" />
-                                <unzip src="${project.basedir}/../resources/gdal/imageio-ext-${imageio-ext.version}-jars.zip" dest="${project.build.directory}/gdal/imageio-ext-${imageio-ext.version}-jars" />
                                 <unzip src="${project.basedir}/../resources/gdal/gdal-1.9.2-MSVC2010-x64.zip" dest="${project.build.directory}/gdal/win64" />
                                 <unzip src="${project.basedir}/../resources/gdal/gdal-data.zip" dest="${project.build.directory}/gdal" />
                             </tasks>                            
@@ -230,9 +229,6 @@
                             <tasks>
                                 <tar destfile="${project.build.directory}/gdal/geoserver-${gs.version}-gdal-plugin.tgz" compression="gzip">
                                     <zipfileset src="${project.basedir}/../resources/gdal/geoserver-${gs.version}-gdal-plugin.zip" />
-                                </tar>
-                                <tar destfile="${project.build.directory}/gdal/imageio-ext-${imageio-ext.version}-jars.tgz" compression="gzip">
-                                    <zipfileset src="${project.basedir}/../resources/gdal/imageio-ext-${imageio-ext.version}-jars.zip" />
                                 </tar>
                                 <tar destfile="${project.build.directory}/gdal/gdal-data.tgz" compression="gzip">
                                     <zipfileset src="${project.basedir}/../resources/gdal/gdal-data.zip" />
