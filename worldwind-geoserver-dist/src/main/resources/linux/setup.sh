@@ -12,6 +12,9 @@ else
     # Setup Java
     source ./setup-java.sh $1
 
+    # Setup Java Advanced Imaging
+    source ./setup-jai.sh $1
+
     # Setup JVM memory allocation
     source ./setup-memory.sh
 
