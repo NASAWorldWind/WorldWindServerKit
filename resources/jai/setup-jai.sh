@@ -117,10 +117,14 @@ if [[ $INTERACTIVE ]]; then
         (Help) 
             echo "Java Advanced Imaging (JAI) Help"
             echo "================================"
-            echo "JAI is perported to improve the performance of GeoServer in may instances."
-            echo "Warning: installing JAI may cause errors with JPEG/WorldImage data stores."
-            echo "To remove JAI, run './setup reinstall' and then skip the JAI installation"
-            echo "or run './setup-jai.sh -r'"
+            echo "JAI can improve the performance of GeoServer in some instances. However,"
+            echo "installing JAI may cause errors reading JPEG/WorldImage data stores."
+            echo "If you are not using JPEG images with 'world files' then JAI should be"
+            echo "safe to install."
+            echo 
+            echo "This setup will install JAI into the WWSK Java runtime. You can remove JAI"
+            echo "later if you wish. To remove JAI, simply run './setup.sh reinstall'"
+            echo "and then skip the JAI installation, or run './setup-jai.sh -r'"
             ;;
         (*) 
             echo "Invalid selection. Try again (1..3)!" 
