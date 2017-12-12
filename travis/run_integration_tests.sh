@@ -79,7 +79,7 @@ popd
 ## --------------------------------------------------
 echo "Installing Java Advanced Imaging (JAI)"
 pushd $BUILD_FOLDER
-./setup-jai.sh
+./setup-jai.sh -jf ${PWD}/worldwind-geoserver/WEB-INF/lib
 popd
 
 echo "Running the integration tests with GDAL and JAI"
