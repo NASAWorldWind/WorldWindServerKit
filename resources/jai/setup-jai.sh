@@ -57,6 +57,7 @@ while getopts :jrhf: opt; do
     esac
 done
 
+# Define the path where the pure-java JAI files will be backed up
 GEOSERVER_SAVE_PATH=${GEOSERVER_LIB_PATH}/../save
 
 # Place in interactive mode if no command line arguments
@@ -156,7 +157,7 @@ if [[ $INSTALL_JAI ]]; then
         rm -r jai_imageio-1_1
 
         # Save original pure-java JAI jars
-        mkdir -p ${GEOSERVER_LIB_PATH}/../save
+        mkdir -p ${GEOSERVER_SAVE_PATH}
         mv ${GEOSERVER_LIB_PATH}/jai_core-1.1.3.jar ${GEOSERVER_SAVE_PATH}
         mv ${GEOSERVER_LIB_PATH}/jai_codec-1.1.3.jar ${GEOSERVER_SAVE_PATH}
         mv ${GEOSERVER_LIB_PATH}/jai_imageio-1.1.jar ${GEOSERVER_SAVE_PATH}
