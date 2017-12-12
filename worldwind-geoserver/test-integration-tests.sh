@@ -92,7 +92,7 @@ gdal_exit_status=$?
 ## --------------------------------------------------
 echo "Installing Java Advanced Imaging (JAI)"
 pushd target
-./setup-jai.sh
+./setup-jai.sh -jf ${PWD}/worldwind-geoserver/WEB-INF/lib
 popd
 echo
 echo "[INFO] ***********************************************"

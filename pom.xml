@@ -333,6 +333,11 @@
                 <version>${gs.version}</version>
                 <classifier>tests</classifier>
             </dependency>
+            <dependency>
+                <groupId>org.geoserver.extension</groupId>
+                <artifactId>gs-control-flow</artifactId>
+                <version>${gs.version}</version>
+            </dependency>
 
             <dependency>
                 <groupId>org.geoserver.security</groupId>

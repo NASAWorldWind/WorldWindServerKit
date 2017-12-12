@@ -2,14 +2,14 @@
 set +x
 
 # -----------------------------------------------------------------------------
-# Setup JAI for the World Wind Server Kit (WWSK) - Linux 
+# Setup JAI for the World Wind Server Kit (WWSK) - Linux
 # -----------------------------------------------------------------------------
+# This script assumes the JAI resources are alongside this script in root of the WWSK distribution
 
 # File and paths
 PWD=$(pwd)
-JAVA_HOME=${PWD}"/java"
-GEOSERVER_LIB_PATH=${PWD}"/webapps/geoserver/WEB-INF/lib"
-GEOSERVER_SAVE_PATH=${PWD}"/webapps/geoserver/WEB-INF/save"
+JAVA_HOME=${PWD}/java
+GEOSERVER_LIB_PATH=${PWD}/webapps/geoserver/WEB-INF/lib
 JAI_ZIP="jai-1_1_3-lib-linux-amd64.tar.gz"
 JAI_IMAGEIO_ZIP="jai_imageio-1_1-lib-linux-amd64.tar.gz"
 
@@ -22,6 +22,7 @@ usage() {
     echo "Options:"
     echo "  -j  install JAI support"
     echo "  -r  removes previous JAI installation"
+    echo "  -f  GeoServer library folder (defaults to './webapps/geoserver/WEB-INF/lib')"
     echo "  -h  display this help text and exit"
 }
 
@@ -29,13 +30,16 @@ usage() {
 # Each time getopts is invoked, it will place the next option in the shell variable $opt.
 # If the first character of OPTSTRING is a colon, getopts uses silent error reporting.
 # If an invalid option is seen, getopts places the option character found into $OPTARG.
-while getopts :jrh opt; do
+while getopts :jrhf: opt; do
     case $opt in
     j)  # Install JAI support
         INSTALL_JAI=yes
         ;;
     r)  # Reinstall; removes previous install
         REINSTALL=yes
+        ;;
+    f) # GeoServer library folder
+        GEOSERVER_LIB_PATH=$OPTARG
         ;;
     h)  # Help!
         echo "Installs Java Advanced Imaging (JAI) in the WWSK JRE"
@@ -52,6 +56,9 @@ while getopts :jrh opt; do
         ;;
     esac
 done
+
+# Define the path where the pure-java JAI files will be backed up
+GEOSERVER_SAVE_PATH=${GEOSERVER_LIB_PATH}/../save
 
 # Place in interactive mode if no command line arguments
 if [[ ! "$*" ]]; then
@@ -150,7 +157,7 @@ if [[ $INSTALL_JAI ]]; then
         rm -r jai_imageio-1_1
 
         # Save original pure-java JAI jars
-        mkdir -p ${GEOSERVER_LIB_PATH}/../save
+        mkdir -p ${GEOSERVER_SAVE_PATH}
         mv ${GEOSERVER_LIB_PATH}/jai_core-1.1.3.jar ${GEOSERVER_SAVE_PATH}
         mv ${GEOSERVER_LIB_PATH}/jai_codec-1.1.3.jar ${GEOSERVER_SAVE_PATH}
         mv ${GEOSERVER_LIB_PATH}/jai_imageio-1.1.jar ${GEOSERVER_SAVE_PATH}
