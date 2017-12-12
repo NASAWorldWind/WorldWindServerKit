@@ -10,6 +10,47 @@ PROJECT_FOLDER=${ROOT_FOLDER}/worldwind-geoserver
 BUILD_FOLDER=${PROJECT_FOLDER}/target
 RESOURCES_FOLDER=${ROOT_FOLDER}/resources
 
+## Usage instructions
+usage() { 
+    echo "Usage:"
+    echo "  $0"
+    echo "  $0 <options>"
+    echo "Options:"
+    echo "  -c  perform 'mvn clean install' before testing"
+    echo "  -h  display this help text and exit"
+}
+# Validate command line options.
+while getopts :ch opt; do
+    case $opt in
+    c)  # Install JAI support
+        CLEAN=yes
+        ;;
+    h)  # Help!
+        echo "Runs the JMeter Integration Tests"
+        usage 
+        exit 0
+        ;;
+    \?) # Invalid syntax
+        echo "Invalid option: -${OPTARG}" >&2
+        usage
+        exit 1
+        ;;
+    :)  # If no command line args
+        echo "Option: -${OPTARG} requires an argument." >$2
+        ;;
+    esac
+done
+
+## --------------------------------------------------------
+# Clean up the target folder and build with the default JDK
+## --------------------------------------------------------
+if [[ $CLEAN ]]; then 
+    echo "[INFO] Building  the Java JRE"
+    pushd $PROJECT_FOLDER 
+    mvn clean install
+    popd 
+fi
+
 ## --------------------------------------------------------
 # Copy resources into the target folder
 ## --------------------------------------------------------
