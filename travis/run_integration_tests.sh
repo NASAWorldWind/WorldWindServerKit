@@ -89,7 +89,7 @@ echo "[INFO] Running the basic integration tests"
 echo "[INFO] ***********************************"
 echo
 pushd $PROJECT_FOLDER
-mvn verify -P integration-test  2> basic_test_errors.log
+mvn verify --show-version -P integration-test  2> basic_test_errors.log
 basic_exit_status=$?
 popd
 
@@ -120,7 +120,7 @@ echo "[INFO] Running the integration tests with GDAL"
 echo "[INFO] ***************************************"
 echo
 pushd $PROJECT_FOLDER
-mvn verify -P integration-test-gdal 2> gdal_test_errors.log
+mvn verify --show-version -P integration-test-gdal 2> gdal_test_errors.log
 gdal_exit_status=$?
 popd
 
@@ -138,7 +138,7 @@ echo "[INFO] Running the integration tests with GDAL and JAI"
 echo "[INFO] ***********************************************"
 echo
 pushd $PROJECT_FOLDER
-mvn verify -P integration-test-jai  2> jai_test_errors.log
+mvn verify --show-version -P integration-test-jai  2> jai_test_errors.log
 jai_exit_status=$?
 popd
 
