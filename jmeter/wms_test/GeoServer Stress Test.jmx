@@ -2,14 +2,44 @@
 <jmeterTestPlan version="1.2" properties="3.1" jmeter="3.1 r1770033">
   <hashTree>
     <TestPlan guiclass="TestPlanGui" testclass="TestPlan" testname="GeoServer Stress Test" enabled="true">
-      <stringProp name="TestPlan.comments">Tutorial</stringProp>
+      <stringProp name="TestPlan.comments">Common variables used elsewhere are defined here.  See the GetMap [HTTP Request] for usage.</stringProp>
       <boolProp name="TestPlan.functional_mode">false</boolProp>
       <boolProp name="TestPlan.serialize_threadgroups">false</boolProp>
       <elementProp name="TestPlan.user_defined_variables" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
         <collectionProp name="Arguments.arguments">
-          <elementProp name="SERVER_ADDRESS" elementType="Argument">
-            <stringProp name="Argument.name">SERVER_ADDRESS</stringProp>
-            <stringProp name="Argument.value">192.168.1.222</stringProp>
+          <elementProp name="COBRA" elementType="Argument">
+            <stringProp name="Argument.name">COBRA</stringProp>
+            <stringProp name="Argument.value">192.168.2.2</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="APACHE" elementType="Argument">
+            <stringProp name="Argument.name">APACHE</stringProp>
+            <stringProp name="Argument.value">192.168.2.3</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="DEVICE" elementType="Argument">
+            <stringProp name="Argument.name">DEVICE</stringProp>
+            <stringProp name="Argument.value">localhost</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="JETTY" elementType="Argument">
+            <stringProp name="Argument.name">JETTY</stringProp>
+            <stringProp name="Argument.value">8080</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="TOMCAT" elementType="Argument">
+            <stringProp name="Argument.name">TOMCAT</stringProp>
+            <stringProp name="Argument.value">8084</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="WMS_ENDPOINT" elementType="Argument">
+            <stringProp name="Argument.name">WMS_ENDPOINT</stringProp>
+            <stringProp name="Argument.value">geoserver/wms</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="GWC_ENDPOINT" elementType="Argument">
+            <stringProp name="Argument.name">GWC_ENDPOINT</stringProp>
+            <stringProp name="Argument.value">geoserver/gwc/service/wms</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
         </collectionProp>
@@ -23,13 +53,14 @@
           <boolProp name="LoopController.continue_forever">false</boolProp>
           <intProp name="LoopController.loops">-1</intProp>
         </elementProp>
-        <stringProp name="ThreadGroup.num_threads">30</stringProp>
-        <stringProp name="ThreadGroup.ramp_time">5</stringProp>
-        <longProp name="ThreadGroup.start_time">1490826449000</longProp>
-        <longProp name="ThreadGroup.end_time">1490826449000</longProp>
-        <boolProp name="ThreadGroup.scheduler">true</boolProp>
-        <stringProp name="ThreadGroup.duration">180</stringProp>
+        <stringProp name="ThreadGroup.num_threads">8</stringProp>
+        <stringProp name="ThreadGroup.ramp_time">1</stringProp>
+        <longProp name="ThreadGroup.start_time">1503787984000</longProp>
+        <longProp name="ThreadGroup.end_time">1503787984000</longProp>
+        <boolProp name="ThreadGroup.scheduler">false</boolProp>
+        <stringProp name="ThreadGroup.duration"></stringProp>
         <stringProp name="ThreadGroup.delay"></stringProp>
+        <stringProp name="TestPlan.comments">Each thread reads the &quot;next&quot; row from the CSV file</stringProp>
       </ThreadGroup>
       <hashTree>
         <Arguments guiclass="ArgumentsPanel" testclass="Arguments" testname="WMS Request Defaults" enabled="true">
@@ -48,7 +79,7 @@
             </elementProp>
             <elementProp name="version" elementType="Argument">
               <stringProp name="Argument.name">version</stringProp>
-              <stringProp name="Argument.value">1.1.1</stringProp>
+              <stringProp name="Argument.value">1.3.0</stringProp>
               <stringProp name="Argument.desc">WMS version to use</stringProp>
               <stringProp name="Argument.metadata">=</stringProp>
             </elementProp>
@@ -60,7 +91,7 @@
             </elementProp>
             <elementProp name="layers" elementType="Argument">
               <stringProp name="Argument.name">layers</stringProp>
-              <stringProp name="Argument.value">nasa:world_topo_bathy</stringProp>
+              <stringProp name="Argument.value">proxy-auto-sensor</stringProp>
               <stringProp name="Argument.desc">Layer(s) to request</stringProp>
               <stringProp name="Argument.metadata">=</stringProp>
             </elementProp>
@@ -70,8 +101,8 @@
               <stringProp name="Argument.desc">Styles to apply</stringProp>
               <stringProp name="Argument.metadata">=</stringProp>
             </elementProp>
-            <elementProp name="srs" elementType="Argument">
-              <stringProp name="Argument.name">srs</stringProp>
+            <elementProp name="crs" elementType="Argument">
+              <stringProp name="Argument.name">crs</stringProp>
               <stringProp name="Argument.value">EPSG:4326</stringProp>
               <stringProp name="Argument.desc">CRS for bounding box</stringProp>
               <stringProp name="Argument.metadata">=</stringProp>
@@ -90,19 +121,15 @@
           <CSVDataSet guiclass="TestBeanGUI" testclass="CSVDataSet" testname="CSV Data Set Config" enabled="true">
             <stringProp name="delimiter">,</stringProp>
             <stringProp name="fileEncoding"></stringProp>
-            <stringProp name="filename">global_0-4.csv</stringProp>
+            <stringProp name="filename">ft_biggs_10-19_4326_zoom.csv</stringProp>
             <boolProp name="quotedData">false</boolProp>
-            <boolProp name="recycle">true</boolProp>
+            <boolProp name="recycle">false</boolProp>
             <stringProp name="shareMode">shareMode.all</stringProp>
-            <boolProp name="stopThread">false</boolProp>
-            <stringProp name="variableNames">width,height,left,bottom,right,top</stringProp>
+            <boolProp name="stopThread">true</boolProp>
+            <stringProp name="variableNames">width,height,left,bottom,right,top,level</stringProp>
           </CSVDataSet>
           <hashTree/>
-          <ConstantTimer guiclass="ConstantTimerGui" testclass="ConstantTimer" testname="Constant Timer" enabled="true">
-            <stringProp name="ConstantTimer.delay">250</stringProp>
-          </ConstantTimer>
-          <hashTree/>
-          <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="GetMap HTTP Request" enabled="true">
+          <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="GetMap ${level}" enabled="true">
             <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
               <collectionProp name="Arguments.arguments">
                 <elementProp name="service" elementType="HTTPArgument">
@@ -128,7 +155,7 @@
                 </elementProp>
                 <elementProp name="bbox" elementType="HTTPArgument">
                   <boolProp name="HTTPArgument.always_encode">false</boolProp>
-                  <stringProp name="Argument.value">${left},${bottom},${right},${top}</stringProp>
+                  <stringProp name="Argument.value">${bottom},${left},${top},${right}</stringProp>
                   <stringProp name="Argument.metadata">=</stringProp>
                   <boolProp name="HTTPArgument.use_equals">true</boolProp>
                   <stringProp name="Argument.name">bbox</stringProp>
@@ -168,12 +195,12 @@
                   <boolProp name="HTTPArgument.use_equals">true</boolProp>
                   <stringProp name="Argument.name">styles</stringProp>
                 </elementProp>
-                <elementProp name="srs" elementType="HTTPArgument">
+                <elementProp name="crs" elementType="HTTPArgument">
                   <boolProp name="HTTPArgument.always_encode">false</boolProp>
-                  <stringProp name="Argument.value">${srs}</stringProp>
+                  <stringProp name="Argument.value">${crs}</stringProp>
                   <stringProp name="Argument.metadata">=</stringProp>
                   <boolProp name="HTTPArgument.use_equals">true</boolProp>
-                  <stringProp name="Argument.name">srs</stringProp>
+                  <stringProp name="Argument.name">crs</stringProp>
                 </elementProp>
                 <elementProp name="tiled" elementType="HTTPArgument">
                   <boolProp name="HTTPArgument.always_encode">false</boolProp>
@@ -190,13 +217,13 @@
                 </elementProp>
               </collectionProp>
             </elementProp>
-            <stringProp name="HTTPSampler.domain">${SERVER_ADDRESS}</stringProp>
-            <stringProp name="HTTPSampler.port">8080</stringProp>
+            <stringProp name="HTTPSampler.domain">${COBRA}</stringProp>
+            <stringProp name="HTTPSampler.port">${JETTY}</stringProp>
             <stringProp name="HTTPSampler.connect_timeout"></stringProp>
             <stringProp name="HTTPSampler.response_timeout"></stringProp>
             <stringProp name="HTTPSampler.protocol"></stringProp>
             <stringProp name="HTTPSampler.contentEncoding"></stringProp>
-            <stringProp name="HTTPSampler.path">geoserver/wms</stringProp>
+            <stringProp name="HTTPSampler.path">${WMS_ENDPOINT}</stringProp>
             <stringProp name="HTTPSampler.method">GET</stringProp>
             <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
             <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
@@ -204,9 +231,73 @@
             <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
             <boolProp name="HTTPSampler.monitor">false</boolProp>
             <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+            <stringProp name="TestPlan.comments">Path: use ${WMS_ENDPOINT} [geoserver/wms]   or    ${GWC_ENDPOINT} [geoserver/gwc/service/wms]</stringProp>
           </HTTPSamplerProxy>
-          <hashTree/>
+          <hashTree>
+            <SizeAssertion guiclass="SizeAssertionGui" testclass="SizeAssertion" testname="Size Assertion" enabled="false">
+              <stringProp name="Assertion.test_field">SizeAssertion.response_data</stringProp>
+              <stringProp name="SizeAssertion.size">1325</stringProp>
+              <intProp name="SizeAssertion.operator">3</intProp>
+              <stringProp name="TestPlan.comments">PNG size assersion</stringProp>
+            </SizeAssertion>
+            <hashTree/>
+            <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Assert Response Code 200" enabled="true">
+              <collectionProp name="Asserion.test_strings">
+                <stringProp name="49586">200</stringProp>
+              </collectionProp>
+              <stringProp name="Assertion.test_field">Assertion.response_code</stringProp>
+              <boolProp name="Assertion.assume_success">false</boolProp>
+              <intProp name="Assertion.test_type">2</intProp>
+            </ResponseAssertion>
+            <hashTree/>
+            <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Assert Content-Type: ${format}" enabled="true">
+              <collectionProp name="Asserion.test_strings">
+                <stringProp name="1815351611">Content-Type: ${format}</stringProp>
+              </collectionProp>
+              <stringProp name="TestPlan.comments">Ensure an image was returned and not an XML error response.</stringProp>
+              <stringProp name="Assertion.test_field">Assertion.response_headers</stringProp>
+              <boolProp name="Assertion.assume_success">false</boolProp>
+              <intProp name="Assertion.test_type">16</intProp>
+            </ResponseAssertion>
+            <hashTree/>
+          </hashTree>
         </hashTree>
+        <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="Request and Response data" enabled="true">
+          <boolProp name="ResultCollector.error_logging">false</boolProp>
+          <objProp>
+            <name>saveConfig</name>
+            <value class="SampleSaveConfiguration">
+              <time>true</time>
+              <latency>true</latency>
+              <timestamp>true</timestamp>
+              <success>true</success>
+              <label>true</label>
+              <code>true</code>
+              <message>true</message>
+              <threadName>true</threadName>
+              <dataType>true</dataType>
+              <encoding>false</encoding>
+              <assertions>true</assertions>
+              <subresults>true</subresults>
+              <responseData>false</responseData>
+              <samplerData>false</samplerData>
+              <xml>false</xml>
+              <fieldNames>true</fieldNames>
+              <responseHeaders>false</responseHeaders>
+              <requestHeaders>false</requestHeaders>
+              <responseDataOnError>false</responseDataOnError>
+              <saveAssertionResultsFailureMessage>true</saveAssertionResultsFailureMessage>
+              <assertionsResultsToSave>0</assertionsResultsToSave>
+              <bytes>true</bytes>
+              <sentBytes>true</sentBytes>
+              <threadCounts>true</threadCounts>
+              <idleTime>true</idleTime>
+              <connectTime>true</connectTime>
+            </value>
+          </objProp>
+          <stringProp name="filename"></stringProp>
+        </ResultCollector>
+        <hashTree/>
         <ResultCollector guiclass="SummaryReport" testclass="ResultCollector" testname="Summary Report" enabled="true">
           <boolProp name="ResultCollector.error_logging">false</boolProp>
           <objProp>
@@ -242,6 +333,7 @@
           </objProp>
           <stringProp name="filename"></stringProp>
           <boolProp name="useGroupName">true</boolProp>
+          <stringProp name="TestPlan.comments">Ignore the Throughput column in indivdual rows. Read the JMeter help for the Summary Report to understand how the &quot;Throughput&quot; column as it relates to the &quot;Label&quot; rows and threads.</stringProp>
         </ResultCollector>
         <hashTree/>
         <ResultCollector guiclass="GraphVisualizer" testclass="ResultCollector" testname="Graph Results" enabled="true">
@@ -280,8 +372,6 @@
           <stringProp name="filename"></stringProp>
         </ResultCollector>
         <hashTree/>
-        <Summariser guiclass="SummariserGui" testclass="Summariser" testname="Generate Summary Results" enabled="true"/>
-        <hashTree/>
         <ResultCollector guiclass="RespTimeGraphVisualizer" testclass="ResultCollector" testname="Response Time Graph" enabled="true">
           <boolProp name="ResultCollector.error_logging">false</boolProp>
           <objProp>
@@ -318,17 +408,19 @@
           <stringProp name="filename"></stringProp>
         </ResultCollector>
         <hashTree/>
-        <ResultSaver guiclass="ResultSaverGui" testclass="ResultSaver" testname="Save Responses to a file" enabled="true">
+        <Summariser guiclass="SummariserGui" testclass="Summariser" testname="Generate Summary Results" enabled="true"/>
+        <hashTree/>
+        <ResultSaver guiclass="ResultSaverGui" testclass="ResultSaver" testname="Save Error Responses to a file" enabled="true">
           <stringProp name="FileSaver.filename">D:/temp/test</stringProp>
-          <boolProp name="FileSaver.errorsonly">false</boolProp>
+          <boolProp name="FileSaver.errorsonly">true</boolProp>
           <boolProp name="FileSaver.skipautonumber">false</boolProp>
           <boolProp name="FileSaver.skipsuffix">false</boolProp>
-          <boolProp name="FileSaver.successonly">true</boolProp>
+          <boolProp name="FileSaver.successonly">false</boolProp>
           <boolProp name="FileSaver.addTimstamp">true</boolProp>
         </ResultSaver>
         <hashTree/>
       </hashTree>
-      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Web Feature Info Elevation Requests" enabled="true">
+      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Web Feature Info Elevation Requests" enabled="false">
         <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
         <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
           <boolProp name="LoopController.continue_forever">false</boolProp>
@@ -548,7 +640,7 @@
         </ResultSaver>
         <hashTree/>
       </hashTree>
-      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Web Coverage Requests" enabled="true">
+      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Web Coverage Requests" enabled="false">
         <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
         <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
           <boolProp name="LoopController.continue_forever">false</boolProp>
