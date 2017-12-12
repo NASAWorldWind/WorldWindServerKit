@@ -32,7 +32,7 @@ cp $RESOURCES_FOLDER/jai/setup-jai.sh $BUILD_FOLDER
 ## -------------------------------------------------- 
 ## Install the Java Server JRE into the target folder
 ## --------------------------------------------------  
-echo "Installing the Java JRE"
+echo "[INFO] Installing the Java JRE"
 # Unzip the JRE from the parent project resources
 pushd $BUILD_FOLDER
 ./setup-java.sh
@@ -42,7 +42,11 @@ popd
 ## --------------------------------------------------
 # Run the basic tests with the configured JRE
 ## --------------------------------------------------
-echo "Running the integration tests"
+echo
+echo "[INFO] ***********************************"
+echo "[INFO] Running the basic integration tests"
+echo "[INFO] ***********************************"
+echo
 pushd $PROJECT_FOLDER
 mvn verify -P integration-test  2> basic_test_errors.log
 basic_exit_status=$?
@@ -51,7 +55,7 @@ popd
 ## --------------------------------------------------
 # Run the tests again with GDAL 
 ## --------------------------------------------------
-echo "Installing GDAL"
+echo "[INFO] Installing GDAL"
 pushd $BUILD_FOLDER
 ./setup-gdal.sh -gemf ${PWD}/worldwind-geoserver/WEB-INF/lib
 GDAL_HOME_PATH=${PWD}"/gdal"
@@ -59,6 +63,7 @@ export GDAL_LIB_PATH=${GDAL_HOME_PATH}"/lib"
 export GDAL_DATA_PATH=${GDAL_HOME_PATH}"/data"
 export LD_LIBRARY_PATH=${GDAL_LIB_PATH}:${LD_LIBRARY_PATH}
 popd
+
 ## HACK for JP2ECW and ECW crash (defines an environment var used by the ECW driver)
 if [ -z "${NCS_USER_PREFS}" ]; then
     if [ ! -z "${HOME}" ]; then
@@ -68,7 +73,11 @@ if [ -z "${NCS_USER_PREFS}" ]; then
     fi
 fi
 
-echo "Running the integration tests with GDAL"
+echo
+echo "[INFO] ***************************************"
+echo "[INFO] Running the integration tests with GDAL"
+echo "[INFO] ***************************************"
+echo
 pushd $PROJECT_FOLDER
 mvn verify -P integration-test-gdal 2> gdal_test_errors.log
 gdal_exit_status=$?
@@ -77,12 +86,16 @@ popd
 ## --------------------------------------------------
 # Run the tests again with GDAL and JAI
 ## --------------------------------------------------
-echo "Installing Java Advanced Imaging (JAI)"
+echo "[INFO] Installing Java Advanced Imaging (JAI)"
 pushd $BUILD_FOLDER
 ./setup-jai.sh -jf ${PWD}/worldwind-geoserver/WEB-INF/lib
 popd
 
-echo "Running the integration tests with GDAL and JAI"
+echo
+echo "[INFO] ***********************************************"
+echo "[INFO] Running the integration tests with GDAL and JAI"
+echo "[INFO] ***********************************************"
+echo
 pushd $PROJECT_FOLDER
 mvn verify -P integration-test-jai  2> jai_test_errors.log
 jai_exit_status=$?
@@ -101,17 +114,17 @@ LD_LIBRARY_PATH=${OLD_LD_LIBRARY_PATH}
 ## --------------------------------------------------
 exit_status=0
 if [ $basic_exit_status -ne 0 ]; then
-    echo "*** The basic integration tests failed."
+    echo "[ERROR] The basic integration tests failed."
     grep httpSample worldwind-geoserver/target/jmeter/logs/error.log     
     exit_status=1
 fi
 if [ $gdal_exit_status -ne 0 ]; then
-    echo "*** The GDAL integration tests failed."
+    echo "[ERROR] The GDAL integration tests failed."
     grep httpSample worldwind-geoserver/target/jmeter/logs/error-gdal.log     
     exit_status=1
 fi
 if [ $jai_exit_status -ne 0 ]; then
-    echo "*** The JAI integration tests failed."
+    echo "[ERROR] The JAI integration tests failed."
     grep httpSample worldwind-geoserver/target/jmeter/logs/error-jai.log     
     exit_status=1
 fi
