@@ -2,7 +2,7 @@
 set +x
 
 # -----------------------------------------------------------------------------
-# Setup JAI for the World Wind Server Kit (WWSK) - Linux 
+# Setup JAI for the World Wind Server Kit (WWSK) - Linux
 # -----------------------------------------------------------------------------
 
 # File and paths
