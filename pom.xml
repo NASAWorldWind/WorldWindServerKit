@@ -29,7 +29,7 @@
     
     <groupId>gov.nasa.worldwind.server</groupId>
     <artifactId>worldwind-serverkit</artifactId>
-    <version>0.4.0</version> 
+    <version>0.5.0</version> 
     <packaging>pom</packaging>
 
     <!--=====================================================================-->
@@ -63,6 +63,7 @@
         <module>worldwind-gs-geopkg</module>
         <module>worldwind-gs-wms</module>
         <module>worldwind-gs-web</module>
+        <module>worldwind-gs-explorer</module>
         <module>worldwind-geoserver</module>
         <module>worldwind-geoserver-dist</module>
     </modules>  
@@ -331,6 +332,11 @@
                 <artifactId>gs-wps-core</artifactId>
                 <version>${gs.version}</version>
                 <classifier>tests</classifier>
+            </dependency>
+            <dependency>
+                <groupId>org.geoserver.extension</groupId>
+                <artifactId>gs-control-flow</artifactId>
+                <version>${gs.version}</version>
             </dependency>
 
             <dependency>
@@ -1371,7 +1377,14 @@
         </dependency> 
     </dependencies>
     
+    <!--Maven searches repositories for artifacts in the order given-->  
     <repositories>
+        <!--Maven Central-->
+        <repository>
+            <id>maven-central</id>
+            <name>Maven Central repository</name>
+            <url>https://repo.maven.apache.org/maven2/</url>
+        </repository>
         <!--GeoServer-->
         <repository>
             <id>boundless</id>
@@ -1504,6 +1517,21 @@
                     <groupId>org.codehaus.mojo</groupId>
                     <version>2.4</version>
                 </plugin>
+                <plugin>
+                    <artifactId>jmeter-maven-plugin</artifactId>
+                    <groupId>com.lazerycode.jmeter</groupId>
+                    <version>2.4.0</version>
+                </plugin> 
+                <plugin>
+                    <artifactId>jmeter-analysis-maven-plugin</artifactId> 
+                    <groupId>com.lazerycode.jmeter</groupId>
+                    <version>1.0.6</version>
+                </plugin>
+                <plugin>          
+                    <artifactId>port-allocator-maven-plugin</artifactId>
+                    <groupId>org.sonatype.plugins</groupId>
+                    <version>1.2</version> 
+                </plugin>                          
             </plugins>              
         </pluginManagement>
         <!-- Define the plugin goals and executions -->

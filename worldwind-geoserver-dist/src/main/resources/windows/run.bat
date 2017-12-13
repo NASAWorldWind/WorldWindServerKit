@@ -11,7 +11,11 @@ rem See http://www.oracle.com/technetwork/systems/index-156457.html
 rem -----------------------------------------------------------------------------
 rem Set how much heap memory to allocate to GeoServer (min and max)
 rem The max size of the "older generation" heap is controlled by the -Xms parameter.
-set HEAP=-Xms2048m -Xmx2048m
+rem Example for 2GB memory allocation:
+rem     set HEAP=-Xms2048m -Xmx2048m
+rem Leave the HEAP blank to allocate 25% of the system memory to the JVM.
+set HEAP=
+
 
 rem Set how much memory to set aside for new objects.
 rem The "young generation" is further divided into an Eden, and Semi-spaces.

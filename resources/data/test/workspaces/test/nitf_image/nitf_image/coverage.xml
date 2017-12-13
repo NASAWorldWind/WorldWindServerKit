@@ -1,0 +1,159 @@
+<coverage>
+  <id>CoverageInfoImpl--69e2ff68:15f55175fb2:-7ff6</id>
+  <name>nitf_image</name>
+  <nativeName>nitf_image</nativeName>
+  <namespace>
+    <id>NamespaceInfoImpl-1af99ad8:15b7cb87324:-7ffe</id>
+  </namespace>
+  <title>nitf_image</title>
+  <description>Generated from NITF</description>
+  <keywords>
+    <string>nitf_image</string>
+    <string>WCS</string>
+    <string>NITF</string>
+  </keywords>
+  <nativeCRS>GEOGCS[&quot;WGS 84&quot;, 
+  DATUM[&quot;World Geodetic System 1984&quot;, 
+    SPHEROID[&quot;WGS 84&quot;, 6378137.0, 298.257223563, AUTHORITY[&quot;EPSG&quot;,&quot;7030&quot;]], 
+    AUTHORITY[&quot;EPSG&quot;,&quot;6326&quot;]], 
+  PRIMEM[&quot;Greenwich&quot;, 0.0, AUTHORITY[&quot;EPSG&quot;,&quot;8901&quot;]], 
+  UNIT[&quot;degree&quot;, 0.017453292519943295], 
+  AXIS[&quot;Geodetic longitude&quot;, EAST], 
+  AXIS[&quot;Geodetic latitude&quot;, NORTH], 
+  AUTHORITY[&quot;EPSG&quot;,&quot;4326&quot;]]</nativeCRS>
+  <srs>EPSG:4326</srs>
+  <nativeBoundingBox>
+    <minx>-180.00011290235034</minx>
+    <maxx>180.00011290235034</maxx>
+    <miny>-90.00011295753232</miny>
+    <maxy>90.00011295753232</maxy>
+    <crs>EPSG:4326</crs>
+  </nativeBoundingBox>
+  <latLonBoundingBox>
+    <minx>-180.00011290235034</minx>
+    <maxx>180.00011290235034</maxx>
+    <miny>-90.00011295753232</miny>
+    <maxy>90.00011295753232</maxy>
+    <crs>EPSG:4326</crs>
+  </latLonBoundingBox>
+  <projectionPolicy>REPROJECT_TO_DECLARED</projectionPolicy>
+  <enabled>true</enabled>
+  <metadata>
+    <entry key="dirName">nitf_image_nitf_image</entry>
+  </metadata>
+  <store class="coverageStore">
+    <id>CoverageStoreInfoImpl--69e2ff68:15f55175fb2:-7ff7</id>
+  </store>
+  <nativeFormat>NITF</nativeFormat>
+  <grid dimension="2">
+    <range>
+      <low>0 0</low>
+      <high>2048 1024</high>
+    </range>
+    <transform>
+      <scaleX>0.1757813602562015</scaleX>
+      <scaleY>-0.17578147062018032</scaleY>
+      <shearX>0.0</shearX>
+      <shearY>0.0</shearY>
+      <translateX>-179.91222222222223</translateX>
+      <translateY>89.91222222222223</translateY>
+    </transform>
+    <crs>EPSG:4326</crs>
+  </grid>
+  <supportedFormats>
+    <string>DTED</string>
+    <string>GIF</string>
+    <string>PNG</string>
+    <string>JPEG</string>
+    <string>TIFF</string>
+    <string>ImagePyramid</string>
+    <string>ImageMosaic</string>
+    <string>JP2MrSID</string>
+    <string>EHdr</string>
+    <string>RPFTOC</string>
+    <string>MBTiles</string>
+    <string>ENVIHdr</string>
+    <string>Gtopo30</string>
+    <string>JP2ECW</string>
+    <string>ERDASImg</string>
+    <string>ECW</string>
+    <string>NITF</string>
+    <string>RST</string>
+    <string>JP2K (Direct) </string>
+    <string>GEOTIFF</string>
+    <string>MrSID</string>
+    <string>GeoPackage (tiles)</string>
+    <string>ArcGrid</string>
+    <string>AIG</string>
+    <string>VRT</string>
+  </supportedFormats>
+  <interpolationMethods>
+    <string>nearest neighbor</string>
+    <string>bilinear</string>
+    <string>bicubic</string>
+  </interpolationMethods>
+  <defaultInterpolationMethod>nearest neighbor</defaultInterpolationMethod>
+  <dimensions>
+    <coverageDimension>
+      <name>RED_BAND</name>
+      <description>GridSampleDimension[-Infinity,Infinity]</description>
+      <range>
+        <min>-inf</min>
+        <max>inf</max>
+      </range>
+      <unit>W.m-2.Sr-1</unit>
+      <dimensionType>
+        <name>UNSIGNED_8BITS</name>
+      </dimensionType>
+    </coverageDimension>
+    <coverageDimension>
+      <name>GREEN_BAND</name>
+      <description>GridSampleDimension[-Infinity,Infinity]</description>
+      <range>
+        <min>-inf</min>
+        <max>inf</max>
+      </range>
+      <unit>W.m-2.Sr-1</unit>
+      <dimensionType>
+        <name>UNSIGNED_8BITS</name>
+      </dimensionType>
+    </coverageDimension>
+    <coverageDimension>
+      <name>BLUE_BAND</name>
+      <description>GridSampleDimension[-Infinity,Infinity]</description>
+      <range>
+        <min>-inf</min>
+        <max>inf</max>
+      </range>
+      <unit>W.m-2.Sr-1</unit>
+      <dimensionType>
+        <name>UNSIGNED_8BITS</name>
+      </dimensionType>
+    </coverageDimension>
+  </dimensions>
+  <requestSRS>
+    <string>EPSG:4326</string>
+  </requestSRS>
+  <responseSRS>
+    <string>EPSG:4326</string>
+  </responseSRS>
+  <parameters>
+    <entry>
+      <string>SUGGESTED_TILE_SIZE</string>
+      <string>512,512</string>
+    </entry>
+    <entry>
+      <string>FootprintBehavior</string>
+      <string>None</string>
+    </entry>
+    <entry>
+      <string>USE_MULTITHREADING</string>
+      <string>false</string>
+    </entry>
+    <entry>
+      <string>USE_JAI_IMAGEREAD</string>
+      <string>true</string>
+    </entry>
+  </parameters>
+  <nativeCoverageName>nitf_image</nativeCoverageName>
+</coverage>

@@ -1,4 +1,4 @@
-<!--The GDAL 1.9.2 native binaries and data for the Ubuntu x64-->
+<!--The JAI for Linux x64-->
 <component>
     <fileSets>
         <fileSet>
@@ -8,14 +8,12 @@
             <includes>
                 <!-- GeoServer GDAL extension to be extracted to geoserver/WEB-INF/lib -->
                 <include>geoserver-${gs.version}-gdal-plugin.tgz</include>
-                <!-- ImageIO-EXT extension to be extracted to geoserver/WEB-INF/lib -->
-                <include>imageio-ext-${imageio-ext.version}-jars.tgz</include>
                 <!-- GDAL data to be extracted to gdal/data : $GDAL_DATA -->
                 <include>gdal-data.tgz</include>
             </includes>            
         </fileSet>
         <fileSet>
-            <!--Include edited scripts (embedded version no strings replaced in an ant task. See POM)--> 
+            <!--Include edited scripts (embedded version no. strings were replaced in an ant task. See POM)--> 
             <directory>${project.build.directory}/gdal</directory>
             <outputDirectory>worldwind-geoserver-${project.version}</outputDirectory>
             <lineEnding>unix</lineEnding>
@@ -25,7 +23,7 @@
             </includes>            
         </fileSet>        
         <fileSet>
-            <directory>src/main/resources/gdal</directory>
+            <directory>../resources/gdal</directory>
             <outputDirectory>worldwind-geoserver-${project.version}/gdal</outputDirectory>
             <includes>
                 <!-- ECW and MrSID license notes -->

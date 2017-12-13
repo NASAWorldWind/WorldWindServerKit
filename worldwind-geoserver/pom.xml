@@ -4,7 +4,7 @@
     <parent>
         <groupId>gov.nasa.worldwind.server</groupId>
         <artifactId>worldwind-serverkit</artifactId>
-        <version>0.4.0</version>
+        <version>0.5.0</version>
     </parent>    
     <artifactId>worldwind-geoserver</artifactId>
     <packaging>war</packaging>
@@ -58,18 +58,24 @@
         <maven.compiler.target>1.8</maven.compiler.target>
         
         <!--Configuration for Jetty-->
-        <webappSourceDirectory>${basedir}/src/main/webapp</webappSourceDirectory>
+        <webappSourceDirectory>${project.basedir}/src/main/webapp</webappSourceDirectory>
         <sde.version>9.3</sde.version>
-        <jetty.port>8080</jetty.port>
-        <jetty.run.daemon>false</jetty.run.daemon>            
-        <!-- dataConfigId : typically "minimal"
-        dataConfigId defines the data folder template. It should match a subfolder
+        <std.jetty.port>8080</std.jetty.port>
+        <std.stop.jetty.port>8079</std.stop.jetty.port>
+        <jetty.run.daemon>false</jetty.run.daemon>       
+        
+        <webapp.protocol>http</webapp.protocol>
+        <webapp.host>localhost</webapp.host>
+        
+        <!-- data.config.nasa : typically "minimal"
+        data.config.nasa defines the data folder template. It should match a subfolder
         under the parent folder's data folder.  Its contents will be copied into
         the war file. 
         -->
-        <baseConfigId>base</baseConfigId>
-        <dataConfigId>nasa</dataConfigId>
-        <configDirectory>${basedir}/../data_config</configDirectory>
+        <data.config.base>base</data.config.base>
+        <data.config.nasa>nasa</data.config.nasa>
+        <data.config.test>test</data.config.test>
+        <data.config.directory>${project.basedir}/../resources/data</data.config.directory>
     </properties>    
     
     <dependencies>
@@ -161,6 +167,10 @@
             <groupId>org.geoserver.security</groupId>
             <artifactId>gs-sec-ldap</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.geoserver.extension</groupId>
+            <artifactId>gs-control-flow</artifactId>
+        </dependency>
         
         <!--Web Processing Service extension-->
         <dependency>
@@ -173,6 +183,13 @@
             <version>${gs.version}</version>
         </dependency>
 
+        <!--WorldWind GeoServer Viewer module-->
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>worldwind-gs-explorer</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        
         <!--WorldWind GeoServer Core UI module-->
         <dependency>
             <groupId>${project.groupId}</groupId>
@@ -241,7 +258,7 @@
             <groupId>org.geotools</groupId>
             <artifactId>gt-imagepyramid</artifactId>
         </dependency>    
-         <!--WPS--> 
+        <!--WPS--> 
         <dependency>
             <groupId>org.geotools</groupId>
             <artifactId>gt-process-geometry</artifactId>
@@ -301,75 +318,45 @@
             <plugin>
                 <artifactId>maven-antrun-plugin</artifactId>
                 <executions>                    
-                    <!-- Builds a valid "data" directory into the web app -->
-                    <!-- In a Linux/Tomcat war file, the default embedded GeoServer 
-                    data directory location is "<web application root>/data" -->
                     <execution>
-                        <id>configPackage</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>run</goal>
-                        </goals>
-                        <configuration>
-                            <tasks>
-                                <!-- copy the base distribution files from the config dir to the webapp dir -->
-                                <echo message="Copying data dir from ${configDirectory}/${baseConfigId}" />
-                                <copy todir="${webappSourceDirectory}/data">
-                                    <fileset dir="${configDirectory}/${baseConfigId}" includes="**/**" />
-                                </copy>
-                                
-                                <!-- check if the data config is available, if not fail -->
-                                <available file="${configDirectory}/${dataConfigId}" property="configIsAvailable" />
-                                <fail message="Unable to locate configuration: ${configDirectory}/${dataConfigId}" unless="configIsAvailable" />
-                                
-                                <!-- copy the data files from the config dir to the webapp dir -->
-                                <echo message="Copying data dir from ${configDirectory}/${dataConfigId}" />
-                                <copy todir="${webappSourceDirectory}/data">
-                                    <fileset dir="${configDirectory}/${dataConfigId}" includes="**/**" />
-                                </copy>
-                            </tasks>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>configClean</id>
+                        <id>clean-webapp-data</id>
                         <phase>clean</phase>
                         <goals>
                             <goal>run</goal>
                         </goals>
                         <configuration>
-                            <tasks>
+                            <target>
                                 <delete dir="${webappSourceDirectory}/data" />
-                            </tasks>
+                            </target>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <!-- Builds a valid "data" directory into the web app -->
+                        <!-- In a Linux/Tomcat war file, the default embedded GeoServer 
+                        data directory location is "<web application root>/data" -->
+                        <id>copy-webapp-data</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <target>
+                                <!-- copy the base distribution files from the config dir to the webapp dir -->
+                                <copy todir="${webappSourceDirectory}/data" overwrite="true">
+                                    <fileset dir="${data.config.directory}/${data.config.base}" includes="**/**" />
+                                </copy>
+                                
+                                <!-- check if the nasa data config is available, if not fail -->
+                                <available file="${data.config.directory}/${data.config.nasa}" property="configIsAvailable" />
+                                <fail message="Unable to locate configuration: ${data.config.directory}/${data.config.nasa}" unless="configIsAvailable" />                                
+                                <copy todir="${webappSourceDirectory}/data" overwrite="true">
+                                    <fileset dir="${data.config.directory}/${data.config.nasa}" includes="**/**" />
+                                </copy>
+                            </target>
                         </configuration>
                     </execution>
                 </executions>
             </plugin>
-            <!--plugin>
-              <groupId>org.geoserver.maven</groupId>
-              <artifactId>gs-config</artifactId>
-              <version>${project.version}</version>
-              <executions>
-                <execution>
-                  <id>configPackage</id>
-                  <configuration>
-                    <configDirectory>${configDirectory}</configDirectory>
-                    <dataConfigId>${dataConfigId}</dataConfigId>
-                  </configuration>
-                  <phase>package</phase>
-                  <goals>
-                    <goal>config</goal>
-                  </goals>
-                </execution>
-                <execution>
-                  <id>configClean</id>
-                  <phase>clean</phase>
-                  <goals>
-                    <goal>clean</goal>
-                  </goals>
-                </execution>
-              </executions>
-            </plugin-->
-
             <!--            
             The WAR Plugin is responsible for collecting all artifact dependencies, 
             classes and resources of the web application and packaging them into 
@@ -398,16 +385,8 @@
                         </manifestEntries>
                     </archive>
                 </configuration>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>war</goal>
-                        </goals>
-                    </execution>
-                </executions>
             </plugin>
-            
+                      
             <!--
             The Jetty Maven plugin is useful for rapid development and testing.
             To start Jetty and serve up your project execute: 
@@ -420,33 +399,1104 @@
                 <version>${jetty.version}</version>
                 <!-- 
                 These configuration elements set up the Jetty environment in which your webapp executes.
+                See: http://www.eclipse.org/jetty/documentation/current/jetty-maven-plugin.html
                 -->
                 <configuration>
+                    <!--By default, this is set to ${project.basedir}/src/main/webapp. --> 
+                    <webAppSourceDirectory>${project.build.directory}/worldwind-geoserver</webAppSourceDirectory>
                     <webApp>
                         <contextPath>/geoserver</contextPath>
                     </webApp>
-                    <connectors>
-                        <connector implementation="org.mortbay.jetty.nio.SelectChannelConnector">
-                            <port>${jetty.port}</port>
-                            <maxIdleTime>10000</maxIdleTime>
-                        </connector>
-                    </connectors>
-                    <stopPort>${jetty.stopPort}</stopPort>
-                    <stopKey>GEOSERVER_JETTY_STOPKEY</stopKey>
+                    <httpConnector>
+                        <!--The port number for the connector to listen on (default is 8080).-->
+                        <port>${std.jetty.port}</port>
+                        <!--Maximum idle time for a connection.--> 
+                        <idleTimeout>10000</idleTimeout>
+                    </httpConnector>                    
+                    <!--A port number for Jetty to listen on to receive a stop command to cause it to shutdown-->
+                    <stopPort>${std.stop.jetty.port}</stopPort>
+                    <!--A string value sent to the stopPort to validate the stop command-->
+                    <stopKey>geoserver</stopKey>
+                    <!--The maximum time in seconds that the plugin will wait for confirmation that Jetty has stopped--> 
+                    <stopWait>10</stopWait>
+                    <!--If daemon is true, the plugin should continue and not block-->
                     <daemon>false</daemon>
                     <!-- Set the GEOSERVER_DATA_DIR for the Jetty run -->
                     <systemProperties> 
                         <systemProperty> 
                             <name>GEOSERVER_DATA_DIR</name>
-                            <value>${project.build.directory}/worldwind-geoserver/data</value> 
+                            <!--<value>${project.build.directory}/worldwind-geoserver/data</value>--> 
+                            <value>${project.build.directory}/data_dir</value> 
                         </systemProperty> 
                     </systemProperties>
-                    
-                    <!-- Make sure it's not looking for annotations everywhere -->
+                    <!--The path to a context xml file that is applied to your webapp AFTER the webApp element.-->
+                    <!--Make sure it's not looking for Java annotations everywhere-->
+                    <!--<contextXml>${project.basedir}/src/test/resources/jetty-context.xml</contextXml>-->
                     <contextXml>${project.build.testOutputDirectory}/jetty-context.xml</contextXml>
                 </configuration>
             </plugin>
-            
         </plugins>
     </build>
+    
+    <!--=====================================================================-->
+    <!-- Profiles                                                            -->
+    <!--=====================================================================-->    
+    <profiles>
+        <!--        
+        ///////////////////////////////////////////////////////////////////////
+        // I N T E G R A T I O N   T E S T   P R O F I L E 
+        // (without GDAL)
+        // Runs JMeter tests against the standard geoserver build
+        ///////////////////////////////////////////////////////////////////////
+        -->
+        <profile>
+            <id>integration-test</id>
+            <build>               
+                <plugins>
+                    <!--
+                    Allocate random unassigned ports to be used during build process
+                    -->
+                    <plugin>
+                        <groupId>org.sonatype.plugins</groupId>
+                        <artifactId>port-allocator-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>allocate-ports</id>
+                                <phase>validate</phase>
+                                <goals>
+                                    <goal>allocate-ports</goal>
+                                </goals>
+                                <configuration>
+                                    <ports>
+                                        <port>
+                                            <name>random.jetty.port</name>
+                                        </port>
+                                        <port>
+                                            <name>random.stop.jetty.port</name>
+                                        </port>
+                                    </ports>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>   
+
+                    <!--
+                    Use ant to display the error log.
+                    -->         
+                    <plugin>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                 <id>install-test-data</id>
+                                 <phase>pre-integration-test</phase>
+                                 <goals>
+                                     <goal>run</goal>
+                                 </goals>
+                                 <configuration>
+                                     <tasks>
+                                         <!-- Clean the test data between test runs-->
+                                         <delete dir="${project.build.directory}/data_dir" />
+                                        <!-- copy the base, nasa and test distribution files -->
+                                        <copy todir="${project.build.directory}/data_dir">
+                                            <fileset dir="${data.config.directory}/${data.config.base}" includes="**/**" />
+                                        </copy>
+                                        <copy todir="${project.build.directory}/data_dir">
+                                            <fileset dir="${data.config.directory}/${data.config.nasa}" includes="**/**" />
+                                        </copy>
+                                        <copy todir="${project.build.directory}/data_dir" overwrite="true">
+                                            <fileset dir="${data.config.directory}/${data.config.test}" includes="**/**" />
+                                        </copy>
+                                     </tasks>
+                                 </configuration>
+                             </execution>                           
+                            <execution>
+                                <id>output-errors</id>
+                                <phase>post-integration-test</phase>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                                <configuration>
+                                    <target>
+                                        <available file="${project.build.directory}/jmeter/logs/error.log" property="errorLogIsAvailable" />
+                                        <echo message="-------------------------------------------------------" />
+                                        <echo message=" P E R F O R M A N C E    T E S T    E R R O R S" />
+                                        <echo message="-------------------------------------------------------" />
+                                        <concat >
+                                            <fileset file="${project.build.directory}/jmeter/logs/error.log" />
+                                        </concat>
+                                    </target>
+                                </configuration>
+                            </execution>                                                
+                        </executions>
+                    </plugin>                
+
+
+
+                    <!--
+                    Configure the Jetty server to run GeoServer with the integration test data
+                    --> 
+                    <plugin>
+                        <groupId>org.eclipse.jetty</groupId>
+                        <artifactId>jetty-maven-plugin</artifactId>
+                        <version>${jetty.version}</version>
+                        <!-- 
+                        These configuration elements set up the Jetty environment in which your webapp executes.
+                        See: http://www.eclipse.org/jetty/documentation/current/jetty-maven-plugin.html
+                        -->
+                        <configuration>
+                            <!--By default, this is set to ${project.basedir}/src/main/webapp.--> 
+                            <!--<webAppSourceDirectory></webAppSourceDirectory>-->
+                            <webApp>
+                                <contextPath>/geoserver</contextPath>
+                            </webApp>
+                            <httpConnector>
+                                <!--The port number for the connector to listen on, assigned by the port-allocator-maven-plugin-->
+                                <port>${random.jetty.port}</port>
+                                <!--Maximum idle time for a connection.--> 
+                                <idleTimeout>10000</idleTimeout>
+                            </httpConnector>
+                            <!--A port number for Jetty to listen on to receive a stop command to cause it to shutdown-->
+                            <stopPort>${random.stop.jetty.port}</stopPort>
+                            <!--A string value sent to the stopPort to validate the stop command-->
+                            <stopKey>geoserver</stopKey>
+                            <!--The maximum time in seconds that the plugin will wait for confirmation that Jetty has stopped--> 
+                            <stopWait>10</stopWait>
+                            <!--If daemon is true, the plugin should continue and not block-->
+                            <daemon>false</daemon>
+                            <!-- Set the GEOSERVER_DATA_DIR for the Jetty run -->
+                            <systemProperties> 
+                                <systemProperty> 
+                                    <name>GEOSERVER_DATA_DIR</name>
+                                    <value>${project.build.directory}/data_dir</value> 
+                                </systemProperty> 
+                            </systemProperties>
+                            <!--The path to a context xml file that is applied to your webapp AFTER the webApp element.-->
+                            <contextXml>${project.basedir}/src/test/resources/jetty-context.xml</contextXml>
+                            <!--Root directory for all html/jsp etc files (default: /src/main/webapp)-->
+                            <webAppSourceDirectory>${project.basedir}/src/main/webapp</webAppSourceDirectory>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>start-jetty</id>
+                                <phase>pre-integration-test</phase>
+                                <goals>
+                                    <goal>start</goal>
+                                </goals>
+                            </execution>
+                            <execution>
+                                <id>stop-jetty</id>
+                                <phase>post-integration-test</phase>
+                                <goals>
+                                    <goal>stop</goal>
+                                </goals>
+                            </execution>
+                        </executions>                
+                    </plugin>
+
+                    <!--
+                    Run the JMeter integration tests on the Jetty server.
+                    See: http://jmeter.lazerycode.com/
+                    See: https://github.com/jmeter-maven-plugin
+                    -->
+                    <plugin>
+                        <artifactId>jmeter-maven-plugin</artifactId>
+                        <groupId>com.lazerycode.jmeter</groupId>
+                        <executions>
+                            <execution>
+                                <id>integration-test</id>
+                                <phase>integration-test</phase>
+                                <goals>
+                                    <goal>jmeter</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <!--Creates the user.properties file-->
+                            <propertiesUser>                                
+                                <protocol>${webapp.protocol}</protocol>
+                                <server>${webapp.host}</server>
+                                <port>${random.jetty.port}</port>
+
+                                <!--A user which accesses all URLs-->
+                                <threadgroup00.name>core</threadgroup00.name>
+                                <!--number of threads to use-->
+                                <threadgroup00.numberOfThreads>10</threadgroup00.numberOfThreads>
+                                <!--delay of the test in seconds-->
+                                <threadgroup00.scheduledDelay>5</threadgroup00.scheduledDelay>
+                                <!--duration of the test in seconds-->
+                                <threadgroup00.scheduledDuration>30</threadgroup00.scheduledDuration>
+                                <!--how long till all threads are up and running in seconds-->
+                                <threadgroup00.rampUp>1</threadgroup00.rampUp>
+                                <!--target throughput of all threads of the group per minute-->
+                                <threadgroup00.throughput>100000000</threadgroup00.throughput>
+                                <!-- use uris from given file -->
+                                <threadgroup00.dataFile>${project.basedir}/src/test/uris/core_uris.txt</threadgroup00.dataFile>
+                                <!-- assertion results file -->
+                                <threadgroup00.errorLog>${project.build.directory}/jmeter/logs/error.log</threadgroup00.errorLog>
+
+                                <!--A user which accesses all URLs-->
+                                <threadgroup01.name>core-getmap</threadgroup01.name>
+                                <!--number of threads to use-->
+                                <threadgroup01.numberOfThreads>10</threadgroup01.numberOfThreads>
+                                <!--delay of the test in seconds-->
+                                <threadgroup01.scheduledDelay>0</threadgroup01.scheduledDelay>
+                                <!--duration of the test in seconds-->
+                                <threadgroup01.scheduledDuration>30</threadgroup01.scheduledDuration>
+                                <!--how long till all threads are up and running in seconds-->
+                                <threadgroup01.rampUp>1</threadgroup01.rampUp>
+                                <!--target throughput of all threads of the group per minute-->
+                                <threadgroup01.throughput>100000000</threadgroup01.throughput>
+                                <!-- use uris from given file -->
+                                <threadgroup01.dataFile>${project.basedir}/src/test/uris/core_getmap_uris.txt</threadgroup01.dataFile>
+                                <!-- assertion results file -->
+                                <threadgroup01.errorLog>${project.build.directory}/jmeter/logs/error.log</threadgroup01.errorLog>
+
+
+                            </propertiesUser>
+                            <!--Sets whether build should fail if there are failed requests found in the JMeter result file-->
+                            <ignoreResultFailures>false</ignoreResultFailures>
+                            <!--Overrides all log levels used by JMeter. Valid log levels are: ERROR, WARN, INFO, DEBUG (They are not case sensitive);-->
+                            <overrideRootLogLevel>info</overrideRootLogLevel>
+                            <!--Adds a timestamp added to each results file (default true)-->
+                            <testResultsTimestamp>true</testResultsTimestamp>
+                            
+                            <!--<resultsFileNameDateFormat>MMMM, yyyy</resultsFileNameDateFormat>-->
+                        </configuration>
+                    </plugin>    
+                             
+                    <!--
+                    Generate reports and charts from the JMeter output.
+                    See https://github.com/afranken/jmeter-analysis-maven-plugin
+                    -->
+                    <plugin>
+                        <groupId>com.lazerycode.jmeter</groupId>
+                        <artifactId>jmeter-analysis-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>analyze-results</id>
+                                <phase>post-integration-test</phase>
+                                <goals>
+                                    <goal>analyze</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <!--
+                            source file that contains jmeter result data. Needs to be XML format or a GZIPed XML format
+                            -->
+                            <source>${project.build.directory}/jmeter/results/*</source>
+
+                            <!--
+                            directory where to store analysis report files. At least a file "summary.txt" will be stored here.
+                            -->
+                            <targetDirectory>${project.build.directory}/reports/core</targetDirectory>
+                            <!--
+                            Check analysis result files. If threshold is not correct, maven build failed.
+
+                            Default: not set.
+                            -->
+                            <checkResult>
+                                <!-- Optional : check throughput. -->
+                                <throughput>
+                                    <!-- Default: -1 (disabling) -->
+                                    <threshold>-1</threshold>
+
+                                    <!-- Default: UPPER_LOWER_TOLERANCE
+                                    Values could be : 
+                                    * UPPER :                 minValue = threshold, maxValue = Double.MAX_VALUE
+                                    * LOWER :                 minValue = 0, maxValue = threshold
+                                    * UPPER_TOLERANCE :       minValue = threshold, maxValue = (threshold + (threshold * tolerance / 100))
+                                    * LOWER_TOLERANCE :       minValue = (threshold - (threshold * tolerance / 100)), maxValue = threshold
+                                    * UPPER_LOWER_TOLERANCE : minValue = (threshold - (threshold * tolerance / 100)), maxValue = (threshold + (threshold * tolerance / 100))
+                                    * EQUALS :                minValue = maxValue = threshold
+                                    If throughput result test is between minValue and maxValue, maven build is OK otherwise, build failed.
+                                    -->
+                                    <toleranceDirection>UPPER_LOWER_TOLERANCE</toleranceDirection>
+
+                                    <!-- Default: 5 (percent)
+                                    Used for calculate min et max values.
+                                    -->
+                                    <tolerance>5</tolerance>
+                                </throughput>
+                                
+                                <!-- Optional : check percent errors. -->
+                                <errors>
+                                    <!-- As above -->
+                                    <threshold>0</threshold>
+                                    <toleranceDirection>EQUALS</toleranceDirection>
+                                    <tolerance>5</tolerance>
+                                </errors>
+                            </checkResult> 
+                            <!--
+                            Request groups as a mapping from "group name" to "ant pattern".
+                            A request uri that matches an ant pattern will be associated with the group name.
+                            Request details, charts and CSV files are generated per requestGroup.
+
+                            The order is honored, a sample will be added to the first matching pattern. So it's possible
+                            to define various patterns and one catch all pattern.
+
+                            If not set, the threadgroup name of the request will be used.
+
+                            Default: not set.
+                            -->
+                            <!--
+                            <requestGroups>
+                                <requestGroup>
+                                    <name>services</name>
+                                    <pattern>/geoserver/ows?service*</pattern>
+                                    <checkResult>
+                                        <throughput>
+                                            <threshold>-1</threshold>
+                                        </throughput>
+                                        <errors>
+                                            <threshold>0</threshold>
+                                            <toleranceDirection>EQUALS</toleranceDirection>
+                                            <tolerance>5</tolerance>
+                                        </errors>                                    
+                                    </checkResult>
+                                </requestGroup>
+                                <requestGroup>
+                                    <name>core</name>
+                                    <pattern>/geoserver/**</pattern>
+                                    <checkResult>
+                                        <errors>
+                                            <threshold>0</threshold>
+                                            <toleranceDirection>EQUALS</toleranceDirection>
+                                            <tolerance>5</tolerance>
+                                        </errors>                                    
+                                    </checkResult>
+                                </requestGroup>                            
+                            </requestGroups>
+                            -->
+
+                            <!--
+                            Change default value for generating charts.
+
+                            Default: width=950, height=500
+                            -->
+                            <configurationCharts>
+                                <width>950</width>
+                                <height>500</height>
+                            </configurationCharts>
+
+                            <!--
+                            Maximum number of samples to keep (in main memory) before compressing. -1 disabling compression.
+
+                            Default: 50000
+                            -->
+                            <maxSamples>50000</maxSamples>
+
+                            <!--
+                            If set to true, the directory structure relative to source will be preserved during output.
+
+                            Default: false
+                            -->
+                            <preserveDirectories>false</preserveDirectories>
+
+                            <!--
+                            Set<String> of sample names that should be processed when analysing a results file.
+
+                            Default: sample, httpSample
+                            -->
+                            <sampleNames>
+                                <sampleName>sample</sampleName>
+                                <sampleName>httpSample</sampleName>
+                            </sampleNames>
+
+                            <!--
+                            If set to true will process all files found by the pattern defined in <source>.
+                            If set to false (the default) it will only process the first file found.
+
+                            *SETTING TO TRUE IS NOT RECOMMENDED*
+                            It can substantially impact performance, if you do this you do it at your own risk!
+
+                            Default: false
+                            -->
+                            <processAllFilesFound>true</processAllFilesFound>
+
+                            <!--
+                            Template directory where custom freemarker templates are stored.
+                            Freemarker templates are used for all generated output. (CSV files, HTML files, console output)
+                            Templates must be stored in one of the following three subfolders of the templateDirectory:
+
+                            csv, html, text
+
+                            The entry template must be called "main.ftl".
+
+                            For example,
+                            templateDirectory/text/main.ftl will be used for generating the console output.
+
+                            Default: not set.
+                            -->
+                            <!--<templateDirectory>${project.basedir}/src/main/resources/</templateDirectory>-->
+
+                            <!--
+                            Mapping from resource URL to file name. Every resource will be downloaded and stored in 'targetDirectory'
+                            with the given filename. Tokens "_FROM_" and "_TO_" can be used as placeholders. These placeholders will
+                            be replaced by timestamps of execution interval (formatted as ISO8601, e.g. '20111216T145509+0100').
+
+                            Default: not set.
+                            -->
+                            <!--                            
+                            <remoteResources>
+                              <property>
+                                <name>http://yourhost/path?from=_FROM_&amp;to=_TO_</name>
+                                <value>my_resource.txt</value>
+                              </property>
+                            </remoteResources>-->
+
+                            <!--
+                            Specify custom date format for resources not supporting ISO8601.
+
+                            Default IOS8601
+                            -->
+                            <remoteResourcesFromUntilDateFormat>HH:mm_yyyyMMdd</remoteResourcesFromUntilDateFormat>
+
+                            <!--
+                            List of writers that handle all output of the plugin.
+                           Defaults to:
+                           * com.lazerycode.jmeter.analyzer.writer.ChartWriter (generates detailed charts as PNGs),
+                           * com.lazerycode.jmeter.analyzer.writer.DetailsToCsvWriter (generates CSV files for every request group),
+                           * com.lazerycode.jmeter.analyzer.writer.DetailsToHtmlWriter (generates HTML files for every request group),
+                           * com.lazerycode.jmeter.analyzer.writer.HtmlWriter (generates an HTML overview file),
+                           * com.lazerycode.jmeter.analyzer.writer.SummaryTextToFileWriter (generates a TXT overview file),
+                           * com.lazerycode.jmeter.analyzer.writer.SummaryTextToStdOutWriter (generates overview output to stdout)
+
+                           If one of those should be deactivated or a new com.lazerycode.jmeter.analyzer.writer.Writer implementation should be added,
+                           all desired writers need to be configured!
+                            -->
+                            <!--<writers>-->
+                            <!--<com.lazerycode.jmeter.analyzer.writer.SummaryTextToStdOutWriter/>-->
+                            <!--<com.lazerycode.jmeter.analyzer.writer.SummaryTextToFileWriter/>-->
+                            <!--<com.lazerycode.jmeter.analyzer.writer.HtmlWriter/>-->
+                            <!--<com.lazerycode.jmeter.analyzer.writer.DetailsToCsvWriter/>-->
+                            <!--<com.lazerycode.jmeter.analyzer.writer.DetailsToHtmlWriter/>-->
+                            <!--<com.lazerycode.jmeter.analyzer.writer.ChartWriter/>-->
+                            <!--</writers>-->    
+                            
+                                                                                                                  
+                            <!-- From example:
+                            Defines groups of requests by URL patterns,
+                            e.g. URIs starting with /mock/page are associated with group "pages". All analysis results are
+                            If there is no such mapping then the threadgroups from the jmeter.xml are used.
+                            -->
+                            <!--<requestGroups>-->
+                            <!--<test>/en-US/firefox/**</test>-->
+                            <!--</requestGroups>-->
+
+                        </configuration>
+                    </plugin>                                                                        
+                </plugins>
+            </build>
+        </profile>
+        <!--        
+        ///////////////////////////////////////////////////////////////////////
+        // G D A L   I N T E G R A T I O N   T E S T   P R O F I L E
+        //
+        // Runs JMeter tests against the a standard geoserver build after
+        // adding GDAL to the geoserver
+        ///////////////////////////////////////////////////////////////////////
+        -->
+        <profile>
+            <id>integration-test-gdal</id>
+            <!--            
+            <dependencies>
+                GDAL extension
+                <dependency>
+                    <groupId>org.geoserver.extension</groupId>
+                    <artifactId>gs-gdal</artifactId>
+                </dependency>
+            </dependencies>        
+            -->
+            
+            <build>               
+                <plugins>
+                    <!--
+                    Allocate random unassigned ports to be used during build process
+                    -->
+                    <plugin>
+                        <groupId>org.sonatype.plugins</groupId>
+                        <artifactId>port-allocator-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>allocate-ports-gdal</id>
+                                <phase>validate</phase>
+                                <goals>
+                                    <goal>allocate-ports</goal>
+                                </goals>
+                                <configuration>
+                                    <ports>
+                                        <port>
+                                            <name>random.jetty.port</name>
+                                        </port>
+                                        <port>
+                                            <name>random.stop.jetty.port</name>
+                                        </port>
+                                    </ports>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                       
+                    <plugin>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <executions>      
+                            <execution>
+                                <id>install-test-data</id>
+                                <phase>pre-integration-test</phase>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                                <configuration>
+                                    <tasks>
+                                        <!-- Clean the test data between test runs-->
+                                        <delete dir="${project.build.directory}/data_dir" />
+                                        <!-- copy the base, nasa and test distribution files -->
+                                        <copy todir="${project.build.directory}/data_dir">
+                                            <fileset dir="${data.config.directory}/${data.config.base}" includes="**/**" />
+                                        </copy>
+                                        <copy todir="${project.build.directory}/data_dir">
+                                            <fileset dir="${data.config.directory}/${data.config.nasa}" includes="**/**" />
+                                        </copy>
+                                        <copy todir="${project.build.directory}/data_dir" overwrite="true">
+                                            <fileset dir="${data.config.directory}/${data.config.test}" includes="**/**" />
+                                        </copy>
+                                    </tasks>
+                                </configuration>
+                            </execution>                                                       
+                            <!--
+                            Prints the JMeter error log to the console
+                            -->                                
+                            <execution>
+                                <id>output-errors-gdal</id>
+                                <phase>post-integration-test</phase>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                                <configuration>
+                                    <target>
+                                        <echo message="-----------------------------------------------------------" />
+                                        <echo message=" G D A L   P E R F O R M A N C E    T E S T    E R R O R S" />
+                                        <echo message="-----------------------------------------------------------" />
+                                        <concat >
+                                            <fileset file="${project.build.directory}/jmeter/logs/error-gdal.log" />
+                                        </concat>
+                                    </target>
+                                </configuration>
+                            </execution>                                                
+                        </executions>                        
+                    </plugin>
+                    
+                    <!--
+                    Configure the Jetty server to run GeoServer with the integration test data
+                    --> 
+                    <plugin>
+                        <groupId>org.eclipse.jetty</groupId>
+                        <artifactId>jetty-maven-plugin</artifactId>
+                        <version>${jetty.version}</version>
+                        <!-- 
+                        These configuration elements set up the Jetty environment in which your webapp executes.
+                        See: http://www.eclipse.org/jetty/documentation/current/jetty-maven-plugin.html
+                        -->
+                        <configuration>
+                            <!--By default, this is set to ${project.basedir}/src/main/webapp. --> 
+                            <webAppSourceDirectory>${project.build.directory}/worldwind-geoserver</webAppSourceDirectory>
+                            <webApp>
+                                <contextPath>/geoserver</contextPath>
+                            </webApp>
+                            <httpConnector>
+                                <!--The port number for the connector to listen on, assigned by the port-allocator-maven-plugin-->
+                                <port>${random.jetty.port}</port>
+                                <!--Maximum idle time for a connection.--> 
+                                <idleTimeout>10000</idleTimeout>
+                            </httpConnector>
+                            <!--A port number for Jetty to listen on to receive a stop command to cause it to shutdown-->
+                            <stopPort>${random.stop.jetty.port}</stopPort>
+                            <!--A string value sent to the stopPort to validate the stop command-->
+                            <stopKey>geoserver</stopKey>
+                            <!--The maximum time in seconds that the plugin will wait for confirmation that Jetty has stopped--> 
+                            <stopWait>10</stopWait>
+                            <!--If daemon is true, the plugin should continue and not block-->
+                            <daemon>false</daemon>
+                            <systemProperties> 
+                                <force>true</force>
+                                <!-- Set the GEOSERVER_DATA_DIR system property (not an env var) for the Jetty run -->
+                                <systemProperty> 
+                                    <name>GEOSERVER_DATA_DIR</name>
+                                    <value>${project.build.directory}/data_dir</value> 
+                                </systemProperty> 
+                                <!--Attempt to override java logging to suppress noise at startup and shutdown-->
+                                <!--Didnt work. No impact
+                                <systemProperty> 
+                                    <name>java.util.logging.config.file</name>
+                                    <value>${project.basedir}/test/data_dir/logs/logging.properties</value>
+                                </systemProperty> 
+                                -->
+                            </systemProperties>
+                            <!--The path to a context xml file that is applied to your webapp AFTER the webApp element.-->
+                            <contextXml>${project.basedir}/src/test/resources/jetty-context.xml</contextXml>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>start-jetty-gdal</id>
+                                <phase>pre-integration-test</phase>
+                                <goals>
+                                    <goal>start</goal>
+                                </goals>
+                            </execution>
+                            <execution>
+                                <id>stop-jetty-gdal</id>
+                                <phase>post-integration-test</phase>
+                                <goals>
+                                    <goal>stop</goal>
+                                </goals>
+                            </execution>
+                        </executions>                
+                    </plugin>
+
+                    <!--
+                    Run the JMeter integration tests on the Jetty server.
+                    See: http://jmeter.lazerycode.com/
+                    See: https://github.com/jmeter-maven-plugin
+                    -->
+                    <plugin>
+                        <artifactId>jmeter-maven-plugin</artifactId>
+                        <groupId>com.lazerycode.jmeter</groupId>
+                        <executions>
+                            <execution>
+                                <id>integration-test-gdal</id>
+                                <phase>integration-test</phase>
+                                <goals>
+                                    <goal>jmeter</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <!--Creates the user.properties file-->
+                            <propertiesUser>                                
+                                <protocol>${webapp.protocol}</protocol>
+                                <server>${webapp.host}</server>
+                                <port>${random.jetty.port}</port>
+
+                                <!--A user which accesses all URLs-->
+                                <threadgroup00.name>core-gdal</threadgroup00.name>
+                                <!--number of threads to use-->
+                                <threadgroup00.numberOfThreads>10</threadgroup00.numberOfThreads>
+                                <!--delay of the test in seconds-->
+                                <threadgroup00.scheduledDelay>5</threadgroup00.scheduledDelay>
+                                <!--duration of the test in seconds-->
+                                <threadgroup00.scheduledDuration>30</threadgroup00.scheduledDuration>
+                                <!--how long till all threads are up and running in seconds-->
+                                <threadgroup00.rampUp>1</threadgroup00.rampUp>
+                                <!--target throughput of all threads of the group per minute-->
+                                <threadgroup00.throughput>100000000</threadgroup00.throughput>
+                                <!-- use uris from given file -->
+                                <threadgroup00.dataFile>${project.basedir}/src/test/uris/core_uris.txt</threadgroup00.dataFile>
+                                <!-- assertion results file -->
+                                <threadgroup00.errorLog>${project.build.directory}/jmeter/logs/error-gdal.log</threadgroup00.errorLog>
+
+                                <!--A user which accesses all URLs-->
+                                <threadgroup01.name>core_getmap-gdal</threadgroup01.name>
+                                <!--number of threads to use-->
+                                <threadgroup01.numberOfThreads>10</threadgroup01.numberOfThreads>
+                                <!--delay of the test in seconds-->
+                                <threadgroup01.scheduledDelay>5</threadgroup01.scheduledDelay>
+                                <!--duration of the test in seconds-->
+                                <threadgroup01.scheduledDuration>30</threadgroup01.scheduledDuration>
+                                <!--how long till all threads are up and running in seconds-->
+                                <threadgroup01.rampUp>1</threadgroup01.rampUp>
+                                <!--target throughput of all threads of the group per minute-->
+                                <threadgroup01.throughput>100000000</threadgroup01.throughput>
+                                <!-- use uris from given file -->
+                                <threadgroup01.dataFile>${project.basedir}/src/test/uris/core_getmap_uris.txt</threadgroup01.dataFile>
+                                <!-- assertion results file -->
+                                <threadgroup01.errorLog>${project.build.directory}/jmeter/logs/error-gdal.log</threadgroup01.errorLog>
+
+                                <!--A user which accesses all URLs-->
+                                <threadgroup02.name>gdal_getmap-gdal</threadgroup02.name>
+                                <!--number of threads to use-->
+                                <threadgroup02.numberOfThreads>10</threadgroup02.numberOfThreads>
+                                <!--delay of the test in seconds-->
+                                <threadgroup02.scheduledDelay>5</threadgroup02.scheduledDelay>
+                                <!--duration of the test in seconds-->
+                                <threadgroup02.scheduledDuration>30</threadgroup02.scheduledDuration>
+                                <!--how long till all threads are up and running in seconds-->
+                                <threadgroup02.rampUp>1</threadgroup02.rampUp>
+                                <!--target throughput of all threads of the group per minute-->
+                                <threadgroup02.throughput>100000000</threadgroup02.throughput>
+                                <!-- use uris from given file -->
+                                <threadgroup02.dataFile>${project.basedir}/src/test/uris/gdal_getmap_uris.txt</threadgroup02.dataFile>
+                                <!-- assertion results file -->
+                                <threadgroup02.errorLog>${project.build.directory}/jmeter/logs/error-gdal.log</threadgroup02.errorLog>
+
+                            </propertiesUser>
+                            <!--Sets whether build should fail if there are failed requests found in the JMeter result file-->
+                            <ignoreResultFailures>false</ignoreResultFailures>
+                            <!--Overrides all log levels used by JMeter. Valid log levels are: ERROR, WARN, INFO, DEBUG (They are not case sensitive);-->
+                            <overrideRootLogLevel>info</overrideRootLogLevel>
+                            <!--Adds a timestamp added to each results file (default true)-->
+                            <testResultsTimestamp>true</testResultsTimestamp>
+                            <!--By default all JMeter test result will be written to ${project.base.directory}/target/jmeter/results.--> 
+                            <resultsDirectory>${project.build.directory}/jmeter/results-gdal</resultsDirectory>
+                            <!--<resultsFileNameDateFormat>MMMM, yyyy</resultsFileNameDateFormat>-->
+                        </configuration>
+                    </plugin>    
+   
+                    <!--
+                    Generate reports and charts from the JMeter output.
+                    See https://github.com/afranken/jmeter-analysis-maven-plugin
+                    -->
+                    <plugin>
+                        <groupId>com.lazerycode.jmeter</groupId>
+                        <artifactId>jmeter-analysis-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>analyze-results-gdal</id>
+                                <phase>post-integration-test</phase>
+                                <goals>
+                                    <goal>analyze</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <source>${project.build.directory}/jmeter/results-gdal/*</source>
+                            <targetDirectory>${project.build.directory}/reports/gdal</targetDirectory>
+                            <checkResult>
+                                <throughput>
+                                    <!-- Default: -1 (disabling) -->
+                                    <threshold>-1</threshold>
+                                    <toleranceDirection>UPPER_LOWER_TOLERANCE</toleranceDirection>
+                                    <tolerance>5</tolerance>
+                                </throughput>
+                                <errors>
+                                    <!-- As above -->
+                                    <threshold>0</threshold>
+                                    <toleranceDirection>EQUALS</toleranceDirection>
+                                    <tolerance>5</tolerance>
+                                </errors>
+                            </checkResult> 
+                            <configurationCharts>
+                                <width>950</width>
+                                <height>500</height>
+                            </configurationCharts>
+
+                            <maxSamples>50000</maxSamples>
+
+                            <preserveDirectories>false</preserveDirectories>
+
+                            <sampleNames>
+                                <sampleName>sample</sampleName>
+                                <sampleName>httpSample</sampleName>
+                            </sampleNames>
+
+                            <processAllFilesFound>true</processAllFilesFound>
+                            <remoteResourcesFromUntilDateFormat>HH:mm_yyyyMMdd</remoteResourcesFromUntilDateFormat>
+
+
+                        </configuration>
+                    </plugin>                                                                        
+                </plugins>
+            </build>
+        </profile>
+        <!--        
+        ///////////////////////////////////////////////////////////////////////
+        // J A I   I N T E G R A T I O N   T E S T   P R O F I L E
+        //
+        // Runs JMeter tests against the a standard geoserver build after
+        // adding JAI native to the JRE
+        ///////////////////////////////////////////////////////////////////////
+        -->
+        <profile>
+            <id>integration-test-jai</id>
+            
+            <build>               
+                <plugins>
+                    <!--
+                    Allocate random unassigned ports to be used during build process
+                    -->
+                    <plugin>
+                        <groupId>org.sonatype.plugins</groupId>
+                        <artifactId>port-allocator-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>allocate-ports-jai</id>
+                                <phase>validate</phase>
+                                <goals>
+                                    <goal>allocate-ports</goal>
+                                </goals>
+                                <configuration>
+                                    <ports>
+                                        <port>
+                                            <name>random.jetty.port</name>
+                                        </port>
+                                        <port>
+                                            <name>random.stop.jetty.port</name>
+                                        </port>
+                                    </ports>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                       
+                    <plugin>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <executions>                                 
+                            <execution>
+                                <id>install-test-data</id>
+                                <phase>pre-integration-test</phase>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                                <configuration>
+                                    <target>
+                                        <!-- Clean the test data between test runs-->
+                                        <delete dir="${project.build.directory}/data_dir" />
+                                        <!-- copy the base, nasa and test distribution files -->
+                                        <copy todir="${project.build.directory}/data_dir">
+                                            <fileset dir="${data.config.directory}/${data.config.base}" includes="**/**" />
+                                        </copy>
+                                        <copy todir="${project.build.directory}/data_dir">
+                                            <fileset dir="${data.config.directory}/${data.config.nasa}" includes="**/**" />
+                                        </copy>
+                                        <copy todir="${project.build.directory}/data_dir" overwrite="true">
+                                            <fileset dir="${data.config.directory}/${data.config.test}" includes="**/**" />
+                                        </copy>
+                                    </target>
+                                </configuration>
+                            </execution>                           
+                            <!--
+                            Prints the JMeter error log to the console
+                            -->                                
+                            <execution>
+                                <id>output-errors-jai</id>
+                                <phase>post-integration-test</phase>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                                <configuration>
+                                    <target>
+                                        <echo message="---------------------------------------------------------" />
+                                        <echo message=" J A I   P E R F O R M A N C E    T E S T    E R R O R S" />
+                                        <echo message="---------------------------------------------------------" />
+                                        <concat >
+                                            <fileset file="${project.build.directory}/jmeter/logs/error-jai.log" />
+                                        </concat>
+                                    </target>
+                                </configuration>
+                            </execution>                                                
+                        </executions>                        
+                    </plugin>
+                    
+                    <!--
+                    Configure the Jetty server to run GeoServer with the integration test data
+                    --> 
+                    <plugin>
+                        <groupId>org.eclipse.jetty</groupId>
+                        <artifactId>jetty-maven-plugin</artifactId>
+                        <version>${jetty.version}</version>
+                        <!-- 
+                        These configuration elements set up the Jetty environment in which your webapp executes.
+                        See: http://www.eclipse.org/jetty/documentation/current/jetty-maven-plugin.html
+                        -->
+                        <configuration>
+                            <webApp>
+                                <contextPath>/geoserver</contextPath>
+                            </webApp>
+                            <!--By default, this is set to ${project.basedir}/src/main/webapp. --> 
+                            <webAppSourceDirectory>${project.build.directory}/worldwind-geoserver</webAppSourceDirectory>
+                            <httpConnector>
+                                <!--The port number for the connector to listen on, assigned by the port-allocator-maven-plugin-->
+                                <port>${random.jetty.port}</port>
+                                <!--Maximum idle time for a connection.--> 
+                                <idleTimeout>10000</idleTimeout>
+                            </httpConnector>
+                            <!--A port number for Jetty to listen on to receive a stop command to cause it to shutdown-->
+                            <stopPort>${random.stop.jetty.port}</stopPort>
+                            <!--A string value sent to the stopPort to validate the stop command-->
+                            <stopKey>geoserver</stopKey>
+                            <!--The maximum time in seconds that the plugin will wait for confirmation that Jetty has stopped--> 
+                            <stopWait>10</stopWait>
+                            <!--If daemon is true, the plugin should continue and not block-->
+                            <daemon>false</daemon>
+                            <systemProperties> 
+                                <force>true</force>
+                                <!-- Set the GEOSERVER_DATA_DIR system property (not an env var) for the Jetty run -->
+                                <systemProperty> 
+                                    <name>GEOSERVER_DATA_DIR</name>
+                                    <value>${project.build.directory}/data_dir</value> 
+                                </systemProperty> 
+                                <!--Attempt to override java logging to suppress noise at startup and shutdown-->
+                                <!--Didnt work. No impact
+                                <systemProperty> 
+                                    <name>java.util.logging.config.file</name>
+                                    <value>${project.basedir}/test/data_dir/logs/logging.properties</value>
+                                </systemProperty> 
+                                -->
+                            </systemProperties>
+                            <!--The path to a context xml file that is applied to your webapp AFTER the webApp element.-->
+                            <contextXml>${project.basedir}/src/test/resources/jetty-context.xml</contextXml>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>start-jetty-jai</id>
+                                <phase>pre-integration-test</phase>
+                                <goals>
+                                    <goal>start</goal>
+                                </goals>
+                            </execution>
+                            <execution>
+                                <id>stop-jetty-jai</id>
+                                <phase>post-integration-test</phase>
+                                <goals>
+                                    <goal>stop</goal>
+                                </goals>
+                            </execution>
+                        </executions>                
+                    </plugin>
+
+                    <!--
+                    Run the JMeter integration tests on the Jetty server.
+                    See: http://jmeter.lazerycode.com/
+                    See: https://github.com/jmeter-maven-plugin
+                    -->
+                    <plugin>
+                        <artifactId>jmeter-maven-plugin</artifactId>
+                        <groupId>com.lazerycode.jmeter</groupId>
+                        <executions>
+                            <execution>
+                                <id>integration-test-jai</id>
+                                <phase>integration-test</phase>
+                                <goals>
+                                    <goal>jmeter</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <!--Creates the user.properties file-->
+                            <propertiesUser>                                
+                                <protocol>${webapp.protocol}</protocol>
+                                <server>${webapp.host}</server>
+                                <port>${random.jetty.port}</port>
+
+                                <!--A user which accesses all URLs-->
+                                <threadgroup00.name>core-gdal-jai</threadgroup00.name>
+                                <!--number of threads to use-->
+                                <threadgroup00.numberOfThreads>10</threadgroup00.numberOfThreads>
+                                <!--delay of the test in seconds-->
+                                <threadgroup00.scheduledDelay>5</threadgroup00.scheduledDelay>
+                                <!--duration of the test in seconds-->
+                                <threadgroup00.scheduledDuration>30</threadgroup00.scheduledDuration>
+                                <!--how long till all threads are up and running in seconds-->
+                                <threadgroup00.rampUp>1</threadgroup00.rampUp>
+                                <!--target throughput of all threads of the group per minute-->
+                                <threadgroup00.throughput>100000000</threadgroup00.throughput>
+                                <!-- use uris from given file -->
+                                <threadgroup00.dataFile>${project.basedir}/src/test/uris/core_uris.txt</threadgroup00.dataFile>
+                                <!-- assertion results file -->
+                                <threadgroup00.errorLog>${project.build.directory}/jmeter/logs/error-jai.log</threadgroup00.errorLog>
+
+                                <!--A user which accesses all URLs-->
+                                <threadgroup01.name>core_getmap-gdal-jai</threadgroup01.name>
+                                <!--number of threads to use-->
+                                <threadgroup01.numberOfThreads>10</threadgroup01.numberOfThreads>
+                                <!--delay of the test in seconds-->
+                                <threadgroup01.scheduledDelay>5</threadgroup01.scheduledDelay>
+                                <!--duration of the test in seconds-->
+                                <threadgroup01.scheduledDuration>30</threadgroup01.scheduledDuration>
+                                <!--how long till all threads are up and running in seconds-->
+                                <threadgroup01.rampUp>1</threadgroup01.rampUp>
+                                <!--target throughput of all threads of the group per minute-->
+                                <threadgroup01.throughput>100000000</threadgroup01.throughput>
+                                <!-- use uris from given file -->
+                                <threadgroup01.dataFile>${project.basedir}/src/test/uris/jai_core_getmap_uris.txt</threadgroup01.dataFile>
+                                <!-- assertion results file -->
+                                <threadgroup01.errorLog>${project.build.directory}/jmeter/logs/error-jai.log</threadgroup01.errorLog>
+
+                                <!--A user which accesses all URLs-->
+                                <threadgroup02.name>gdal_getmap-gdal-jai</threadgroup02.name>
+                                <!--number of threads to use-->
+                                <threadgroup02.numberOfThreads>10</threadgroup02.numberOfThreads>
+                                <!--delay of the test in seconds-->
+                                <threadgroup02.scheduledDelay>5</threadgroup02.scheduledDelay>
+                                <!--duration of the test in seconds-->
+                                <threadgroup02.scheduledDuration>30</threadgroup02.scheduledDuration>
+                                <!--how long till all threads are up and running in seconds-->
+                                <threadgroup02.rampUp>1</threadgroup02.rampUp>
+                                <!--target throughput of all threads of the group per minute-->
+                                <threadgroup02.throughput>100000000</threadgroup02.throughput>
+                                <!-- use uris from given file -->
+                                <threadgroup02.dataFile>${project.basedir}/src/test/uris/gdal_getmap_uris.txt</threadgroup02.dataFile>
+                                <!-- assertion results file -->
+                                <threadgroup02.errorLog>${project.build.directory}/jmeter/logs/error-jai.log</threadgroup02.errorLog>
+
+                            </propertiesUser>
+                            <!--Sets whether build should fail if there are failed requests found in the JMeter result file-->
+                            <ignoreResultFailures>false</ignoreResultFailures>
+                            <!--Overrides all log levels used by JMeter. Valid log levels are: ERROR, WARN, INFO, DEBUG (They are not case sensitive);-->
+                            <overrideRootLogLevel>info</overrideRootLogLevel>
+                            <!--Adds a timestamp added to each results file (default true)-->
+                            <testResultsTimestamp>true</testResultsTimestamp>
+                            <!--By default all JMeter test result will be written to ${project.base.directory}/target/jmeter/results.--> 
+                            <resultsDirectory>${project.basedir}/target/jmeter/results-jai</resultsDirectory>
+                            <!--<resultsFileNameDateFormat>MMMM, yyyy</resultsFileNameDateFormat>-->
+                        </configuration>
+                    </plugin>    
+   
+                    <!--
+                    Generate reports and charts from the JMeter output.
+                    See https://github.com/afranken/jmeter-analysis-maven-plugin
+                    -->
+                    <plugin>
+                        <groupId>com.lazerycode.jmeter</groupId>
+                        <artifactId>jmeter-analysis-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>analyze-results-jai</id>
+                                <phase>post-integration-test</phase>
+                                <goals>
+                                    <goal>analyze</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <source>${project.build.directory}/jmeter/results-jai/*</source>
+                            <targetDirectory>${project.build.directory}/reports/jai</targetDirectory>
+                            <checkResult>
+                                <throughput>
+                                    <!-- Default: -1 (disabling) -->
+                                    <threshold>-1</threshold>
+                                    <toleranceDirection>UPPER_LOWER_TOLERANCE</toleranceDirection>
+                                    <tolerance>5</tolerance>
+                                </throughput>
+                                <errors>
+                                    <!-- As above -->
+                                    <threshold>0</threshold>
+                                    <toleranceDirection>EQUALS</toleranceDirection>
+                                    <tolerance>5</tolerance>
+                                </errors>
+                            </checkResult> 
+                            <configurationCharts>
+                                <width>950</width>
+                                <height>500</height>
+                            </configurationCharts>
+
+                            <maxSamples>50000</maxSamples>
+
+                            <preserveDirectories>false</preserveDirectories>
+
+                            <sampleNames>
+                                <sampleName>sample</sampleName>
+                                <sampleName>httpSample</sampleName>
+                            </sampleNames>
+
+                            <processAllFilesFound>true</processAllFilesFound>
+                            <remoteResourcesFromUntilDateFormat>HH:mm_yyyyMMdd</remoteResourcesFromUntilDateFormat>
+
+
+                        </configuration>
+                    </plugin>                                                                        
+                </plugins>
+            </build>
+        </profile>
+    </profiles>    
 </project>

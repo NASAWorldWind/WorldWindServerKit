@@ -11,8 +11,10 @@ export GEOSERVER_DATA_DIR=${GEOSERVER_HOME}/data_dir
 # -----------------------------------------------------------------------------
 # Set how much heap memory to allocate to GeoServer (min and max)
 # The max size of the "older generation" heap is controlled by the -Xms parameter.
+# Example for a 2GB allocation: 
+#   HEAP="-Xms2048m -Xmx2048m"
 # Leave blank to auto-select 25% of system memory
-HEAP="-Xms2048m -Xmx2048m"
+HEAP=
 
 # Set how much memory to set aside for new objects.
 # The "young generation" is further divided into an Eden, and Semi-spaces.
@@ -41,6 +43,7 @@ if [ -d "${GEOSERVER_HOME}"/java ]; then
     export JAVA_HOME=${GEOSERVER_HOME}/java
     export PATH=${JAVA_HOME}/bin:${PATH}
 fi
+echo "JAVA_HOME set to ${JAVA_HOME}"
 
 # -----------------------------------------------------------------------------
 # Use the local GDAL natives if they were installed
