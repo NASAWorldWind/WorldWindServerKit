@@ -43,6 +43,7 @@ if [ -d "${GEOSERVER_HOME}"/java ]; then
     export JAVA_HOME=${GEOSERVER_HOME}/java
     export PATH=${JAVA_HOME}/bin:${PATH}
 fi
+echo "JAVA_HOME set to ${JAVA_HOME}"
 
 # -----------------------------------------------------------------------------
 # Use the local GDAL natives if they were installed
