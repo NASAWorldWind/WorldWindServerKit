@@ -831,7 +831,7 @@ define(['knockout',
                                                 var renderableLayer = new WorldWind.RenderableLayer(name);
 
                                                 renderableLayer.addRenderable(kmlFile);
-                                                globe.layerManager.addOverlayLayer(renderableLayer);
+                                                globe.layerManager.addOverlayLayer(renderableLayer, {enabled: false});
                                             }
                                         }
                                     }(globe, layerName);
@@ -872,16 +872,16 @@ define(['knockout',
                 var layerSector = layer.wwLayer.bbox; // property of EnhancedWmsLayer
                 // layerSector = setTestSector(layerSector, "hawaii"); // Test with known sectors
                 if (layerSector == null) { // null or undefined.
-                    $.growl.error({ message: "No Layer sector / bounding box defined!" });
+                    $.growl.error({message: "No Layer sector / bounding box defined!"});
                     return;
                 }
 
                 // Comparing each boundary of the sector to verify layer global coverage.
                 if (layerSector.maxLatitude === 90 &&
-                    layerSector.minLatitude === -90 &&
-                    layerSector.maxLongitude === 180 &&
-                    layerSector.minLongitude === -180) {
-                    $.growl.notice({ message: "The selected layer covers the full globe. No camera centering needed." });
+                        layerSector.minLatitude === -90 &&
+                        layerSector.maxLongitude === 180 &&
+                        layerSector.minLongitude === -180) {
+                    $.growl.notice({message: "The selected layer covers the full globe. No camera centering needed."});
                     return;
                 }
 
@@ -891,7 +891,7 @@ define(['knockout',
                 this.globe.goto(layerCenterPosition.latitude, layerCenterPosition.longitude, defineZoomLevel(layerSector));
 
                 // Classical formula to obtain middle point between two coordinates
-                function findLayerCenter (layerSector){
+                function findLayerCenter(layerSector) {
                     var centerLatitude = (layerSector.maxLatitude + layerSector.minLatitude) / 2;
                     var centerLongitude = (layerSector.maxLongitude + layerSector.minLongitude) / 2;
                     var layerCenter = new WorldWind.Position(centerLatitude, centerLongitude);
@@ -900,7 +900,7 @@ define(['knockout',
 
                 // Zoom level is obtained following this simple method: Calculate approx arc length of the
                 // sectors' diagonal, and set that as the range (altitude) of the camera.
-                function defineZoomLevel (layerSector) {
+                function defineZoomLevel(layerSector) {
                     var verticalBoundary = layerSector.maxLatitude - layerSector.minLatitude;
                     var horizontalBoundary = layerSector.maxLongitude - layerSector.minLongitude;
 
@@ -910,20 +910,20 @@ define(['knockout',
 
                     // If the diagonal angle is equal or more than an hemisphere (180°) don't change zoom level.
                     // Else, use the diagonal arc length as camera altitude.
-                    if (diagonalAngle >= 180){
+                    if (diagonalAngle >= 180) {
                         return null;
                     } else {
                         // Gross approximation of longitude of arc in km
                         // (assuming spherical Earth with radius of 6,371 km. Accuracy is not needed for this).
-                        var diagonalArcLength = (diagonalAngle/360) * (2 * 3.1416 * 6371000);
+                        var diagonalArcLength = (diagonalAngle / 360) * (2 * 3.1416 * 6371000);
                         return diagonalArcLength;
                     }
                 }
 
                 // Predefined known sectors. For testing purposes only
                 // obtained with: http://boundingbox.klokantech.com/
-                function setTestSector(layerSector, place){
-                    switch(place){
+                function setTestSector(layerSector, place) {
+                    switch (place) {
                         case "switzerland":
                             layerSector.maxLatitude = 47.8084;
                             layerSector.minLatitude = 45.818;
@@ -973,25 +973,25 @@ define(['knockout',
              */
             LayerManager.prototype.sortLayers = function () {
                 var explorerLayerCategories = [
-                    this.backgroundLayers, 
-                    this.baseLayers, 
-                    this.overlayLayers, 
+                    this.backgroundLayers,
+                    this.baseLayers,
+                    this.overlayLayers,
                     this.dataLayers,
                     this.widgetLayers,
                     this.effectsLayers
-                ], i, len = explorerLayerCategories.length, 
-                byOrderValue = function (a, b) {
-                    // if an order value is provided use it
-                    if (a.order && !isNaN(a.order()) && b.order && !isNaN(b.order())) {
-                        return a.order() - b.order();
-                    } else if (a.order && !isNaN(a.order())) {
-                        return -1;
-                    } else if (b.order && !isNaN(b.order())) {
-                        return 1;
-                    } else {
-                        return a.name().localeCompare(b.name());
-                    }
-                };
+                ], i, len = explorerLayerCategories.length,
+                        byOrderValue = function (a, b) {
+                            // if an order value is provided use it
+                            if (a.order && !isNaN(a.order()) && b.order && !isNaN(b.order())) {
+                                return a.order() - b.order();
+                            } else if (a.order && !isNaN(a.order())) {
+                                return -1;
+                            } else if (b.order && !isNaN(b.order())) {
+                                return 1;
+                            } else {
+                                return a.name().localeCompare(b.name());
+                            }
+                        };
 
                 for (i = 0; i < len; i++) {
                     explorerLayerCategories[i].sort(byOrderValue);
@@ -1006,9 +1006,9 @@ define(['knockout',
              */
             LayerManager.prototype.synchronizeLayers = function () {
                 var explorerLayerCategories = [
-                    this.backgroundLayers, 
-                    this.baseLayers, 
-                    this.overlayLayers, 
+                    this.backgroundLayers,
+                    this.baseLayers,
+                    this.overlayLayers,
                     this.dataLayers,
                     this.widgetLayers,
                     this.effectsLayers
@@ -1024,9 +1024,9 @@ define(['knockout',
              * will reverse the ordering of the base, background, and overlay arrays in order to match expected 
              * visibility.
              */
-            LayerManager.prototype.synchronizeLayerCategory = function(layerCategory) {
-                var i, explorerLayerLength = layerCategory().length, wwStartIndex = Number.MAX_SAFE_INTEGER, 
-                    explorerLayer, wwInsertionIndex;
+            LayerManager.prototype.synchronizeLayerCategory = function (layerCategory) {
+                var i, explorerLayerLength = layerCategory().length, wwStartIndex = Number.MAX_SAFE_INTEGER,
+                        explorerLayer, wwInsertionIndex;
 
                 if (explorerLayerLength === 0) {
                     return; // there is nothing to sort in this layer
@@ -1042,7 +1042,7 @@ define(['knockout',
                     console.error('Unable to determine initial index ');
                     return;
                 }
-                
+
                 // Remove all of the layers of this layer category from the WorldWindow layers
                 for (i = 0; i < explorerLayerLength; i++) {
                     this.globe.wwd.removeLayer(layerCategory()[i].wwLayer);
@@ -1051,12 +1051,12 @@ define(['knockout',
                 // Iterate through the layer category layers and populate the ordered WorldWind layer array
                 for (i = 0; i < explorerLayerLength; i++) {
                     explorerLayer = layerCategory()[i];
-                 
+
                     // The category type determines if the layer should be added to the end or beginning of the
                     // WorldWind layers
                     if (explorerLayer.category() === constants.LAYER_CATEGORY_BACKGROUND ||
-                        explorerLayer.category() === constants.LAYER_CATEGORY_BASE ||
-                        explorerLayer.category() === constants.LAYER_CATEGORY_OVERLAY) {
+                            explorerLayer.category() === constants.LAYER_CATEGORY_BASE ||
+                            explorerLayer.category() === constants.LAYER_CATEGORY_OVERLAY) {
                         wwInsertionIndex = wwStartIndex; // index expression of the unshift method
                     } else {
                         wwInsertionIndex = wwStartIndex + i; // index expression of the push method
@@ -1117,7 +1117,7 @@ define(['knockout',
 
                 // Update the layer manager order
                 LayerManager.moveLayerInArray(layerViewModel, index, explorerLayerArray);
-                
+
                 // Synchronize the layer ordering
                 this.globe.layerManager.synchronizeLayers();
             };

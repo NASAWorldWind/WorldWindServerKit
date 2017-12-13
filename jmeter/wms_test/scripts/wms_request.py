@@ -1,6 +1,9 @@
 #!/usr/bin/env python
-# ******************************************************************************
+# 
+# Original script:
+#  http://svn.osgeo.org/osgeo/foss4g/benchmarking/wms/2010/scripts/wms_request.py
 #
+# ******************************************************************************
 #  Project:  2009 Web Map Server Benchmarking
 #  Purpose:  Generate WMS BBOX/size requests randomly over a defined dataset.
 #  Author:   Frank Warmerdam, warmerdam@pobox.com
@@ -65,6 +68,8 @@ if __name__ == '__main__':
     coordinate_transformation = None
 
     # output files
+    output_filename = None
+    output_filename2 = None
     output_file = None
     output_file2 = None
 
@@ -102,6 +107,14 @@ if __name__ == '__main__':
 
         elif arg == '-filter_within' and i < len(argv) - 1:
             filter_within = argv[i + 1]
+            i = i + 1
+
+        elif arg == '-output' and i < len(argv) - 1:
+            output_filename = argv[i + 1]
+            i = i + 1
+
+        elif arg == '-output2' and i < len(argv) - 1:
+            output_filename2 = argv[i + 1]
             i = i + 1
 
         elif arg == '-srs' and i < len(argv) - 1:
@@ -181,9 +194,14 @@ if __name__ == '__main__':
     # -------------------------------------------------------------------------
 
     # create output file
-    output_file = open('./' + str(srs_input) + '.csv', 'w')
+    if output_filename is None:
+        output_filename = str(srs_input) + '.csv'
+    output_file = open('./' + output_filename, 'w')
+
     if srs_output is not None:
-        output_file2 = open('./' + str(srs_output) + '.csv', 'w')
+        if output_filename2 is None:
+            output_filename2 = str(srs_output) + '.csv'
+        output_file2 = open('./' + output_filename2, 'w')
 
     first = True
     while count > 0:
@@ -203,6 +221,7 @@ if __name__ == '__main__':
                 center_y - height * 0.5 * res,
                 center_x + width * 0.5 * res,
                 center_y + height * 0.5 * res)
+        print '%d; %d; %.8g, %.8g, %.8g, %.8g' % (width, height, bbox[0], bbox[1], bbox[2], bbox[3])
 
         if bbox[0] >= region[0] \
                 and bbox[1] >= region[1] \
@@ -228,6 +247,7 @@ if __name__ == '__main__':
                 srs2_width = math.floor(delta_transformed * srs2_height)
 
             if first:
+                print '%d; %d; %.8g, %.8g, %.8g, %.8g, %d' % (width, height, bbox[0], bbox[1], bbox[2], bbox[3], count)
                 # Trick to have the command that created the csv file without making jmeter bomb (csv format has no notion of comments)
                 output_file.write(
                     '%d;%d;%.8g,%.8g,%.8g,%.8g;wms_request.py -count %d -region %.8g %.8g %.8g %.8g -minsize %d %d -maxsize %d %d -minres %.8g -maxres %.8g\n' \
@@ -242,6 +262,7 @@ if __name__ == '__main__':
 
                 first = False
             else:
+                print '%d; %d; %.8g, %.8g, %.8g, %.8g, %d' % (width, height, bbox[0], bbox[1], bbox[2], bbox[3], count)
                 output_file.write('%d;%d;%.8g,%.8g,%.8g,%.8g\n' \
                                   % (width, height, bbox[0], bbox[1], bbox[2], bbox[3]))
                 if srs_output is not None:
