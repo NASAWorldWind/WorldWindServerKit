@@ -1,0 +1,23 @@
+<dataStore>
+  <id>DataStoreInfoImpl--2ca806e5:160457fc9bc:-7ffe</id>
+  <name>shp_vector</name>
+  <description>states shapefile</description>
+  <type>Shapefile</type>
+  <enabled>true</enabled>
+  <workspace>
+    <id>WorkspaceInfoImpl-1af99ad8:15b7cb87324:-7fff</id>
+  </workspace>
+  <connectionParameters>
+    <entry key="charset">ISO-8859-1</entry>
+    <entry key="filetype">shapefile</entry>
+    <entry key="create spatial index">true</entry>
+    <entry key="memory mapped buffer">false</entry>
+    <entry key="timezone">America/Los_Angeles</entry>
+    <entry key="enable spatial index">true</entry>
+    <entry key="namespace">https://worldwind.arc.nasa.gov/test</entry>
+    <entry key="cache and reuse memory maps">true</entry>
+    <entry key="url">file:data/test/shp/states.shp</entry>
+    <entry key="fstype">shape</entry>
+  </connectionParameters>
+  <__default>false</__default>
+</dataStore>

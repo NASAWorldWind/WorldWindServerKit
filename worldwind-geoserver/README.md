@@ -6,3 +6,11 @@
 This module builds the basic WWSK GeoServer web application. 
 
 The maven POM.xml defines all the dependencies for the WWSK GeoServer.
+
+
+### Profiles
+#### integration-test
+
+#### integration-test-gdal
+
+#### integration-test-jai

@@ -2,7 +2,7 @@
     <fileSets>
         <fileSet>
              <!-- the data directory--> 
-            <directory>../data_config/nasa</directory>
+            <directory>../resources/data/nasa</directory>
             <outputDirectory>worldwind-geoserver-${project.version}/data_dir</outputDirectory>
             <includes>
                 <include>**/*</include>

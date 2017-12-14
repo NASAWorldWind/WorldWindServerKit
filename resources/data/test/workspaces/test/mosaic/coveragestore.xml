@@ -1,0 +1,11 @@
+<coverageStore>
+  <id>CoverageStoreInfoImpl-5bc14ab1:160131c27b8:-7ff9</id>
+  <name>mosaic</name>
+  <type>ImageMosaic</type>
+  <enabled>true</enabled>
+  <workspace>
+    <id>WorkspaceInfoImpl-1af99ad8:15b7cb87324:-7fff</id>
+  </workspace>
+  <__default>false</__default>
+  <url>file:data/test/mosaic</url>
+</coverageStore>

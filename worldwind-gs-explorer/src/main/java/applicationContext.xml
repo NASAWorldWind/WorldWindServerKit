@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright (C) 2017 NASA World Wind
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+-->
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+
+<beans>
+
+    <!-- WebWorldWind Viewer -->
+    
+    <bean id="worldwindClasspathPublisherMapping" class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
+        <property name="alwaysUseFullPath" value="true"/>
+        <property name="mappings">
+            <props>
+                <!-- 
+                Use the classpathPublisher bean defined in the GeoServer Main Module 
+                to locate the viewer endpoint resources
+                -->
+                <prop key="/explorer">classpathPublisher</prop>
+                <prop key="/explorer/**">classpathPublisher</prop>
+            </props>
+        </property>
+    </bean>
+    
+    <!--    
+    Create a link to the "Explorer" in the WWSK category.
+    -->
+    <bean id="wwskExplorerLink" class="org.geoserver.web.MenuPageInfo">
+         <!--An internal identifier for the link component--> 
+        <property name="id" value="wwskExplorerPage"/>
+         <!--The i18n key for the link title--> 
+        <property name="titleKey" value="WWSKExplorerPage.page.title"/>
+         <!--The i18n key for a longer description of the page used for a tooltip--> 
+        <property name="descriptionKey" value="WWSKExplorerPage.page.description"/>
+         <!--The fully qualified name of the page class--> 
+        <property name="componentClass" value="gov.nasa.worldwind.gs.explorer.WWSKExplorerPage"/>
+         <!--Optional, an icon to display alongside the link.--> 
+        <property name="icon" value="icons/16x16-icon-earth.png"/>
+         <!--Optional, the bean id of the menu category in which the link should be grouped.--> 
+        <property name="category" ref="wwskCategory"/>
+         <!--Optional, a key used to order the links in the menu.--> 
+        <property name="order" value="10"/>
+    </bean>    
+    
+</beans>

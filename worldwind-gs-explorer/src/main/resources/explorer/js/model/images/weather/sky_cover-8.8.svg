@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="64" height="64" viewBox="0 0 64 64">
+<desc>Cloud cover 8/8</desc>
+   <g style="fill:black; stroke:black; stroke-width:3;">
+	<circle r="28" cx="32" cy="32"/>
+   </g>
+</svg>

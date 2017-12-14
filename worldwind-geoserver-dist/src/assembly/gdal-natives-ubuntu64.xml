@@ -2,7 +2,7 @@
 <component>
     <fileSets>
         <fileSet>
-            <directory>src/main/resources/gdal</directory>
+            <directory>../resources/gdal</directory>
             <outputDirectory>worldwind-geoserver-${project.version}/gdal</outputDirectory>
             <includes>
                 <!-- GDAL native binaries to be extracted to gdal/lib : $LB_LIBRARY_PATH -->
