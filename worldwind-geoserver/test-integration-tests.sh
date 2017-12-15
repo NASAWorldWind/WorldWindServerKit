@@ -10,78 +10,66 @@ set +x # echo
 ## --------------------------------------------------------
 mvn clean install
 
+
+## --------------------------------------------------------
+# Copy resources into the target folder
+## --------------------------------------------------------
+GEOSERVER_VER=2.11.1
+JDK_MIN_VER="121"
+WWSK_RESOURCES="../resources"
+# Copy Java resources to the target folder
+cp $WWSK_RESOURCES/java/"server-jre-8u"${JDK_MIN_VER}"-linux-x64.tar.gz" target
+cp $WWSK_RESOURCES/java/setup-java.sh target
+# Copy GDAL resources to the target folder
+mkdir -p target/gdal
+cp $WWSK_RESOURCES/gdal/geoserver-${GEOSERVER_VER}-gdal-plugin.tgz target/gdal
+cp $WWSK_RESOURCES/gdal/gdal192-Ubuntu12-gcc4.6.3-x86_64.tar.gz target/gdal
+cp $WWSK_RESOURCES/gdal/gdal-data.tgz target/gdal
+cp $WWSK_RESOURCES/gdal/setup-gdal.sh target
+# Copy JAI resources to the target folder
+cp $WWSK_RESOURCES/jai/jai-1_1_3-lib-linux-amd64.tar.gz target
+cp $WWSK_RESOURCES/jai/jai_imageio-1_1-lib-linux-amd64.tar.gz target
+cp $WWSK_RESOURCES/jai/setup-jai.sh target
+
+
 ## -------------------------------------------------- 
 ## Install the Java Server JRE into the target folder
 ## --------------------------------------------------  
 echo "Installing the Java JRE"
-# Unzip the JRE from the parent project resources
 pushd target
-JAVA_MINOR_VER="121"
-tar -xzf ../../resources/java/server-jre-8u${JAVA_MINOR_VER}-linux-x64.tar.gz jdk1.8.0_${JAVA_MINOR_VER}/jre
-JAVA_HOME=${PWD}/jdk1.8.0_${JAVA_MINOR_VER}/jre
+./setup-java.sh
+# Set the JAVA_HOME for the mvn integration tests
+OLD_JAVA_HOME=${JAVA_HOME}
+export JAVA_HOME=${PWD}/java
 popd
+
+# Verify java runtime
+mvn --version 
 
 ## --------------------------------------------------
 # Run the tests on with the configured JRE
 ## --------------------------------------------------
-echo "Running the integration tests"
-mvn verify -P integration-test
+echo
+echo "[INFO] ***********************************"
+echo "[INFO] Running the basic integration tests"
+echo "[INFO] ***********************************"
+echo
+mvn verify --show-version -P integration-test 2> basic_test_errors.log
+basic_exit_status=$?
 
 
 ## --------------------------------------------------
-# Run the tests again with GDAL 
+# Run the tests again with GDAL, ECW and MRSID 
 ## --------------------------------------------------
 # Setup
-GEOSERVER_VER=2.11.1
-IMAGEIO_EXT_VER=1.1.17
-PROJECT_FOLDER=$(pwd)
-OLD_GDAL_LIB_PATH=${GDAL_LIB_PATH}
-OLD_GDAL_DATA_PATH=${GDAL_DATA_PATH}
-OLD_LD_LIBRARY_PATH=${LD_LIBRARY_PATH}
-# Paths
-GEOSERVER_LIB_PATH=${PROJECT_FOLDER}"/target/worldwind-geoserver/WEB-INF/lib"
-GDAL_HOME_PATH=${PROJECT_FOLDER}"/target/gdal"
+echo "Installing GDAL"
+pushd target
+./setup-gdal.sh -gemf ${PWD}/worldwind-geoserver/WEB-INF/lib
+GDAL_HOME_PATH=${PWD}"/gdal"
 export GDAL_LIB_PATH=${GDAL_HOME_PATH}"/lib"
 export GDAL_DATA_PATH=${GDAL_HOME_PATH}"/data"
 export LD_LIBRARY_PATH=${GDAL_LIB_PATH}:${LD_LIBRARY_PATH}
-# Zip files relative to project folder
-IMAGEIO_EXT_ZIP=${PROJECT_FOLDER}"/../resources/gdal/imageio-ext-${IMAGEIO_EXT_VER}-jars.tgz"
-GDAL_PLUGIN_ZIP=${PROJECT_FOLDER}"/../resources/gdal/geoserver-${GEOSERVER_VER}-gdal-plugin.tgz"
-GDAL_DATA_ZIP=${PROJECT_FOLDER}"/../resources/gdal/gdal-data.tgz"
-GDAL_NATIVES_ZIP=${PROJECT_FOLDER}"/../resources/gdal/gdal192-Ubuntu12-gcc4.6.3-x86_64.tar.gz"
-GDAL_BINDINGS_ARTIFACT="imageio-ext-gdal-bindings-1.9.2.jar"
-#   Through functional testing it was discovered that GeoTIFF's with JPEG
-#   compression don't work if imageio-ext-gdalgeotiff and imageio-ext-gdaljpeg
-#   jars are included.
-PROBLEM_ARTIFACTS="imageio-ext-gdalgeotiff-${IMAGEIO_EXT_VER}.jar imageio-ext-gdaljpeg-${IMAGEIO_EXT_VER}.jar"
-## Install the gdal-plugin jars
-echo "Installing the GeoServer GDAL coverage format extension"
-TEMP_DIR=$(mktemp -d)
-pushd $TEMP_DIR
-tar -xzf $GDAL_PLUGIN_ZIP 
-# Delete the problem jars
-for file in $PROBLEM_ARTIFACTS; do rm $file; done
-cp *.jar $GEOSERVER_LIB_PATH
-popd; rm -rf $TEMP_DIR
-## Install the imageio-ext jars
-echo "Installing the ImageIO-Ext extension"
-TEMP_DIR=$(mktemp -d)
-pushd $TEMP_DIR
-tar -xzf $IMAGEIO_EXT_ZIP
-cp *.jar $GEOSERVER_LIB_PATH
-popd; rm -rf $TEMP_DIR
-## Install GDAL natives (platform specific)
-echo "Installing the GDAL natives"
-mkdir -p $GDAL_LIB_PATH
-tar -xzf $GDAL_NATIVES_ZIP -C $GDAL_LIB_PATH
-for file in $PROBLEM_ARTIFACTS; do rm $file; done
-# Copy the bindings jar from the javainfo folder to the geoserver/lib folder
-cp ${GDAL_LIB_PATH}/javainfo/${GDAL_BINDINGS_ARTIFACT} $GEOSERVER_LIB_PATH
-## Install GDAL data
-echo "Installing the GDAL data"
-mkdir -p $GDAL_DATA_PATH
-tar -xzf $GDAL_DATA_ZIP -C $GDAL_DATA_PATH
-chmod a+rw -R ${GDAL_DATA_PATH}/*
+popd
 ## HACK for JP2ECW and ECW crash (defines an environment var used by the ECW driver)
 if [ -z "${NCS_USER_PREFS}" ]; then
     if [ ! -z "${HOME}" ]; then
@@ -90,9 +78,13 @@ if [ -z "${NCS_USER_PREFS}" ]; then
         export NCS_USER_PREFS=/etc/erm/ncsuserprefs.xml
     fi
 fi
-
-echo "Running the integration tests with GDAL"
-mvn verify -P integration-test-gdal
+echo
+echo "[INFO] ***************************************"
+echo "[INFO] Running the integration tests with GDAL"
+echo "[INFO] ***************************************"
+echo
+mvn verify --show-version -P integration-test-gdal 2> gdal_test_errors.log
+gdal_exit_status=$?
 
 
 ## --------------------------------------------------
@@ -100,21 +92,15 @@ mvn verify -P integration-test-gdal
 ## --------------------------------------------------
 echo "Installing Java Advanced Imaging (JAI)"
 pushd target
-gunzip -c ../../resources/jai/jai-1_1_3-lib-linux-amd64.tar.gz | tar xf - && \
-mv jai-1_1_3/lib/*.jar $JAVA_HOME/lib/ext/ && \
-mv jai-1_1_3/lib/*.so $JAVA_HOME/lib/amd64/ 
-gunzip -c ../../resources/jai/jai_imageio-1_1-lib-linux-amd64.tar.gz | tar xf - && \
-mv jai_imageio-1_1/lib/*.jar $JAVA_HOME/lib/ext/ && \
-mv jai_imageio-1_1/lib/*.so $JAVA_HOME/lib/amd64/ 
+./setup-jai.sh -jf ${PWD}/worldwind-geoserver/WEB-INF/lib
 popd
-
-echo "Running the integration tests with GDAL and JAI"
-mvn verify -P integration-test-jai
-
-## --------------------------------------------------
-# Uncomment to run WWSK in order validate JAI 
-## --------------------------------------------------
-#mvn jetty:run -P integration-test-jai
+echo
+echo "[INFO] ***********************************************"
+echo "[INFO] Running the integration tests with GDAL and JAI"
+echo "[INFO] ***********************************************"
+echo
+mvn verify --show-version -P integration-test-jai 2> jai_test_errors.log
+jai_exit_status=$?
 
 
 ## --------------------------------------------------
@@ -123,3 +109,32 @@ mvn verify -P integration-test-jai
 GDAL_LIB_PATH=${OLD_GDAL_LIB_PATH}
 GDAL_DATA_PATH=${OLD_GDAL_DATA_PATH}
 LD_LIBRARY_PATH=${OLD_LD_LIBRARY_PATH}
+JAVA_HOME=${OLD_JAVA_HOME}
+
+
+## --------------------------------------------------------
+# FAil the build (in Travis) if the integration tests fail
+## --------------------------------------------------------
+exit_status=0
+if [ $basic_exit_status -ne 0 ]; then
+    echo "[ERROR] -----------------------------------"
+    echo "[ERROR] The basic integration tests failed."
+    echo "[ERROR] -----------------------------------"
+    grep httpSample target/jmeter/logs/error.log     
+    exit_status=1
+fi
+if [ $gdal_exit_status -ne 0 ]; then
+    echo "[ERROR] ----------------------------------"
+    echo "[ERROR] The GDAL integration tests failed."
+    echo "[ERROR] ----------------------------------"
+    grep httpSample target/jmeter/logs/error-gdal.log     
+    exit_status=1
+fi
+if [ $jai_exit_status -ne 0 ]; then
+    echo "[ERROR] ---------------------------------"
+    echo "[ERROR] The JAI integration tests failed."
+    echo "[ERROR] ---------------------------------"
+    grep httpSample target/jmeter/logs/error-jai.log     
+    exit_status=1
+fi
+exit $exit_status

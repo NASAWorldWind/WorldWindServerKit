@@ -4,7 +4,7 @@
     <parent>
         <groupId>gov.nasa.worldwind.server</groupId>
         <artifactId>worldwind-serverkit</artifactId>
-        <version>0.5.0-SNAPSHOT</version>
+        <version>0.6.0-SNAPSHOT</version>
     </parent>
     <artifactId>worldwind-geoserver-dist</artifactId>
     <packaging>pom</packaging>
@@ -210,7 +210,6 @@
                         <configuration>
                             <tasks>
                                 <unzip src="${project.basedir}/../resources/gdal/geoserver-${gs.version}-gdal-plugin.zip" dest="${project.build.directory}/gdal/geoserver-${gs.version}-gdal-plugin" />
-                                <unzip src="${project.basedir}/../resources/gdal/imageio-ext-${imageio-ext.version}-jars.zip" dest="${project.build.directory}/gdal/imageio-ext-${imageio-ext.version}-jars" />
                                 <unzip src="${project.basedir}/../resources/gdal/gdal-1.9.2-MSVC2010-x64.zip" dest="${project.build.directory}/gdal/win64" />
                                 <unzip src="${project.basedir}/../resources/gdal/gdal-data.zip" dest="${project.build.directory}/gdal" />
                             </tasks>                            
@@ -230,9 +229,6 @@
                             <tasks>
                                 <tar destfile="${project.build.directory}/gdal/geoserver-${gs.version}-gdal-plugin.tgz" compression="gzip">
                                     <zipfileset src="${project.basedir}/../resources/gdal/geoserver-${gs.version}-gdal-plugin.zip" />
-                                </tar>
-                                <tar destfile="${project.build.directory}/gdal/imageio-ext-${imageio-ext.version}-jars.tgz" compression="gzip">
-                                    <zipfileset src="${project.basedir}/../resources/gdal/imageio-ext-${imageio-ext.version}-jars.zip" />
                                 </tar>
                                 <tar destfile="${project.build.directory}/gdal/gdal-data.tgz" compression="gzip">
                                     <zipfileset src="${project.basedir}/../resources/gdal/gdal-data.zip" />
@@ -276,33 +272,34 @@
                     <execution>
                         <phase>install</phase>
                         <configuration>
+                            <tarLongFileMode>posix</tarLongFileMode>
                             <descriptors>
 
                                 <!--Binary distibution content-->
                                 <descriptor>src/assembly/bin-assembly.xml</descriptor>
-                                
+
                                 <!--Windows x64 distribution-->
                                 <descriptor>src/assembly/win64-assembly.xml</descriptor>
-                                
+
                                 <!--Linux/Ubuntu x64 distirbution-->
                                 <descriptor>src/assembly/ubuntu64-assembly.xml</descriptor>
-                                
+
                                 <!--Linux/CentOS x64) distribution-->
                                 <descriptor>src/assembly/centos64-assembly.xml</descriptor>
-                                
+
                                 <!--WAR file distibution content -->
                                 <descriptor>src/assembly/war-assembly.xml</descriptor>
-                                
+
                             </descriptors>
-                            
+
                             <!-- Output file and location -->
                             <finalName>worldwind-geoserver-${project.version}</finalName>
                             <outputDirectory>${project.build.directory}</outputDirectory>    
-                                                    
+
                         </configuration>
                         <goals>
                             <goal>single</goal>
-                        </goals>                        
+                        </goals>
                     </execution>
                 </executions>
             </plugin>

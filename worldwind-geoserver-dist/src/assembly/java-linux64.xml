@@ -1,7 +1,7 @@
 <component>
     <fileSets>
         <fileSet>
-            <!-- the Java Server JRE distribution(s); to be unzipped on the target device -->
+            <!-- The Java Server JRE distribution(s); to be unzipped on the target device -->
             <directory>../resources/java</directory>
             <outputDirectory>worldwind-geoserver-${project.version}</outputDirectory>
             <includes>
@@ -9,7 +9,7 @@
             </includes>           
         </fileSet>
         <fileSet>
-            <!--Include edited scripts (embedded version no strings replaced in an ant task. See POM)--> 
+            <!-- Ensure the setup script is "runnable" -->
             <directory>../resources/java</directory>
             <outputDirectory>worldwind-geoserver-${project.version}</outputDirectory>
             <lineEnding>unix</lineEnding>

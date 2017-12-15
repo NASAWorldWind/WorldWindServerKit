@@ -4,7 +4,7 @@
     <parent>
         <groupId>gov.nasa.worldwind.server</groupId>
         <artifactId>worldwind-serverkit</artifactId>
-        <version>0.5.0-SNAPSHOT</version>
+        <version>0.6.0-SNAPSHOT</version>
     </parent>    
     <artifactId>worldwind-geoserver</artifactId>
     <packaging>war</packaging>
@@ -166,6 +166,10 @@
         <dependency>
             <groupId>org.geoserver.security</groupId>
             <artifactId>gs-sec-ldap</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.geoserver.extension</groupId>
+            <artifactId>gs-control-flow</artifactId>
         </dependency>
         
         <!--Web Processing Service extension-->
@@ -618,7 +622,7 @@
                                 <!--number of threads to use-->
                                 <threadgroup00.numberOfThreads>10</threadgroup00.numberOfThreads>
                                 <!--delay of the test in seconds-->
-                                <threadgroup00.scheduledDelay>0</threadgroup00.scheduledDelay>
+                                <threadgroup00.scheduledDelay>5</threadgroup00.scheduledDelay>
                                 <!--duration of the test in seconds-->
                                 <threadgroup00.scheduledDuration>30</threadgroup00.scheduledDuration>
                                 <!--how long till all threads are up and running in seconds-->
@@ -971,9 +975,9 @@
                                 </goals>
                                 <configuration>
                                     <target>
-                                        <echo message="-------------------------------------------------------" />
-                                        <echo message=" P E R F O R M A N C E    T E S T    E R R O R S" />
-                                        <echo message="-------------------------------------------------------" />
+                                        <echo message="-----------------------------------------------------------" />
+                                        <echo message=" G D A L   P E R F O R M A N C E    T E S T    E R R O R S" />
+                                        <echo message="-----------------------------------------------------------" />
                                         <concat >
                                             <fileset file="${project.build.directory}/jmeter/logs/error-gdal.log" />
                                         </concat>
@@ -1079,7 +1083,7 @@
                                 <!--number of threads to use-->
                                 <threadgroup00.numberOfThreads>10</threadgroup00.numberOfThreads>
                                 <!--delay of the test in seconds-->
-                                <threadgroup00.scheduledDelay>0</threadgroup00.scheduledDelay>
+                                <threadgroup00.scheduledDelay>5</threadgroup00.scheduledDelay>
                                 <!--duration of the test in seconds-->
                                 <threadgroup00.scheduledDuration>30</threadgroup00.scheduledDuration>
                                 <!--how long till all threads are up and running in seconds-->
@@ -1096,7 +1100,7 @@
                                 <!--number of threads to use-->
                                 <threadgroup01.numberOfThreads>10</threadgroup01.numberOfThreads>
                                 <!--delay of the test in seconds-->
-                                <threadgroup01.scheduledDelay>0</threadgroup01.scheduledDelay>
+                                <threadgroup01.scheduledDelay>5</threadgroup01.scheduledDelay>
                                 <!--duration of the test in seconds-->
                                 <threadgroup01.scheduledDuration>30</threadgroup01.scheduledDuration>
                                 <!--how long till all threads are up and running in seconds-->
@@ -1113,7 +1117,7 @@
                                 <!--number of threads to use-->
                                 <threadgroup02.numberOfThreads>10</threadgroup02.numberOfThreads>
                                 <!--delay of the test in seconds-->
-                                <threadgroup02.scheduledDelay>0</threadgroup02.scheduledDelay>
+                                <threadgroup02.scheduledDelay>5</threadgroup02.scheduledDelay>
                                 <!--duration of the test in seconds-->
                                 <threadgroup02.scheduledDuration>30</threadgroup02.scheduledDuration>
                                 <!--how long till all threads are up and running in seconds-->
@@ -1271,9 +1275,9 @@
                                 </goals>
                                 <configuration>
                                     <target>
-                                        <echo message="-------------------------------------------------------" />
-                                        <echo message=" P E R F O R M A N C E    T E S T    E R R O R S" />
-                                        <echo message="-------------------------------------------------------" />
+                                        <echo message="---------------------------------------------------------" />
+                                        <echo message=" J A I   P E R F O R M A N C E    T E S T    E R R O R S" />
+                                        <echo message="---------------------------------------------------------" />
                                         <concat >
                                             <fileset file="${project.build.directory}/jmeter/logs/error-jai.log" />
                                         </concat>
@@ -1379,7 +1383,7 @@
                                 <!--number of threads to use-->
                                 <threadgroup00.numberOfThreads>10</threadgroup00.numberOfThreads>
                                 <!--delay of the test in seconds-->
-                                <threadgroup00.scheduledDelay>0</threadgroup00.scheduledDelay>
+                                <threadgroup00.scheduledDelay>5</threadgroup00.scheduledDelay>
                                 <!--duration of the test in seconds-->
                                 <threadgroup00.scheduledDuration>30</threadgroup00.scheduledDuration>
                                 <!--how long till all threads are up and running in seconds-->
@@ -1396,7 +1400,7 @@
                                 <!--number of threads to use-->
                                 <threadgroup01.numberOfThreads>10</threadgroup01.numberOfThreads>
                                 <!--delay of the test in seconds-->
-                                <threadgroup01.scheduledDelay>0</threadgroup01.scheduledDelay>
+                                <threadgroup01.scheduledDelay>5</threadgroup01.scheduledDelay>
                                 <!--duration of the test in seconds-->
                                 <threadgroup01.scheduledDuration>30</threadgroup01.scheduledDuration>
                                 <!--how long till all threads are up and running in seconds-->
@@ -1404,7 +1408,7 @@
                                 <!--target throughput of all threads of the group per minute-->
                                 <threadgroup01.throughput>100000000</threadgroup01.throughput>
                                 <!-- use uris from given file -->
-                                <threadgroup01.dataFile>${project.basedir}/src/test/uris/core_getmap_uris.txt</threadgroup01.dataFile>
+                                <threadgroup01.dataFile>${project.basedir}/src/test/uris/jai_core_getmap_uris.txt</threadgroup01.dataFile>
                                 <!-- assertion results file -->
                                 <threadgroup01.errorLog>${project.build.directory}/jmeter/logs/error-jai.log</threadgroup01.errorLog>
 
@@ -1413,7 +1417,7 @@
                                 <!--number of threads to use-->
                                 <threadgroup02.numberOfThreads>10</threadgroup02.numberOfThreads>
                                 <!--delay of the test in seconds-->
-                                <threadgroup02.scheduledDelay>0</threadgroup02.scheduledDelay>
+                                <threadgroup02.scheduledDelay>5</threadgroup02.scheduledDelay>
                                 <!--duration of the test in seconds-->
                                 <threadgroup02.scheduledDuration>30</threadgroup02.scheduledDuration>
                                 <!--how long till all threads are up and running in seconds-->
