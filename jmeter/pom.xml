@@ -1,0 +1,84 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>gov.nasa.worldwind.server</groupId>
+    <artifactId>worldwind-geoserver-stress-test</artifactId>
+    <packaging>pom</packaging>
+    <version>0.6.0-SNAPSHOT</version>
+    <name>WorldWind JMeter Tests</name>
+    <url>http://maven.apache.org</url>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>com.lazerycode.jmeter</groupId>
+                <artifactId>jmeter-maven-plugin</artifactId>
+                <version>2.4.0</version>
+                <executions>
+                    <execution>
+                        <id>jmeter-tests</id>
+                        <phase>integration-test</phase>
+                        <goals>
+                            <goal>jmeter</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <!--
+            Generate reports and charts from the JMeter output.
+            See https://github.com/afranken/jmeter-analysis-maven-plugin
+            -->
+            <plugin>
+                <groupId>com.lazerycode.jmeter</groupId>
+                <artifactId>jmeter-analysis-maven-plugin</artifactId>
+                <version>1.0.6</version>
+                <executions>
+                    <execution>
+                        <id>analyze-results</id>
+                        <phase>post-integration-test</phase>
+                        <goals>
+                            <goal>analyze</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <source>${project.build.directory}/jmeter/results/*</source>
+                    <targetDirectory>${project.build.directory}/reports</targetDirectory>
+                    <checkResult>
+                        <throughput>
+                            <!-- Default: -1 (disabling) -->
+                            <threshold>-1</threshold>
+                            <toleranceDirection>UPPER_LOWER_TOLERANCE</toleranceDirection>
+                            <tolerance>5</tolerance>
+                        </throughput>
+                        <errors>
+                            <!-- As above -->
+                            <threshold>0</threshold>
+                            <toleranceDirection>EQUALS</toleranceDirection>
+                            <tolerance>5</tolerance>
+                        </errors>
+                    </checkResult> 
+                    <configurationCharts>
+                        <width>950</width>
+                        <height>500</height>
+                    </configurationCharts>
+
+                    <maxSamples>50000</maxSamples>
+
+                    <preserveDirectories>false</preserveDirectories>
+
+                    <sampleNames>
+                        <sampleName>sample</sampleName>
+                        <sampleName>httpSample</sampleName>
+                    </sampleNames>
+
+                    <processAllFilesFound>true</processAllFilesFound>
+                    <remoteResourcesFromUntilDateFormat>HH:mm_yyyyMMdd</remoteResourcesFromUntilDateFormat>
+
+                </configuration>
+            </plugin>                                                                        
+        </plugins>
+    </build>
+
+</project>
+
