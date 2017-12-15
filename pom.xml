@@ -1518,6 +1518,11 @@
                     <version>2.4</version>
                 </plugin>
                 <plugin>
+                    <groupId>org.eclipse.jetty</groupId>
+                    <artifactId>jetty-maven-plugin</artifactId>
+                    <version>9.4.7.v20170914</version>
+                </plugin>
+                <plugin>
                     <artifactId>jmeter-maven-plugin</artifactId>
                     <groupId>com.lazerycode.jmeter</groupId>
                     <version>2.4.0</version>
