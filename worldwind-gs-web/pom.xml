@@ -4,7 +4,7 @@
     <parent>
         <groupId>gov.nasa.worldwind.server</groupId>
         <artifactId>worldwind-serverkit</artifactId>
-        <version>0.5.0</version>
+        <version>0.5.1</version>
     </parent>
     <artifactId>worldwind-gs-web</artifactId>
     <packaging>jar</packaging>
