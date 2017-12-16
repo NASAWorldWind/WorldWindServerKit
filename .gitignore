@@ -62,3 +62,4 @@ nbactions.xml
 /worldwind-geoserver/src/test/data_dir/logs/geoserver.log
 /worldwind-geoserver/src/test/data_dir/logs/geoserver.log.*
 /archive/
+/worldwind-gs-web/pom.xml.versionsBackup
