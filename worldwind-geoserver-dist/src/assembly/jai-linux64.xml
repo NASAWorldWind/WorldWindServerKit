@@ -1,0 +1,23 @@
+<component>
+    <fileSets>
+        <fileSet>
+            <!-- the JAI (Java Advanced Imaging) distribution(s); to be unzipped on the target device -->
+            <directory>../resources/jai</directory>
+            <outputDirectory>worldwind-geoserver-${project.version}</outputDirectory>
+            <includes>
+                <include>jai-1_1_3-lib-linux-amd64.tar.gz</include>
+                <include>jai_imageio-1_1-lib-linux-amd64.tar.gz</include>
+            </includes>           
+        </fileSet>
+        <fileSet>
+            <!-- Ensure the setup script is "runnable" -->
+            <directory>../resources/jai</directory>
+            <outputDirectory>worldwind-geoserver-${project.version}</outputDirectory>
+            <lineEnding>unix</lineEnding>
+            <fileMode>0755</fileMode>
+            <includes>
+                <include>setup-jai.sh</include>
+            </includes>            
+        </fileSet>    
+    </fileSets>
+</component>

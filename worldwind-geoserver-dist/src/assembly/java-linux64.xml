@@ -1,16 +1,16 @@
 <component>
     <fileSets>
         <fileSet>
-            <!-- the Java Server JRE distribution(s); to be unzipped on the target device -->
-            <directory>src/main/resources/java</directory>
+            <!-- The Java Server JRE distribution(s); to be unzipped on the target device -->
+            <directory>../resources/java</directory>
             <outputDirectory>worldwind-geoserver-${project.version}</outputDirectory>
             <includes>
                 <include>server-jre-8u121-linux-x64.tar.gz</include>
             </includes>           
         </fileSet>
         <fileSet>
-            <!--Include edited scripts (embedded version no strings replaced in an ant task. See POM)--> 
-            <directory>src/main/resources/java</directory>
+            <!-- Ensure the setup script is "runnable" -->
+            <directory>../resources/java</directory>
             <outputDirectory>worldwind-geoserver-${project.version}</outputDirectory>
             <lineEnding>unix</lineEnding>
             <fileMode>0755</fileMode>

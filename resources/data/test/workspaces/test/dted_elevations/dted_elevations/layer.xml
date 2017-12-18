@@ -1,0 +1,15 @@
+<layer>
+  <name>dted_elevations</name>
+  <id>LayerInfoImpl--5a83e780:15f5505e2d5:-7ff8</id>
+  <type>RASTER</type>
+  <defaultStyle>
+    <id>StyleInfoImpl-78ff667e:12476299803:-7ffb</id>
+  </defaultStyle>
+  <resource class="coverage">
+    <id>CoverageInfoImpl--5a83e780:15f5505e2d5:-7ff9</id>
+  </resource>
+  <attribution>
+    <logoWidth>0</logoWidth>
+    <logoHeight>0</logoHeight>
+  </attribution>
+</layer>

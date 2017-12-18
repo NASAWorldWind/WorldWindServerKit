@@ -1,0 +1,15 @@
+<layer>
+  <name>nitf_image</name>
+  <id>LayerInfoImpl--69e2ff68:15f55175fb2:-7ff5</id>
+  <type>RASTER</type>
+  <defaultStyle>
+    <id>StyleInfoImpl-78ff667e:12476299803:-7ffb</id>
+  </defaultStyle>
+  <resource class="coverage">
+    <id>CoverageInfoImpl--69e2ff68:15f55175fb2:-7ff6</id>
+  </resource>
+  <attribution>
+    <logoWidth>0</logoWidth>
+    <logoHeight>0</logoHeight>
+  </attribution>
+</layer>

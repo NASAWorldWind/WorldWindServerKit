@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="64" height="64" viewBox="-32 -32 64 64">
+<desc>Sky obscured</desc>
+   <g style="fill:none; stroke:black; stroke-width:3;">
+	<circle r="28"/>
+	<path d="M19.8,19.8 L-19.8,-19.8 M19.8,-19.8 L-19.8,19.8"/>
+   </g>
+</svg>

@@ -1,0 +1,12 @@
+<coverageStore>
+  <id>CoverageStoreInfoImpl--1fc8d4a3:15f54126b94:-7feb</id>
+  <name>jp2k_image</name>
+  <description>JP2K (Direct) Coverage Format</description>
+  <type>JP2K (Direct) </type>
+  <enabled>true</enabled>
+  <workspace>
+    <id>WorkspaceInfoImpl-1af99ad8:15b7cb87324:-7fff</id>
+  </workspace>
+  <__default>false</__default>
+  <url>file:data/test/jp2k/jp2k_image.jp2</url>
+</coverageStore>

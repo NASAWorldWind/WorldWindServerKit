@@ -1,0 +1,15 @@
+<layer>
+  <name>mosaic</name>
+  <id>LayerInfoImpl-5bc14ab1:160131c27b8:-7ff7</id>
+  <type>RASTER</type>
+  <defaultStyle>
+    <id>StyleInfoImpl-78ff667e:12476299803:-7ffb</id>
+  </defaultStyle>
+  <resource class="coverage">
+    <id>CoverageInfoImpl-5bc14ab1:160131c27b8:-7ff8</id>
+  </resource>
+  <attribution>
+    <logoWidth>0</logoWidth>
+    <logoHeight>0</logoHeight>
+  </attribution>
+</layer>

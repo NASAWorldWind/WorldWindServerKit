@@ -1,0 +1,12 @@
+<coverageStore>
+  <id>CoverageStoreInfoImpl--1fc8d4a3:15f54126b94:-7fff</id>
+  <name>aaigrid_elevations</name>
+  <description>ARC/INFO ASCII GRID Coverage Format</description>
+  <type>ArcGrid</type>
+  <enabled>true</enabled>
+  <workspace>
+    <id>WorkspaceInfoImpl-1af99ad8:15b7cb87324:-7fff</id>
+  </workspace>
+  <__default>false</__default>
+  <url>file:data/test/asc/aaigrid_elevations.asc</url>
+</coverageStore>

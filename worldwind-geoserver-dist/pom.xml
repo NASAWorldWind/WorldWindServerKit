@@ -4,7 +4,7 @@
     <parent>
         <groupId>gov.nasa.worldwind.server</groupId>
         <artifactId>worldwind-serverkit</artifactId>
-        <version>0.4.1</version>
+        <version>0.6.0-SNAPSHOT</version>
     </parent>
     <artifactId>worldwind-geoserver-dist</artifactId>
     <packaging>pom</packaging>
@@ -190,7 +190,7 @@
                         <phase>package</phase>
                         <configuration>
                             <tasks>
-                                <untar src="${project.basedir}/src/main/resources/java/server-jre-8u121-windows-x64.tar.gz" dest="${project.build.directory}/java-win64" compression="gzip" />
+                                <untar src="${project.basedir}/../resources/java/server-jre-8u121-windows-x64.tar.gz" dest="${project.build.directory}/java-win64" compression="gzip" />
                             </tasks>                            
                         </configuration>
                         <goals>
@@ -209,10 +209,9 @@
                         <phase>package</phase>
                         <configuration>
                             <tasks>
-                                <unzip src="${project.basedir}/src/main/resources/gdal/geoserver-${gs.version}-gdal-plugin.zip" dest="${project.build.directory}/gdal/geoserver-${gs.version}-gdal-plugin" />
-                                <unzip src="${project.basedir}/src/main/resources/gdal/imageio-ext-${imageio-ext.version}-jars.zip" dest="${project.build.directory}/gdal/imageio-ext-${imageio-ext.version}-jars" />
-                                <unzip src="${project.basedir}/src/main/resources/gdal/gdal-1.9.2-MSVC2010-x64.zip" dest="${project.build.directory}/gdal/win64" />
-                                <unzip src="${project.basedir}/src/main/resources/gdal/gdal-data.zip" dest="${project.build.directory}/gdal" />
+                                <unzip src="${project.basedir}/../resources/gdal/geoserver-${gs.version}-gdal-plugin.zip" dest="${project.build.directory}/gdal/geoserver-${gs.version}-gdal-plugin" />
+                                <unzip src="${project.basedir}/../resources/gdal/gdal-1.9.2-MSVC2010-x64.zip" dest="${project.build.directory}/gdal/win64" />
+                                <unzip src="${project.basedir}/../resources/gdal/gdal-data.zip" dest="${project.build.directory}/gdal" />
                             </tasks>                            
                         </configuration>
                         <goals>
@@ -229,13 +228,10 @@
                         <configuration>
                             <tasks>
                                 <tar destfile="${project.build.directory}/gdal/geoserver-${gs.version}-gdal-plugin.tgz" compression="gzip">
-                                    <zipfileset src="${project.basedir}/src/main/resources/gdal/geoserver-${gs.version}-gdal-plugin.zip" />
-                                </tar>
-                                <tar destfile="${project.build.directory}/gdal/imageio-ext-${imageio-ext.version}-jars.tgz" compression="gzip">
-                                    <zipfileset src="${project.basedir}/src/main/resources/gdal/imageio-ext-${imageio-ext.version}-jars.zip" />
+                                    <zipfileset src="${project.basedir}/../resources/gdal/geoserver-${gs.version}-gdal-plugin.zip" />
                                 </tar>
                                 <tar destfile="${project.build.directory}/gdal/gdal-data.tgz" compression="gzip">
-                                    <zipfileset src="${project.basedir}/src/main/resources/gdal/gdal-data.zip" />
+                                    <zipfileset src="${project.basedir}/../resources/gdal/gdal-data.zip" />
                                 </tar>
                             </tasks>                            
                         </configuration>
@@ -249,7 +245,7 @@
                         <configuration>
                             <tasks>
                                 <!--Copy scripts to build dir for editing-->
-                                <copy todir="${project.build.directory}/gdal" file="${project.basedir}/src/main/resources/gdal/setup-gdal.sh" />
+                                <copy todir="${project.build.directory}/gdal" file="${project.basedir}/../resources/gdal/setup-gdal.sh" />
                                 <!--Edit the version numbers in the scripts-->
                                 <replace token="GEOSERVER_VER=" value="GEOSERVER_VER=${gs.version} #Set by ant-task. was: " dir="${project.build.directory}/gdal">                                 
                                     <include name="**/*.sh" />
@@ -276,33 +272,34 @@
                     <execution>
                         <phase>install</phase>
                         <configuration>
+                            <tarLongFileMode>posix</tarLongFileMode>
                             <descriptors>
 
                                 <!--Binary distibution content-->
                                 <descriptor>src/assembly/bin-assembly.xml</descriptor>
-                                
+
                                 <!--Windows x64 distribution-->
                                 <descriptor>src/assembly/win64-assembly.xml</descriptor>
-                                
+
                                 <!--Linux/Ubuntu x64 distirbution-->
                                 <descriptor>src/assembly/ubuntu64-assembly.xml</descriptor>
-                                
+
                                 <!--Linux/CentOS x64) distribution-->
                                 <descriptor>src/assembly/centos64-assembly.xml</descriptor>
-                                
+
                                 <!--WAR file distibution content -->
                                 <descriptor>src/assembly/war-assembly.xml</descriptor>
-                                
+
                             </descriptors>
-                            
+
                             <!-- Output file and location -->
                             <finalName>worldwind-geoserver-${project.version}</finalName>
                             <outputDirectory>${project.build.directory}</outputDirectory>    
-                                                    
+
                         </configuration>
                         <goals>
                             <goal>single</goal>
-                        </goals>                        
+                        </goals>
                     </execution>
                 </executions>
             </plugin>
