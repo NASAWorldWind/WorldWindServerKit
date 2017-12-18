@@ -24,6 +24,7 @@ import java.awt.image.RenderedImage;
 import java.io.IOException;
 import java.net.URL;
 import javax.imageio.ImageIO;
+import javax.media.jai.ImageLayout;
 
 import org.geotools.coverage.grid.GridCoverage2D;
 import org.geotools.coverage.grid.GridEnvelope2D;
@@ -35,6 +36,7 @@ import org.geotools.image.test.ImageAssert;
 import org.geotools.parameter.Parameter;
 import org.geotools.referencing.CRS;
 import org.geotools.referencing.crs.DefaultGeographicCRS;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assume.assumeNotNull;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -51,6 +53,17 @@ public class GeoPackageReaderTest {
             36.8701171875,
             DefaultGeographicCRS.WGS84
     );
+
+    @Test
+    public void testImageLayout() throws IOException {
+        URL gpkg = getClass().getResource(GEOPACKAGE);
+        assumeNotNull(gpkg);  // Skip test if not found
+
+        GeoPackageReader reader = new GeoPackageReader(gpkg, null);
+        ImageLayout imageLayout = reader.getImageLayout();
+        assertNotNull("ImageLayout must not be null", imageLayout);
+
+    }
 
     @Test
     public void testZoomLevel_12() throws IOException {

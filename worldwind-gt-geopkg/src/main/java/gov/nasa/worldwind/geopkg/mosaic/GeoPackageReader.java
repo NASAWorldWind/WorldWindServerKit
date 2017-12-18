@@ -44,7 +44,16 @@ import gov.nasa.worldwind.geopkg.Tile;
 import gov.nasa.worldwind.geopkg.TileEntry;
 import gov.nasa.worldwind.geopkg.TileMatrix;
 import gov.nasa.worldwind.geopkg.TileReader;
+import it.geosolutions.jaiext.utilities.ImageLayout2;
+import java.awt.Dimension;
+import java.awt.Transparency;
+import java.awt.color.ColorSpace;
 import static java.awt.image.BufferedImage.TYPE_4BYTE_ABGR;
+import java.awt.image.ColorModel;
+import java.awt.image.ComponentColorModel;
+import java.awt.image.DataBuffer;
+import javax.imageio.ImageTypeSpecifier;
+import javax.media.jai.ImageLayout;
 
 import org.geotools.coverage.CoverageFactoryFinder;
 import org.geotools.coverage.grid.GridCoverage2D;
@@ -58,6 +67,7 @@ import org.geotools.geometry.GeneralEnvelope;
 import org.geotools.geometry.jts.ReferencedEnvelope;
 import org.geotools.image.ImageWorker;
 import org.geotools.referencing.CRS;
+import org.geotools.resources.image.ImageUtilities;
 import org.geotools.util.Utilities;
 import org.geotools.util.logging.Logging;
 import org.opengis.coverage.grid.Format;
@@ -74,7 +84,7 @@ import org.opengis.referencing.crs.CoordinateReferenceSystem;
  * @author Niels Charlier
  * @author Bruce Schubert
  */
-public class GeoPackageReader extends AbstractGridCoverage2DReader {
+public final class GeoPackageReader extends AbstractGridCoverage2DReader {
 
     /**
      * The {@link Logger} for this {@link GeoPackageReader}.
@@ -90,18 +100,25 @@ public class GeoPackageReader extends AbstractGridCoverage2DReader {
     protected File sourceFile;
 
     protected Map<String, TileEntry> tiles = new HashMap<String, TileEntry>();
-    
+
     // TODO: store these gridRanges in the TileEntry class
     protected Map<String, GridEnvelope2D> gridRanges = new HashMap<String, GridEnvelope2D>();
 
+    /**
+     * Constructs a GeoPackageReader from a source.
+     *
+     * @param source File, URL or filename.
+     * @param hints
+     * @throws IOException
+     */
     public GeoPackageReader(Object source, Hints hints) throws IOException {
         coverageFactory = CoverageFactoryFinder.getGridCoverageFactory(this.hints);
         sourceFile = GeoPackageFormat.getFileFromSource(source);
-        GeoPackage file = new GeoPackage(sourceFile);
+        GeoPackage gpkg = new GeoPackage(sourceFile);
 
         try {
-            coverageName = null;   // default value was "geotools_coverage"
-            for (TileEntry tileset : file.tiles()) {
+            coverageName = null; 
+            for (TileEntry tileset : gpkg.tiles()) {
                 // Map the tileset to the coverage name (table name)
                 tiles.put(tileset.getTableName(), tileset);
 
@@ -114,10 +131,10 @@ public class GeoPackageReader extends AbstractGridCoverage2DReader {
                 List<TileMatrix> matricies = tileset.getTileMatricies();
                 TileMatrix matrix = matricies.get(matricies.size() - 1);
                 int maxZoomLevel = matrix.getZoomLevel();
-                int minCol = file.getTileBound(tileset, maxZoomLevel, false, false);   // booleans: isMax, isRow
-                int maxCol = file.getTileBound(tileset, maxZoomLevel, true, false);
-                int minRow = file.getTileBound(tileset, maxZoomLevel, false, true);  
-                int maxRow = file.getTileBound(tileset, maxZoomLevel, true, true);  
+                int minCol = gpkg.getTileBound(tileset, maxZoomLevel, false, false);   // booleans: isMax, isRow
+                int maxCol = gpkg.getTileBound(tileset, maxZoomLevel, true, false);
+                int minRow = gpkg.getTileBound(tileset, maxZoomLevel, false, true);
+                int maxRow = gpkg.getTileBound(tileset, maxZoomLevel, true, true);
                 int numCols = (maxCol - minCol) + 1;
                 int numRows = (maxRow - minRow) + 1;
 
@@ -126,12 +143,17 @@ public class GeoPackageReader extends AbstractGridCoverage2DReader {
                         minRow * matrix.getTileHeight(),
                         numCols * matrix.getTileWidth(),
                         numRows * matrix.getTileHeight());
-                
+
                 gridRanges.put(tileset.getTableName(), gridRange);
             }
 
+            // Set the image layout for the reader to the first available coverage
+            if (coverageName != null) {
+                setlayout(getImageLayout(coverageName));
+            }
+
         } finally {
-            file.close();
+            gpkg.close();
         }
     }
 
@@ -200,6 +222,25 @@ public class GeoPackageReader extends AbstractGridCoverage2DReader {
     @Override
     public int getGridCoverageCount() {
         return tiles.size();
+    }
+
+    @Override
+    public ImageLayout getImageLayout(String coverageName) throws IOException {
+
+        // Get the envelope surrounding the tiles found in the maximum zoom level
+        GridEnvelope gridRange = getOriginalGridRange(coverageName);
+        final Dimension tileSize = ImageUtilities.toTileSize(new Dimension(gridRange.getSpan(0), gridRange.getSpan(1)));
+
+        BufferedImage image = new BufferedImage(tileSize.width, tileSize.height, BufferedImage.TYPE_4BYTE_ABGR);
+        ColorModel cm = image.getColorModel();
+        SampleModel sm = image.getSampleModel();
+
+        ImageLayout imageLayout = new ImageLayout(0, 0, gridRange.getSpan(0), gridRange.getSpan(1));
+        imageLayout.setTileGridXOffset(0).setTileGridYOffset(0).setTileWidth(tileSize.width).setTileHeight(tileSize.height);
+        imageLayout.setColorModel(cm).setSampleModel(sm);
+ 
+
+        return imageLayout;
     }
 
     /**
@@ -413,8 +454,8 @@ public class GeoPackageReader extends AbstractGridCoverage2DReader {
      */
     protected BufferedImage getStartImage(int width, int height, Color inputTransparentColor) {
 
-        // ImageWorker.makeColorTransparent only works images with an IndexColorModel or a ComponentColorModel
-        int imageType = (inputTransparentColor != null) ? BufferedImage.TYPE_4BYTE_ABGR : BufferedImage.TYPE_INT_ARGB;
+        // ImageWorker.makeColorTransparent used in the read method only works images with a a ComponentColorModel or IndexColorModel
+        int imageType = (inputTransparentColor != null) ? /*ComponentColorModel*/ BufferedImage.TYPE_4BYTE_ABGR : /*DirectColorModel*/ BufferedImage.TYPE_INT_ARGB;
 
         BufferedImage image = new BufferedImage(width, height, imageType);
 
