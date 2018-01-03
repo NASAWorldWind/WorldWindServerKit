@@ -11,9 +11,8 @@
  * @param {type} $
  * @returns {LayersViewModel}
  */
-define(['knockout', 'jquery', 'jqueryui', 'bootstrap', 'model/Constants', 'model/util/Log',
-],
-        function (ko, $, jqueryui, boostrap, constants, log) {
+define(['knockout', 'jquery', 'jqueryui', 'bootstrap', 'dragula', 'model/globe/LayerManager', 'model/Constants', 'model/util/Log'],
+        function (ko, $, jqueryui, boostrap, dragula, LayerManager, constants, log) {
 
             /**
              * The view model for the Layers panel.
@@ -158,6 +157,61 @@ define(['knockout', 'jquery', 'jqueryui', 'bootstrap', 'model/Constants', 'model
                     }
                     return true;
                 };
+
+                /**
+                 * Handle drop event from the Dragula dragger.
+                 * 
+                 * @param {element} dropped Element that was dropped
+                 * @param {element} target Target element container
+                 * @param {element} source Source element container
+                 * @param {element} sibling New sibling element next to dropped element 
+                 */
+                this.onDropLayer = function (dropped, target, source, sibling) {
+                    var droppedName = $(dropped).find('.layer').text(),
+                            siblingName = $(sibling).find('.layer').text(),
+                            droppedLayer = layerManager.findLayerViewModel(droppedName),
+                            siblingLayer = layerManager.findLayerViewModel(siblingName),
+                            layers, oldIndex, newIndex;
+
+                    // Remove the dropped element created by dragula; it's not compatible with Knockout
+                    $(dropped).remove();
+
+                    // We'll let knockout manage the DOM by removing/adding items in the observable array.
+                    if (source.id === 'base-layers-item-container') {
+                        layers = self.baseLayers;
+                    } else if (source.id === 'overlay-layers-item-container') {
+                        layers = self.overlayLayers;
+                    }
+                    oldIndex = layers.indexOf(droppedLayer);
+                    newIndex = layers.indexOf(siblingLayer);
+
+                    if (oldIndex < 0) {
+                        return; // error?
+                    }
+                    if (newIndex < 0) {
+                        newIndex = layers().length;
+                    }
+                    // Remove/add the item in the obserable array to update the DOM
+                    layers.splice(oldIndex, 1);
+                    layers.splice(oldIndex > newIndex ? newIndex : newIndex - 1, 0, droppedLayer);
+
+                    layerManager.synchronizeLayers();
+                };
+
+
+                //
+                // Setup dragging
+                //
+                this.drake = dragula({
+                    revertOnSpill: true,
+                    accepts: function (el, target, source, sibling) {
+                        return source.id === target.id;
+                    }
+                });
+                this.drake.containers.push(document.getElementById('base-layers-item-container'));
+                this.drake.containers.push(document.getElementById('overlay-layers-item-container'));
+                this.drake.on('drop', this.onDropLayer);
+
             }
 
             return LayersViewModel;
