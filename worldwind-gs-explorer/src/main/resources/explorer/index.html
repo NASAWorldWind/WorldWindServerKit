@@ -181,7 +181,7 @@
                                 </h5>
                             </div>
                             <div class="panel-collapse collapse in" id="base-layers-panel">
-                                <div data-bind="template: { name: 'layer-template', foreach: baseLayers}"></div>
+                                <div data-bind="template: { name: 'layer-template', foreach: baseLayers}" id="base-layers-item-container"></div>
                             </div>
                         </div>
                         <div class="panel panel-default">
@@ -194,7 +194,7 @@
                                 </h5>
                             </div>
                             <div class="panel-collapse collapse in" id="overlay-layers-panel">
-                                <div data-bind="template: { name: 'layer-template', foreach: overlayLayers}"></div>
+                                <div data-bind="template: { name: 'layer-template', foreach: overlayLayers}" id="overlay-layers-item-container"></div>
                             </div>
                         </div>
                         <div class="panel panel-default">
@@ -207,7 +207,7 @@
                                 </h5>
                             </div>
                             <div class="panel-collapse collapse" id="data-layers-panel">
-                                <div data-bind="template: { name: 'unsorted-layer-template', foreach: dataLayers}"></div>
+                                <div data-bind="template: { name: 'layer-template', foreach: dataLayers}" id="data-layers-item-container"></div>
                             </div>
                         </div>
                         <div class="panel panel-default">
@@ -220,7 +220,7 @@
                                 </h5>
                             </div>
                             <div class="panel-collapse collapse" id="effect-layers-panel">
-                                <div data-bind="template: { name: 'unsorted-layer-template', foreach: effectsLayers}"></div>
+                                <div data-bind="template: { name: 'unsorted-layer-template', foreach: effectsLayers}" id="effect-layers-item-container"></div>
                             </div>
                         </div>
                         <div class="panel panel-default">
@@ -233,7 +233,7 @@
                                 </h5>
                             </div>
                             <div class="panel-collapse collapse" id="widget-layers-panel">
-                                <div data-bind="template: { name: 'unsorted-layer-template', foreach: widgetLayers}"></div>
+                                <div data-bind="template: { name: 'unsorted-layer-template', foreach: widgetLayers}" id="widget-layers-item-container"></div>
                             </div>
                         </div>
                     </div>                  
