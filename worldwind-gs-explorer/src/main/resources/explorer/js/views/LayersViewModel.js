@@ -25,22 +25,22 @@ define(['knockout', 'jquery', 'jqueryui', 'bootstrap', 'model/Constants', 'model
                         layerManager = globe.layerManager;
 
                 // Create view data sources from the LayerManager's observable arrays
-                self.baseLayers = layerManager.baseLayers;
-                self.overlayLayers = layerManager.overlayLayers;
-                self.dataLayers = layerManager.dataLayers;
-                self.effectsLayers = layerManager.effectsLayers;
-                self.widgetLayers = layerManager.widgetLayers;
+                this.baseLayers = layerManager.baseLayers;
+                this.overlayLayers = layerManager.overlayLayers;
+                this.dataLayers = layerManager.dataLayers;
+                this.effectsLayers = layerManager.effectsLayers;
+                this.widgetLayers = layerManager.widgetLayers;
 
                 // Layer type options
-                self.optionValues = ["WMS Layer", "WMTS Layer", "KML file", "Shapefile"];
-                self.selectedOptionValue = ko.observable(self.optionValues[0]);
+                this.optionValues = ["WMS Layer", "WMTS Layer", "KML file", "Shapefile"];
+                this.selectedOptionValue = ko.observable(self.optionValues[0]);
 
                 /**
                  * An observable array of servers
                  */
                 this.servers = layerManager.servers;
                 // Setting a default server address to some interesting data
-                self.serverAddress = ko.observable("http://neowms.sci.gsfc.nasa.gov/wms/wms"); // CORS is disabled now in here
+                this.serverAddress = ko.observable("https://neowms.sci.gsfc.nasa.gov/wms/wms"); // CORS is disabled now in here
                 // self.serverAddress = ko.observable("https://worldwind25.arc.nasa.gov/wms");
 
 
@@ -48,7 +48,7 @@ define(['knockout', 'jquery', 'jqueryui', 'bootstrap', 'model/Constants', 'model
                  * Toggles the selected layer's visibility on/off
                  * @param {Object} layer The selected layer in the layer collection
                  */
-                self.onToggleLayer = function (layer) {
+                this.onToggleLayer = function (layer) {
                     layer.enabled(!layer.enabled());
                     globe.redraw();
                 };
@@ -58,8 +58,7 @@ define(['knockout', 'jquery', 'jqueryui', 'bootstrap', 'model/Constants', 'model
                  * Opens a dialog to edit the layer settings.
                  * @param {Object} layer The selected layer in the layer collection
                  */
-                self.onEditSettings = function (layer) {
-
+                this.onEditSettings = function (layer) {
                     $('#opacity-slider').slider({
                         animate: 'fast',
                         min: 0,
@@ -74,19 +73,37 @@ define(['knockout', 'jquery', 'jqueryui', 'bootstrap', 'model/Constants', 'model
 
                     $("#layer-settings-dialog").dialog({
                         autoOpen: false,
-                        title: layer.name()
+                        title: layer.name(),
+                        close: function (event, ui) {
+                            $('#move-up-button').off('click');
+                            $('#move-down-button').off('click');
+                            $('#move-top-button').off('click');
+                            $('#move-bottom-button').off('click');
+                        }
+                    });
+                    $('#opacity-slider').slider("option", "value", layer.opacity());
+                    $('#move-up-button').on('click', function () {
+                        layerManager.moveLayer(layer, 'up');
+                    });
+                    $('#move-down-button').on('click', function () {
+                        layerManager.moveLayer(layer, 'down');
+                    });
+                    $('#move-top-button').on('click', function () {
+                        layerManager.moveLayer(layer, 'top');
+                    });
+                    $('#move-bottom-button').on('click', function () {
+                        layerManager.moveLayer(layer, 'bottom');
                     });
 
                     //console.log(layer.name() + ":  " + layer.opacity());
-                    $("#opacity-slider").slider("option", "value", layer.opacity());
-                    $("#layer-settings-dialog").dialog("open");
+                    $('#layer-settings-dialog').dialog("open");
                 };
 
 
                 /**
                  * Opens the Add Layer dialog.
                  */
-                self.onAddLayer = function () {
+                this.onAddLayer = function () {
                     $("#add-layer-dialog").dialog({
                         autoOpen: false,
                         title: "Add Layer"
@@ -96,26 +113,30 @@ define(['knockout', 'jquery', 'jqueryui', 'bootstrap', 'model/Constants', 'model
                 };
 
 
-                self.onAddServer = function () {
+                this.onAddServer = function () {
                     layerManager.addWmsServer(self.serverAddress());
                     return true;
                 };
 
-                self.onZoomToLayer = function (layer){
+                this.onZoomToLayer = function (layer) {
                     layerManager.zoomToLayer(layer);
                 };
 
-                self.onMoveLayerUp = function (layer) {
+                this.onMoveLayerUp = function (layer) {
                     layerManager.moveLayer(layer, "up");
                 };
 
-                self.onMoveLayerToTop = function(layer) {
-                    layerManager.moveLayer(layer, 0);
+                this.onMoveLayerDown = function (layer) {
+                    layerManager.moveLayer(layer, "down");
                 };
 
-                self.onMoveLayerDown = function (layer) {
-                    layerManager.moveLayer(layer, "down");
-                }
+                this.onMoveLayerToTop = function (layer) {
+                    layerManager.moveLayer(layer, "top");
+                };
+
+                this.onMoveLayerToBottom = function (layer) {
+                    layerManager.moveLayer(layer, "bottom");
+                };
 
                 /**
                  * Add the supplied layer from the server's capabilities to the active layers
