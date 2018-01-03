@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>gov.nasa.worldwind.server</groupId>
+        <artifactId>worldwind-serverkit</artifactId>
+        <version>0.6.0-SNAPSHOT</version>
+    </parent>
+    <artifactId>worldwind-gs-layergroup-getmapcallback</artifactId>
+    <packaging>jar</packaging>
+
+    <!--=====================================================================-->
+    <!--Project Information                                                  -->
+    <!--=====================================================================-->    
+    <name>WorldWind LayerGroupGetMapCallback</name>
+    <description>A GetMapCallback that improves performance and rendering of LayerGroups</description>
+    <url>https://github.com/NASAWorldWind/WorldWindServerKit</url>
+    <organization>
+        <name>NASA World Wind</name>
+        <url>https://worldwind.arc.nasa.gov</url>
+    </organization>
+    <licenses>
+        <license>
+            <name>General Public License (GPL)</name>
+            <url>http://www.gnu.org/copyleft/gpl.txt</url>
+        </license>
+    </licenses>
+    <developers />
+    <contributors />
+    <mailingLists />
+    <prerequisites />    
+    
+    <!--=====================================================================-->
+    <!--Environment Settings                                                 -->
+    <!--=====================================================================-->    
+    <scm>
+        <url>https://github.com/NASAWorldWind/WorldWindServerKit</url>
+        <connection>scm:git:git://github.com/NASAWorldWind/WorldWindServerKit.git</connection>
+        <developerConnection>scm:git:https://github.com/NASAWorldWind/WorldWindServerKit.git</developerConnection>
+        <tag>HEAD</tag>
+    </scm>    
+    <issueManagement>
+        <system>GitHub Issues</system>
+        <url>https://github.com/NASAWorldWind/WorldWindServerKit/issues</url>
+    </issueManagement>
+    <ciManagement>
+        <system>Travis CI</system>
+        <url>https://travis-ci.org/NASAWorldWind/WorldWindServerKit</url>
+    </ciManagement>
+    <distributionManagement />    
+    
+    <!--=====================================================================-->
+    <!--The Basics                                                           -->
+    <!--=====================================================================-->
+    <dependencies>
+        <!--Dependencies common the GeoServer modules-->
+        <dependency>
+            <groupId>org.geotools</groupId>
+            <artifactId>gt-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.geotools</groupId>
+            <artifactId>gt-main</artifactId>
+        </dependency>        
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-beans</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-webmvc</artifactId>
+        </dependency>        
+        
+        <!--GeoServer Web Map Service module-->
+        <dependency>
+            <groupId>org.geoserver</groupId>
+            <artifactId>gs-wms</artifactId>
+        </dependency>
+
+
+        <!--Test dependencies-->
+        <dependency>
+            <groupId>org.geoserver</groupId>
+            <artifactId>gs-platform</artifactId>
+            <classifier>tests</classifier>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.geoserver</groupId>
+            <artifactId>gs-main</artifactId>
+            <classifier>tests</classifier>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.geoserver</groupId>
+            <artifactId>gs-wms</artifactId>
+            <classifier>tests</classifier>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.geoserver</groupId>
+            <artifactId>gs-wfs</artifactId>
+            <classifier>tests</classifier>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.geoserver.extension</groupId>
+            <artifactId>gs-wps-core</artifactId>
+            <scope>test</scope>
+            <classifier>tests</classifier>
+        </dependency>
+        <dependency>
+            <groupId>org.geoserver.web</groupId>
+            <artifactId>gs-web-core</artifactId>
+            <classifier>tests</classifier>
+            <scope>test</scope>
+        </dependency>    
+        <dependency>
+            <groupId>org.geoserver.web</groupId>
+            <artifactId>gs-web-demo</artifactId>
+            <scope>test</scope>
+        </dependency>   
+        <dependency>
+            <groupId>org.geotools</groupId>
+            <artifactId>gt-sample-data</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.easymock</groupId>
+            <artifactId>easymockclassextension</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>3.0.1</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <!--=====================================================================-->
+    <!--Build Settings                                                       -->
+    <!--=====================================================================-->
+    <build>
+        <plugins />
+        <resources>
+            <resource>
+                <directory>${basedir}/src/main/java</directory>
+                <includes>
+                    <!--Spring bean factory configuration-->
+                    <include>applicationContext.xml</include>
+                </includes>
+            </resource>
+        </resources>
+        <testResources>
+            <testResource>
+                <directory>src/test/resources</directory>
+            </testResource>     
+        </testResources>    
+    </build>    
+    <reporting /> 
+    <profiles>
+        <!--Generate the javadocs and sources jar files when the "release" profile is activated-->
+        <profile>
+            <id>release</id>
+            <activation>
+                <property>
+                    <name>release</name>
+                </property>
+            </activation>
+            <dependencies />
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>attach-javadocs</id>
+                                <goals>
+                                    <goal>jar</goal>
+                                </goals>
+                            </execution>
+                        </executions>            
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-source-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>attach-sources</id>
+                                <goals>
+                                    <goal>jar</goal>
+                                </goals>
+                            </execution>
+                        </executions>            
+                    </plugin>               
+                </plugins>
+            </build>
+            <modules />
+        </profile>
+    </profiles>
+</project>
