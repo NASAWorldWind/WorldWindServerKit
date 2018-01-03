@@ -66,6 +66,7 @@
         <module>worldwind-gs-explorer</module>
         <module>worldwind-geoserver</module>
         <module>worldwind-geoserver-dist</module>
+        <module>worldwind-gs-layergroup-getmapcallback</module>
     </modules>  
       
     <!--=====================================================================-->
