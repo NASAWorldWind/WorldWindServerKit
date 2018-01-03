@@ -98,8 +98,12 @@ define(['knockout', 'jquery', 'jqueryui',
                 self.dropIsArmed(false);
                 event.stopImmediatePropagation();
             };
-            // Assign the click handler to the WorldWind
+            
+            // Assign the click handlers to the WorldWindow
             globe.wwd.addEventListener('click', function (event) {
+                self.handleDropClick(event);
+            });
+            globe.wwd.addEventListener("touchend", function (event) {
                 self.handleDropClick(event);
             });
 
