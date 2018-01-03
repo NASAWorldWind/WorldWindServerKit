@@ -34,7 +34,7 @@ define(['knockout', 'jquery', 'views/BookmarkDialog'],
                 self.onBookmark = function () {
                     
                     // Generate a bookmark for the current scene
-                    var bookmark = window.origin + "/geoserver/explorer/index.html?" 
+                    var bookmark = window.location.origin + window.location.pathname + "?" 
                             + globe.layerManager.getWmsLayersParam() + "&"
                             + globe.getCameraParams();
                     // TODO: The bookmark should be generated from Bookmark class
