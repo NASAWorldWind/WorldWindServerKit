@@ -459,7 +459,7 @@
                     <!--Layer name and visibility button-->
                     <button type="button"
                             class="btn btn-default layer-name wrap-panel-heading"
-                            style="display: block; width: 50%;"
+                            style="display: block; width: 70%;"
                             data-bind="click: $root.onToggleLayer, css: {active: $data.enabled()}">
                         <span class="glyphicon pull-left"
                               data-bind="css: {'glyphicon-eye-open': $data.enabled(), 'glyphicon-eye-close': !$data.enabled()}"></span>
@@ -468,35 +468,16 @@
                     <!--Settings button-->
                     <button type="button"
                             class="btn btn-default"
-                            style="display: block; width: 10%;"
+                            style="display: block; width: 15%;"
                             data-bind="css: {active: $data.enabled()}, click: $root.onEditSettings">
                         <span class="glyphicon glyphicon-cog"></span>
                     </button>
                     <!--Zoom to layer button-->
                     <button type="button"
                             class="btn btn-default"
-                            style="display: block; width: 10%;"
+                            style="display: block; width: 15%;"
                             data-bind="css: {active: $data.enabled()}, click: $root.onZoomToLayer">
                         <span class="glyphicon glyphicon-zoom-in"></span>
-                    </button>
-                    <!--Layer ordering buttons-->
-                    <button type="button"
-                            class="btn btn-default"
-                            style="display: block; width: 10%;"
-                            data-bind="css: {active: $data.enabled()}, click: $root.onMoveLayerUp">
-                        <span class="glyphicon glyphicon-arrow-up"></span>
-                    </button>
-                    <button type="button"
-                            class="btn btn-default"
-                            style="display: block; width: 10%;"
-                            data-bind="css: {active: $data.enabled()}, click: $root.onMoveLayerDown">
-                        <span class="glyphicon glyphicon-arrow-down"></span>
-                    </button>
-                    <button type="button"
-                            class="btn btn-default"
-                            style="display: block; width: 10%;"
-                            data-bind="css: {active: $data.enabled()}, click: $root.onMoveLayerToTop">
-                        <span class="glyphicon glyphicon-circle-arrow-up"></span>
                     </button>
                 </div>
                 <div class="collapse" data-bind="attr: {id: 'collapse-layer-' + $data.id()}">
@@ -521,7 +502,7 @@
                     <!--Layer name and visibility button-->
                     <button type="button"
                             class="btn btn-default layer-name wrap-panel-heading"
-                            style="display: block; width: 80%;"
+                            style="display: block; width: 70%;"
                             data-bind="click: $root.onToggleLayer, css: {active: $data.enabled()}">
                         <span class="glyphicon pull-left"
                               data-bind="css: {'glyphicon-eye-open': $data.enabled(), 'glyphicon-eye-close': !$data.enabled()}"></span>
@@ -530,14 +511,14 @@
                     <!--Settings button-->
                     <button type="button"
                             class="btn btn-default"
-                            style="display: block; width: 10%;"
+                            style="display: block; width: 15%;"
                             data-bind="css: {active: $data.enabled()}, click: $root.onEditSettings">
                         <span class="glyphicon glyphicon-cog"></span>
                     </button>
                     <!--Zoom to layer button-->
                     <button type="button"
                             class="btn btn-default"
-                            style="display: block; width: 10%;"
+                            style="display: block; width: 15%;"
                             data-bind="css: {active: $data.enabled()}, click: $root.onZoomToLayer">
                         <span class="glyphicon glyphicon-zoom-in"></span>
                     </button>
@@ -563,6 +544,38 @@
                 <div>
                     <!-- TODO not binding the url -->
                     <img data-bind="attr: {src: $data.legendUrl}"/>
+                </div>
+                Layer Ordering
+                <div class="btn-group btn-block">
+                    <!--Layer ordering buttons-->
+                    <button id="move-up-button" 
+                            type="button"
+                            class="btn btn-default"
+                            style="display: block; width: 25%;"
+                            data-bind="css: {active: $data.enabled()}, click: $root.onMoveLayerUp">
+                        <span class="glyphicon glyphicon-arrow-up"></span>
+                    </button>
+                    <button id="move-down-button"
+                            type="button"
+                            class="btn btn-default"
+                            style="display: block; width: 25%;"
+                            data-bind="css: {active: $data.enabled()}, click: $root.onMoveLayerDown">
+                        <span class="glyphicon glyphicon-arrow-down"></span>
+                    </button>
+                    <button id="move-top-button"
+                            type="button"
+                            class="btn btn-default"
+                            style="display: block; width: 25%;"
+                            data-bind="css: {active: $data.enabled()}, click: $root.onMoveLayerToTop">
+                        <span class="glyphicon glyphicon-circle-arrow-up"></span>
+                    </button>
+                    <button id="move-bottom-button"
+                            type="button"
+                            class="btn btn-default"
+                            style="display: block; width: 25%;"
+                            data-bind="css: {active: $data.enabled()}, click: $root.onMoveLayerToBottom">
+                        <span class="glyphicon glyphicon-circle-arrow-down"></span>
+                    </button>
                 </div>
             </div>
         </div>
