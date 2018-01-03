@@ -105,7 +105,7 @@ define([
          * Reset the view to North up and nadir.
          */
         KeyboardControls.prototype.resetHeadingAndTilt = function () {
-            //this.ctrl.resetHeadingAndTilt();
+            this.globe.resetHeadingAndTilt();
         };
 
         /**
