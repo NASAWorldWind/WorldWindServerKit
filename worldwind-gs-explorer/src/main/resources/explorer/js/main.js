@@ -12,6 +12,7 @@
 requirejs.config({
 // Path mappings for the logical module names
     paths: {
+        'dragula': 'libs/dragula/dragula',
         'knockout': 'libs/knockout/knockout-3.4.0.debug',
         'jquery': 'libs/jquery/jquery-2.1.3',
         'jqueryui': 'libs/jquery-ui/jquery-ui-1.11.4',
@@ -36,7 +37,7 @@ requirejs.config({
 /**
  * A top-level require call executed by the Application.
  */
-require(['knockout', 'jquery', 'bootstrap', 'worldwind',
+require(['dragula', 'knockout', 'jquery', 'bootstrap', 'worldwind',
     'model/Config',
     'model/Constants',
     'model/Explorer',
@@ -51,7 +52,7 @@ require(['knockout', 'jquery', 'bootstrap', 'worldwind',
     'views/ProjectionsViewModel',
     'views/SearchViewModel',
     'views/SettingsViewModel'],
-    function (ko, $, bootstrap, ww,
+    function (dragula, ko, $, bootstrap, ww,
         config,
         constants,
         explorer,
