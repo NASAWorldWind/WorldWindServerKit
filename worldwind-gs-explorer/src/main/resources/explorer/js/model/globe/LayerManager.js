@@ -42,13 +42,13 @@ define([
                 /** WWSK GeoServer WMS endpoint
                  * TODO: initialize from server REST settings
                  */
-                this.localWmsServer = window.origin + "/geoserver/wms";
+                this.localWmsServer = window.location.origin + "/geoserver/wms";
 //                this.localWmsServer = window.origin + "/geoserver/gwc/service/wms";
 
                 /** WWSK GeoServer WFS endpoint
                  * TODO: initialize from server REST settings
                  */
-                this.localWfsServer = window.origin + "/geoserver/ows";
+                this.localWfsServer = window.location.origin + "/geoserver/ows";
 
                 /** WWSK GeoServer WMS version
                  * TODO: initialize from server REST settings
