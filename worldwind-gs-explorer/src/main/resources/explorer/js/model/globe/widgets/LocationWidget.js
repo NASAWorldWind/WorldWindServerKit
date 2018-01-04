@@ -21,11 +21,13 @@ define([
     'model/Constants',
     'model/Events',
     'model/util/Formatter',
+    'model/util/Clickable',
     'worldwind'],
     function (
         constants,
         events,
         formatter,
+        clickable,
         ww) {
         "use strict";
 
@@ -84,7 +86,11 @@ define([
             // Graphics
             this.reset = new WorldWind.ScreenImage(lowerRight, constants.IMAGE_PATH + "reset-button.png");
             this.reset.imageOffset = resetOffset;
-                        
+            // Make the reset image selectable via picking (see SelectController): adds the "click" method
+            clickable.makeClickable(this.reset, function(params) {
+                    globe.resetHeadingAndTilt();
+            });                        
+
             this.background = new WorldWind.ScreenImage(lowerRight, constants.IMAGE_PATH + "widget-circle-bg.png");
             this.background.imageOffset = backgroundOffset;
 
