@@ -216,7 +216,11 @@ define(['knockout',
                     widgets = new WorldWind.RenderableLayer(constants.LAYER_NAME_WIDGETS);
                     widgets.addRenderable(new TimeWidget(this));
                     widgets.addRenderable(new LocationWidget(this));
-                    this.layerManager.addWidgetLayer(widgets);
+                    this.layerManager.addWidgetLayer(widgets, {
+                        pickEnabled: true,
+                        enabled: true,
+                        hideInMenu: false
+                    });
                 }
 
                 // Add handler to redraw the WorldWindow during resize events
