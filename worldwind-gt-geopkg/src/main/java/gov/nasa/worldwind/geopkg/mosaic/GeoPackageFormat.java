@@ -65,6 +65,14 @@ public class GeoPackageFormat extends AbstractGridFormat {
      */
     public final static String[] SUFFIXES = {"gpkg"};
     
+    /**
+     * The input Types that are accepted.
+     */
+    public static final Class[] INPUT_TYPES = new Class[]{
+        File.class, URL.class, String.class, FileImageInputStreamExtImpl.class
+    };
+    
+    
     private final static Logger LOGGER = Logging.getLogger(GeoPackageFormat.class.getPackage().getName());
 
     /**

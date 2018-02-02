@@ -1,70 +1,58 @@
 package gov.nasa.worldwind.geopkg.mosaic;
 
-import it.geosolutions.imageio.stream.input.FileImageInputStreamExtImpl;
-import java.io.File;
 import java.io.IOException;
-import java.net.URL;
 import java.util.Locale;
 import javax.imageio.spi.ImageReaderSpi;
 
 /**
- *
+ * The service provider interface for the GeoPackageImageReader.
  * @author Bruce Schubert
  */
 public class GeoPackageImageReaderSpi extends ImageReaderSpi {
 
-    private static final String vendorName = "worldwind.arc.nasa.gov";
-    private static final String[] suffixes = {"gpkg"};
-    private static final String[] formatNames = {"geopackage", "geopkg", "gpkg"};
-    private static final String[] MIMETypes = {"application/x-gpkg"};
-    private static final String version = "1.0";
+    /**
+     * The class name of the image reader.
+     */
+    private static final String READER_CLASS_NAME = "gov.nasa.worldwind.geopkg.mosaic.GeoPackageImageReader";
 
     /**
-     * the class name of the image reader.
+     * The Writer SPI class name.
      */
-    private static final String readerCN = "gov.nasa.worldwind.geopkg.mosaic.GeoPackageImageReader";
-
-    /**
-     * the inputTypes that are accepted by the {@link GeoPackageImageReader}:
-     * file, URL or filename
-     */
-    private static final Class[] inputTypes = new Class[]{File.class, URL.class, String.class, FileImageInputStreamExtImpl.class};
-
-    /**
-     * the writerSpiName
-     */
-    private static final String[] wSN = null;
+    private static final String[] WRITER_SPI_NAME = null;
 
     /**
      * the flag for stream metadata support.
      */
-    private static final boolean supportsStandardStreamMetadataFormat = false;
+    private static final boolean SUPPORTS_STANDARD_STREAM_METADATA_FORMAT = false;
 
-    private static final String nativeStreamMetadataFormatName = null;
-    private static final String nativeStreamMetadataFormatClassName = null;
-    private static final String[] extraStreamMetadataFormatNames = null;
-    private static final String[] extraStreamMetadataFormatClassNames = null;
+    private static final String NATIVE_STREAM_METADATA_FORMAT_NAME = null;
+    private static final String NATIVE_STREAM_METADATA_FORMAT_CLASSNAME = null;
+    private static final String[] EXTRA_STREAM_METADATA_FORMAT_NAMES = null;
+    private static final String[] EXTRA_STREAM_METADATA_FORMAT_CLASSNAMES = null;
 
     /**
      * the flag for image metadata support.
      */
-    private static final boolean supportsStandardImageMetadataFormat = false;
+    private static final boolean SUPPORTS_STANDARD_IMAGE_METADATA_FORMAT = false;
 
-    private static final String nativeImageMetadataFormatName = null;
-    private static final String nativeImageMetadataFormatClassName = null;
-    private static final String[] extraImageMetadataFormatNames = null;
-    private static final String[] extraImageMetadataFormatClassNames = null;
+    private static final String NATIVE_IMAGE_METADATA_FORMAT_NAME = null;
+    private static final String NATIVE_IMAGE_METADATA_FORMAT_CLASSNAME = null;
+    private static final String[] EXTRA_IMAGE_METADATA_FORMAT_NAMES = null;
+    private static final String[] EXTRA_IMAGE_METADATA_FORMAT_CLASSNAMES = null;
 
     /**
      * default constructor for the service provider interface.
      */
     public GeoPackageImageReaderSpi() {
-        super(vendorName, version, formatNames, suffixes, MIMETypes, readerCN, inputTypes, wSN,
-                supportsStandardStreamMetadataFormat, nativeStreamMetadataFormatName,
-                nativeStreamMetadataFormatClassName, extraStreamMetadataFormatNames,
-                extraStreamMetadataFormatClassNames, supportsStandardImageMetadataFormat,
-                nativeImageMetadataFormatName, nativeImageMetadataFormatClassName,
-                extraImageMetadataFormatNames, extraImageMetadataFormatClassNames);
+        super(GeoPackageFormat.VENDOR, GeoPackageFormat.VERSION,
+                GeoPackageFormat.FORMAT_NAMES, GeoPackageFormat.SUFFIXES, 
+                GeoPackageFormat.MIME_TYPES, READER_CLASS_NAME, 
+                GeoPackageFormat.INPUT_TYPES, WRITER_SPI_NAME,
+                SUPPORTS_STANDARD_STREAM_METADATA_FORMAT, NATIVE_STREAM_METADATA_FORMAT_NAME,
+                NATIVE_STREAM_METADATA_FORMAT_CLASSNAME, EXTRA_STREAM_METADATA_FORMAT_NAMES,
+                EXTRA_STREAM_METADATA_FORMAT_CLASSNAMES, SUPPORTS_STANDARD_IMAGE_METADATA_FORMAT,
+                NATIVE_IMAGE_METADATA_FORMAT_NAME, NATIVE_IMAGE_METADATA_FORMAT_CLASSNAME,
+                EXTRA_IMAGE_METADATA_FORMAT_NAMES, EXTRA_IMAGE_METADATA_FORMAT_CLASSNAMES);
     }
 
     @Override
@@ -73,25 +61,16 @@ public class GeoPackageImageReaderSpi extends ImageReaderSpi {
     }
 
     /**
-     * Returns true if the input source can be is a GeoPackage file.
+     * Returns true if the supplied source object appears to reference a
+     * GeoPackage file.
      *
-     * @param source a URL or File object
-     * @return true if the (underlying) file extension is valid for a GeoPackage
+     * @param source a URL, File, String or FileImageInputStreamExtImpl object
+     * @return if the source object references an existing GeoPackage file
      * @throws IOException
      */
     @Override
     public boolean canDecodeInput(Object source) throws IOException {
-        File file = GeoPackageFormat.getFileFromSource(source);
-        if (file == null) {
-            return false;
-        }
-        String filename = file.getName().toLowerCase();
-        for (String suffix : suffixes) {
-            if (filename.endsWith("." + suffix)) {
-                return true;
-            }
-        }
-        return false;
+        return GeoPackageFormat.isValidGeoPackage(source);
     }
 
     /**
