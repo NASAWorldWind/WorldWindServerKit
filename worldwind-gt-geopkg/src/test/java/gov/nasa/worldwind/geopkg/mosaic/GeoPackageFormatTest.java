@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package gov.nasa.worldwind.geopkg.mosaic;
 
 import it.geosolutions.imageio.stream.input.FileImageInputStreamExtImpl;
@@ -10,20 +5,16 @@ import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.List;
 import org.geotools.coverage.grid.io.AbstractGridCoverage2DReader;
 import org.geotools.coverage.grid.io.imageio.GeoToolsWriteParams;
 import org.geotools.factory.GeoTools;
 import org.geotools.factory.Hints;
 import org.geotools.referencing.factory.gridshift.DataUtilities;
 import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import org.opengis.coverage.grid.GridCoverageWriter;
-import org.opengis.parameter.GeneralParameterValue;
 import org.opengis.parameter.ParameterValueGroup;
 
 /**
@@ -177,6 +168,7 @@ public class GeoPackageFormatTest {
 
     /**
      * Test of accepts method, of class GeoPackageFormat.
+     * @throws java.io.IOException
      */
     @Test
     public void testAccepts_fileImageInputStreamExt() throws IOException {
