@@ -1,4 +1,3 @@
-
 package gov.nasa.worldwind.geopkg.mosaic;
 
 import it.geosolutions.imageio.stream.input.FileImageInputStreamExtImpl;
@@ -7,14 +6,13 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Locale;
 import javax.imageio.spi.ImageReaderSpi;
-import javax.imageio.stream.FileImageInputStream;
-import javax.imageio.stream.ImageInputStream;
 
 /**
  *
  * @author Bruce Schubert
  */
-public class GeoPackageImageReaderSpi extends ImageReaderSpi{
+public class GeoPackageImageReaderSpi extends ImageReaderSpi {
+
     private static final String vendorName = "worldwind.arc.nasa.gov";
     private static final String[] suffixes = {"gpkg"};
     private static final String[] formatNames = {"geopackage", "geopkg", "gpkg"};
@@ -52,12 +50,11 @@ public class GeoPackageImageReaderSpi extends ImageReaderSpi{
      */
     private static final boolean supportsStandardImageMetadataFormat = false;
 
-    private static final String nativeImageMetadataFormatName = null; 
-    private static final String nativeImageMetadataFormatClassName = null; 
+    private static final String nativeImageMetadataFormatName = null;
+    private static final String nativeImageMetadataFormatClassName = null;
     private static final String[] extraImageMetadataFormatNames = null;
     private static final String[] extraImageMetadataFormatClassNames = null;
 
- 
     /**
      * default constructor for the service provider interface.
      */
@@ -71,37 +68,42 @@ public class GeoPackageImageReaderSpi extends ImageReaderSpi{
     }
 
     @Override
-    public String getDescription( Locale locale ) {
+    public String getDescription(Locale locale) {
         return "GeoPackage raster image reader service provider interface, version " + version;
     }
 
+    /**
+     * Returns true if the input source can be is a GeoPackage file.
+     *
+     * @param source a URL or File object
+     * @return true if the (underlying) file extension is valid for a GeoPackage
+     * @throws IOException
+     */
     @Override
-    public boolean canDecodeInput( Object source ) throws IOException {
-//        URI input = null;
-//        if (source instanceof URI) {
-//            input = (URI) source;
-//        } else if (source instanceof File) {
-//            input = ((File) source).toURI();
-//        } else if (source instanceof FileImageInputStreamExtImpl) {
-//            input = ((FileImageInputStreamExtImpl) source).getFile().toURI();
-//            if (LOGGER.isLoggable(Level.FINE)) {
-//                LOGGER.fine("Found a valid FileImageInputStream");
-//            }
-//        } else if (source instanceof URIImageInputStream) {
-//            input = ((URIImageInputStream) source).getUri();
-//        }
-//        
-//        if (input != null) {
-//            return NetCDFUtilities.getFormat(input) != FileFormat.NONE;
-//        } else {
-//            return false;
-//        }        
-        return true;
+    public boolean canDecodeInput(Object source) throws IOException {
+        File file = GeoPackageFormat.getFileFromSource(source);
+        if (file == null) {
+            return false;
+        }
+        String filename = file.getName().toLowerCase();
+        for (String suffix : suffixes) {
+            if (filename.endsWith("." + suffix)) {
+                return true;
+            }
+        }
+        return false;
     }
 
+    /**
+     * Returns an instance of a GeoPackageImageReader..
+     *
+     * @param extension a plug-in specific extension object, which may be null.
+     * @return a new GeoPackageImageReader object
+     * @throws IOException
+     */
     @Override
-    public GeoPackageImageReader createReaderInstance( Object extension ) throws IOException {
+    public GeoPackageImageReader createReaderInstance(Object extension) throws IOException {
         return new GeoPackageImageReader(this);
     }
-    
+
 }
