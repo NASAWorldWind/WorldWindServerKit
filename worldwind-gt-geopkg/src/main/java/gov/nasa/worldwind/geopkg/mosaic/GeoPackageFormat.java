@@ -16,6 +16,7 @@
  */
 package gov.nasa.worldwind.geopkg.mosaic;
 
+import it.geosolutions.imageio.stream.input.FileImageInputStreamExtImpl;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -135,6 +136,11 @@ public class GeoPackageFormat extends AbstractGridFormat {
         writeParameters = null;
     }
 
+    /**
+     * Attempts to return a File object from the input source.
+     * @param source a File, URL or filename referencing a GeoPackage file
+     * @return a File object or null
+     */
     public static File getFileFromSource(Object source) {
         if (source == null) {
             return null;
@@ -145,6 +151,9 @@ public class GeoPackageFormat extends AbstractGridFormat {
         try {
             if (source instanceof File) {
                 sourceFile = (File) source;
+            } else if (source instanceof FileImageInputStreamExtImpl) {
+                // FileImageInputStreamExtImpl is used by image mosaic granules
+                sourceFile = ((FileImageInputStreamExtImpl)source).getFile();
             } else if (source instanceof URL) {
                 if (((URL) source).getProtocol().equals("file")) {
                     sourceFile = DataUtilities.urlToFile((URL) source);
