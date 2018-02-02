@@ -35,6 +35,11 @@ public class TileMatrix implements Serializable {
     Integer tileWidth, tileHeight;
     Double xPixelSize;
     Double yPixelSize;
+    
+    Integer minCol;
+    Integer maxCol;
+    Integer minRow;
+    Integer maxRow;
 
     public TileMatrix() {
     }
@@ -100,6 +105,10 @@ public class TileMatrix implements Serializable {
         return true;
     }
 
+    /**
+     * Returns the zoom level for this matrix.
+     * @return zoom level
+     */
     public Integer getZoomLevel() {
         return zoomLevel;
     }
@@ -108,6 +117,10 @@ public class TileMatrix implements Serializable {
         this.zoomLevel = zoomLevel;
     }
 
+    /**
+     * Returns the number of columns in the matrix.
+     * @return number of columns
+     */
     public Integer getMatrixWidth() {
         return matrixWidth;
     }
@@ -115,7 +128,11 @@ public class TileMatrix implements Serializable {
     public void setMatrixWidth(Integer matrixWidth) {
         this.matrixWidth = matrixWidth;
     }
-
+    
+    /**
+     * Returns the number of rows in the matrix.
+     * @return number of rows
+     */
     public Integer getMatrixHeight() {
         return matrixHeight;
     }
@@ -124,6 +141,10 @@ public class TileMatrix implements Serializable {
         this.matrixHeight = matrixHeight;
     }
 
+    /**
+     * Returns the width of a tile in pixels.
+     * @return number of pixels
+     */
     public Integer getTileWidth() {
         return tileWidth;
     }
@@ -132,6 +153,10 @@ public class TileMatrix implements Serializable {
         this.tileWidth = tileWidth;
     }
 
+    /**
+     * Returns the height of a tile in pixels.
+     * @return number of pixels
+     */
     public Integer getTileHeight() {
         return tileHeight;
     }
@@ -140,6 +165,10 @@ public class TileMatrix implements Serializable {
         this.tileHeight = tileHeight;
     }
 
+    /**
+     * Returns the width of a pixel in the coverage's coordinate system units.
+     * @return the width of a pixel
+     */
     public Double getXPixelSize() {
         return xPixelSize;
     }
@@ -148,11 +177,46 @@ public class TileMatrix implements Serializable {
         this.xPixelSize = xPixelSize;
     }
 
+    /**
+     * Returns the height of a pixel in the coverage's coordinate system units.
+     * @return the height of a pixel
+     */
     public Double getYPixelSize() {
         return yPixelSize;
     }
 
     public void setYPixelSize(Double yPixelSize) {
         this.yPixelSize = yPixelSize;
+    }
+
+    // Read only properties
+    
+    public Integer getMinCol() {
+        return minCol;
+    }
+
+    public Integer getMaxCol() {
+        return maxCol;
+    }
+
+    public Integer getMinRow() {
+        return minRow;
+    }
+
+    public Integer getMaxRow() {
+        return maxRow;
+    }    
+    
+    public Integer getWidth() {
+        if (minCol != null && maxCol != null) {
+            return (maxCol - minCol + 1) * tileWidth;
+        }
+        return 0;
+    }
+    public Integer getHeight() {
+        if (minRow != null && maxRow != null) {
+            return (maxRow - minRow + 1) * tileHeight;
+        }
+        return 0;
     }
 }
