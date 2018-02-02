@@ -44,14 +44,28 @@ import org.opengis.parameter.GeneralParameterDescriptor;
  */
 public class GeoPackageFormat extends AbstractGridFormat {
 
-    public final static String GPKG_FILE_EXTENSION = ".gpkg";
-    private final static Logger LOGGER = Logging.getLogger(GeoPackageFormat.class.getPackage().getName());
-    final static String NAME = "GeoPackage (tiles)";
-    final static String DESC = "GeoPackage format with OGC encoding";
-    final static String VENDOR = "WorldWind";   // TODO: Change back to GeoTools when this fork is rolled back into community
-    final static String DOC_URL = "";
-    final static String VERSION = "1.0";
+    public final static String NAME = "GeoPackage (tiles)";
+    public final static String DESC = "GeoPackage format with OGC encoding";
+    public final static String VENDOR = "worldwind.arc.nasa.gov";   // TODO: Change back to GeoTools when this fork is rolled back into community
+    public final static String DOC_URL = "";
+    public final static String VERSION = "1.0";
     
+    /**
+     * Format names for a GeoPackage.
+     */
+    public static final String[] FORMAT_NAMES = {"geopackage", "geopkg", "gpkg"};
+    
+    /**
+     * The format's MIME type(s).
+     */
+    public static final String[] MIME_TYPES = {"application/x-gpkg"};
+
+    /**
+     * Common file suffixes.
+     */
+    public final static String[] SUFFIXES = {"gpkg"};
+    
+    private final static Logger LOGGER = Logging.getLogger(GeoPackageFormat.class.getPackage().getName());
 
     /**
      * Creates an instance and sets the metadata and default read parameters.
@@ -92,6 +106,7 @@ public class GeoPackageFormat extends AbstractGridFormat {
     /**
      * Not implemented.
      *
+     * @return nothing
      * @throws UnsupportedOperationException
      */
     @Override
@@ -102,6 +117,7 @@ public class GeoPackageFormat extends AbstractGridFormat {
     /**
      * Not implemented.
      *
+     * @return nothing
      * @throws UnsupportedOperationException
      */
     @Override
@@ -110,7 +126,7 @@ public class GeoPackageFormat extends AbstractGridFormat {
     }
 
     /**
-     * Test if the given source object points to a GeoPackage file object.
+     * Tests if the given source object can be read as a GeoPackage.
      *
      * @param source A File, filename String, file:// URL or a
      * FileImageInputStreamExtImpl
@@ -119,25 +135,13 @@ public class GeoPackageFormat extends AbstractGridFormat {
      */
     @Override
     public boolean accepts(Object source, Hints hints) {
-        if (source == null) {
-            return false;
-        }
-
-        // Assert that the source references a valid file object
-        File sourceFile = getFileFromSource(source);
-        if (sourceFile == null) {
-            return false;
-        }
-
-        
-        // Assert the source file appears to be a GeoPackage
-        // TODO: check if it is proper sqlite database
-        return sourceFile.getName().toLowerCase().endsWith(GPKG_FILE_EXTENSION);
+        return isValidGeoPackage(source);
     }
 
     /**
      * Not implemented.
      *
+     * @return nothing
      * @throws UnsupportedOperationException
      */
     @Override
@@ -149,7 +153,7 @@ public class GeoPackageFormat extends AbstractGridFormat {
      * Sets the metadata information.
      */
     private void setInfo() {
-        final HashMap<String, String> info = new HashMap<String, String>();
+        final HashMap<String, String> info = new HashMap<>();
         info.put("name", NAME);
         info.put("description", DESC);
         info.put("vendor", VENDOR);
@@ -181,6 +185,35 @@ public class GeoPackageFormat extends AbstractGridFormat {
 
         // reading parameters
         writeParameters = null;
+    }
+
+    /**
+     * Tests if the source appears to be a valid GeoPackage file.
+     *
+     * @param source a File, String, URL or FileImageInputStreamExtImpl object
+     * @return true if the source object references an existing GeoPackage file
+     *
+     */
+    public static boolean isValidGeoPackage(Object source) {
+        if (source == null) {
+            return false;
+        }
+
+        // Assert that the source references a valid file object
+        File sourceFile = getFileFromSource(source);
+        if (sourceFile == null) {
+            return false;
+        }
+
+        // Assert the source file appears to be a GeoPackage
+        // TODO: Check if the file is a sqlite database
+        String filename = sourceFile.getName().toLowerCase();
+        for (String suffix : SUFFIXES) {
+            if (filename.endsWith("."+ suffix)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
