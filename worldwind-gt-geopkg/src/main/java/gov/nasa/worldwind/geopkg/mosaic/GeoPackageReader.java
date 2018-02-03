@@ -142,15 +142,37 @@ public final class GeoPackageReader extends AbstractGridCoverage2DReader {
         }
     }
 
+    /**
+     * Returns the tileset corresponding to the default raster coverage in this
+     * GeoPackage.
+     *
+     * @return a {@link TileEntry} representing the tileset
+     */
     public TileEntry getTileset() {
         return getTileset(coverageName);
-
     }
 
+    /**
+     * Returns the tileset corresponding to the raster coverage name.
+     *
+     * @param coverageName the coverage name matching a user-data table name
+     * @return a TileEntry object representing the tileset
+     * @throws IllegalArgumentException if the coverage name does not match a
+     * user-data table
+     */
     public TileEntry getTileset(String coverageName) {
+        if (!checkName(coverageName)) {
+            throw new IllegalArgumentException("The specified coverageName " + coverageName
+                    + "is not supported");
+        }
         return tiles.get(coverageName);
     }
 
+    /**
+     * Returns the Format that is handled by this reader.
+     *
+     * @return a new {@link GeoPackageFormat}
+     */
     @Override
     public Format getFormat() {
         return new GeoPackageFormat();
@@ -180,10 +202,12 @@ public final class GeoPackageReader extends AbstractGridCoverage2DReader {
     }
 
     /**
-     * Ensure the given coverage name matches a table name in the GeoPackage.
+     * Ensure the given coverage name matches a user-data table name in the
+     * GeoPackage.
      *
      * @param coverageName the name to validate
-     * @return true if the name matches a table name in the GeoPackage
+     * @return true if the name matches a user-data table name in the
+     * {@link GeoPackage}
      */
     @Override
     protected boolean checkName(String coverageName) {
@@ -198,18 +222,14 @@ public final class GeoPackageReader extends AbstractGridCoverage2DReader {
                     + "is not supported");
         }
         // Get the pixel sizes from the last matrix; matrices are in ascending order of resolution
-        List<TileMatrix> matrices = tiles.get(coverageName).getTileMatricies();
+        List<TileMatrix> matrices = getTileset(coverageName).getTileMatricies();
         TileMatrix matrix = matrices.get(matrices.size() - 1);
         return new double[]{matrix.getXPixelSize(), matrix.getYPixelSize()};
     }
 
     @Override
     public GeneralEnvelope getOriginalEnvelope(String coverageName) {
-        if (!checkName(coverageName)) {
-            throw new IllegalArgumentException(
-                    "The specified coverageName " + coverageName + "is not supported");
-        }
-        return new GeneralEnvelope(tiles.get(coverageName).getBounds());
+        return new GeneralEnvelope(getTileset(coverageName).getBounds());
     }
 
     /**
@@ -222,11 +242,7 @@ public final class GeoPackageReader extends AbstractGridCoverage2DReader {
      */
     @Override
     public GridEnvelope getOriginalGridRange(String coverageName) {
-        if (!checkName(coverageName)) {
-            throw new IllegalArgumentException("The specified coverageName " + coverageName
-                    + "is not supported");
-        }
-        int zoomLevel = tiles.get(coverageName).getMaxZoomLevel();
+        int zoomLevel = getTileset(coverageName).getMaxZoomLevel();
         return getGridRange(coverageName, zoomLevel);
     }
 
@@ -253,10 +269,7 @@ public final class GeoPackageReader extends AbstractGridCoverage2DReader {
      * the the geographic bounds within the tileset's pixel grid
      */
     public GridEnvelope getGridRange(String coverageName, int zoomLevel) {
-        if (!checkName(coverageName)) {
-            throw new IllegalArgumentException("The specified coverageName " + coverageName
-                    + "is not supported");
-        }
+        
         // TODO: check zoom level; throw IllegalArgumentException
 
         TileEntry tileset = getTileset(coverageName);
@@ -291,13 +304,8 @@ public final class GeoPackageReader extends AbstractGridCoverage2DReader {
 
     @Override
     public CoordinateReferenceSystem getCoordinateReferenceSystem(String coverageName) {
-        if (!checkName(coverageName)) {
-            throw new IllegalArgumentException("The specified coverageName " + coverageName
-                    + "is not supported");
-        }
-
         try {
-            return CRS.decode("EPSG:" + tiles.get(coverageName).getSrid(), true);
+            return CRS.decode("EPSG:" + getTileset(coverageName).getSrid(), true);
         } catch (Exception e) {
             LOGGER.log(Level.WARNING, e.getMessage(), e);
             return null;
@@ -405,7 +413,7 @@ public final class GeoPackageReader extends AbstractGridCoverage2DReader {
 
         // Get the imageImage from the zoom level
         if (useOverviews) {
-            TileEntry tilePyramid = tiles.get(coverageName);
+            TileEntry tilePyramid = getTileset(coverageName);
             int zoomLevel = pickZoomLevel(coverageName, overviewPolicy, requestedRes);
             imageIndex = tilePyramid.getMaxZoomLevel() - zoomLevel;
         }
@@ -443,7 +451,7 @@ public final class GeoPackageReader extends AbstractGridCoverage2DReader {
     Integer pickZoomLevel(String coverageName, OverviewPolicy policy, double[] requestedRes) {
 
         // Find the closest zoom based on the horizontal resolution
-        TileEntry tilepyramid = tiles.get(coverageName);
+        TileEntry tilepyramid = getTileset(coverageName);
         TileMatrix bestMatrix = null;
         double horRes = requestedRes[0];
 
@@ -509,7 +517,7 @@ public final class GeoPackageReader extends AbstractGridCoverage2DReader {
      */
     @Override
     public GridCoverage2D read(String coverageName, GeneralParameterValue[] parameters) throws IllegalArgumentException, IOException {
-        TileEntry entry = tiles.get(coverageName);
+        TileEntry entry = getTileset(coverageName);
         BufferedImage image = null;
         ReferencedEnvelope resultEnvelope = null;
         GeoPackage file = new GeoPackage(sourceFile);
@@ -817,7 +825,7 @@ public final class GeoPackageReader extends AbstractGridCoverage2DReader {
     }
 
     public BufferedImage readTiles(String coverageName, int zoomLevel, int leftTile, int rightTile, int topTile, int bottomTile) throws IllegalArgumentException, IOException {
-        TileEntry pyramid = tiles.get(coverageName);
+        TileEntry pyramid = getTileset(coverageName);
         TileMatrix matrix = pyramid.getTileMatrix(zoomLevel);
         GeoPackage file = new GeoPackage(sourceFile);
         BufferedImage image = null;
@@ -890,7 +898,7 @@ public final class GeoPackageReader extends AbstractGridCoverage2DReader {
      * @return
      */
     public int[] getTileIndex(String coverage, int zoomLevel, double xCoord, double yCoord) {
-        TileEntry tilePyramid = tiles.get(coverageName);
+        TileEntry tilePyramid = getTileset(coverageName);
         ReferencedEnvelope bounds = tilePyramid.getBounds();
         TileMatrix matrix = tilePyramid.getTileMatrix(zoomLevel);
         CoordinateSystem coordSys = tilePyramid.getCrs().getCoordinateSystem();
@@ -935,7 +943,7 @@ public final class GeoPackageReader extends AbstractGridCoverage2DReader {
         if (!checkName(coverageName)) {
             return 0;
         }
-        TileEntry tileset = tiles.get(coverageName);
+        TileEntry tileset = getTileset(coverageName);
         int minZoom = tileset.getMinZoomLevel();
         int maxZoom = tileset.getMaxZoomLevel();
 
@@ -952,10 +960,6 @@ public final class GeoPackageReader extends AbstractGridCoverage2DReader {
     public double[][] getResolutionLevels(String coverageName) throws IOException {
         // The superclass method doesn't handle multiple coverages and operates
         // off protected members and not getters
-        if (!checkName(coverageName)) {
-            throw new IllegalArgumentException("The specified coverageName " + coverageName
-                    + "is not supported");
-        }
         TileEntry tilepyramid = getTileset(coverageName);
         int maxZoomLevel = tilepyramid.getMaxZoomLevel();
         int minZoomLevel = tilepyramid.getMinZoomLevel();
@@ -977,7 +981,7 @@ public final class GeoPackageReader extends AbstractGridCoverage2DReader {
      * @return double[]{resX, resY}
      */
     public double[] getResolution(String coverage, int zoomLevel) {
-        TileEntry tilePyramid = tiles.get(coverageName);
+        TileEntry tilePyramid = getTileset(coverageName);
         TileMatrix matrix = tilePyramid.getTileMatrix(zoomLevel);
         double[] resXY = new double[2];
         resXY[0] = matrix.getXPixelSize();
@@ -989,7 +993,7 @@ public final class GeoPackageReader extends AbstractGridCoverage2DReader {
         try {
             // TODO: Cache the gpkg or read and cache the metadata
             GeoPackage gpkg = new GeoPackage(sourceFile);
-            TileEntry entry = tiles.get(coverageName);
+            TileEntry entry = getTileset(coverageName);
             TileReader tileReader = gpkg.reader(entry, zoomLevel, zoomLevel, tileX, tileX, tileY, tileY);
             while (tileReader.hasNext()) {
                 Tile tile = tileReader.next();
