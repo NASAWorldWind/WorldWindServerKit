@@ -93,11 +93,8 @@ public final class GeoPackageReader extends AbstractGridCoverage2DReader {
      */
     static final Logger LOGGER = Logging.getLogger("org.geotools.geopkg");
 
-    protected final static int DEFAULT_TILE_SIZE = 256;
-
-    protected final static int ZOOM_LEVEL_BASE = 2;
-
-    protected GridCoverageFactory coverageFactory;
+    // BDS: commented out so as set/use base-class member
+    //protected GridCoverageFactory coverageFactory;
 
     protected File sourceFile;
 
