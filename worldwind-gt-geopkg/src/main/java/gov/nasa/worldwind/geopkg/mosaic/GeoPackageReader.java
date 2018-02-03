@@ -100,9 +100,6 @@ public final class GeoPackageReader extends AbstractGridCoverage2DReader {
 
     protected Map<String, TileEntry> tiles = new HashMap<>();
 
-    // TODO: store these gridRanges in the TileEntry class
-    protected Map<String, GridEnvelope2D> gridRanges = new HashMap<>();
-
     /**
      * Constructs a GeoPackageReader from a source.
      *
@@ -214,10 +211,6 @@ public final class GeoPackageReader extends AbstractGridCoverage2DReader {
 
     @Override
     protected double[] getHighestRes(String coverageName) {
-        if (!checkName(coverageName)) {
-            throw new IllegalArgumentException("The specified coverageName " + coverageName
-                    + "is not supported");
-        }
         // Get the pixel sizes from the last matrix; matrices are in ascending order of resolution
         List<TileMatrix> matrices = getTileset(coverageName).getTileMatricies();
         TileMatrix matrix = matrices.get(matrices.size() - 1);
@@ -266,13 +259,10 @@ public final class GeoPackageReader extends AbstractGridCoverage2DReader {
      * the the geographic bounds within the tileset's pixel grid
      */
     public GridEnvelope getGridRange(String coverageName, int zoomLevel) {
-        
-        // TODO: check zoom level; throw IllegalArgumentException
-
         TileEntry tileset = getTileset(coverageName);
-        TileMatrix matrix = tileset.getTileMatricies().get(zoomLevel);
         Envelope bounds = tileset.getTileMatrixSetBounds();
         CoordinateReferenceSystem crs1 = tileset.getCrs();
+        TileMatrix matrix = tileset.getTileMatrix(zoomLevel);
         int startCol = matrix.getMinCol();
         int startRow = matrix.getMinRow();
         double pixSizeX = matrix.getXPixelSize();
@@ -934,12 +924,6 @@ public final class GeoPackageReader extends AbstractGridCoverage2DReader {
      */
     @Override
     public int getNumOverviews(String coverageName) {
-        // The base class getNumOverviews processes the dtLayout member, a DatasetLayout object.
-        // The dtLayout member normally contains information about Overviews and Mask management,
-        // but it is null in this implementation. Instead we use the number of tile matricies.
-        if (!checkName(coverageName)) {
-            return 0;
-        }
         TileEntry tileset = getTileset(coverageName);
         int minZoom = tileset.getMinZoomLevel();
         int maxZoom = tileset.getMaxZoomLevel();
