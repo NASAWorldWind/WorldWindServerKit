@@ -907,75 +907,7 @@ public final class GeoPackageReader extends AbstractGridCoverage2DReader {
             file.close();
         }
         return destImage;
-
     }
-
-    // TODO: remove this method
-    public BufferedImage readTiles(String coverageName, int zoomLevel, int leftTile, int rightTile, int topTile, int bottomTile) throws IllegalArgumentException, IOException {
-        TileEntry pyramid = getTileset(coverageName);
-        TileMatrix matrix = pyramid.getTileMatrix(zoomLevel);
-        GeoPackage file = new GeoPackage(sourceFile);
-        BufferedImage image = null;
-        try {
-            Color inputTransparentColor = null;
-            int tileWidth = matrix.getTileWidth();
-            int tileHeight = matrix.getTileHeight();
-            int width = (int) (rightTile - leftTile + 1) * tileWidth;
-            int height = (int) (bottomTile - topTile + 1) * tileHeight;
-
-            TileReader it;
-            it = file.reader(pyramid, zoomLevel, zoomLevel, leftTile, rightTile, topTile, bottomTile);
-
-            while (it.hasNext()) {
-                // Create the destination image that we draw into
-                if (image == null) {
-                    image = getStartImage(width, height, inputTransparentColor);
-                }
-
-                // Read the tile's image data into a BufferedImage
-                Tile tile = it.next();
-                BufferedImage tileImage = readImage(tile.getData());
-
-                ////////////////////////////////////////////////////////////////
-                // DEBUGGING: Uncomment block to draw a border around the tiles
-                {
-                    Graphics2D graphics = tileImage.createGraphics();
-                    float thickness = 2;
-                    graphics.setStroke(new BasicStroke(thickness));
-                    graphics.drawRect(0, 0, tileImage.getWidth(), tileImage.getHeight());
-                }
-
-                // Get the tile coordinates within the mosaic
-                int posx = (int) (tile.getColumn() - leftTile) * tileWidth;
-                int posy = (int) (tile.getRow() - topTile) * tileHeight;
-
-                // Draw the tile. We 'draw' versus using 'copy data' to 
-                // accomdate potentially different SampleModels between image tiles,
-                // e.g., when there's a mix of PNG and JPEG image types in the table.
-                Graphics2D g2 = image.createGraphics();
-                g2.drawImage(tileImage, posx, posy, tileWidth, tileHeight, null);
-            }
-
-            it.close();
-
-            // If there were no tiles, then we need to create an empty image
-            if (image == null) { // no tiles ??
-                image = getStartImage(width, height, inputTransparentColor);
-            }
-
-            // Apply the color transparency mask
-            if (inputTransparentColor != null) {
-                // Note: ImageWorker.makeColorTransparent only works 
-                // with an IndexColorModel or a ComponentColorModel
-                image = new ImageWorker(image).makeColorTransparent(inputTransparentColor).getRenderedOperation().getAsBufferedImage();
-            }
-
-        } finally {
-            file.close();
-        }
-        return image;
-    }
-
     /**
      * Creates a BufferedImage from the supplied image data byte array.
      *
@@ -1102,5 +1034,72 @@ public final class GeoPackageReader extends AbstractGridCoverage2DReader {
         }
         return null;
     }
+
+    @Deprecated
+    protected BufferedImage readTiles(String coverageName, int zoomLevel, int leftTile, int rightTile, int topTile, int bottomTile) throws IllegalArgumentException, IOException {
+        TileEntry pyramid = getTileset(coverageName);
+        TileMatrix matrix = pyramid.getTileMatrix(zoomLevel);
+        GeoPackage file = new GeoPackage(sourceFile);
+        BufferedImage image = null;
+        try {
+            Color inputTransparentColor = null;
+            int tileWidth = matrix.getTileWidth();
+            int tileHeight = matrix.getTileHeight();
+            int width = (int) (rightTile - leftTile + 1) * tileWidth;
+            int height = (int) (bottomTile - topTile + 1) * tileHeight;
+
+            TileReader it;
+            it = file.reader(pyramid, zoomLevel, zoomLevel, leftTile, rightTile, topTile, bottomTile);
+
+            while (it.hasNext()) {
+                // Create the destination image that we draw into
+                if (image == null) {
+                    image = getStartImage(width, height, inputTransparentColor);
+                }
+
+                // Read the tile's image data into a BufferedImage
+                Tile tile = it.next();
+                BufferedImage tileImage = readImage(tile.getData());
+
+                ////////////////////////////////////////////////////////////////
+                // DEBUGGING: Uncomment block to draw a border around the tiles
+                {
+                    Graphics2D graphics = tileImage.createGraphics();
+                    float thickness = 2;
+                    graphics.setStroke(new BasicStroke(thickness));
+                    graphics.drawRect(0, 0, tileImage.getWidth(), tileImage.getHeight());
+                }
+
+                // Get the tile coordinates within the mosaic
+                int posx = (int) (tile.getColumn() - leftTile) * tileWidth;
+                int posy = (int) (tile.getRow() - topTile) * tileHeight;
+
+                // Draw the tile. We 'draw' versus using 'copy data' to 
+                // accomdate potentially different SampleModels between image tiles,
+                // e.g., when there's a mix of PNG and JPEG image types in the table.
+                Graphics2D g2 = image.createGraphics();
+                g2.drawImage(tileImage, posx, posy, tileWidth, tileHeight, null);
+            }
+
+            it.close();
+
+            // If there were no tiles, then we need to create an empty image
+            if (image == null) { // no tiles ??
+                image = getStartImage(width, height, inputTransparentColor);
+            }
+
+            // Apply the color transparency mask
+            if (inputTransparentColor != null) {
+                // Note: ImageWorker.makeColorTransparent only works 
+                // with an IndexColorModel or a ComponentColorModel
+                image = new ImageWorker(image).makeColorTransparent(inputTransparentColor).getRenderedOperation().getAsBufferedImage();
+            }
+
+        } finally {
+            file.close();
+        }
+        return image;
+    }
+
     
 }
