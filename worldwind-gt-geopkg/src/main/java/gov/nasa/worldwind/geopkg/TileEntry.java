@@ -78,15 +78,12 @@ public class TileEntry extends Entry {
         this.tileMatrixSetBounds = tileMatrixSetBounds;
     }
 
-    
     //
     // TODO: These derived properties should be placed in a new TilePyramid class.
     // TODO: TilePyramid could be a wrapper around TileEntry or derived from TileEntry
     //
-    
-    
     /**
-     * Returns the minimum zoom level found it the raster data table.
+     * Returns the minimum zoom level found in the raster data table.
      *
      * @return the minimum zoom level, or -1 if not found
      */
@@ -98,7 +95,23 @@ public class TileEntry extends Entry {
         this.minZoom = minZoom;
     }
 
+    /**
+     * Returns the TileMatrix corresponding to the zoom level. Zoom levels range
+     * from zero to the highest resolution zoom level in the GeoPackage. The
+     * existence of a TileMatix for a zoom level does not mean there are tiles
+     * at that zoom level.
+     *
+     * @param zoomLevel
+     * @return a TileMatrix for the given zoom level
+     * @throws IllegalArgumentException if the zoom level greater than the
+     * tileset's max zoom level
+     */
     public TileMatrix getTileMatrix(int zoomLevel) {
+        if (zoomLevel < 0 || zoomLevel >= tileMatricies.size()) {
+            throw new IllegalArgumentException(
+                    String.format("The specified zoom level (%d) is not found in the tileMatricies (size: %d).",
+                            zoomLevel, tileMatricies.size()));
+        }
         return this.tileMatricies.get(zoomLevel);
     }
 
@@ -115,7 +128,11 @@ public class TileEntry extends Entry {
         this.maxZoom = maxZoom;
     }
 
-    
+    /**
+     * Returns the CRS corresponding to this entry's SRID.
+     *
+     * @return the CRS decoded from the "EPSG:{SRID}" string
+     */
     public CoordinateReferenceSystem getCrs() {
         try {
             // Deferred loading of CRS
