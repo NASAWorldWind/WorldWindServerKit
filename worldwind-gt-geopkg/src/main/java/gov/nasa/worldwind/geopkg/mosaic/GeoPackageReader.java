@@ -52,7 +52,6 @@ import javax.media.jai.ImageLayout;
 
 import org.geotools.coverage.CoverageFactoryFinder;
 import org.geotools.coverage.grid.GridCoverage2D;
-import org.geotools.coverage.grid.GridCoverageFactory;
 import org.geotools.coverage.grid.GridEnvelope2D;
 import org.geotools.coverage.grid.GridGeometry2D;
 import org.geotools.coverage.grid.io.AbstractGridCoverage2DReader;
@@ -95,7 +94,6 @@ public final class GeoPackageReader extends AbstractGridCoverage2DReader {
 
     // BDS: commented out so as set/use base-class member
     //protected GridCoverageFactory coverageFactory;
-
     protected File sourceFile;
 
     protected Map<String, TileEntry> tiles = new HashMap<>();
@@ -173,10 +171,10 @@ public final class GeoPackageReader extends AbstractGridCoverage2DReader {
     }
 
     /**
-     * Returns a {@link ResourceInfo} object describing the specified coverage.
+     * Returns a {@link ResourceInfo} describing the specified coverage.
      *
      * @param coverageName The name of a coverage in the GeoPackage
-     * @return a new ResourceInfo object or null if the coverage is not found
+     * @return a {@link ResourceInfo} or null if the coverage is not found
      */
     @Override
     public ResourceInfo getInfo(String coverageName) {
@@ -209,26 +207,45 @@ public final class GeoPackageReader extends AbstractGridCoverage2DReader {
         return tiles.keySet().contains(coverageName);
     }
 
+    /**
+     * Returns the number of coverages in the {@link GeoPackage}.
+     *
+     * @return the number of user-data tables in the {@link GeoPackage}
+     */
     @Override
-    protected double[] getHighestRes(String coverageName) {
-        // Get the pixel sizes from the last matrix; matrices are in ascending order of resolution
-        List<TileMatrix> matrices = getTileset(coverageName).getTileMatricies();
-        TileMatrix matrix = matrices.get(matrices.size() - 1);
-        return new double[]{matrix.getXPixelSize(), matrix.getYPixelSize()};
+    public int getGridCoverageCount() {
+        return tiles.size();
     }
 
+    /**
+     * Returns the list of the raster coverages in the GeoPackage.
+     *
+     * @return an array of the {@link GeoPackage}'s user-data table names
+     */
+    @Override
+    public String[] getGridCoverageNames() {
+        return tiles.keySet().toArray(new String[tiles.size()]);
+    }
+
+    /**
+     * Returns the geographic extents of the given raster coverage.
+     *
+     * @param coverageName the name of the raster coverage
+     * @return a {@link GeneralEnvelope} containing the bounds of the given
+     * coverage
+     */
     @Override
     public GeneralEnvelope getOriginalEnvelope(String coverageName) {
         return new GeneralEnvelope(getTileset(coverageName).getBounds());
     }
 
     /**
-     * Return the pixel envelope surrounding the raster data found in the
-     * maximum zoom level.
+     * Returns the pixel envelope surrounding the raster data at the highest
+     * resolution (maximum zoom level).
      *
      * @param coverageName the name of the GeoPackage coverage
-     * @return a GridEnvelope containing the location and dimensions of the the
-     * geographic bounds within the tileset's pixel grid
+     * @return a GridEnvelope containing the location and dimensions of the
+     * raster data within the tileset's pixel grid
      */
     @Override
     public GridEnvelope getOriginalGridRange(String coverageName) {
@@ -241,21 +258,22 @@ public final class GeoPackageReader extends AbstractGridCoverage2DReader {
      * zoom level.
      *
      * @param zoomLevel
-     * @return
+     * @return a {@link GridEnvelope} containing the location and dimensions of
+     * the raster data within the tileset's pixel grid
      */
     public GridEnvelope getGridRange(int zoomLevel) {
         return getGridRange(coverageName, zoomLevel);
     }
 
     /**
-     * Return the pixel envelope corresponding to the geographic extents of this
-     * coverage at the given zoom level within the tileset's pixel grid. The
-     * grid range's x/y pixel values are the margin between the tileset's
-     * left/top edge and the top/left edge of the .
+     * Returns the pixel envelope corresponding to the geographic extents of
+     * this coverage local to given zoom level's pixel grid. The grid range's
+     * x/y values are the margins between the tileset's left/top edge and the
+     * left/top edge of the raster data.
      *
      * @param coverageName the name of the GeoPackage coverage
      * @param zoomLevel the zoom level within the coverage
-     * @return a new GridEnvelope2D containing the location and dimensions of
+     * @return a {@link GridEnvelope} containing the location and dimensions of
      * the the geographic bounds within the tileset's pixel grid
      */
     public GridEnvelope getGridRange(String coverageName, int zoomLevel) {
@@ -289,38 +307,99 @@ public final class GeoPackageReader extends AbstractGridCoverage2DReader {
         return gridRange;
     }
 
+    /**
+     * Returns the coordinate reference system for the given coverage.
+     *
+     * @param coverageName the raster coverage name
+     * @return the tile set's spatial reference ID (SRID) decoded to a CRS
+     */
     @Override
     public CoordinateReferenceSystem getCoordinateReferenceSystem(String coverageName) {
-        try {
-            return CRS.decode("EPSG:" + getTileset(coverageName).getSrid(), true);
-        } catch (Exception e) {
-            LOGGER.log(Level.WARNING, e.getMessage(), e);
-            return null;
+        return getTileset(coverageName).getCrs();
+    }
+
+    /**
+     * Number of overviews for the specified coverage.
+     *
+     * @param coverageName
+     * @return the number of zoom levels minus 1
+     */
+    @Override
+    public int getNumOverviews(String coverageName) {
+        TileEntry tileset = getTileset(coverageName);
+        int minZoom = tileset.getMinZoomLevel();
+        int maxZoom = tileset.getMaxZoomLevel();
+
+        return maxZoom - minZoom;
+    }
+
+    /**
+     * Returns the resolution (pixel sizes) of the specified coverage's maximum
+     * zoom level.
+     *
+     * @param coverageName the raster coverage name
+     * @return new double[]{xPixelSize, yPixelSize}
+     */
+    @Override
+    protected double[] getHighestRes(String coverageName) {
+        TileEntry tileset = getTileset(coverageName);
+        TileMatrix matrix = tileset.getTileMatrix(tileset.getMaxZoomLevel());
+        return new double[]{matrix.getXPixelSize(), matrix.getYPixelSize()};
+    }
+
+    /**
+     * Returns the resolution levels of the overviews for the specified
+     * coverage.
+     *
+     * @param coverageName the raster coverage name
+     * @return new double[imageIndex][resolution]
+     */
+    @Override
+    public double[][] getResolutionLevels(String coverageName) {
+        // The superclass method doesn't handle multiple coverages and operates
+        // off protected members and not getters
+        TileEntry tilepyramid = getTileset(coverageName);
+        int maxZoomLevel = tilepyramid.getMaxZoomLevel();
+        int minZoomLevel = tilepyramid.getMinZoomLevel();
+        int numImages = maxZoomLevel - minZoomLevel + 1;
+
+        final double[][] resolutionLevels = new double[numImages][2];
+        for (int i = 0, level = maxZoomLevel; level >= minZoomLevel; level--, i++) {
+            double[] res = getResolution(coverageName, level); // [lonRes, latRes]
+            System.arraycopy(res, 0, resolutionLevels[i], 0, 2);
         }
+        return resolutionLevels;
     }
 
     /**
+     * Returns the pixel resolution for the given coverage and zoom level.
      *
-     * @return
+     * @param coverage
+     * @param zoomLevel
+     * @return double[]{resX, resY}
      */
-    @Override
-    public String[] getGridCoverageNames() {
-        return tiles.keySet().toArray(new String[tiles.size()]);
-    }
-
-    /**
-     *
-     * @return
-     */
-    @Override
-    public int getGridCoverageCount() {
-        return tiles.size();
-    }
-
-    @Override
-    public ImageLayout getImageLayout(String coverageName) throws IOException {
+    public double[] getResolution(String coverage, int zoomLevel) {
         TileEntry tilePyramid = getTileset(coverageName);
-        int maxZoomLevel = tilePyramid.getMaxZoomLevel();
+        TileMatrix matrix = tilePyramid.getTileMatrix(zoomLevel);
+        double[] resXY = new double[2];
+        resXY[0] = matrix.getXPixelSize();
+        resXY[1] = matrix.getYPixelSize();
+        return resXY;
+    }
+
+    /**
+     * Returns an {@link ImageLayout} containing the
+     * {@link ColorModel}, {@link SampleModel} and tile grid for the specified
+     * coverage at its highest resolution.
+     *
+     * @param coverageName the raster coverage name
+     * @return a {@link ImageLayout} initialized with color model, sample model
+     * and tile
+     */
+    @Override
+    public ImageLayout getImageLayout(String coverageName) {
+        TileEntry tileset = getTileset(coverageName);
+        int maxZoomLevel = tileset.getMaxZoomLevel();
 
         // Get the envelope surrounding the tiles found in the maximum zoom level
         GridEnvelope gridRange = getOriginalGridRange(coverageName);
@@ -330,6 +409,8 @@ public final class GeoPackageReader extends AbstractGridCoverage2DReader {
         ColorModel cm = image.getColorModel();
         SampleModel sm = image.getSampleModel();
 
+        // TODO: validate understanding of ImageLayout
+        // TODO: set the x/y values to the grid values; may affect read
         ImageLayout imageLayout = new ImageLayout(0, 0, gridRange.getSpan(0), gridRange.getSpan(1));
         imageLayout.setTileGridXOffset(0).setTileGridYOffset(0).setTileWidth(tileSize.width).setTileHeight(tileSize.height);
         imageLayout.setColorModel(cm).setSampleModel(sm);
@@ -337,28 +418,34 @@ public final class GeoPackageReader extends AbstractGridCoverage2DReader {
         return imageLayout;
     }
 
+    /**
+     * Returns the pixel dimensions of a tile in the specified coverage at the
+     * specified zoom level.
+     *
+     * @param coverageName the raster coverage name
+     * @param zoomLevel the zoom level
+     * @return the width and hight of a tile in pixels
+     */
     public Dimension getTileSize(String coverageName, int zoomLevel) {
-        TileEntry tilePyramid = getTileset(coverageName);
-        TileMatrix tileMatrix = tilePyramid.getTileMatrix(zoomLevel);
-        Integer tileHeight = tileMatrix.getTileHeight();
-        Integer tileWidth = tileMatrix.getTileWidth();
+        TileMatrix matrix = getTileset(coverageName).getTileMatrix(zoomLevel);
+        Integer tileHeight = matrix.getTileHeight();
+        Integer tileWidth = matrix.getTileWidth();
 
         return new Dimension(tileWidth, tileHeight);
-
     }
 
     /**
-     * This method is responsible for preparing the read param for doing an
-     * {@link ImageReader#read(int, ImageReadParam)}.
+     * This method is responsible for preparing the @{link ImageReadParam} for
+     * doing an {@link ImageReader#read(int, ImageReadParam)}.
      *
-     * @param coverageName
-     * @param overviewPolicy specifies the policy to compute the zoom level upon
-     * request
+     * @param coverageName the raster coverage name
+     * @param overviewPolicy specifies the policy to compute the zoom level
      * @param readParams an instance of {@link ImageReadParam} for setting the
      * subsampling factors
      * @param requestedEnvelope the {@link GeneralEnvelope} we are requesting
-     * @param requestedDim the requested dimensions
-     * @return the image index (mapped to a zoom level)
+     * @param requestedDim a {@link Rectangle} containing requested dimensions
+     * @return a zero-based image index where 0 is the highest resolution, 1 is
+     * the first overview, and so on
      * @throws IOException
      * @throws TransformException
      */
@@ -389,6 +476,7 @@ public final class GeoPackageReader extends AbstractGridCoverage2DReader {
             return imageIndex;
         }
 
+        // FIXME! numOverviews is not initialized; call getNumOverviews or initialize base class
         final boolean useOverviews = (numOverviews > 0) ? true : false;
 
         // Compute the requested resolution to determine the zoom level
@@ -413,6 +501,12 @@ public final class GeoPackageReader extends AbstractGridCoverage2DReader {
         return imageIndex;
     }
 
+    /**
+     * Returns the {@link OverviewPolicy} found in this reader's hints.
+     *
+     * @return the {@link OverviewPolicy} in the hints; or if not found, the
+     * {@code OverviewPolicy.getDefaultPolicy()} (NEAREST)
+     */
     private OverviewPolicy extractOverviewPolicy() {
         OverviewPolicy overviewPolicy = null;
         // Check if a policy was provided using hints (check even the deprecated one)
@@ -429,17 +523,20 @@ public final class GeoPackageReader extends AbstractGridCoverage2DReader {
     }
 
     /**
+     * Returns a zoom level for the specified coverage matching the given
+     * overview policy and requested resolution.
      *
-     * @param coverageName
-     * @param policy
-     * @param requestedRes two-element array: [lonRes,latRes]
-     * @return
+     * @param coverageName the raster coverage name
+     * @param policy the overview policy governing the zoom level selection
+     * @param requestedRes two-element array defining the requested resolution:
+     * [xRes, yRes]
+     * @return the best zoom level for the specified overview policy and
+     * resolution
      */
     Integer pickZoomLevel(String coverageName, OverviewPolicy policy, double[] requestedRes) {
 
         // Find the closest zoom based on the horizontal resolution
         TileEntry tilepyramid = getTileset(coverageName);
-        TileMatrix bestMatrix = null;
         double horRes = requestedRes[0];
 
         // Loop over matrices to find the best match. They are ordered by zoom level in ascending order         
@@ -687,11 +784,13 @@ public final class GeoPackageReader extends AbstractGridCoverage2DReader {
     }
 
     /**
+     * Reads the raster tile data intersecting the given region into a
+     * {@link BufferedImage}.
      *
-     * @param zoomLevel
-     * @param region
-     * @param inputTransparentColor
-     * @return
+     * @param zoomLevel the requested zoom level
+     * @param region requested pixel region within the tileset
+     * @param inputTransparentColor color to use for transparency; may be null
+     * @return a {@link BufferedImage} matching the region's width and height
      * @throws IllegalArgumentException
      * @throws IOException
      */
@@ -700,12 +799,14 @@ public final class GeoPackageReader extends AbstractGridCoverage2DReader {
     }
 
     /**
+     * Reads the raster tile data intersecting the given region within the
+     * specified coverage's zoom level into a {@link BufferedImage}.
      *
-     * @param coverageName
-     * @param zoomLevel
-     * @param region
-     * @param inputTransparentColor
-     * @return
+     * @param coverageName the raster coverage name
+     * @param zoomLevel the zoom level to read
+     * @param region requested pixel region within the tileset
+     * @param inputTransparentColor color to use for transparency; may be null
+     * @return a {@link BufferedImage} matching the region's width and height
      * @throws IllegalArgumentException
      * @throws IOException
      */
@@ -811,6 +912,7 @@ public final class GeoPackageReader extends AbstractGridCoverage2DReader {
 
     }
 
+    // TODO: remove this method
     public BufferedImage readTiles(String coverageName, int zoomLevel, int leftTile, int rightTile, int topTile, int bottomTile) throws IllegalArgumentException, IOException {
         TileEntry pyramid = getTileset(coverageName);
         TileMatrix matrix = pyramid.getTileMatrix(zoomLevel);
@@ -876,14 +978,7 @@ public final class GeoPackageReader extends AbstractGridCoverage2DReader {
         return image;
     }
 
-    /**
-     *
-     * @param coverage
-     * @param zoomLevel
-     * @param xCoord
-     * @param yCoord
-     * @return
-     */
+    // TODO: remove this method
     public int[] getTileIndex(String coverage, int zoomLevel, double xCoord, double yCoord) {
         TileEntry tilePyramid = getTileset(coverageName);
         ReferencedEnvelope bounds = tilePyramid.getBounds();
@@ -914,60 +1009,6 @@ public final class GeoPackageReader extends AbstractGridCoverage2DReader {
             topTile = Math.max(topTile, (int) Math.round(Math.floor((originY - yCoord) / resY)));
         }
         return new int[]{leftTile, topTile};
-    }
-
-    /**
-     * Number of overviews for the specified coverage.
-     *
-     * @param coverageName
-     * @return the number of zoom levels minus 1
-     */
-    @Override
-    public int getNumOverviews(String coverageName) {
-        TileEntry tileset = getTileset(coverageName);
-        int minZoom = tileset.getMinZoomLevel();
-        int maxZoom = tileset.getMaxZoomLevel();
-
-        return maxZoom - minZoom;
-    }
-
-    /**
-     *
-     * @param coverageName
-     * @return new double[imageIndex][resolution]
-     * @throws IOException
-     */
-    @Override
-    public double[][] getResolutionLevels(String coverageName) throws IOException {
-        // The superclass method doesn't handle multiple coverages and operates
-        // off protected members and not getters
-        TileEntry tilepyramid = getTileset(coverageName);
-        int maxZoomLevel = tilepyramid.getMaxZoomLevel();
-        int minZoomLevel = tilepyramid.getMinZoomLevel();
-        int numImages = maxZoomLevel - minZoomLevel + 1;
-
-        final double[][] resolutionLevels = new double[numImages][2];
-        for (int i = 0, level = maxZoomLevel; level >= minZoomLevel; level--, i++) {
-            double[] res = getResolution(coverageName, level); // [lonRes, latRes]
-            System.arraycopy(res, 0, resolutionLevels[i], 0, 2);
-        }
-        return resolutionLevels;
-    }
-
-    /**
-     * Returns the pixel resolution for the given coverage and zoom level.
-     *
-     * @param coverage
-     * @param zoomLevel
-     * @return double[]{resX, resY}
-     */
-    public double[] getResolution(String coverage, int zoomLevel) {
-        TileEntry tilePyramid = getTileset(coverageName);
-        TileMatrix matrix = tilePyramid.getTileMatrix(zoomLevel);
-        double[] resXY = new double[2];
-        resXY[0] = matrix.getXPixelSize();
-        resXY[1] = matrix.getYPixelSize();
-        return resXY;
     }
 
     public BufferedImage readTile(int zoomLevel, int tileX, int tileY) {
@@ -1044,7 +1085,7 @@ public final class GeoPackageReader extends AbstractGridCoverage2DReader {
         Map<String, Object> properties = null;
 
         if (copyFrom.getPropertyNames() != null) {
-            properties = new HashMap<String, Object>();
+            properties = new HashMap<>();
             for (String name : copyFrom.getPropertyNames()) {
                 properties.put(name, copyFrom.getProperty(name));
             }
