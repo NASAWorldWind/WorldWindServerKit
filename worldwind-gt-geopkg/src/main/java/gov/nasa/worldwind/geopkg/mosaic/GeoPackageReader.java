@@ -30,7 +30,6 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -628,14 +627,14 @@ public final class GeoPackageReader extends AbstractGridCoverage2DReader {
                         dim = gg.getGridRange2D().getBounds();
 
                         /////////////////////////////////////////////////////////
+                        // TODO: Remove this hack if longer needed.
                         // HACK!
-                        // The GeoServer CatalogBuilder.buildCoverageInternal 
-                        // mistakenly pass a maxX and maxY values instead of 
-                        // width and height when attempting to create a 5x5 
-                        // test range - resulting in out-of-memory errors with 
-                        // large GeoPackages.
-                        // This is a hack to regenerate the dim if we detect
-                        // this condition.
+                        // GeoServer CatalogBuilder.buildCoverageInternal() mistakenly 
+                        // passes maxX and maxY values instead of width and height for the
+                        // range when attempting to create a 5x5 test range - potentially 
+                        // causing out-of-memory errors.
+                        // This hack regenerates the width/height dim if we detect this condition.
+                        ////////////////////////////////////////////////////////
                         GridEnvelope gridRange = getOriginalGridRange(coverageName);
                         if (dim.getWidth() > gridRange.getSpan(0)) {
                             try {
@@ -657,7 +656,6 @@ public final class GeoPackageReader extends AbstractGridCoverage2DReader {
                         }
                         if (name.equals(AbstractGridFormat.INPUT_TRANSPARENT_COLOR.getName())) {
                             inputTransparentColor = (Color) param.getValue();
-                            continue;
                         }
                     }
                 }
@@ -978,58 +976,6 @@ public final class GeoPackageReader extends AbstractGridCoverage2DReader {
         return image;
     }
 
-    // TODO: remove this method
-    public int[] getTileIndex(String coverage, int zoomLevel, double xCoord, double yCoord) {
-        TileEntry tilePyramid = getTileset(coverageName);
-        ReferencedEnvelope bounds = tilePyramid.getBounds();
-        TileMatrix matrix = tilePyramid.getTileMatrix(zoomLevel);
-        CoordinateSystem coordSys = tilePyramid.getCrs().getCoordinateSystem();
-
-        double originX = coordSys.getAxis(0).getMinimumValue(); // left
-        double originY = coordSys.getAxis(1).getMinimumValue(); // top
-        double extentX = coordSys.getAxis(0).getMaximumValue(); // right
-        double extentY = coordSys.getAxis(1).getMaximumValue(); // bottom
-        double resX = (extentX - originX) / matrix.getMatrixWidth();
-        double resY = (extentY - originY) / matrix.getMatrixHeight();
-        double pixSizeX = matrix.getXPixelSize();
-        double pixSizeY = matrix.getYPixelSize();
-
-        // Test if the point is with tile matrix boundaries
-        double remX = (xCoord - originX) % resX;
-        double remY = (originY - yCoord) % resY;
-        boolean resolutionWithinAPixel = (remX < pixSizeX) && (remY < pixSizeY);
-
-        int leftTile = -1;
-        int topTile = -1;
-        if (resolutionWithinAPixel) {
-            leftTile = Math.max(leftTile, (int) Math.round((xCoord - originX) / resX));
-            topTile = Math.max(topTile, (int) Math.round((originY - yCoord) / resY));
-        } else {
-            leftTile = Math.max(leftTile, (int) Math.round(Math.floor((xCoord - originX) / resX)));
-            topTile = Math.max(topTile, (int) Math.round(Math.floor((originY - yCoord) / resY)));
-        }
-        return new int[]{leftTile, topTile};
-    }
-
-    public BufferedImage readTile(int zoomLevel, int tileX, int tileY) {
-        try {
-            // TODO: Cache the gpkg or read and cache the metadata
-            GeoPackage gpkg = new GeoPackage(sourceFile);
-            TileEntry entry = getTileset(coverageName);
-            TileReader tileReader = gpkg.reader(entry, zoomLevel, zoomLevel, tileX, tileX, tileY, tileY);
-            while (tileReader.hasNext()) {
-                Tile tile = tileReader.next();
-
-                // Convert the tile image data to a BufferedImage
-                BufferedImage tileImage = readImage(tile.getData());
-                return tileImage;
-            }
-        } catch (IOException ex) {
-            Logger.getLogger(GeoPackageReader.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return null;
-    }
-
     /**
      * Creates a BufferedImage from the supplied image data byte array.
      *
@@ -1099,4 +1045,62 @@ public final class GeoPackageReader extends AbstractGridCoverage2DReader {
 
         return image;
     }
+    
+    ////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////
+    
+
+    @Deprecated
+    protected int[] getTileIndex(String coverage, int zoomLevel, double xCoord, double yCoord) {
+        TileEntry tilePyramid = getTileset(coverageName);
+        ReferencedEnvelope bounds = tilePyramid.getBounds();
+        TileMatrix matrix = tilePyramid.getTileMatrix(zoomLevel);
+        CoordinateSystem coordSys = tilePyramid.getCrs().getCoordinateSystem();
+
+        double originX = coordSys.getAxis(0).getMinimumValue(); // left
+        double originY = coordSys.getAxis(1).getMinimumValue(); // top
+        double extentX = coordSys.getAxis(0).getMaximumValue(); // right
+        double extentY = coordSys.getAxis(1).getMaximumValue(); // bottom
+        double resX = (extentX - originX) / matrix.getMatrixWidth();
+        double resY = (extentY - originY) / matrix.getMatrixHeight();
+        double pixSizeX = matrix.getXPixelSize();
+        double pixSizeY = matrix.getYPixelSize();
+
+        // Test if the point is with tile matrix boundaries
+        double remX = (xCoord - originX) % resX;
+        double remY = (originY - yCoord) % resY;
+        boolean resolutionWithinAPixel = (remX < pixSizeX) && (remY < pixSizeY);
+
+        int leftTile = -1;
+        int topTile = -1;
+        if (resolutionWithinAPixel) {
+            leftTile = Math.max(leftTile, (int) Math.round((xCoord - originX) / resX));
+            topTile = Math.max(topTile, (int) Math.round((originY - yCoord) / resY));
+        } else {
+            leftTile = Math.max(leftTile, (int) Math.round(Math.floor((xCoord - originX) / resX)));
+            topTile = Math.max(topTile, (int) Math.round(Math.floor((originY - yCoord) / resY)));
+        }
+        return new int[]{leftTile, topTile};
+    }
+
+    @Deprecated
+    protected BufferedImage readTile(int zoomLevel, int tileX, int tileY) {
+        try {
+            // TODO: Cache the gpkg or read and cache the metadata
+            GeoPackage gpkg = new GeoPackage(sourceFile);
+            TileEntry entry = getTileset(coverageName);
+            TileReader tileReader = gpkg.reader(entry, zoomLevel, zoomLevel, tileX, tileX, tileY, tileY);
+            while (tileReader.hasNext()) {
+                Tile tile = tileReader.next();
+                // Convert the tile image data to a BufferedImage
+                BufferedImage tileImage = readImage(tile.getData());
+                return tileImage;
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(GeoPackageReader.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+    
 }
