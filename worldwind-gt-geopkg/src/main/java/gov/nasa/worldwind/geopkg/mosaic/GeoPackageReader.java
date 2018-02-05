@@ -290,10 +290,10 @@ public final class GeoPackageReader extends AbstractGridCoverage2DReader {
         // Compute the size of a tile in CRS units
         double colSpan = worldSpanHorz / matrix.getMatrixWidth(); // matrixWidth is num columns
         double rowSpan = worldSpanVert / matrix.getMatrixHeight();// matrixHeight is num rows
-        // Compute the location of the top-left corner of the tile set in the CRS
+        // Compute the location of the upper-left corner of the tile set in the CRS
         double originX = crs1.getCoordinateSystem().getAxis(0).getMinimumValue() + (colSpan * startCol);
         double originY = crs1.getCoordinateSystem().getAxis(0).getMaximumValue() - (rowSpan * startRow);
-        // Compute the x/y pixel offsets for the top-left corner of the tileset's bounds.
+        // Compute the x/y pixel offsets for the upper-left corner of the tileset's bounds.
         // The x/y pixel values are the margin between the tileset's edge and the imagery.
         int x = (int) Math.round((bounds.getMinX() - originX) / pixSizeX);
         int y = (int) Math.round((originY - bounds.getMaxY()) / pixSizeY);
@@ -387,31 +387,36 @@ public final class GeoPackageReader extends AbstractGridCoverage2DReader {
     }
 
     /**
-     * Returns an {@link ImageLayout} containing the
-     * {@link ColorModel}, {@link SampleModel} and tile grid for the specified
-     * coverage at its highest resolution.
+     * Returns an {@link ImageLayout} specified coverage at its highest
+     * resolution. The ImageLayout contains the image bounds comprising the
+     * image X/Y and width/height; the tile grid layout, comprising tile grid
+     * X/Y offsets, and tile width/height; and the {@link ColorModel} and the
+     * {@link SampleModel} of the image.
      *
      * @param coverageName the raster coverage name
-     * @return a {@link ImageLayout} initialized with color model, sample model
-     * and tile
+     * @return a {@link ImageLayout} initialized with image bounds, tile grid
+     * layout, color model and sample model
      */
     @Override
     public ImageLayout getImageLayout(String coverageName) {
         TileEntry tileset = getTileset(coverageName);
         int maxZoomLevel = tileset.getMaxZoomLevel();
 
-        // Get the envelope surrounding the tiles found in the maximum zoom level
+        // Create the ImageLayout with the image bounds of the primary image
         GridEnvelope gridRange = getOriginalGridRange(coverageName);
-        Dimension tileSize = getTileSize(coverageName, maxZoomLevel);
+        ImageLayout imageLayout = new ImageLayout(
+                gridRange.getLow(0), gridRange.getLow(1),
+                gridRange.getSpan(0), gridRange.getSpan(1));
 
+        // Set the tile grid offsets; the x/y coords of the upper-left pixel in the upper-left tile 
+        Dimension tileSize = getTileSize(coverageName, maxZoomLevel);
+        imageLayout.setTileGridXOffset(0).setTileGridYOffset(0);
+        imageLayout.setTileWidth(tileSize.width).setTileHeight(tileSize.height);
+
+        // Set the color/sample models
         BufferedImage image = new BufferedImage(tileSize.width, tileSize.height, BufferedImage.TYPE_4BYTE_ABGR);
         ColorModel cm = image.getColorModel();
         SampleModel sm = image.getSampleModel();
-
-        // TODO: validate understanding of ImageLayout
-        // TODO: set the x/y values to the grid values; may affect read
-        ImageLayout imageLayout = new ImageLayout(0, 0, gridRange.getSpan(0), gridRange.getSpan(1));
-        imageLayout.setTileGridXOffset(0).setTileGridYOffset(0).setTileWidth(tileSize.width).setTileHeight(tileSize.height);
         imageLayout.setColorModel(cm).setSampleModel(sm);
 
         return imageLayout;
@@ -581,7 +586,6 @@ public final class GeoPackageReader extends AbstractGridCoverage2DReader {
      */
     @Override
     public GridCoverage2D read(GeneralParameterValue[] parameters) throws IllegalArgumentException, IOException {
-        // TODO: call setReadParams
         return read(coverageName, parameters);
     }
 
@@ -783,7 +787,7 @@ public final class GeoPackageReader extends AbstractGridCoverage2DReader {
 
     /**
      * Reads the raster tile data intersecting the given region into a
-     * {@link BufferedImage}.
+     * {@link BufferedImage}. Called by {@link GeoPackageImageReader).
      *
      * @param zoomLevel the requested zoom level
      * @param region requested pixel region within the tileset
@@ -878,36 +882,35 @@ public final class GeoPackageReader extends AbstractGridCoverage2DReader {
             srcGraphics.dispose();
             it.close();
 
-            if (srcImage != null) {
-                // Apply the color transparency mask
-                if (inputTransparentColor != null) {
-                    // Note: ImageWorker.makeColorTransparent only works 
-                    // with an IndexColorModel or a ComponentColorModel
-                    srcImage = new ImageWorker(srcImage).makeColorTransparent(inputTransparentColor).getRenderedOperation().getAsBufferedImage();
-                }
-
-                // Copy the src image into the dest image, cropping the image as required                
-                Graphics2D g2 = destImage.createGraphics();
-                int sx = regionX % tileWidth;
-                int sy = regionY % tileHeight;
-                g2.drawImage(srcImage,
-                        0, //int dx1,
-                        0, //int dy1,
-                        destImage.getWidth(), //int dx2,
-                        destImage.getHeight(), //int dy2,
-                        sx, //int sx1,
-                        sy, //int sy1,
-                        sx + region.width, //int sx2,
-                        sy + region.height, //int sy2,
-                        null); //ImageObserver observer)
-                g2.dispose();
+            // Apply the color transparency mask
+            if (inputTransparentColor != null) {
+                // Note: ImageWorker.makeColorTransparent only works 
+                // with an IndexColorModel or a ComponentColorModel
+                srcImage = new ImageWorker(srcImage).makeColorTransparent(inputTransparentColor).getRenderedOperation().getAsBufferedImage();
             }
+
+            // Copy the src image into the dest image, cropping the image as required                
+            Graphics2D g2 = destImage.createGraphics();
+            int sx = regionX % tileWidth;
+            int sy = regionY % tileHeight;
+            g2.drawImage(srcImage,
+                    0, //int dx1,
+                    0, //int dy1,
+                    destImage.getWidth(), //int dx2,
+                    destImage.getHeight(), //int dy2,
+                    sx, //int sx1,
+                    sy, //int sy1,
+                    sx + region.width, //int sx2,
+                    sy + region.height, //int sy2,
+                    null); //ImageObserver observer)
+            g2.dispose();
 
         } finally {
             file.close();
         }
         return destImage;
     }
+
     /**
      * Creates a BufferedImage from the supplied image data byte array.
      *
@@ -977,12 +980,10 @@ public final class GeoPackageReader extends AbstractGridCoverage2DReader {
 
         return image;
     }
-    
-    ////////////////////////////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////////////////////////////
-    
 
+    ////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////
     @Deprecated
     protected int[] getTileIndex(String coverage, int zoomLevel, double xCoord, double yCoord) {
         TileEntry tilePyramid = getTileset(coverageName);
@@ -1016,8 +1017,17 @@ public final class GeoPackageReader extends AbstractGridCoverage2DReader {
         return new int[]{leftTile, topTile};
     }
 
-    @Deprecated
-    protected BufferedImage readTile(int zoomLevel, int tileX, int tileY) {
+    /**
+     * Used by GeoPackageImageReader.readTile().
+     *
+     * @param zoomLevel
+     * @param tileX TODO: tileX should be an image tile index, not a matrix tile
+     * index
+     * @param tileY TODO: tileY should be an image tile index, not a matrix tile
+     * index
+     * @return
+     */
+    public BufferedImage readTile(int zoomLevel, int tileX, int tileY) {
         try {
             // TODO: Cache the gpkg or read and cache the metadata
             GeoPackage gpkg = new GeoPackage(sourceFile);
@@ -1101,5 +1111,4 @@ public final class GeoPackageReader extends AbstractGridCoverage2DReader {
         return image;
     }
 
-    
 }
