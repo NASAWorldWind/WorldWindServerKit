@@ -292,7 +292,7 @@ public final class GeoPackageReader extends AbstractGridCoverage2DReader {
         double rowSpan = worldSpanVert / matrix.getMatrixHeight();// matrixHeight is num rows
         // Compute the location of the upper-left corner of the tile set in the CRS
         double originX = crs1.getCoordinateSystem().getAxis(0).getMinimumValue() + (colSpan * startCol);
-        double originY = crs1.getCoordinateSystem().getAxis(0).getMaximumValue() - (rowSpan * startRow);
+        double originY = crs1.getCoordinateSystem().getAxis(1).getMaximumValue() - (rowSpan * startRow);
         // Compute the x/y pixel offsets for the upper-left corner of the tileset's bounds.
         // The x/y pixel values are the margin between the tileset's edge and the imagery.
         int x = (int) Math.round((bounds.getMinX() - originX) / pixSizeX);
@@ -387,6 +387,30 @@ public final class GeoPackageReader extends AbstractGridCoverage2DReader {
     }
 
     /**
+     * Returns the actual resolution used to read the data given the specified
+     * target resolution and the specified overview policy.
+     *
+     * Copied from base class and fixed to use getNumOverviews(coverageName).
+     *
+     * @param coverageName
+     * @param policy
+     * @param requestedResolution
+     * @return new double[]{xRes, yRes}
+     */
+    @Override
+    public double[] getReadingResolutions(
+            String coverageName, OverviewPolicy policy, double[] requestedResolution) {
+        // Find the target resolution level
+        double[] result;
+        if (getNumOverviews(coverageName) > 0) {
+            int zoomLevel = pickZoomLevel(coverageName, policy, requestedResolution);
+            return getResolution(coverageName, zoomLevel);
+        } else {
+            return getHighestRes(coverageName);
+        }
+    }
+
+    /**
      * Returns an {@link ImageLayout} specified coverage at its highest
      * resolution. The ImageLayout contains the image bounds comprising the
      * image X/Y and width/height; the tile grid layout, comprising tile grid
@@ -448,8 +472,8 @@ public final class GeoPackageReader extends AbstractGridCoverage2DReader {
      * subsampling factors
      * @param requestedEnvelope the {@link GeneralEnvelope} we are requesting
      * @param requestedDim a {@link Rectangle} containing requested dimensions
-     * @return a zero-based image index where 0 is the highest resolution, 1 is
-     * the first overview, and so on
+     * @return the selected overview: a zero-based image index where 0 is the
+     * highest resolution, 1 is the first overview, and so on
      * @throws IOException
      * @throws TransformException
      */
@@ -468,39 +492,33 @@ public final class GeoPackageReader extends AbstractGridCoverage2DReader {
             overviewPolicy = extractOverviewPolicy();
         }
 
-        // Set the default values for subsampling:
-        //  sourceXSubsampling - the number of columns to advance between pixels.
-        //  sourceYSubsampling - the number of rows to advance between pixels.
-        //  subsamplingXOffset - the horizontal offset of the first subsample within the region
-        //  subsamplingYOffset - the horizontal offset of the first subsample within the region.
-        readParams.setSourceSubsampling(1, 1, 0, 0);
+        // Set the default values for subsampling
+        readParams.setSourceSubsampling(
+                /*sourceXSubsampling*/1, /*sourceXSubsampling*/ 1,
+                /*subsamplingXOffset*/ 0, /*subsamplingYOffset*/ 0);
 
         // All done if ignoring overviews
         if (overviewPolicy.equals(OverviewPolicy.IGNORE)) {
             return imageIndex;
         }
 
-        // FIXME! numOverviews is not initialized; call getNumOverviews or initialize base class
-        final boolean useOverviews = (numOverviews > 0) ? true : false;
+        final boolean useOverviews = (getNumOverviews(coverageName) > 0);
 
         // Compute the requested resolution to determine the zoom level
-        //  The super.getResolution utility returns a two-element array: [lonRes,latRes]
+        //  The super.getResolution utility returns a two-element array: [xRes,yRes]
         double[] requestedRes = getResolution(requestedEnvelope, requestedDim, getCoordinateReferenceSystem(coverageName));
         if (requestedRes == null) {
             return imageIndex;
         }
 
-        // Get the imageImage from the zoom level
+        // Get the imageIndex from the zoom level
         if (useOverviews) {
-            TileEntry tilePyramid = getTileset(coverageName);
             int zoomLevel = pickZoomLevel(coverageName, overviewPolicy, requestedRes);
-            imageIndex = tilePyramid.getMaxZoomLevel() - zoomLevel;
+            imageIndex = getTileset(coverageName).getMaxZoomLevel() - zoomLevel;
         }
 
-        // Evaluate possible subsampling factors once the best resolution level has been found, in case we have support
-        // for overviews, or starting from the original coverage in case there are no overviews available.
-        //  May update readParams' source subsampling.
-        decimationOnReadingControl(coverageName, imageIndex, readParams, requestedRes);
+        // Update the readParams' subsampling based on the selected overview and resolution.
+        decimationOnReading(coverageName, imageIndex, readParams, requestedRes);
 
         return imageIndex;
     }
@@ -570,6 +588,82 @@ public final class GeoPackageReader extends AbstractGridCoverage2DReader {
             }
         }
         return zoomLevel;
+    }
+
+    /**
+     * Called by setReadParam, this method is responsible for evaluating
+     * possible subsampling factors once the best resolution level has been
+     * found, in case we have support for overviews, or starting from the
+     * original coverage in case there are no overviews available.
+     *
+     * Copied from base class decimationOnReadingControl and fixed for
+     * multi-coverage GeoPackage format: i.e., getHighestRes(coverageName)
+     *
+     * @param coverageName
+     * @param imageIndex zero-based image index (0 is highest resolution)
+     * @param readParams
+     * @param requestedRes
+     */
+    protected final void decimationOnReading(String coverageName, Integer imageIndex, ImageReadParam readParams, double[] requestedRes) {
+        {
+            int w, h;
+            double[] selectedRes = new double[2];
+            if (imageIndex == 0) {
+                // highest resolution
+                double[] highestRes1 = getHighestRes(coverageName);
+                GridEnvelope originalGridRange1 = getOriginalGridRange(coverageName);
+                w = originalGridRange1.getSpan(0);
+                h = originalGridRange1.getSpan(1);
+                selectedRes[0] = highestRes1[0];
+                selectedRes[1] = highestRes1[1];
+            } else {
+                // some overview
+                int zoomLevel = getTileset(coverageName).getMaxZoomLevel() - imageIndex;
+                double[] zoomRes = getResolution(coverageName, zoomLevel);
+                selectedRes[0] = zoomRes[0];
+                selectedRes[1] = zoomRes[1];
+
+                GeneralEnvelope originalEnvelope1 = getOriginalEnvelope(coverageName);
+                w = (int) Math.round(originalEnvelope1.getSpan(0) / selectedRes[0]);
+                h = (int) Math.round(originalEnvelope1.getSpan(1) / selectedRes[1]);
+            }
+            // /////////////////////////////////////////////////////////////////////
+            // DECIMATION ON READING
+            // Setting subsampling factors with some checkings
+            // 1) the subsampling factors cannot be zero
+            // 2) the subsampling factors cannot be such that the w or h are zero
+            // /////////////////////////////////////////////////////////////////////
+            // setSourceSubsampling(
+            //      sourceXSubsampling, sourceYSubsampling, 
+            //      subsamplingXOffset, subsamplingYOffset)
+            //  sourceXSubsampling - the number of columns to advance between pixels.
+            //  sourceYSubsampling - the number of rows to advance between pixels.
+            //  subsamplingXOffset - the horizontal offset of the first subsample within the region
+            //  subsamplingYOffset - the horizontal offset of the first subsample within the region.
+            // /////////////////////////////////////////////////////////////////////
+            if (requestedRes == null) {
+                readParams.setSourceSubsampling(1, 1, 0, 0);
+
+            } else {
+                int subSamplingFactorX = (int) Math.floor(requestedRes[0] / selectedRes[0]);
+                subSamplingFactorX = subSamplingFactorX == 0 ? 1 : subSamplingFactorX;
+
+                while (w / subSamplingFactorX <= 0 && subSamplingFactorX >= 0) {
+                    subSamplingFactorX--;
+                }
+                subSamplingFactorX = subSamplingFactorX == 0 ? 1 : subSamplingFactorX;
+
+                int subSamplingFactorY = (int) Math.floor(requestedRes[1] / selectedRes[1]);
+                subSamplingFactorY = subSamplingFactorY == 0 ? 1 : subSamplingFactorY;
+
+                while (h / subSamplingFactorY <= 0 && subSamplingFactorY >= 0) {
+                    subSamplingFactorY--;
+                }
+                subSamplingFactorY = subSamplingFactorY == 0 ? 1 : subSamplingFactorY;
+
+                readParams.setSourceSubsampling(subSamplingFactorX, subSamplingFactorY, 0, 0);
+            }
+        }
     }
 
     /**
