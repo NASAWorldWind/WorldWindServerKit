@@ -207,6 +207,14 @@ public class TileMatrix implements Serializable {
         return maxRow;
     }    
     
+    public Integer getNumRows() {
+        return maxRow - minRow + 1;
+    }    
+    
+    public Integer getNumCols() {
+        return maxCol - minCol + 1;
+    }    
+    
     public Integer getWidth() {
         if (minCol != null && maxCol != null) {
             return (maxCol - minCol + 1) * tileWidth;
