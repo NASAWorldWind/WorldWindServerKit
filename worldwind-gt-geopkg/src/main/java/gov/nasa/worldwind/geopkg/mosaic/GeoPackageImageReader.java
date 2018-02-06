@@ -1,17 +1,9 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package gov.nasa.worldwind.geopkg.mosaic;
 
 import gov.nasa.worldwind.geopkg.TileEntry;
 import gov.nasa.worldwind.geopkg.TileMatrix;
 import it.geosolutions.imageio.stream.input.FileImageInputStreamExtImpl;
-import java.awt.BasicStroke;
-import java.awt.Dimension;
 import java.awt.Graphics2D;
-import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.awt.image.ColorModel;
@@ -19,10 +11,8 @@ import java.awt.image.SampleModel;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Locale;
 import java.util.logging.Logger;
 import javax.imageio.IIOException;
 import javax.imageio.ImageReadParam;
@@ -30,7 +20,6 @@ import javax.imageio.ImageReader;
 import javax.imageio.ImageTypeSpecifier;
 import javax.imageio.metadata.IIOMetadata;
 import javax.media.jai.PlanarImage;
-import static org.geotools.resources.image.ImageUtilities.tileImage;
 import org.geotools.util.logging.Logging;
 import org.opengis.coverage.grid.GridEnvelope;
 
@@ -68,7 +57,7 @@ public class GeoPackageImageReader extends ImageReader {
      * the {@link ImageTypeSpecifier} associated to this reader.
      */
     private ImageTypeSpecifier imageType;
-    
+
     /**
      * The .gpkg input file derived from the input source.
      */
@@ -252,8 +241,7 @@ public class GeoPackageImageReader extends ImageReader {
 //        this.monitor = monitor;
 //    }
     /**
-     *
-     * @param the image index (mapped to a zoom level)
+     * @param imageIndex
      * @return
      * @throws IOException
      */
@@ -263,10 +251,12 @@ public class GeoPackageImageReader extends ImageReader {
     }
 
     /**
+     * Returns a BufferedImage defined by the values in the supplied
+     * ImageReadParam.
      *
      * @param imageIndex the image index (mapped to a zoom level)
      * @param param
-     * @return
+     * @return A BufferedImage containing the tile data from a GeoPackage
      * @throws IOException
      */
     @Override
@@ -277,20 +267,20 @@ public class GeoPackageImageReader extends ImageReader {
         // Get the pixel width/height of the GeoPackgae image data
         int srcWidth = getWidth(imageIndex);
         int srcHeight = getHeight(imageIndex);
-        
+
         // Compute the pixel region of the source image that should be read, taking into
         // account any source region and subsampling offset settings in the supplied ImageReadParam.
         Rectangle srcRegion = getSourceRegion(param, srcWidth, srcHeight);
-        
+
         // Read GeoPackage tiles for the defined pixel region into an image 
         BufferedImage srcImage = gpkgReader.readTiles(zoomLevel, srcRegion, null);
-        
+
         // Get the BufferedImage to which decoded pixel data should be written. 
         // The image is determined by inspecting the supplied ImageReadParam if it is
         // non-null; if its getDestination method returns a non-null value, that image is
         // simply returned. 
         BufferedImage destImage = getDestination(param, getImageTypes(imageIndex), srcWidth, srcHeight);
-        
+
         // Copy the source image into the destination, scaling/coverting as reqd.
         Graphics2D destGraphics = destImage.createGraphics();
         destGraphics.drawImage(srcImage,
@@ -311,19 +301,16 @@ public class GeoPackageImageReader extends ImageReader {
             destGraphics.setStroke(new BasicStroke(thickness));
             destGraphics.drawRect(0, 0, destImage.getWidth(), destImage.getHeight());
         }
-        */
+         */
         destGraphics.dispose();
-        
+
         return destImage;
     }
 
     /**
      * Reads the tile indicated by the <code>tileX</code> and <code>tileY</code>
      * arguments, returning it as a <code>BufferedImage</code>. If the arguments
-     * are out of range, an <code>IllegalArgumentException</code> is thrown. If
-     * the image is not tiled, the values 0, 0 will return the entire image; any
-     * other values will cause an <code>IllegalArgumentException</code> to be
-     * thrown.
+     * are out of range, an <code>IllegalArgumentException</code> is thrown.
      *
      * @param imageIndex the image index (mapped to a zoom level)
      * @param tileX
@@ -334,7 +321,20 @@ public class GeoPackageImageReader extends ImageReader {
     @Override
     public BufferedImage readTile(int imageIndex, int tileX, int tileY) throws IOException {
         ensureOpen();
-        return this.gpkgReader.readTile(getZoomLevel(imageIndex), tileX, tileY);
+        int zoomLevel = getZoomLevel(imageIndex);
+        TileMatrix matrix = gpkgReader.getTileset().getTileMatrix(zoomLevel);
+        
+        if (tileX < 0 || tileX >= (matrix.getNumCols())) {
+            throw new IllegalArgumentException(String.format("tileX (%d) is outside the range of columns", tileX));
+        }
+        if (tileY < 0 || tileY >= (matrix.getNumRows())) {
+            throw new IllegalArgumentException(String.format("tileY (%d) is outside the range of rows", tileY));
+        }
+        
+        return gpkgReader.readTile(
+                zoomLevel, 
+                matrix.getMinCol() + tileX, 
+                matrix.getMinRow() + tileY);
     }
 
     /**
