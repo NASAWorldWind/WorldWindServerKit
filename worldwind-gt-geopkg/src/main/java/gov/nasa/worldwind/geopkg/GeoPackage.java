@@ -1450,12 +1450,12 @@ public class GeoPackage {
     // TODO: The tiles' bounds / gridRange should added to the TileEntry or a meta data class.
     // TODO: The tiles' bounds should be computed on the initialization of the GeoPackage tiles.
     /**
-     * 
+     *
      * @param rs Result set containing a row from the gpkg_contents table
      * @param cx Connection to the GeoPackage
      * @param zoom zoom level
      * @return new int[] {minCol, minRow, maxCol, maxRow}
-     * @throws IOException 
+     * @throws IOException
      */
     static int[] lookupZoomLevelBounds(ResultSet rs, Connection cx, int zoom) throws IOException {
         try {
@@ -1467,25 +1467,25 @@ public class GeoPackage {
             sql.append(" WHERE zoom_level == ");
             sql.append(zoom);
 
-                Statement st = cx.createStatement();
+            Statement st = cx.createStatement();
+            try {
+                ResultSet rsz = st.executeQuery(sql.toString());
                 try {
-                    ResultSet rsz = st.executeQuery(sql.toString());
-                    try {
-                        rsz.next();
-                        int minCol = rsz.getInt("min_column");
-                        int maxCol = rsz.getInt("max_column");
-                        int minRow = rsz.getInt("min_row");
-                        int maxRow = rsz.getInt("max_row");
-                        
-                        bounds = new int[] {minCol, minRow, maxCol, maxRow};
+                    rsz.next();
+                    int minCol = rsz.getInt("min_column");
+                    int maxCol = rsz.getInt("max_column");
+                    int minRow = rsz.getInt("min_row");
+                    int maxRow = rsz.getInt("max_row");
 
-                    } finally {
-                        close(rsz);
-                    }
+                    bounds = new int[]{minCol, minRow, maxCol, maxRow};
+
                 } finally {
-                    close(st);
+                    close(rsz);
                 }
- 
+            } finally {
+                close(st);
+            }
+
             return bounds;
 
         } catch (SQLException e) {
@@ -1570,16 +1570,16 @@ public class GeoPackage {
                     m.setTileHeight(rsm.getInt("tile_height"));
                     m.setXPixelSize(rsm.getDouble("pixel_x_size"));
                     m.setYPixelSize(rsm.getDouble("pixel_y_size"));
-                                        
+
                     //
-                    int [] bounds = lookupZoomLevelBounds(rs, cx, m.getZoomLevel());
+                    int[] bounds = lookupZoomLevelBounds(rs, cx, m.getZoomLevel());
                     if (bounds != null) {
                         m.minCol = bounds[0];
                         m.minRow = bounds[1];
                         m.maxCol = bounds[2];
                         m.maxRow = bounds[3];
                     }
-                    
+
                     e.getTileMatricies().add(m);
                 }
             } finally {
@@ -1639,9 +1639,13 @@ public class GeoPackage {
                 throw new IOException(ex);
             }
         }
-
-        e.setBounds(new ReferencedEnvelope(rs.getDouble("min_x"),
-                rs.getDouble("max_x"), rs.getDouble("min_y"), rs.getDouble("max_y"), crs));
+        CRS.AxisOrder axisOrder = CRS.getAxisOrder(crs);
+        e.setBounds(new ReferencedEnvelope(
+                rs.getDouble(axisOrder == CRS.AxisOrder.EAST_NORTH ? "min_x" : "min_y"),
+                rs.getDouble(axisOrder == CRS.AxisOrder.EAST_NORTH ? "max_x" : "max_y"),
+                rs.getDouble(axisOrder == CRS.AxisOrder.EAST_NORTH ? "min_y" : "min_x"),
+                rs.getDouble(axisOrder == CRS.AxisOrder.EAST_NORTH ? "max_y" : "max_x"),
+                crs));
     }
 
     //
