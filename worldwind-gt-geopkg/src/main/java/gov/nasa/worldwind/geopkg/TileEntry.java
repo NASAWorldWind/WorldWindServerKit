@@ -131,6 +131,8 @@ public class TileEntry extends Entry {
     /**
      * Returns the CRS corresponding to this entry's SRID.
      *
+     * The CRS should have long/lat ordering.
+     * 
      * @return the CRS decoded from the "EPSG:{SRID}" string
      */
     public CoordinateReferenceSystem getCrs() {
@@ -141,7 +143,7 @@ public class TileEntry extends Entry {
             }
             return crs;
         } catch (FactoryException e) {
-            // TODO: log error
+            // TODO: log error and throw exception
             return null;
         }
     }
