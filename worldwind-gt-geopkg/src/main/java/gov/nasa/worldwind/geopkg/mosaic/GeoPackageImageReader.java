@@ -138,9 +138,6 @@ public class GeoPackageImageReader extends ImageReader {
         ensureOpen();
         GridEnvelope gridRange = gpkgReader.getGridRange(getZoomLevel(imageIndex));
         return gridRange.getSpan(1);
-        // The min size returned by toTileSize is 512x512
-        //final Dimension tileSize = ImageUtilities.toTileSize(new Dimension(gridRange.getSpan(0), gridRange.getSpan(1)));
-        //return tileSize.height;
     }
 
     /**
