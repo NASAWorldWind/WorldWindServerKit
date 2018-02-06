@@ -47,6 +47,7 @@ import gov.nasa.worldwind.geopkg.TileReader;
 import java.awt.BasicStroke;
 import java.awt.Dimension;
 import java.awt.image.ColorModel;
+import java.net.URL;
 import javax.media.jai.ImageLayout;
 
 import org.geotools.coverage.CoverageFactoryFinder;
@@ -63,6 +64,7 @@ import org.geotools.geometry.GeneralEnvelope;
 import org.geotools.geometry.jts.ReferencedEnvelope;
 import org.geotools.image.ImageWorker;
 import org.geotools.referencing.CRS;
+import static org.geotools.referencing.CRS.AxisOrder.EAST_NORTH;
 import org.geotools.util.Utilities;
 import org.geotools.util.logging.Logging;
 import org.opengis.coverage.grid.Format;
@@ -73,6 +75,7 @@ import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.ReferenceIdentifier;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import org.opengis.referencing.cs.CoordinateSystem;
+import org.opengis.referencing.cs.CoordinateSystemAxis;
 import org.opengis.referencing.datum.PixelInCell;
 import org.opengis.referencing.operation.MathTransform;
 import org.opengis.referencing.operation.TransformException;
@@ -131,6 +134,10 @@ public final class GeoPackageReader extends AbstractGridCoverage2DReader {
         } finally {
             gpkg.close();
         }
+    }
+
+    GeoPackageReader(URL source) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     /**
@@ -277,31 +284,34 @@ public final class GeoPackageReader extends AbstractGridCoverage2DReader {
      */
     public GridEnvelope getGridRange(String coverageName, int zoomLevel) {
         TileEntry tileset = getTileset(coverageName);
-        Envelope bounds = tileset.getTileMatrixSetBounds();
-        CoordinateReferenceSystem crs1 = tileset.getCrs();
+        ReferencedEnvelope bounds = (ReferencedEnvelope) tileset.getTileMatrixSetBounds();
+        CoordinateReferenceSystem crs1 = bounds.getCoordinateReferenceSystem();
         TileMatrix matrix = tileset.getTileMatrix(zoomLevel);
         int startCol = matrix.getMinCol();
         int startRow = matrix.getMinRow();
         double pixSizeX = matrix.getXPixelSize();
         double pixSizeY = matrix.getYPixelSize();
         // Get the size of world in CRS units
-        double worldSpanHorz = crs1.getCoordinateSystem().getAxis(0).getMaximumValue() - crs1.getCoordinateSystem().getAxis(0).getMinimumValue();
-        double worldSpanVert = crs1.getCoordinateSystem().getAxis(1).getMaximumValue() - crs1.getCoordinateSystem().getAxis(1).getMinimumValue();
+        CRS.AxisOrder axisOrder = CRS.getAxisOrder(crs1);
+        final int xIndex = axisOrder==EAST_NORTH ? 0 : 1;
+        final int yIndex = 1 - xIndex;
+        CoordinateSystemAxis xAxis = crs1.getCoordinateSystem().getAxis(xIndex);
+        CoordinateSystemAxis yAxis = crs1.getCoordinateSystem().getAxis(yIndex);
         // Compute the size of a tile in CRS units
-        double colSpan = worldSpanHorz / matrix.getMatrixWidth(); // matrixWidth is num columns
-        double rowSpan = worldSpanVert / matrix.getMatrixHeight();// matrixHeight is num rows
+        double colSpan = (xAxis.getMaximumValue() - xAxis.getMinimumValue()) / matrix.getMatrixWidth(); 
+        double rowSpan = (yAxis.getMaximumValue() - yAxis.getMinimumValue()) / matrix.getMatrixHeight();
         // Compute the location of the upper-left corner of the tile set in the CRS
-        double originX = crs1.getCoordinateSystem().getAxis(0).getMinimumValue() + (colSpan * startCol);
-        double originY = crs1.getCoordinateSystem().getAxis(1).getMaximumValue() - (rowSpan * startRow);
+        double originX = xAxis.getMinimumValue() + (colSpan * startCol);
+        double originY = yAxis.getMaximumValue() - (rowSpan * startRow);
         // Compute the x/y pixel offsets for the upper-left corner of the tileset's bounds.
         // The x/y pixel values are the margin between the tileset's edge and the imagery.
-        int x = (int) Math.round((bounds.getMinX() - originX) / pixSizeX);
-        int y = (int) Math.round((originY - bounds.getMaxY()) / pixSizeY);
+        int xPix = (int) Math.round((bounds.getMinimum(xIndex) - originX) / pixSizeX);
+        int yPix = (int) Math.round((originY - bounds.getMaximum(yIndex)) / pixSizeY);
         // Compute width and height of a tile in pixels
-        int width = (int) Math.round((bounds.getMaxX() - bounds.getMinX()) / pixSizeX);
-        int height = (int) Math.round((bounds.getMaxY() - bounds.getMinY()) / pixSizeY);
+        int width = (int) Math.round((bounds.getMaximum(xIndex)- bounds.getMinimum(xIndex)) / pixSizeX);
+        int height = (int) Math.round((bounds.getMaximum(yIndex)- bounds.getMinimum(yIndex)) / pixSizeY);
 
-        GridEnvelope2D gridRange = new GridEnvelope2D(x, y, width, height);
+        GridEnvelope2D gridRange = new GridEnvelope2D(xPix, yPix, width, height);
 
         return gridRange;
     }
@@ -1075,6 +1085,33 @@ public final class GeoPackageReader extends AbstractGridCoverage2DReader {
         return image;
     }
 
+    
+    /**
+     * Used by GeoPackageImageReader.readTile().
+     *
+     * @param zoomLevel
+     * @param tileX a matrix tile index
+     * @param tileY a matrix tile index
+     * @return A BufferedImage containing the specified tile
+     */
+    public BufferedImage readTile(int zoomLevel, int tileX, int tileY) {
+        try {
+            // TODO: Cache the gpkg or read and cache the metadata
+            GeoPackage gpkg = new GeoPackage(sourceFile);
+            TileEntry entry = getTileset(coverageName);
+            TileReader tileReader = gpkg.reader(entry, zoomLevel, zoomLevel, tileX, tileX, tileY, tileY);
+            while (tileReader.hasNext()) {
+                Tile tile = tileReader.next();
+                // Convert the tile image data to a BufferedImage
+                BufferedImage tileImage = readImage(tile.getData());
+                return tileImage;
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(GeoPackageReader.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+    
     ////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////
@@ -1111,33 +1148,6 @@ public final class GeoPackageReader extends AbstractGridCoverage2DReader {
         return new int[]{leftTile, topTile};
     }
 
-    /**
-     * Used by GeoPackageImageReader.readTile().
-     *
-     * @param zoomLevel
-     * @param tileX TODO: tileX should be an image tile index, not a matrix tile
-     * index
-     * @param tileY TODO: tileY should be an image tile index, not a matrix tile
-     * index
-     * @return
-     */
-    public BufferedImage readTile(int zoomLevel, int tileX, int tileY) {
-        try {
-            // TODO: Cache the gpkg or read and cache the metadata
-            GeoPackage gpkg = new GeoPackage(sourceFile);
-            TileEntry entry = getTileset(coverageName);
-            TileReader tileReader = gpkg.reader(entry, zoomLevel, zoomLevel, tileX, tileX, tileY, tileY);
-            while (tileReader.hasNext()) {
-                Tile tile = tileReader.next();
-                // Convert the tile image data to a BufferedImage
-                BufferedImage tileImage = readImage(tile.getData());
-                return tileImage;
-            }
-        } catch (IOException ex) {
-            Logger.getLogger(GeoPackageReader.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return null;
-    }
 
     @Deprecated
     protected BufferedImage readTiles(String coverageName, int zoomLevel, int leftTile, int rightTile, int topTile, int bottomTile) throws IllegalArgumentException, IOException {
