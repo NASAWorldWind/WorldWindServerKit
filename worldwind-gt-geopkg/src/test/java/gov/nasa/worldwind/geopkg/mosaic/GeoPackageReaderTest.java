@@ -61,29 +61,30 @@ import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 public class GeoPackageReaderTest {
 
-    private final static String GEOPACKAGE = "GeoPackageTutorial.gpkg";
-    private final static String COVERAGE_NAME = "GeoPackageTutorial";
-    private URL source;
+    public final static String GEOPACKAGE = "GeoPackageTutorial.gpkg";
+    public final static String COVERAGE_NAME = "GeoPackageTutorial";
+    public final static int NUM_ZOOM_LEVELS = 6;
+    public final static int MAX_ZOOM_LEVEL = 16;
 
     // ORIGINAL_ENVELOPE report by GDAL
-    private final static ReferencedEnvelope ORIGINAL_ENVELOPE = new ReferencedEnvelope(
+    public final static ReferencedEnvelope ORIGINAL_ENVELOPE = new ReferencedEnvelope(
             -76.0637651, -76.0014413, 36.7975956, 36.8303400, DefaultGeographicCRS.WGS84);
 
     // GRID_RANGE width, height values are reported by GDAL.
     // GRID_RANGE x,y values are simply values record getRange so the unit test can detect a change.
-    private final static GridEnvelope ORIGINAL_GRID_RANGE = new GridEnvelope2D(7, 124, 5809, 3052);
-    private final static GridEnvelope LEVEL_15_GRID_RANGE = new GridEnvelope2D(4, 62, 2905, 1526);
-    private final static GridEnvelope LEVEL_14_GRID_RANGE = new GridEnvelope2D(130, 159, 1452, 763);
-    private final static GridEnvelope LEVEL_13_GRID_RANGE = new GridEnvelope2D(65, 207, 726, 382); // GDAL reports 381 (using 382 so test will pass)
-    private final static GridEnvelope LEVEL_12_GRID_RANGE = new GridEnvelope2D(32, 232, 363, 191);
-    private final static GridEnvelope LEVEL_11_GRID_RANGE = new GridEnvelope2D(144, 244, 182, 95);
+    public final static GridEnvelope ORIGINAL_GRID_RANGE = new GridEnvelope2D(7, 124, 5809, 3052);
+    public final static GridEnvelope LEVEL_15_GRID_RANGE = new GridEnvelope2D(4, 62, 2905, 1526);
+    public final static GridEnvelope LEVEL_14_GRID_RANGE = new GridEnvelope2D(130, 159, 1452, 763);
+    public final static GridEnvelope LEVEL_13_GRID_RANGE = new GridEnvelope2D(65, 207, 726, 382); // GDAL reports 381 (using 382 so test will pass)
+    public final static GridEnvelope LEVEL_12_GRID_RANGE = new GridEnvelope2D(32, 232, 363, 191);
+    public final static GridEnvelope LEVEL_11_GRID_RANGE = new GridEnvelope2D(144, 244, 182, 95);
 
     // Test specific values
-    private final static int NUM_ZOOM_LEVELS = 6;
-    private final static int MAX_ZOOM_LEVEL = 16;
     private final static ReferencedEnvelope ZOOMLEVEL_12_BBOX = new ReferencedEnvelope(
-            -76.0693359375, -75.9814453125, 36.7822265625, 36.8701171875, DefaultGeographicCRS.WGS84
-    );
+            -76.0693359375, -75.9814453125, 36.7822265625, 36.8701171875, DefaultGeographicCRS.WGS84);
+
+    private URL source;
+
 
     @Before
     public void setUp() {
@@ -374,13 +375,20 @@ public class GeoPackageReaderTest {
         assumeNotNull(source);  // Skip test if not found
         GeoPackageReader instance = new GeoPackageReader(source, null);
         GeneralEnvelope expResult = new GeneralEnvelope(ORIGINAL_ENVELOPE);
+        CRS.AxisOrder axisOrder1 = CRS.getAxisOrder(expResult.getCoordinateReferenceSystem());
+        int x1 = axisOrder1 == CRS.AxisOrder.EAST_NORTH ? 0 : 1;
+        int y1 = 1 - x1;
 
         GeneralEnvelope result = instance.getOriginalEnvelope(COVERAGE_NAME);
 
-        assertEquals(expResult.getMinimum(0), result.getMinimum(0), 0.000001);
-        assertEquals(expResult.getMinimum(1), result.getMinimum(1), 0.000001);
-        assertEquals(expResult.getMaximum(0), result.getMaximum(0), 0.000001);
-        assertEquals(expResult.getMaximum(1), result.getMaximum(1), 0.000001);
+        CRS.AxisOrder axisOrder2 = CRS.getAxisOrder(result.getCoordinateReferenceSystem());
+        int x2 = axisOrder2 == CRS.AxisOrder.EAST_NORTH ? 0 : 1;
+        int y2 = 1 - x2;
+
+        assertEquals(expResult.getMinimum(x1), result.getMinimum(x2), 0.000001);
+        assertEquals(expResult.getMinimum(y1), result.getMinimum(y2), 0.000001);
+        assertEquals(expResult.getMaximum(x1), result.getMaximum(x2), 0.000001);
+        assertEquals(expResult.getMaximum(y1), result.getMaximum(y2), 0.000001);
     }
 
     @Test
@@ -391,7 +399,7 @@ public class GeoPackageReaderTest {
         GridEnvelope result = instance.getOriginalGridRange(COVERAGE_NAME);
 
         assertEquals("X", ORIGINAL_GRID_RANGE.getLow(0), result.getLow(0));
-        assertEquals("y", ORIGINAL_GRID_RANGE.getLow(1), result.getLow(1));
+        assertEquals("Y", ORIGINAL_GRID_RANGE.getLow(1), result.getLow(1));
         assertEquals("Width", ORIGINAL_GRID_RANGE.getSpan(0), result.getSpan(0));
         assertEquals("Height", ORIGINAL_GRID_RANGE.getSpan(1), result.getSpan(1));
     }
