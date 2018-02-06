@@ -12,6 +12,8 @@ import java.net.URL;
 import java.util.List;
 import org.geotools.geometry.jts.ReferencedEnvelope;
 import org.geotools.referencing.CRS;
+import static org.geotools.referencing.CRS.AxisOrder.EAST_NORTH;
+import static org.geotools.referencing.CRS.AxisOrder.NORTH_EAST;
 import org.geotools.referencing.crs.DefaultGeographicCRS;
 import org.junit.After;
 import org.junit.Before;
@@ -22,6 +24,7 @@ import org.junit.Ignore;
 import org.omg.IOP.ENCODING_CDR_ENCAPS;
 import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
+import org.opengis.referencing.cs.AxisDirection;
 
 /**
  *
@@ -80,7 +83,6 @@ public class TileEntryTest {
             assertNotNull("Zoom Level " + zoomLevel, result);
         }
     }
-    
 
     /**
      * Test of getTileMatrix method, of class TileEntry.
@@ -95,7 +97,6 @@ public class TileEntryTest {
         fail("Expected IllegalArgumentException");
     }
 
-    
     /**
      * Test of getTileMatrixSetBounds method, of class TileEntry.
      */
@@ -103,17 +104,24 @@ public class TileEntryTest {
     public void testGetTileMatrixSetBounds() {
         assumeNotNull(reader);  // Skip test if not found
         TileEntry instance = reader.getTileset(COVERAGE_NAME);
-                
-        Envelope result = instance.getTileMatrixSetBounds();
+
+        ReferencedEnvelope result = (ReferencedEnvelope) instance.getTileMatrixSetBounds();
+
+        CRS.AxisOrder axisOrder1 = CRS.getAxisOrder(ENVELOPE.getCoordinateReferenceSystem());
+        int x1 = axisOrder1 == CRS.AxisOrder.EAST_NORTH ? 0 : 1;
+        int y1 = 1 - x1;
+        CRS.AxisOrder axisOrder2 = CRS.getAxisOrder(result.getCoordinateReferenceSystem());
+        int x2 = axisOrder2 == CRS.AxisOrder.EAST_NORTH ? 0 : 1;
+        int y2 = 1 - x2;
 
         assertNotNull(result);
-        assertEquals(ENVELOPE.getMinimum(0), result.getMinX(), 0.000001);
-        assertEquals(ENVELOPE.getMinimum(1), result.getMinY(), 0.000001);
-        assertEquals(ENVELOPE.getMaximum(0), result.getMaxX(), 0.000001);
-        assertEquals(ENVELOPE.getMaximum(1), result.getMaxY(), 0.000001);
-        
+        assertEquals(ENVELOPE.getMinimum(x1), result.getMinimum(x2), 0.000001);
+        assertEquals(ENVELOPE.getMinimum(y1), result.getMinimum(y2), 0.000001);
+        assertEquals(ENVELOPE.getMaximum(x1), result.getMaximum(x2), 0.000001);
+        assertEquals(ENVELOPE.getMaximum(y1), result.getMaximum(y2), 0.000001);
+
     }
-    
+
     /**
      * Test of getMaxZoomLevel method, of class TileEntry.
      */
@@ -150,18 +158,15 @@ public class TileEntryTest {
         CoordinateReferenceSystem expected = CRS.decode("EPSG:4326", true);
 
         CoordinateReferenceSystem result = instance.getCrs();
-        
+
         assertNotNull(result);
         assertEquals(expected, result);
     }
 
-
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
-
-    
     /**
      * Test of setTileMatricies method, of class TileEntry.
      */
@@ -190,7 +195,6 @@ public class TileEntryTest {
         fail("The test case is a prototype.");
     }
 
-
     /**
      * Test of setTileMatrixSetBounds method, of class TileEntry.
      */
@@ -204,7 +208,6 @@ public class TileEntryTest {
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
     }
-
 
     /**
      * Test of setMinZoomLevel method, of class TileEntry.
@@ -220,7 +223,6 @@ public class TileEntryTest {
         fail("The test case is a prototype.");
     }
 
-
     /**
      * Test of setMaxZoomLevel method, of class TileEntry.
      */
@@ -234,7 +236,5 @@ public class TileEntryTest {
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
     }
-
-
 
 }
