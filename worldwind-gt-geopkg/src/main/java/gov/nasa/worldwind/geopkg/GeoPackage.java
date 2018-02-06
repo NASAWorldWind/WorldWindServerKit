@@ -339,13 +339,14 @@ public class GeoPackage {
     }
 
     /**
-     * Adds an epsg crs to the geopackage, registering it in the spatial_ref_sys
-     * table.
-     * <p>
-     * This method will look up the <tt>srid</tt> in the local epsg database.
-     * Use {@link #addCRS(CoordinateReferenceSystem, int)} to specify an
-     * explicit CRS, authority, code entry.
-     * </p>
+     * Adds an EPSG CRS to the GeoPackage - with long/lat ordering - registering
+     * it in the spatial_ref_sys table.
+     *
+     * This method will look up the {@code srid} in the local EPSG database. Use
+     * {@link #addCRS(CoordinateReferenceSystem, int)} to specify an explicit
+     * CRS, authority, code entry.
+     *
+     * @param srid
      */
     public void addCRS(int srid) throws IOException {
         try {
@@ -1630,7 +1631,8 @@ public class GeoPackage {
 
         CoordinateReferenceSystem crs;
         try {
-            crs = CRS.decode("EPSG:" + srid);
+            // Forced long/lat ordering
+            crs = CRS.decode("EPSG:" + srid, true);
         } catch (Exception ex) {
             // try parsing srtext directly
             try {
@@ -1639,6 +1641,8 @@ public class GeoPackage {
                 throw new IOException(ex);
             }
         }
+        // With forced long/lat ordering if the CRS, this swapping effort shouldn't be necessary, 
+        // but it is robust and may catch a corner case (e.g., WKT parsing).
         CRS.AxisOrder axisOrder = CRS.getAxisOrder(crs);
         e.setBounds(new ReferencedEnvelope(
                 rs.getDouble(axisOrder == CRS.AxisOrder.EAST_NORTH ? "min_x" : "min_y"),
