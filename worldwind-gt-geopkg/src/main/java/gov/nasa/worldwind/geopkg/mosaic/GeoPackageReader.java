@@ -292,13 +292,12 @@ public final class GeoPackageReader extends AbstractGridCoverage2DReader {
         double pixSizeX = matrix.getXPixelSize();
         double pixSizeY = matrix.getYPixelSize();
         // Get the size of world in CRS units
-        CRS.AxisOrder axisOrder = CRS.getAxisOrder(crs1);
-        final int xIndex = axisOrder==EAST_NORTH ? 0 : 1;
+        final int xIndex = CRS.getAxisOrder(crs1) == EAST_NORTH ? 0 : 1;
         final int yIndex = 1 - xIndex;
         CoordinateSystemAxis xAxis = crs1.getCoordinateSystem().getAxis(xIndex);
         CoordinateSystemAxis yAxis = crs1.getCoordinateSystem().getAxis(yIndex);
         // Compute the size of a tile in CRS units
-        double colSpan = (xAxis.getMaximumValue() - xAxis.getMinimumValue()) / matrix.getMatrixWidth(); 
+        double colSpan = (xAxis.getMaximumValue() - xAxis.getMinimumValue()) / matrix.getMatrixWidth();
         double rowSpan = (yAxis.getMaximumValue() - yAxis.getMinimumValue()) / matrix.getMatrixHeight();
         // Compute the location of the upper-left corner of the tile set in the CRS
         double originX = xAxis.getMinimumValue() + (colSpan * startCol);
@@ -308,8 +307,8 @@ public final class GeoPackageReader extends AbstractGridCoverage2DReader {
         int xPix = (int) Math.round((bounds.getMinimum(xIndex) - originX) / pixSizeX);
         int yPix = (int) Math.round((originY - bounds.getMaximum(yIndex)) / pixSizeY);
         // Compute width and height of a tile in pixels
-        int width = (int) Math.round((bounds.getMaximum(xIndex)- bounds.getMinimum(xIndex)) / pixSizeX);
-        int height = (int) Math.round((bounds.getMaximum(yIndex)- bounds.getMinimum(yIndex)) / pixSizeY);
+        int width = (int) Math.round((bounds.getMaximum(xIndex) - bounds.getMinimum(xIndex)) / pixSizeX);
+        int height = (int) Math.round((bounds.getMaximum(yIndex) - bounds.getMinimum(yIndex)) / pixSizeY);
 
         GridEnvelope2D gridRange = new GridEnvelope2D(xPix, yPix, width, height);
 
@@ -634,8 +633,10 @@ public final class GeoPackageReader extends AbstractGridCoverage2DReader {
                 selectedRes[1] = zoomRes[1];
 
                 GeneralEnvelope originalEnvelope1 = getOriginalEnvelope(coverageName);
-                w = (int) Math.round(originalEnvelope1.getSpan(0) / selectedRes[0]);
-                h = (int) Math.round(originalEnvelope1.getSpan(1) / selectedRes[1]);
+                int xAxis = (CRS.getAxisOrder(originalEnvelope1.getCoordinateReferenceSystem()) == CRS.AxisOrder.EAST_NORTH ? 0 : 1);
+                int yAxis = 1 - xAxis;
+                w = (int) Math.round(originalEnvelope1.getSpan(xAxis) / selectedRes[0]);
+                h = (int) Math.round(originalEnvelope1.getSpan(yAxis) / selectedRes[1]);
             }
             // /////////////////////////////////////////////////////////////////////
             // DECIMATION ON READING
@@ -768,16 +769,17 @@ public final class GeoPackageReader extends AbstractGridCoverage2DReader {
                     }
                 }
             }
-
+            final int xAxis = (CRS.getAxisOrder(requestedEnvelope.getCoordinateReferenceSystem()) == CRS.AxisOrder.EAST_NORTH ? 0 : 1);
+            final int yAxis = 1 - xAxis;
             int leftTile, topTile, rightTile, bottomTile;
 
             //find the closest zoom based on horizontal resolution
             TileMatrix bestMatrix = null;
             if (requestedEnvelope != null && dim != null) {
                 //requested res
-                // TODO: Replace this with a call to getResolution
-                double horRes = requestedEnvelope.getSpan(0) / dim.getWidth(); //proportion of total width that is being requested
-                double worldSpan = crs.getCoordinateSystem().getAxis(0).getMaximumValue() - crs.getCoordinateSystem().getAxis(0).getMinimumValue();
+                // TODO: Replace this with a call to getResolution(coverage)
+                double horRes = requestedEnvelope.getSpan(xAxis) / dim.getWidth(); //proportion of total width that is being requested
+                double worldSpan = crs.getCoordinateSystem().getAxis(xAxis).getMaximumValue() - crs.getCoordinateSystem().getAxis(xAxis).getMinimumValue();
 
                 //loop over matrices            
                 double difference = Double.MAX_VALUE;
@@ -811,28 +813,33 @@ public final class GeoPackageReader extends AbstractGridCoverage2DReader {
 
             if (requestedEnvelope != null) { // crop tile set to requested envelope       
                 // Test if the requested envelope aligns with tile matrix boundaries
-                double remX = (requestedEnvelope.getMinimum(0) - originX) % resX;
-                double remY = (originY - requestedEnvelope.getMaximum(1)) % resY;
+                double remX = (requestedEnvelope.getMinimum(xAxis) - originX) % resX;
+                double remY = (originY - requestedEnvelope.getMaximum(yAxis)) % resY;
                 boolean extentsWithinAPixel = (remX < pixSizeX) && (remY < pixSizeY);
                 boolean identicalTileSize = (dim != null && dim.getWidth() == tileWidth && dim.getHeight() == tileHeight);
                 if (identicalTileSize && extentsWithinAPixel) {
-                    leftTile = Math.max(leftTile, (int) Math.round((requestedEnvelope.getMinimum(0) - originX) / resX));
-                    topTile = Math.max(topTile, (int) Math.round((originY - requestedEnvelope.getMaximum(1)) / resY));
+                    leftTile = Math.max(leftTile, (int) Math.round((requestedEnvelope.getMinimum(xAxis) - originX) / resX));
+                    topTile = Math.max(topTile, (int) Math.round((originY - requestedEnvelope.getMaximum(yAxis)) / resY));
                     rightTile = leftTile;
                     bottomTile = topTile;
                 } else {
-                    leftTile = Math.max(leftTile, (int) Math.round(Math.floor((requestedEnvelope.getMinimum(0) - originX) / resX)));
-                    rightTile = Math.max(leftTile, (int) Math.min(rightTile, Math.round(Math.floor((requestedEnvelope.getMaximum(0) - originX) / resX))));
-                    topTile = Math.max(topTile, (int) Math.round(Math.floor((originY - requestedEnvelope.getMaximum(1)) / resY)));
-                    bottomTile = Math.max(topTile, (int) Math.min(bottomTile, Math.round(Math.floor((originY - requestedEnvelope.getMinimum(1)) / resY))));
+                    leftTile = Math.max(leftTile, (int) Math.round(Math.floor((requestedEnvelope.getMinimum(xAxis) - originX) / resX)));
+                    rightTile = Math.max(leftTile, (int) Math.min(rightTile, Math.round(Math.floor((requestedEnvelope.getMaximum(xAxis) - originX) / resX))));
+                    topTile = Math.max(topTile, (int) Math.round(Math.floor((originY - requestedEnvelope.getMaximum(yAxis)) / resY)));
+                    bottomTile = Math.max(topTile, (int) Math.min(bottomTile, Math.round(Math.floor((originY - requestedEnvelope.getMinimum(yAxis)) / resY))));
                 }
             }
 
             int width = (int) (rightTile - leftTile + 1) * tileWidth;
             int height = (int) (bottomTile - topTile + 1) * tileHeight;
 
-            //recalculate the envelope we are actually returning
-            resultEnvelope = new ReferencedEnvelope(originX + leftTile * resX, originX + (rightTile + 1) * resX, originY - topTile * resY, originY - (bottomTile + 1) * resY, crs);
+            // Recalculate the envelope we are actually returning
+            // TODO: should ensure x/y ordering matches CRS
+            resultEnvelope = new ReferencedEnvelope(
+                    originX + leftTile * resX,
+                    originX + (rightTile + 1) * resX,
+                    originY - topTile * resY,
+                    originY - (bottomTile + 1) * resY, crs);
 
             TileReader it;
             it = file.reader(entry, bestMatrix.getZoomLevel(), bestMatrix.getZoomLevel(), leftTile, rightTile, topTile, bottomTile);
@@ -1085,7 +1092,6 @@ public final class GeoPackageReader extends AbstractGridCoverage2DReader {
         return image;
     }
 
-    
     /**
      * Used by GeoPackageImageReader.readTile().
      *
@@ -1111,21 +1117,23 @@ public final class GeoPackageReader extends AbstractGridCoverage2DReader {
         }
         return null;
     }
-    
+
     ////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////
     @Deprecated
     protected int[] getTileIndex(String coverage, int zoomLevel, double xCoord, double yCoord) {
-        TileEntry tilePyramid = getTileset(coverageName);
-        ReferencedEnvelope bounds = tilePyramid.getBounds();
-        TileMatrix matrix = tilePyramid.getTileMatrix(zoomLevel);
-        CoordinateSystem coordSys = tilePyramid.getCrs().getCoordinateSystem();
+        TileEntry tileset = getTileset(coverageName);
+        ReferencedEnvelope bounds = tileset.getBounds();
+        TileMatrix matrix = tileset.getTileMatrix(zoomLevel);
+        CoordinateSystem coordSys = tileset.getCrs().getCoordinateSystem();
+        final int xAxis = (CRS.getAxisOrder(bounds.getCoordinateReferenceSystem()) == CRS.AxisOrder.EAST_NORTH ? 0 : 1);
+        final int yAxis = 1 - xAxis;
 
-        double originX = coordSys.getAxis(0).getMinimumValue(); // left
-        double originY = coordSys.getAxis(1).getMinimumValue(); // top
-        double extentX = coordSys.getAxis(0).getMaximumValue(); // right
-        double extentY = coordSys.getAxis(1).getMaximumValue(); // bottom
+        double originX = coordSys.getAxis(xAxis).getMinimumValue(); // left
+        double originY = coordSys.getAxis(yAxis).getMinimumValue(); // top
+        double extentX = coordSys.getAxis(xAxis).getMaximumValue(); // right
+        double extentY = coordSys.getAxis(yAxis).getMaximumValue(); // bottom
         double resX = (extentX - originX) / matrix.getMatrixWidth();
         double resY = (extentY - originY) / matrix.getMatrixHeight();
         double pixSizeX = matrix.getXPixelSize();
@@ -1147,7 +1155,6 @@ public final class GeoPackageReader extends AbstractGridCoverage2DReader {
         }
         return new int[]{leftTile, topTile};
     }
-
 
     @Deprecated
     protected BufferedImage readTiles(String coverageName, int zoomLevel, int leftTile, int rightTile, int topTile, int bottomTile) throws IllegalArgumentException, IOException {
