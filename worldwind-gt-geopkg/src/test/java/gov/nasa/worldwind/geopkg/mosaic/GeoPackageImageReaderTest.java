@@ -1,6 +1,8 @@
 package gov.nasa.worldwind.geopkg.mosaic;
 
+import static gov.nasa.worldwind.geopkg.mosaic.GeoPackageReaderTest.LEVEL_12_GRID_RANGE;
 import it.geosolutions.imageio.stream.input.FileImageInputStreamExtImpl;
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -8,9 +10,13 @@ import java.net.URL;
 import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.imageio.ImageIO;
 import javax.imageio.ImageReadParam;
 import javax.imageio.ImageTypeSpecifier;
 import javax.imageio.metadata.IIOMetadata;
+import org.geotools.coverage.grid.io.OverviewPolicy;
+import org.geotools.geometry.GeneralEnvelope;
+import org.geotools.image.test.ImageAssert;
 import org.geotools.referencing.factory.gridshift.DataUtilities;
 import org.junit.After;
 import org.junit.Before;
@@ -18,6 +24,7 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 import static org.junit.Assume.assumeNotNull;
 import org.junit.Ignore;
+import org.opengis.coverage.grid.GridEnvelope;
 
 /**
  *
@@ -26,9 +33,11 @@ import org.junit.Ignore;
 public class GeoPackageImageReaderTest {
 
     private final static String GEOPACKAGE = "GeoPackageTutorial.gpkg";
+    public final static String COVERAGE_NAME = "GeoPackageTutorial";
     private final static int MAX_ZOOM_LEVEL = 16;
     private GeoPackageImageReaderSpi imageReaderSpi;
     private FileImageInputStreamExtImpl inputStream;
+    private URL source;
 
     public GeoPackageImageReaderTest() {
     }
@@ -37,7 +46,7 @@ public class GeoPackageImageReaderTest {
     public void setUp() {
         imageReaderSpi = new GeoPackageImageReaderSpi();
         try {
-            URL source = GeoPackageReader.class.getResource(GEOPACKAGE);
+            source = GeoPackageReader.class.getResource(GEOPACKAGE);
             File file = DataUtilities.urlToFile(source);
             inputStream = new FileImageInputStreamExtImpl(file);
         } catch (IOException ex) {
@@ -50,11 +59,11 @@ public class GeoPackageImageReaderTest {
     public void tearDown() {
         imageReaderSpi = null;
         inputStream = null;
+        source = null;
     }
 
     @Test
     public void testConstructor() {
-
         GeoPackageImageReader instance = new GeoPackageImageReader(imageReaderSpi);
 
         assertNotNull(instance);
@@ -63,9 +72,9 @@ public class GeoPackageImageReaderTest {
     @Test
     public void testSetInput() {
         assumeNotNull(inputStream);  // Skip test if not found
+        GeoPackageImageReader instance = new GeoPackageImageReader(imageReaderSpi);
         boolean seekForwardOnly = false;
         boolean ignoreMetadata = true;
-        GeoPackageImageReader instance = new GeoPackageImageReader(imageReaderSpi);
 
         instance.setInput(inputStream, seekForwardOnly, ignoreMetadata);
 
@@ -82,114 +91,171 @@ public class GeoPackageImageReaderTest {
         int imageIndex = 0;
         int result = instance.getZoomLevel(imageIndex);
 
-        assertEquals(MAX_ZOOM_LEVEL, result);
+        assertEquals(GeoPackageImageReaderTest.MAX_ZOOM_LEVEL, result);
     }
 
-    @Ignore
     @Test
     public void testGetHeight() throws IOException {
         assumeNotNull(inputStream);  // Skip test if not found
         GeoPackageImageReader instance = new GeoPackageImageReader(imageReaderSpi);
         instance.setInput(inputStream);
-
         int imageIndex = 0;
-        int expResult = 0;
+
         int result = instance.getHeight(imageIndex);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+
+        assertEquals(GeoPackageReaderTest.ORIGINAL_GRID_RANGE.getSpan(1), result);
     }
 
-    @Ignore
     @Test
     public void testGetWidth() throws Exception {
         assumeNotNull(inputStream);  // Skip test if not found
         GeoPackageImageReader instance = new GeoPackageImageReader(imageReaderSpi);
         instance.setInput(inputStream);
-
         int imageIndex = 0;
-        int expResult = 0;
+
         int result = instance.getWidth(imageIndex);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+
+        assertEquals(GeoPackageReaderTest.ORIGINAL_GRID_RANGE.getSpan(0), result);
     }
 
-    @Ignore
     @Test
     public void testGetNumImages() throws Exception {
         assumeNotNull(inputStream);  // Skip test if not found
         GeoPackageImageReader instance = new GeoPackageImageReader(imageReaderSpi);
         instance.setInput(inputStream);
-
         boolean allowSearch = false;
-        int expResult = 0;
+
         int result = instance.getNumImages(allowSearch);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+
+        assertEquals(GeoPackageReaderTest.NUM_ZOOM_LEVELS, result);
     }
 
-    @Ignore
     @Test
     public void testGetImageTypes() throws Exception {
         assumeNotNull(inputStream);  // Skip test if not found
         GeoPackageImageReader instance = new GeoPackageImageReader(imageReaderSpi);
         instance.setInput(inputStream);
-
         int imageIndex = 0;
-        Iterator<ImageTypeSpecifier> expResult = null;
+
         Iterator<ImageTypeSpecifier> result = instance.getImageTypes(imageIndex);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+
+        assertTrue("at least one ImageTypeSpecifier", result.hasNext());
     }
 
-    @Ignore
     @Test
     public void testGetTileHeight() throws Exception {
         assumeNotNull(inputStream);  // Skip test if not found
         GeoPackageImageReader instance = new GeoPackageImageReader(imageReaderSpi);
         instance.setInput(inputStream);
-
         int imageIndex = 0;
-        int expResult = 0;
+
         int result = instance.getTileHeight(imageIndex);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+
+        assertEquals(256, result);
     }
 
-    @Ignore
     @Test
     public void testGetTileWidth() throws Exception {
         assumeNotNull(inputStream);  // Skip test if not found
         GeoPackageImageReader instance = new GeoPackageImageReader(imageReaderSpi);
         instance.setInput(inputStream);
-
         int imageIndex = 0;
-        int expResult = 0;
+
         int result = instance.getTileWidth(imageIndex);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+
+        assertEquals("GeoPackage tile width", 256, result);
     }
 
-    @Ignore
     @Test
     public void testIsImageTiled() throws Exception {
         assumeNotNull(inputStream);  // Skip test if not found
         GeoPackageImageReader instance = new GeoPackageImageReader(imageReaderSpi);
         instance.setInput(inputStream);
-
         int imageIndex = 0;
-        boolean expResult = false;
+
         boolean result = instance.isImageTiled(imageIndex);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+
+        assertEquals(true, result);
     }
 
+    @Test
+    public void testReset() throws IOException {
+        assumeNotNull(inputStream);  // Skip test if not found
+        GeoPackageImageReader instance = new GeoPackageImageReader(imageReaderSpi);
+        instance.setInput(inputStream);
+        assertNotNull("input", instance.getInput());
+
+        instance.reset();
+
+        assertNull("input", instance.getInput());
+    }
+
+    @Test
+    public void testGetStreamMetadata() throws Exception {
+        assumeNotNull(inputStream);  // Skip test if not found
+        GeoPackageImageReader instance = new GeoPackageImageReader(imageReaderSpi);
+        instance.setInput(inputStream);
+
+        IIOMetadata expResult = null;
+        IIOMetadata result = instance.getStreamMetadata();
+
+        assertEquals(expResult, result);
+    }
+
+    @Test
+    public void testGetImageMetadata() throws Exception {
+        assumeNotNull(inputStream);  // Skip test if not found
+        GeoPackageImageReader instance = new GeoPackageImageReader(imageReaderSpi);
+        instance.setInput(inputStream);
+        int imageIndex = 0;
+
+        IIOMetadata expResult = null;
+        IIOMetadata result = instance.getImageMetadata(imageIndex);
+
+        assertEquals(expResult, result);
+    }
+
+    @Test
+    public void testReadTile() throws Exception {
+        assumeNotNull(inputStream);  // Skip test if not found
+        GeoPackageImageReader instance = new GeoPackageImageReader(imageReaderSpi);
+        instance.setInput(inputStream);
+        int imageIndex = 0;
+        int tileX = 0;
+        int tileY = 0;
+
+        BufferedImage result = instance.readTile(imageIndex, tileX, tileY);
+        //ImageIO.write(result, "png", DataUtilities.urlToFile(getClass().getResource("testReadTile.png")));    // writes to target/test_classes
+
+        assertNotNull(result);
+        ImageAssert.assertEquals(DataUtilities.urlToFile(getClass().getResource("testReadTile.png")), result, 2);
+    }
+
+    @Test
+    public void testRead_zoomLevel_readParam() throws Exception {
+        assumeNotNull(inputStream);  // Skip test if not found
+        GeoPackageImageReader instance = new GeoPackageImageReader(imageReaderSpi);
+        instance.setInput(inputStream);
+        // Prepare the readParms and imageIndex
+        GeoPackageReader reader = new GeoPackageReader(source, null);
+        GeneralEnvelope requestedEnvelope = reader.getOriginalEnvelope(COVERAGE_NAME);
+        System.out.println(requestedEnvelope);
+        
+        Rectangle requestedDim = new Rectangle(0, 0, LEVEL_12_GRID_RANGE.getSpan(0), LEVEL_12_GRID_RANGE.getSpan(1));
+        ImageReadParam readParams = new ImageReadParam();
+        int imageIndex = reader.setReadParams(COVERAGE_NAME, OverviewPolicy.NEAREST, readParams, requestedEnvelope, requestedDim);
+
+        BufferedImage result = instance.read(imageIndex, readParams);
+        //ImageIO.write(result, "png", DataUtilities.urlToFile(getClass().getResource("testRead.png"))); // writes to target folder
+
+        assertNotNull(result);
+        ImageAssert.assertEquals(DataUtilities.urlToFile(getClass().getResource("testRead.png")), result, 2);
+    }
+
+    ///////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////
     @Ignore
     @Test
     public void testRead_int() throws Exception {
@@ -200,79 +266,6 @@ public class GeoPackageImageReaderTest {
         int imageIndex = 0;
         BufferedImage expResult = null;
         BufferedImage result = instance.read(imageIndex);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    @Ignore
-    @Test
-    public void testRead_int_ImageReadParam() throws Exception {
-        assumeNotNull(inputStream);  // Skip test if not found
-        GeoPackageImageReader instance = new GeoPackageImageReader(imageReaderSpi);
-        instance.setInput(inputStream);
-
-        int imageIndex = 0;
-        ImageReadParam param = null;
-        BufferedImage expResult = null;
-        BufferedImage result = instance.read(imageIndex, param);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    @Ignore
-    @Test
-    public void testReadTile() throws Exception {
-        assumeNotNull(inputStream);  // Skip test if not found
-        GeoPackageImageReader instance = new GeoPackageImageReader(imageReaderSpi);
-        instance.setInput(inputStream);
-
-        int imageIndex = 0;
-        int tileX = 0;
-        int tileY = 0;
-        BufferedImage expResult = null;
-        BufferedImage result = instance.readTile(imageIndex, tileX, tileY);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    @Ignore
-    @Test
-    public void testReset() {
-        assumeNotNull(inputStream);  // Skip test if not found
-        GeoPackageImageReader instance = new GeoPackageImageReader(imageReaderSpi);
-        instance.setInput(inputStream);
-
-        instance.reset();
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    @Ignore
-    @Test
-    public void testGetStreamMetadata() throws Exception {
-        assumeNotNull(inputStream);  // Skip test if not found
-        GeoPackageImageReader instance = new GeoPackageImageReader(imageReaderSpi);
-        instance.setInput(inputStream);
-
-        IIOMetadata expResult = null;
-        IIOMetadata result = instance.getStreamMetadata();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    @Ignore
-    @Test
-    public void testGetImageMetadata() throws Exception {
-        assumeNotNull(inputStream);  // Skip test if not found
-        GeoPackageImageReader instance = new GeoPackageImageReader(imageReaderSpi);
-        instance.setInput(inputStream);
-        int imageIndex = 0;
-        IIOMetadata expResult = null;
-        IIOMetadata result = instance.getImageMetadata(imageIndex);
         assertEquals(expResult, result);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
