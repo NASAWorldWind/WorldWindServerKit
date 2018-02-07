@@ -727,7 +727,7 @@ public final class GeoPackageReader extends AbstractGridCoverage2DReader {
      */
     @Override
     public GridCoverage2D read(String coverageName, GeneralParameterValue[] parameters) throws IllegalArgumentException, IOException {
-        return read_original(coverageName, parameters);
+        return read_new(coverageName, parameters);
     }
 
     private GridCoverage2D read_original(String coverageName, GeneralParameterValue[] parameters) throws IllegalArgumentException, IOException {
@@ -1010,6 +1010,8 @@ public final class GeoPackageReader extends AbstractGridCoverage2DReader {
         int height = (int) ((yMax - yMin) / yPixelSize);
         BufferedImage destImage = createImage(width, height, inputTransparentColor);
         Graphics2D g2 = destImage.createGraphics();
+        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
+
         g2.drawImage(srcImage,
                 0, //int dx1,
                 0, //int dy1,
@@ -1190,9 +1192,6 @@ public final class GeoPackageReader extends AbstractGridCoverage2DReader {
      * Creates a {@link GridCoverage} for the provided {@link PlanarImage} using
      * the {@link #raster2Model} that was provided for this coverage.
      *
-     * <p>
-     * This method is vital when working with coverages that have a raster to
-     * model transformation that is not a simple scale and translate.
      *
      * @param coverageName
      * @param image contains the data for the coverage to create.
@@ -1336,6 +1335,7 @@ public final class GeoPackageReader extends AbstractGridCoverage2DReader {
         BufferedImage srcImage = createImage(matrixPixWidth, matrixPixHeight, inputTransparentColor);
         try {
             Graphics2D g2 = srcImage.createGraphics();
+            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
 
             // Open a tile reader on the result set matching the zoom level and the tile indices
             TileReader it = file.reader(tileset, zoomLevel, zoomLevel, startCol, endCol, startRow, endRow);
