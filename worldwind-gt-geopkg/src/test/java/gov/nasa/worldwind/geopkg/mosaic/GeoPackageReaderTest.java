@@ -28,6 +28,7 @@ import java.awt.image.BufferedImage;
 import java.awt.image.RenderedImage;
 import java.io.IOException;
 import java.net.URL;
+import javax.imageio.ImageIO;
 import javax.imageio.ImageReadParam;
 import javax.media.jai.ImageLayout;
 import static junit.framework.TestCase.assertNull;
@@ -364,9 +365,9 @@ public class GeoPackageReaderTest {
         assertEquals(512, img.getHeight());
 
         assertTrue(CRS.equalsIgnoreMetadata(gc.getCoordinateReferenceSystem(), gc.getEnvelope().getCoordinateReferenceSystem()));
+        //ImageIO.write(img, "png", DataUtilities.urlToFile(getClass().getResource("GeoPackageTutorial.png")));
 
-//        ImageIO.write(img, "png", DataUtilities.urlToFile(getClass().getResource("GeoPackageTutorial.png")));
-        ImageAssert.assertEquals(DataUtilities.urlToFile(getClass().getResource("GeoPackageTutorial.png")), img, 250);
+        ImageAssert.assertEquals(DataUtilities.urlToFile(getClass().getResource("GeoPackageTutorial.png")), img, 2);
 
     }
 
@@ -517,7 +518,7 @@ public class GeoPackageReaderTest {
         int height = 0;
         Color inputTransparentColor = null;
         BufferedImage expResult = null;
-        BufferedImage result = instance.getStartImage(width, height, inputTransparentColor);
+        BufferedImage result = instance.createImage(width, height, inputTransparentColor);
         assertEquals(expResult, result);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
@@ -532,7 +533,7 @@ public class GeoPackageReaderTest {
         int width = 0;
         int height = 0;
         BufferedImage expResult = null;
-        BufferedImage result = instance.getStartImage(copyFrom, width, height);
+        BufferedImage result = instance.createImage(copyFrom, width, height);
         assertEquals(expResult, result);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
@@ -605,7 +606,7 @@ public class GeoPackageReaderTest {
         int topTile = 0;
         int bottomTile = 0;
         BufferedImage expResult = null;
-        BufferedImage result = instance.readTiles(COVERAGE_NAME, zoomLevel, leftTile, rightTile, topTile, bottomTile);
+        BufferedImage result = instance.readTiles(COVERAGE_NAME, zoomLevel, leftTile, rightTile, topTile, bottomTile, null);
         assertEquals(expResult, result);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
@@ -647,7 +648,7 @@ public class GeoPackageReaderTest {
         assumeNotNull(source);  // Skip test if not found
         byte[] data = null;
         BufferedImage expResult = null;
-        BufferedImage result = GeoPackageReader.readImage(data);
+        BufferedImage result = GeoPackageReader.createImageFromBytes(data);
         assertEquals(expResult, result);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
