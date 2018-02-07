@@ -727,10 +727,10 @@ public final class GeoPackageReader extends AbstractGridCoverage2DReader {
      */
     @Override
     public GridCoverage2D read(String coverageName, GeneralParameterValue[] parameters) throws IllegalArgumentException, IOException {
-        return read_new(coverageName, parameters);
+        return read_original(coverageName, parameters);
     }
 
-    public GridCoverage2D read_original(String coverageName, GeneralParameterValue[] parameters) throws IllegalArgumentException, IOException {
+    private GridCoverage2D read_original(String coverageName, GeneralParameterValue[] parameters) throws IllegalArgumentException, IOException {
         TileEntry entry = getTileset(coverageName);
         BufferedImage image = null;
         ReferencedEnvelope resultEnvelope = null;
@@ -919,7 +919,7 @@ public final class GeoPackageReader extends AbstractGridCoverage2DReader {
     }
 
 
-    public GridCoverage2D read_new(String coverageName, GeneralParameterValue[] params) throws IllegalArgumentException, IOException {
+    private GridCoverage2D read_new(String coverageName, GeneralParameterValue[] params) throws IllegalArgumentException, IOException {
         TileEntry tileset = getTileset(coverageName);
         CoordinateReferenceSystem crs1 = getCoordinateReferenceSystem(coverageName);
         final int xAxis = (CRS.getAxisOrder(crs1) == CRS.AxisOrder.EAST_NORTH ? 0 : 1);
@@ -1033,7 +1033,7 @@ public final class GeoPackageReader extends AbstractGridCoverage2DReader {
     }
 
 
-    public GridCoverage2D read_newest(String coverageName, GeneralParameterValue[] params) throws IllegalArgumentException, IOException {
+    private GridCoverage2D read_newest(String coverageName, GeneralParameterValue[] params) throws IllegalArgumentException, IOException {
         TileEntry tileset = getTileset(coverageName);
         CoordinateReferenceSystem crs1 = getCoordinateReferenceSystem(coverageName);
         final int xAxis = (CRS.getAxisOrder(crs1) == CRS.AxisOrder.EAST_NORTH ? 0 : 1);
