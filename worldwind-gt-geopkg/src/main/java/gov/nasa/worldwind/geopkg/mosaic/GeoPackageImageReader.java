@@ -122,6 +122,9 @@ public class GeoPackageImageReader extends ImageReader {
 
     int getZoomLevel(int imageIndex) throws IOException {
         ensureOpen();
+        if (maxZoomLevel < 0) {
+            throw new IllegalStateException("maxZoomLevel invalid. Must be greater than or equal to zero.");
+        }
         return maxZoomLevel - imageIndex;
     }
 
@@ -279,27 +282,30 @@ public class GeoPackageImageReader extends ImageReader {
         BufferedImage destImage = getDestination(param, getImageTypes(imageIndex), srcWidth, srcHeight);
 
         // Copy the source image into the destination, scaling/coverting as reqd.
-        Graphics2D destGraphics = destImage.createGraphics();
-        destGraphics.drawImage(srcImage,
-                0, //int dx1,
-                0, //int dy1,
-                destImage.getWidth(), //int dx2,
-                destImage.getHeight(), //int dy2,
-                0, //int sx1,
-                0, //int sy1,
-                srcImage.getWidth(), //int sx2,
-                srcImage.getHeight(), //int sy2,
-                null); //ImageObserver observer)
+        Graphics2D g2 = destImage.createGraphics();
+        try {
+            g2.drawImage(srcImage,
+                    0, //int dx1,
+                    0, //int dy1,
+                    destImage.getWidth(), //int dx2,
+                    destImage.getHeight(), //int dy2,
+                    0, //int sx1,
+                    0, //int sy1,
+                    srcImage.getWidth(), //int sx2,
+                    srcImage.getHeight(), //int sy2,
+                    null); //ImageObserver observer)
 
-        // DEBUGGING: Uncomment block to draw a border around the tiles
-        /*
-        {
-            float thickness = 8;
-            destGraphics.setStroke(new BasicStroke(thickness));
-            destGraphics.drawRect(0, 0, destImage.getWidth(), destImage.getHeight());
+            // DEBUGGING: Uncomment block to draw a border around the tiles
+            /*
+            {
+                float thickness = 8;
+                g2.setStroke(new BasicStroke(thickness));
+                g2.drawRect(0, 0, destImage.getWidth(), destImage.getHeight());
+            }
+             */
+        } finally {
+            g2.dispose();
         }
-         */
-        destGraphics.dispose();
 
         return destImage;
     }
@@ -320,17 +326,17 @@ public class GeoPackageImageReader extends ImageReader {
         ensureOpen();
         int zoomLevel = getZoomLevel(imageIndex);
         TileMatrix matrix = gpkgReader.getTileset().getTileMatrix(zoomLevel);
-        
+
         if (tileX < 0 || tileX >= (matrix.getNumCols())) {
             throw new IllegalArgumentException(String.format("tileX (%d) is outside the range of columns", tileX));
         }
         if (tileY < 0 || tileY >= (matrix.getNumRows())) {
             throw new IllegalArgumentException(String.format("tileY (%d) is outside the range of rows", tileY));
         }
-        
+
         return gpkgReader.readTile(
-                zoomLevel, 
-                matrix.getMinCol() + tileX, 
+                zoomLevel,
+                matrix.getMinCol() + tileX,
                 matrix.getMinRow() + tileY);
     }
 
@@ -345,6 +351,7 @@ public class GeoPackageImageReader extends ImageReader {
         file = null;
         csm = null;
         imageType = null;
+        maxZoomLevel = -1;
     }
 
 //    /**
