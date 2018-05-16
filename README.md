@@ -21,6 +21,21 @@ Example:
 
     $ mvn clean install
 
+### Versions
+
+The versions for GeoServer, GeoTools, ImageIO, JAI and others are defined and 
+maintained in the properties section of the WWSK parent POM. 
+
+- If you update the GeoServer version you must download the GDAL extension for
+the new version from the GeoServer distribution site and copy the zip file to the 
+resources folder. For example, for GeoServer 2.13.0, download 
+[geoserver-2.13.0-gdal-plugin.zip](https://sourceforge.net/projects/geoserver/files/GeoServer/2.13.0/extensions/geoserver-2.13.0-gdal-plugin.zip)
+- If you update the ImageIO version you must download the artifacts for the new version
+from [geo-solutions.it](https://demo.geo-solutions.it/share/github/imageio-ext/releases/1.1.X/) 
+and copy them to the resources folder. For example, for ImageIO 1.0.20, download
+[imageio-ext-1.1.20-jars.zip](https://demo.geo-solutions.it/share/github/imageio-ext/releases/1.1.X/1.1.20/imageio-ext-1.1.20-jars.zip).
+
+
 ## Running
 
 ### Option 1. Deploy a standalone WWSK distribution
