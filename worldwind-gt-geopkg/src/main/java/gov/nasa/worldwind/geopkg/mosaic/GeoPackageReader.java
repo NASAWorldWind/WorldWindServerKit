@@ -305,19 +305,21 @@ public final class GeoPackageReader extends AbstractGridCoverage2DReader {
      */
     public GridEnvelope getGridRange(String coverageName, int zoomLevel) {
         TileEntry tileset = getTileset(coverageName);
-        ReferencedEnvelope bounds = (ReferencedEnvelope) tileset.getTileMatrixSetBounds();
-        CoordinateReferenceSystem crs1 = bounds.getCoordinateReferenceSystem();
-        TileMatrix matrix = tileset.getTileMatrix(zoomLevel);
+        final ReferencedEnvelope bounds = (ReferencedEnvelope) tileset.getTileMatrixSetBounds();
+        final CoordinateReferenceSystem crs1 = bounds.getCoordinateReferenceSystem();
+        final TileMatrix matrix = tileset.getTileMatrix(zoomLevel);
         final int startCol = matrix.getMinCol();
         final int startRow = matrix.getMinRow();
+        final double pixSizeX = matrix.getXPixelSize();
+        final double pixSizeY = matrix.getYPixelSize();
         // Get the size of world in CRS units
         final int xIndex = CRS.getAxisOrder(crs1) == EAST_NORTH ? 0 : 1;
         final int yIndex = 1 - xIndex;
         final CoordinateSystemAxis xAxis = crs1.getCoordinateSystem().getAxis(xIndex);
         final CoordinateSystemAxis yAxis = crs1.getCoordinateSystem().getAxis(yIndex);
         // Compute size of pixels for accuracy versus reading from matrix 
-        final double pixSizeX = (xAxis.getMaximumValue() - xAxis.getMinimumValue()) / (matrix.getMatrixWidth() * matrix.getTileWidth());
-        final double pixSizeY = (yAxis.getMaximumValue() - yAxis.getMinimumValue()) / (matrix.getMatrixHeight() * matrix.getTileHeight());
+//        final double pixSizeX = (xAxis.getMaximumValue() - xAxis.getMinimumValue()) / (matrix.getMatrixWidth() * matrix.getTileWidth());
+//        final double pixSizeY = (yAxis.getMaximumValue() - yAxis.getMinimumValue()) / (matrix.getMatrixHeight() * matrix.getTileHeight());
         // Compute the size of a tile in CRS units
         double colSpan = (xAxis.getMaximumValue() - xAxis.getMinimumValue()) / matrix.getMatrixWidth();
         double rowSpan = (yAxis.getMaximumValue() - yAxis.getMinimumValue()) / matrix.getMatrixHeight();
@@ -1240,8 +1242,7 @@ public final class GeoPackageReader extends AbstractGridCoverage2DReader {
         // Get matrix tiles that intersect the specified region
         final int startCol = matrix.getMinCol() + (regionX / tileWidth);
         final int startRow = matrix.getMinRow() + (regionY / tileHeight);
-//        final int endCol = matrix.getMinCol() + ((regionX + region.width) / tileWidth);
-//        final int endRow = matrix.getMinRow() + ((regionY + region.height) / tileHeight);
+        // Account for tiles that align with the region's boundaries
         final int endCol = matrix.getMinCol() + (regionX2 / tileWidth) + (regionX2 % tileWidth == 0 ? -1 : 0);
         final int endRow = matrix.getMinRow() + (regionY2 / tileHeight) + (regionY2 % tileHeight == 0 ? -1 : 0);
 
@@ -1255,14 +1256,13 @@ public final class GeoPackageReader extends AbstractGridCoverage2DReader {
         // Read the tiles into an image
         BufferedImage srcImage = readTiles(coverageName, zoomLevel, startCol, endCol, startRow, endRow, inputTransparentColor);
 
-        //If src and dest images have the same dimensions, then return src image
-        BufferedImage destImage;
+        // If src and dest images have the same dimensions, then return src image
         if (srcImage.getWidth() == region.width && srcImage.getHeight() == region.height) {
             System.out.println("***************************returning srcImage********************************");
-            //destImage = srcImage;
+            return srcImage;
         }
         // Copy the src image into the dest image, cropping the image as required                
-        destImage = createImage(region.width, region.height, inputTransparentColor);
+       BufferedImage destImage = createImage(region.width, region.height, inputTransparentColor);
 
         Graphics2D g2 = destImage.createGraphics();
         int sx = regionX % tileWidth;
