@@ -49,6 +49,11 @@ The tests can be run in Travis-CI and on a local development workstation.
     Review the worldwind-geoserver/src/test/jmeter folder for the JMeter test plans.
     Examine the worldwind-geoserver POM file for the integration test profiles.
 
+### Test Results
+The test results from the last Travis-CI build can be viewed here:
+- https://nasaworldwind.github.io/WorldWindServerKit/core/
+- https://nasaworldwind.github.io/WorldWindServerKit/gdal/
+
 ## Running
 
 ### Option 1. Deploy a standalone WWSK distribution
