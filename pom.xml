@@ -97,15 +97,15 @@
         <!-- 
         See the geoserver-<version>.pom file in the GeoServer repository for a 
         reference to the version properties used in a particular GeoServer release. E.g.: 
-            https://repo.boundlessgeo.com/main/org/geoserver/geoserver/2.11.1/geoserver-2.11.1.pom
+            https://repo.boundlessgeo.com/main/org/geoserver/geoserver/2.13.0/geoserver-2.13.0.pom
         You can browse the GeoServer repository to view the current GeoServer artifacts:
             https://repo.boundlessgeo.com/main/org/geoserver/geoserver/
         You can browse the GeoServer extensions for this version here:
-            https://sourceforge.net/projects/geoserver/files/GeoServer/2.11.1/extensions/
+            https://sourceforge.net/projects/geoserver/files/GeoServer/2.13.0/extensions/
         You can download the gdal-plugin jars used in the worldwind-geoserver-dist assemblies here:
-            https://sourceforge.net/projects/geoserver/files/GeoServer/2.11.1/extensions/geoserver-2.11.1-gdal-plugin.zip/download
+            https://sourceforge.net/projects/geoserver/files/GeoServer/2.13.0/extensions/geoserver-2.13.0-gdal-plugin.zip/download
         You can download the ImageID-Ext jars and resourses used in the worldwind-geoserver-dist assemblies here:
-            http://demo.geo-solutions.it/share/github/imageio-ext/releases/1.1.X/1.1.17/
+            http://demo.geo-solutions.it/share/github/imageio-ext/releases/1.1.X/1.1.20/
         -->
         
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
