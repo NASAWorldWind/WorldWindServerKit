@@ -21,6 +21,74 @@ Example:
 
     $ mvn clean install
 
+### Versions
+
+The versions for GeoServer, GeoTools, ImageIO, JAI and others are defined and 
+maintained in the properties section of the WWSK parent POM. 
+- Also review travis scripts and installation scripts for the old GeoServer version
+- If you update the GeoServer version you must download the GDAL extension for
+the new version from the GeoServer distribution site and copy the zip file to the 
+resources folder. For example, for GeoServer 2.13.0, download 
+[geoserver-2.13.0-gdal-plugin.zip](https://sourceforge.net/projects/geoserver/files/GeoServer/2.13.0/extensions/geoserver-2.13.0-gdal-plugin.zip).
+You will need to create a .tgz version of the .zip file for inclusion in the 
+Linux distribution.
+- If you update the ImageIO version you must download the artifacts for the new version
+from [geo-solutions.it](https://demo.geo-solutions.it/share/github/imageio-ext/releases/1.1.X/) 
+and copy them to the resources folder. For example, for ImageIO 1.0.20, download
+[imageio-ext-1.1.20-jars.zip](https://demo.geo-solutions.it/share/github/imageio-ext/releases/1.1.X/1.1.20/imageio-ext-1.1.20-jars.zip).
+You will need to create a .tgz version of the .zip file for inclusion in the 
+Linux distribution.
+
+### Integration Tests
+
+The integration tests are run via a script via Maven and a JMeter maven plugin. 
+The tests can be run in Travis-CI and on a local development workstation. 
+
+- To run the tests locally, run _./travis/run_integration_tests.sh_ (Linux/Ubuntu only at this time).
+- See the _worldwind-geoserver/src/test/uris_ folder for the URI CSV files used by the JMeter tests.
+- The maven based test plan is _worldwind-geoserver/src/test/jmeter/test.jmx_
+- Review the _worldwind-geoserver/src/test/jmeter_ folder for the JMeter test plans.
+- The test data is located in the _resources/data/test_ folder
+
+The tests are controlled the following profiles found in the _worldwind-geoserver.pom_:
+
+#### `integration-test`
+Runs JMeter tests against the standard geoserver build.
+
+#### `integration-test-gdal`
+Runs JMeter tests against the a standard geoserver build after adding GDAL to the 
+geoserver instance.
+
+#### `integration-test-jai`
+Runs JMeter tests against the a standard geoserver build after adding JAI native 
+to the JRE
+
+### What to do if a test fails
+The _worldwind-geoserver/src/test/jmeter/test.jmx_ outputs assertion error and the
+associated responses to log files in the _worldwind-geoserver/target/jmeter/logs_
+folder. These logs may be voluminous do the nature of the responses, but the nature
+of the assertion failures can be obtained examining <failureMessage> messsages.
+If its a Content-Type error, compare the expected content type to the received
+header a few lines down in the log. If required, you can change the expected 
+content type in the URI text file(s) located in _worldwind-geoserver/src/test/uris_ 
+folder.
+
+#### Test Results
+The test results from the last Travis-CI build can be viewed here:
+- https://nasaworldwind.github.io/WorldWindServerKit/core/
+- https://nasaworldwind.github.io/WorldWindServerKit/gdal/
+
+
+### Functional Tests
+
+To run the functional tests you must install [Apache JMeter](https://jmeter.apache.org).
+Launch JMeter from the {project root}/jmeter folder.  From the JMeter client, 
+open the `functional_test/GeoServer Functional Tests.jmx`. Prerequisites:
+ - GeoServer Functional Tests requires running instance of GeoServer. Configure
+the test suite to point to the server.
+ - The server instance must have the internal [test data and workspaces](https://drive.google.com/drive/folders/0Bxjx1De3fE2KemZQc1NPMmhWaVU) installed.
+
+
 ## Running
 
 ### Option 1. Deploy a standalone WWSK distribution

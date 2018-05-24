@@ -51,6 +51,7 @@ import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import com.vividsolutions.jts.geom.Envelope;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryFactory;
+import org.geotools.factory.Hints;
 
 /**
  * The GeoPackage SQL Dialect.
@@ -118,11 +119,10 @@ public class GeoPkgDialect extends PreparedStatementSQLDialect {
     }
 
     @Override
-    public Geometry decodeGeometryValue(GeometryDescriptor descriptor, ResultSet rs, String column, 
-        GeometryFactory factory, Connection cx) throws IOException, SQLException {
-        return geometry(rs.getBytes(column),factory);
+    public Geometry decodeGeometryValue(GeometryDescriptor gd, ResultSet rs, String column, GeometryFactory factory, 
+            Connection cnctn, Hints hints) throws IOException, SQLException {
+        return geometry(rs.getBytes(column),factory);    
     }
-
 
     @Override
     public void setGeometryValue(Geometry g, int dimension, int srid, Class binding,
