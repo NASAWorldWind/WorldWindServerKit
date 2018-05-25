@@ -326,7 +326,6 @@ public class GeoPackageReaderTest {
         assertEquals("Nearest zoom level", 15, zoomLevel2);
     }
 
-    @Ignore
     @Test
     public void testImageLayout() throws IOException {
         assumeNotNull(source);  // Skip test if not found
@@ -342,11 +341,10 @@ public class GeoPackageReaderTest {
         assertEquals("HEIGHT", ORIGINAL_GRID_RANGE.getSpan(1), imageLayout.getHeight(fallback));
         assertEquals("TILE WIDTH", 256, imageLayout.getTileWidth(fallback));
         assertEquals("TILE HEIGHT", 256, imageLayout.getTileWidth(fallback));
-        assertEquals("TILE GRID X OFFSET", 0, imageLayout.getTileGridXOffset(fallback));
-        assertEquals("TILE GRID Y OFFSET", 0, imageLayout.getTileGridYOffset(fallback));
+        assertEquals("TILE GRID X OFFSET", -7, imageLayout.getTileGridXOffset(fallback));   // test for change between versions
+        assertEquals("TILE GRID Y OFFSET", -124, imageLayout.getTileGridYOffset(fallback)); // test for change between versions
     }
 
-    @Test
     @Ignore
     public void testZoomLevel_12() throws IOException {
         assumeNotNull(source);  // Skip test if not found
@@ -369,7 +367,7 @@ public class GeoPackageReaderTest {
         assertTrue(CRS.equalsIgnoreMetadata(gc.getCoordinateReferenceSystem(), gc.getEnvelope().getCoordinateReferenceSystem()));
         //ImageIO.write(img, "png", DataUtilities.urlToFile(getClass().getResource("GeoPackageTutorial.png")));
 
-//        ImageAssert.assertEquals(DataUtilities.urlToFile(getClass().getResource("GeoPackageTutorial.png")), img, 2);
+        ImageAssert.assertEquals(DataUtilities.urlToFile(getClass().getResource("GeoPackageTutorial.png")), img, 2);
 
     }
 
@@ -394,7 +392,6 @@ public class GeoPackageReaderTest {
         assertEquals(expResult.getMaximum(y1), result.getMaximum(y2), 0.000001);
     }
 
-    @Ignore
     @Test
     public void testGetOriginalGridRange() throws IOException {
         assumeNotNull(source);  // Skip test if not found
@@ -408,7 +405,6 @@ public class GeoPackageReaderTest {
         assertEquals("Height", ORIGINAL_GRID_RANGE.getSpan(1), result.getSpan(1));
     }
 
-    @Ignore
     @Test
     public void testGetGridRange() throws IOException {
         assumeNotNull(source);  // Skip test if not found
