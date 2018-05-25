@@ -345,7 +345,7 @@ public class GeoPackageReaderTest {
         assertEquals("TILE GRID Y OFFSET", -124, imageLayout.getTileGridYOffset(fallback)); // test for change between versions
     }
 
-    @Ignore
+    @Test
     public void testZoomLevel_12() throws IOException {
         assumeNotNull(source);  // Skip test if not found
         // Get an image from the coverage containing, but not cropped to, the bounding box 
