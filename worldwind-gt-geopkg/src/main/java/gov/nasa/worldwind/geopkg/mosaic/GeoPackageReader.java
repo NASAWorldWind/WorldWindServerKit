@@ -1322,6 +1322,7 @@ public final class GeoPackageReader extends AbstractGridCoverage2DReader {
                     BufferedImage tileImage = createImageFromBytes(tile.getData());
 
                     // DEBUGGING: Uncomment block to draw a border around the tiles
+                    /*
                     {
                         Graphics2D graphics = tileImage.createGraphics();
                         float thickness = 1;
@@ -1332,6 +1333,7 @@ public final class GeoPackageReader extends AbstractGridCoverage2DReader {
                         graphics.drawString("Zoom: " + tile.getZoom(), 100, 140);
                         graphics.dispose();
                     }
+                    */
                     // Get the tile coordinates within the mosaic
                     int posx = (tile.getColumn() - startCol) * tileWidth;
                     int posy = (tile.getRow() - startRow) * tileHeight;
@@ -1695,6 +1697,7 @@ public final class GeoPackageReader extends AbstractGridCoverage2DReader {
 
                 ////////////////////////////////////////////////////////////////
                 // DEBUGGING: Uncomment block to draw a border around the tiles
+                /*
                 {
                     Graphics2D graphics = tileImage.createGraphics();
                     float thickness = 1;
@@ -1706,7 +1709,7 @@ public final class GeoPackageReader extends AbstractGridCoverage2DReader {
                             + "\nCol: " + tile.getColumn()
                             + "\nZoom: " + tile.getZoom(), 10, 50);
                 }
-
+                */
                 // Create the destination image that we draw into
                 if (image == null) {
                     image = createImage(width, height, inputTransparentColor);
