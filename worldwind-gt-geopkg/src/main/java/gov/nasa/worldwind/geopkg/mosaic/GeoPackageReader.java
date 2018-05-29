@@ -44,7 +44,6 @@ import gov.nasa.worldwind.geopkg.TileEntry;
 import gov.nasa.worldwind.geopkg.TileMatrix;
 import gov.nasa.worldwind.geopkg.TileReader;
 import it.geosolutions.imageio.maskband.DatasetLayout;
-import java.awt.BasicStroke;
 import java.awt.Dimension;
 import java.awt.RenderingHints;
 import java.awt.geom.AffineTransform;
@@ -73,16 +72,13 @@ import org.geotools.data.DefaultResourceInfo;
 import org.geotools.data.ResourceInfo;
 import org.geotools.factory.Hints;
 import org.geotools.geometry.DirectPosition2D;
-import org.geotools.geometry.Envelope2D;
 import org.geotools.geometry.GeneralEnvelope;
-import org.geotools.geometry.jts.JTS;
 import org.geotools.geometry.jts.ReferencedEnvelope;
 import org.geotools.image.ImageWorker;
 import org.geotools.metadata.iso.spatial.PixelTranslation;
 import org.geotools.referencing.CRS;
 import static org.geotools.referencing.CRS.AxisOrder.EAST_NORTH;
 import org.geotools.referencing.operation.builder.GridToEnvelopeMapper;
-import org.geotools.referencing.operation.matrix.AffineTransform2D;
 import org.geotools.referencing.operation.matrix.XAffineTransform;
 import org.geotools.referencing.operation.transform.ProjectiveTransform;
 import org.geotools.resources.coverage.CoverageUtilities;
@@ -92,18 +88,15 @@ import org.geotools.util.logging.Logging;
 import org.opengis.coverage.ColorInterpretation;
 import org.opengis.coverage.grid.Format;
 import org.opengis.coverage.grid.GridEnvelope;
-import org.opengis.geometry.Envelope;
 import org.opengis.metadata.spatial.PixelOrientation;
 import org.opengis.parameter.GeneralParameterValue;
 import org.opengis.parameter.ParameterValue;
 import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.ReferenceIdentifier;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
-import org.opengis.referencing.cs.CoordinateSystem;
 import org.opengis.referencing.cs.CoordinateSystemAxis;
 import org.opengis.referencing.datum.PixelInCell;
 import org.opengis.referencing.operation.MathTransform;
-import org.opengis.referencing.operation.MathTransform2D;
 import org.opengis.referencing.operation.TransformException;
 
 /**
@@ -317,9 +310,6 @@ public final class GeoPackageReader extends AbstractGridCoverage2DReader {
         final int yIndex = 1 - xIndex;
         final CoordinateSystemAxis xAxis = crs1.getCoordinateSystem().getAxis(xIndex);
         final CoordinateSystemAxis yAxis = crs1.getCoordinateSystem().getAxis(yIndex);
-        // Compute size of pixels for accuracy versus reading from matrix 
-//        final double pixSizeX = (xAxis.getMaximumValue() - xAxis.getMinimumValue()) / (matrix.getMatrixWidth() * matrix.getTileWidth());
-//        final double pixSizeY = (yAxis.getMaximumValue() - yAxis.getMinimumValue()) / (matrix.getMatrixHeight() * matrix.getTileHeight());
         // Compute the size of a tile in CRS units
         double colSpan = (xAxis.getMaximumValue() - xAxis.getMinimumValue()) / matrix.getMatrixWidth();
         double rowSpan = (yAxis.getMaximumValue() - yAxis.getMinimumValue()) / matrix.getMatrixHeight();
@@ -778,7 +768,7 @@ public final class GeoPackageReader extends AbstractGridCoverage2DReader {
      * Reads from the named raster coverage.
      *
      * @param coverageName The name of the coverage to be read
-     * @param parameters Array containing the requested grid geometry as a
+     * @param params Array containing the requested grid geometry as a
      * {@code Parameter<GridGeometry2D>} descriptor-value pair with a
      * {@code AbstractGridFormat.READ_GRIDGEOMETRY2D} descriptor. See
      * {@link GeoPackageFormat}.
@@ -788,7 +778,6 @@ public final class GeoPackageReader extends AbstractGridCoverage2DReader {
      * @throws IllegalArgumentException
      * @throws IOException
      */
-    @Override
     public GridCoverage2D read(String coverageName, GeneralParameterValue[] params) throws IllegalArgumentException, IOException {
         final TileEntry tileset = getTileset(coverageName);
         final CoordinateReferenceSystem crs1 = getCoordinateReferenceSystem(coverageName);
@@ -902,6 +891,7 @@ public final class GeoPackageReader extends AbstractGridCoverage2DReader {
         int endCol = computeEnd(xMax - xOrigin, tileColSpan, xHalfPixel);
         int endRow = computeEnd(yOrigin - yMin, tileRowSpan, yHalfPixel);
 
+        /*
         System.out.println("+++++++++++++++++++++++++++");
         System.out.println("[" + startCol + "..." + endCol + "],[" + startRow + "..." + endRow + "]");
         System.out.println("{" + startCol2 + "..." + endCol2 + "},{" + startRow2 + "..." + endRow2 + "}");
@@ -910,7 +900,8 @@ public final class GeoPackageReader extends AbstractGridCoverage2DReader {
         System.out.println(lowerCorner);
         System.out.println(dim);
         System.out.println("+++++++++++++++++++++++++++");
-
+        */
+        
         // Read the tiles into an image
         BufferedImage srcImage = readTiles(coverageName, zoomLevel, startCol, endCol, startRow, endRow, inputTransparentColor);
 
@@ -926,7 +917,7 @@ public final class GeoPackageReader extends AbstractGridCoverage2DReader {
         GridToEnvelopeMapper gridToEnvelopeMapper = new GridToEnvelopeMapper(resultGrid, resultEnvelope);
         gridToEnvelopeMapper.setPixelAnchor(PixelInCell.CELL_CORNER);
         MathTransform gridToCRS = gridToEnvelopeMapper.createTransform();
-
+        
 //        ReferencedEnvelope resultEnvelope2 = new ReferencedEnvelope(
 //                xOrigin + startCol * tileColSpan + xPixelSize, // min X 
 //                xOrigin + (endCol + 1) * tileColSpan - xPixelSize, // max X
@@ -935,6 +926,7 @@ public final class GeoPackageReader extends AbstractGridCoverage2DReader {
 //                crs1);
 //        gridToEnvelopeMapper.setEnvelope(resultEnvelope2);
 //        gridToEnvelopeMapper.setPixelAnchor(PixelInCell.CELL_CENTER);
+
         MathTransform gridToCRS2 = PixelTranslation.translate(gridToCRS, PixelInCell.CELL_CORNER, PixelInCell.CELL_CENTER);
         String name = coverageName + "-" + zoomLevel + "-[" + startCol + "..." + endCol + "],[" + startRow + "..." + endRow + "]";
 
@@ -972,130 +964,7 @@ public final class GeoPackageReader extends AbstractGridCoverage2DReader {
         }
     }
 
-    /**
-     * Read the GeoPackage into a coverage raster via a GeoPackageImageReader
-     * and a JAI "ImageRead" operation.
-     *
-     * @param coverageName
-     * @param params
-     * @return
-     * @throws IllegalArgumentException
-     * @throws IOException
-     */
-    private GridCoverage2D read_newest(String coverageName, GeneralParameterValue[] params) throws IllegalArgumentException, IOException {
-        TileEntry tileset = getTileset(coverageName);
-        CoordinateReferenceSystem crs1 = getCoordinateReferenceSystem(coverageName);
-        final int xAxis = (CRS.getAxisOrder(crs1) == CRS.AxisOrder.EAST_NORTH ? 0 : 1);
-        final int yAxis = 1 - xAxis;
-
-        //ReferencedEnvelope requestedEnvelope = null;
-        GeneralEnvelope requestedEnvelope = null;
-        Rectangle dim = null;
-        Color inputTransparentColor = null;
-        OverviewPolicy overviewPolicy = null;
-        // Extract the input parameters
-        if (params != null) {
-            for (GeneralParameterValue parameter : params) {
-                final ParameterValue param = (ParameterValue) parameter;
-                final ReferenceIdentifier name = param.getDescriptor().getName();
-                // Extract requested envelope and dimensions.
-                if (name.equals(AbstractGridFormat.READ_GRIDGEOMETRY2D.getName())) {
-                    final GridGeometry2D gg = (GridGeometry2D) param.getValue();
-                    requestedEnvelope = new GeneralEnvelope((org.opengis.geometry.Envelope) gg.getEnvelope2D());
-                    dim = gg.getGridRange2D().getBounds();
-                    continue;
-                }
-                // Extract the input transparent color
-                if (name.equals(AbstractGridFormat.INPUT_TRANSPARENT_COLOR.getName())) {
-                    inputTransparentColor = (Color) param.getValue();
-                    continue;
-                }
-                if (name.equals(AbstractGridFormat.OVERVIEW_POLICY.getName())) {
-                    overviewPolicy = (OverviewPolicy) param.getValue();
-                    continue;
-                }
-                //  TODO: Extract interpolation
-            }
-        }
-
-        if (requestedEnvelope == null) {
-            throw new IllegalArgumentException(
-                    "The request envelope could not be extracted from the READ_GRIDGEOMETRY2D param");
-        }
-        if (dim == null) {
-            throw new IllegalArgumentException(
-                    "The request dimensions could not be extracted from the READ_GRIDGEOMETRY2D param");
-        }
-
-        System.out.println("////////////////////////////////");
-        System.out.println("Requested Envelope: " + requestedEnvelope.toString());
-        System.out.println("Rectangle: " + dim.toString());
-        System.out.println("////////////////////////////////");
-
-        //
-        // Initialize/set the readParams
-        //
-        Integer imageChoice = 0;
-        final ImageReadParam readParams = new ImageReadParam();
-        try {
-            imageChoice = setReadParams(coverageName, overviewPolicy, readParams, requestedEnvelope, dim);
-        } catch (TransformException e) {
-            throw new DataSourceException(e);
-        }
-
-        int overviewImageIndex = getDatasetLayout(coverageName).getInternalOverviewImageIndex(imageChoice);
-        int index = overviewImageIndex >= 0 ? overviewImageIndex : 0;
-
-        //
-        // IMAGE READ OPERATION
-        //
-        Hints newHints = null;
-//        final RenderingHints newHints = new RenderingHints(JAI.KEY_IMAGE_LAYOUT, getImageLayout(coverageName));
-        final ParameterBlock pbjRead = new ParameterBlock();
-        ImageInputStream iis = ImageIO.createImageInputStream(sourceFile);
-        pbjRead.add(iis);               // Input: the image source
-        pbjRead.add(index);             // ImageChoice: the image index(s) to read
-        pbjRead.add(Boolean.FALSE);     // ReadMetadata:
-        pbjRead.add(Boolean.FALSE);     // ReadThumbnails:
-        pbjRead.add(Boolean.FALSE);     // VerifyInput:
-        pbjRead.add(null);              // Listeners:
-        pbjRead.add(null);              // Locale:
-        pbjRead.add(readParams);        // ReadParam:
-        pbjRead.add(new GeoPackageImageReaderSpi().createReaderInstance()); // Reader:
-
-        RenderedOp coverageRaster = JAI.create("ImageRead", pbjRead, newHints != null ? (RenderingHints) newHints : null);
-        iis.close();
-
-        //
-        // MASKING INPUT COLOR as indicated
-        //
-        if (inputTransparentColor != null) {
-            coverageRaster = new ImageWorker(coverageRaster).setRenderingHints(newHints).makeColorTransparent(inputTransparentColor).getRenderedOperation();
-        }
-
-        // 
-        // Create a tileset coverage that encapulates the requested region
-        //
-        //
-        // BUILDING COVERAGE
-        //
-        AffineTransform rasterToModel = getRescaledRasterToModel(coverageRaster);
-        try {
-
-            return createCoverage(coverageName, coverageRaster, ProjectiveTransform.create(rasterToModel));
-
-        } catch (Exception e) {
-            // dispose and close file
-            ImageUtilities.disposePlanarImageChain(coverageRaster);
-
-            // rethrow
-            if (e instanceof DataSourceException) {
-                throw (DataSourceException) e;
-            }
-            throw new DataSourceException(e);
-        }
-    }
-
+ 
     protected MathTransform getGridToEnvelope(String coverageName) {
         final GridToEnvelopeMapper geMapper = new GridToEnvelopeMapper(
                 getOriginalGridRange(coverageName),
@@ -1247,18 +1116,19 @@ public final class GeoPackageReader extends AbstractGridCoverage2DReader {
         final int endRow = matrix.getMinRow() + (regionY2 / tileHeight) + (regionY2 % tileHeight == 0 ? -1 : 0);
 
         ////////////// DEBUG INFO ////////////////
+        /*
         System.out.println("///////// readTiles ///////");
         System.out.println("zoomLevel: " + zoomLevel);
         System.out.println("region: " + region.toString());
         System.out.println("gridRange: " + gridRange.toString());
         System.out.println("///////////////////////////");
+        */
 
         // Read the tiles into an image
         BufferedImage srcImage = readTiles(coverageName, zoomLevel, startCol, endCol, startRow, endRow, inputTransparentColor);
 
         // If src and dest images have the same dimensions, then return src image
         if (srcImage.getWidth() == region.width && srcImage.getHeight() == region.height) {
-            System.out.println("***************************returning srcImage********************************");
             return srcImage;
         }
         // Copy the src image into the dest image, cropping the image as required                
@@ -1355,7 +1225,7 @@ public final class GeoPackageReader extends AbstractGridCoverage2DReader {
                 srcImage = new ImageWorker(srcImage).makeColorTransparent(inputTransparentColor).getRenderedOperation().getAsBufferedImage();
             }
         } catch (Exception e) {
-            System.out.println("*****************" + e.getMessage());
+            //System.out.println("*****************" + e.getMessage());
             LOGGER.log(Level.SEVERE, "readTiles", e);
 
         } finally {
@@ -1482,6 +1352,144 @@ public final class GeoPackageReader extends AbstractGridCoverage2DReader {
     ////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////
+    
+   /**
+     * Read the GeoPackage into a coverage raster via a GeoPackageImageReader
+     * and a JAI "ImageRead" operation.
+     *
+     * @param coverageName
+     * @param params
+     * @return
+     * @throws IllegalArgumentException
+     * @throws IOException
+     */
+    //@Deprecated
+    public GridCoverage2D read_alt(String coverageName, GeneralParameterValue[] params) throws IllegalArgumentException, IOException {
+        TileEntry tileset = getTileset(coverageName);
+        CoordinateReferenceSystem crs1 = getCoordinateReferenceSystem(coverageName);
+        final int xAxis = (CRS.getAxisOrder(crs1) == CRS.AxisOrder.EAST_NORTH ? 0 : 1);
+        final int yAxis = 1 - xAxis;
+
+        //ReferencedEnvelope requestedEnvelope = null;
+        GeneralEnvelope requestedEnvelope = null;
+        Rectangle dim = null;
+        Color inputTransparentColor = null;
+        OverviewPolicy overviewPolicy = null;
+        // Extract the input parameters
+        if (params != null) {
+            for (GeneralParameterValue parameter : params) {
+                final ParameterValue param = (ParameterValue) parameter;
+                final ReferenceIdentifier name = param.getDescriptor().getName();
+                // Extract requested envelope and dimensions.
+                if (name.equals(AbstractGridFormat.READ_GRIDGEOMETRY2D.getName())) {
+                    final GridGeometry2D gg = (GridGeometry2D) param.getValue();
+                    requestedEnvelope = new GeneralEnvelope((org.opengis.geometry.Envelope) gg.getEnvelope2D());
+                    dim = gg.getGridRange2D().getBounds();
+                    continue;
+                }
+                // Extract the input transparent color
+                if (name.equals(AbstractGridFormat.INPUT_TRANSPARENT_COLOR.getName())) {
+                    inputTransparentColor = (Color) param.getValue();
+                    continue;
+                }
+                if (name.equals(AbstractGridFormat.OVERVIEW_POLICY.getName())) {
+                    overviewPolicy = (OverviewPolicy) param.getValue();
+                    continue;
+                }
+                //  TODO: Extract interpolation
+            }
+        }
+
+        if (requestedEnvelope == null) {
+            throw new IllegalArgumentException(
+                    "The request envelope could not be extracted from the READ_GRIDGEOMETRY2D param");
+        }
+        if (dim == null) {
+            throw new IllegalArgumentException(
+                    "The request dimensions could not be extracted from the READ_GRIDGEOMETRY2D param");
+        }
+
+        //
+        // Initialize/set the readParams
+        //
+        Integer imageChoice = 0;
+        final ImageReadParam readParams = new ImageReadParam();
+        try {
+            imageChoice = setReadParams(coverageName, overviewPolicy, readParams, requestedEnvelope, dim);
+        } catch (TransformException e) {
+            throw new DataSourceException(e);
+        }
+
+        int overviewImageIndex = getDatasetLayout(coverageName).getInternalOverviewImageIndex(imageChoice);
+        int index = overviewImageIndex >= 0 ? overviewImageIndex : 0;
+
+        //
+        // IMAGE READ OPERATION
+        //
+        Hints newHints = null;
+//        final RenderingHints newHints = new RenderingHints(JAI.KEY_IMAGE_LAYOUT, getImageLayout(coverageName));
+        final ParameterBlock pbjRead = new ParameterBlock();
+        ImageInputStream iis = ImageIO.createImageInputStream(sourceFile);
+        pbjRead.add(iis);               // Input: the image source
+        pbjRead.add(index);             // ImageChoice: the image index(s) to read
+        pbjRead.add(Boolean.FALSE);     // ReadMetadata:
+        pbjRead.add(Boolean.FALSE);     // ReadThumbnails:
+        pbjRead.add(Boolean.FALSE);     // VerifyInput:
+        pbjRead.add(null);              // Listeners:
+        pbjRead.add(null);              // Locale:
+        pbjRead.add(readParams);        // ReadParam:
+        pbjRead.add(new GeoPackageImageReaderSpi().createReaderInstance()); // Reader:
+
+        RenderedOp coverageRaster = JAI.create("ImageRead", pbjRead, newHints != null ? (RenderingHints) newHints : null);
+        iis.close();
+
+        //
+        // MASKING INPUT COLOR as indicated
+        //
+        if (inputTransparentColor != null) {
+            coverageRaster = new ImageWorker(coverageRaster).setRenderingHints(newHints).makeColorTransparent(inputTransparentColor).getRenderedOperation();
+        }
+
+        // 
+        // Create a tileset coverage that encapulates the requested region
+        //
+        //
+        // BUILDING COVERAGE
+        //
+        AffineTransform rasterToModel = getRescaledRasterToModel(coverageRaster);
+        try {
+
+            return createCoverage(coverageName, coverageRaster, ProjectiveTransform.create(rasterToModel));
+
+        } catch (Exception e) {
+            // dispose and close file
+            ImageUtilities.disposePlanarImageChain(coverageRaster);
+
+            // rethrow
+            if (e instanceof DataSourceException) {
+                throw (DataSourceException) e;
+            }
+            throw new DataSourceException(e);
+        }
+    }
+    
+    /*
     @Deprecated
     protected int[] getTileIndex(String coverage, int zoomLevel, double xCoord, double yCoord) {
         TileEntry tileset = getTileset(coverageName);
@@ -1697,7 +1705,6 @@ public final class GeoPackageReader extends AbstractGridCoverage2DReader {
 
                 ////////////////////////////////////////////////////////////////
                 // DEBUGGING: Uncomment block to draw a border around the tiles
-                /*
                 {
                     Graphics2D graphics = tileImage.createGraphics();
                     float thickness = 1;
@@ -1709,7 +1716,6 @@ public final class GeoPackageReader extends AbstractGridCoverage2DReader {
                             + "\nCol: " + tile.getColumn()
                             + "\nZoom: " + tile.getZoom(), 10, 50);
                 }
-                */
                 // Create the destination image that we draw into
                 if (image == null) {
                     image = createImage(width, height, inputTransparentColor);
@@ -1912,5 +1918,5 @@ public final class GeoPackageReader extends AbstractGridCoverage2DReader {
 
         //return coverageFactory.create(name, srcImage, resultEnvelope); // **
     }
-
+    */
 }
