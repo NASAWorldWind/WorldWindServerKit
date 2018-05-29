@@ -23,8 +23,6 @@ import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import static org.junit.Assume.assumeNotNull;
-import org.junit.Ignore;
-import org.opengis.coverage.grid.GridEnvelope;
 
 /**
  *
@@ -232,14 +230,14 @@ public class GeoPackageImageReaderTest {
     }
 
     @Test
-    public void testRead_zoomLevel_readParam() throws Exception {
+    public void testRead_imageIndex_readParam() throws Exception {
         assumeNotNull(inputStream);  // Skip test if not found
         GeoPackageImageReader instance = new GeoPackageImageReader(imageReaderSpi);
         instance.setInput(inputStream);
         // Prepare the readParms and imageIndex
         GeoPackageReader reader = new GeoPackageReader(source, null);
         GeneralEnvelope requestedEnvelope = reader.getOriginalEnvelope(COVERAGE_NAME);
-        System.out.println(requestedEnvelope);
+        //System.out.println(requestedEnvelope);
         
         Rectangle requestedDim = new Rectangle(0, 0, LEVEL_12_GRID_RANGE.getSpan(0), LEVEL_12_GRID_RANGE.getSpan(1));
         ImageReadParam readParams = new ImageReadParam();
@@ -248,27 +246,26 @@ public class GeoPackageImageReaderTest {
         BufferedImage result = instance.read(imageIndex, readParams);
         //ImageIO.write(result, "png", DataUtilities.urlToFile(getClass().getResource("testRead.png"))); // writes to target folder
 
-        assertNotNull(result);
         ImageAssert.assertEquals(DataUtilities.urlToFile(getClass().getResource("testRead.png")), result, 2);
+        assertNotNull(result);
     }
 
-    ///////////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////////
-    @Ignore
     @Test
-    public void testRead_int() throws Exception {
+    public void testRead_imageIndex() throws Exception {
         assumeNotNull(inputStream);  // Skip test if not found
         GeoPackageImageReader instance = new GeoPackageImageReader(imageReaderSpi);
         instance.setInput(inputStream);
-
-        int imageIndex = 0;
-        BufferedImage expResult = null;
+        int imageIndex = 4; // 0 = level 16: native resolution
+        int srcWidth = instance.getWidth(imageIndex);
+        int srcHeight = instance.getHeight(imageIndex);  
+        
         BufferedImage result = instance.read(imageIndex);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        //ImageIO.write(result, "png", DataUtilities.urlToFile(getClass().getResource("testRead.png"))); // writes to target folder
+        
+        assertNotNull(result);
+        assertEquals(srcWidth, result.getWidth());
+        assertEquals(srcHeight, result.getHeight());
+        ImageAssert.assertEquals(DataUtilities.urlToFile(getClass().getResource("testRead.png")), result, 2);
     }
 
 }
