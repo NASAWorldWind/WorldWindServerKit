@@ -9,6 +9,7 @@ import com.vividsolutions.jts.geom.Envelope;
 import gov.nasa.worldwind.geopkg.mosaic.GeoPackageReader;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Arrays;
 import java.util.List;
 import org.geotools.geometry.jts.ReferencedEnvelope;
 import org.geotools.referencing.CRS;
@@ -54,7 +55,80 @@ public class TileEntryTest {
     public void tearDown() {
         reader = null;
     }
+    
+    /**
+     * Test of init method, of class TileEntry.
+     */
+    @Test
+    public void testInit() {
+        assumeNotNull(reader);  // Skip test if not found        
+        TileEntry e = reader.getTileset(COVERAGE_NAME);
+        TileEntry instance = new TileEntry();
+        
+        instance.init(e);
+        
+        assertEquals("Expected min zoom", e.minZoom, instance.minZoom);
+        assertEquals("Expected max zoom", e.maxZoom, instance.maxZoom);
+        assertTrue("Tile matricies match", e.getTileMatricies().equals(instance.getTileMatricies()));
+        assertTrue("Tile matricies bounds match", e.getTileMatrixSetBounds().equals(instance.getTileMatrixSetBounds()));
+                
+    }
 
+    /**
+     * Test of setMinZoomLevel method, of class TileEntry.
+     */
+    @Test
+    public void testSetMinZoomLevel() {
+        int minZoom = 0;
+        TileEntry instance = new TileEntry();
+
+        instance.setMinZoomLevel(minZoom);
+
+        assertEquals("Expected min zoom", minZoom, instance.minZoom);
+    }
+    
+    /**
+     * Test of setMaxZoomLevel method, of class TileEntry.
+     */
+    @Test
+    public void testSetMaxZoomLevel() {
+        int maxZoom = 0;
+        TileEntry instance = new TileEntry();
+
+        instance.setMaxZoomLevel(maxZoom);
+
+        assertEquals("Expected max zoom", maxZoom, instance.maxZoom);
+    }
+    
+    /**
+     * Test of setTileMatrixSetBounds method, of class TileEntry.
+     */
+    @Test
+    public void testSetTileMatrixSetBounds() {
+        Envelope tileMatrixSetBounds = new Envelope(1.0, 2.0, 3.0, 4.0);
+        TileEntry instance = new TileEntry();
+        
+        instance.setTileMatrixSetBounds(tileMatrixSetBounds);
+        
+        assertEquals("Tile matrix bounds match", tileMatrixSetBounds, instance.getTileMatrixSetBounds());
+    }    
+
+    /**
+     * Test of setTileMatricies method, of class TileEntry.
+     */
+    @Test
+    public void testSetTileMatricies() {
+        assumeNotNull(reader);  // Skip test if not found
+        TileEntry e = reader.getTileset(COVERAGE_NAME);
+        List<TileMatrix> tileMatricies = e.getTileMatricies();
+        TileEntry instance = new TileEntry();
+        
+        instance.setTileMatricies(tileMatricies);
+        
+        assertNotNull(instance.tileMatricies);
+        assertEquals("Expected size", tileMatricies.size(), instance.tileMatricies.size());
+        assertTrue(Arrays.equals(tileMatricies.toArray(), instance.tileMatricies.toArray()));
+    }    
     /**
      * Test of getTileMatricies method, of class TileEntry.
      */
@@ -161,80 +235,6 @@ public class TileEntryTest {
 
         assertNotNull(result);
         assertEquals(expected, result);
-    }
-
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-    /**
-     * Test of setTileMatricies method, of class TileEntry.
-     */
-    @Ignore
-    @Test
-    public void testSetTileMatricies() {
-        System.out.println("setTileMatricies");
-        List<TileMatrix> tileMatricies = null;
-        TileEntry instance = new TileEntry();
-        instance.setTileMatricies(tileMatricies);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of init method, of class TileEntry.
-     */
-    @Ignore
-    @Test
-    public void testInit() {
-        System.out.println("init");
-        TileEntry e = null;
-        TileEntry instance = new TileEntry();
-        instance.init(e);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of setTileMatrixSetBounds method, of class TileEntry.
-     */
-    @Ignore
-    @Test
-    public void testSetTileMatrixSetBounds() {
-        System.out.println("setTileMatrixSetBounds");
-        Envelope tileMatrixSetBounds = null;
-        TileEntry instance = new TileEntry();
-        instance.setTileMatrixSetBounds(tileMatrixSetBounds);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of setMinZoomLevel method, of class TileEntry.
-     */
-    @Ignore
-    @Test
-    public void testSetMinZoomLevel() {
-        System.out.println("setMinZoomLevel");
-        int minZoom = 0;
-        TileEntry instance = new TileEntry();
-        instance.setMinZoomLevel(minZoom);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of setMaxZoomLevel method, of class TileEntry.
-     */
-    @Ignore
-    @Test
-    public void testSetMaxZoomLevel() {
-        System.out.println("setMaxZoomLevel");
-        int maxZoom = 0;
-        TileEntry instance = new TileEntry();
-        instance.setMaxZoomLevel(maxZoom);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
 }
