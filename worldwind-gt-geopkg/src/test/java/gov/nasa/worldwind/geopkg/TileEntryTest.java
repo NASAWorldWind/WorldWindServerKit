@@ -13,19 +13,14 @@ import java.util.Arrays;
 import java.util.List;
 import org.geotools.geometry.jts.ReferencedEnvelope;
 import org.geotools.referencing.CRS;
-import static org.geotools.referencing.CRS.AxisOrder.EAST_NORTH;
-import static org.geotools.referencing.CRS.AxisOrder.NORTH_EAST;
 import org.geotools.referencing.crs.DefaultGeographicCRS;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import static org.junit.Assume.assumeNotNull;
-import org.junit.Ignore;
-import org.omg.IOP.ENCODING_CDR_ENCAPS;
 import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
-import org.opengis.referencing.cs.AxisDirection;
 
 /**
  *
