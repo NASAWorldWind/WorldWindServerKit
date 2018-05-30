@@ -517,19 +517,19 @@ public class GeoPackageReaderTest {
         assertEquals(height, result.getHeight());
     }
 
-    @Ignore
     @Test
     public void testCreateImage_copyFrom_width_height() throws IOException {
         assumeNotNull(source);  // Skip test if not found
         GeoPackageReader instance = new GeoPackageReader(source, null);
-        BufferedImage copyFrom = null;
-        int width = 0;
-        int height = 0;
-        BufferedImage expResult = null;
+        int width = 256;
+        int height = 256;
+        BufferedImage copyFrom = instance.createImage(width, height, null);
+
         BufferedImage result = instance.createImage(copyFrom, width, height);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+
+        assertNotNull(result);
+        assertEquals(width, result.getWidth());
+        assertEquals(height, result.getHeight());
     }
 
     @Ignore
@@ -542,92 +542,102 @@ public class GeoPackageReaderTest {
         fail("The test case is a prototype.");
     }
 
-    @Ignore
     @Test
     public void testReadTile() throws IOException {
         assumeNotNull(source);  // Skip test if not found
         GeoPackageReader instance = new GeoPackageReader(source, null);
-        int zoomLevel = 0;
-        int tileX = 0;
-        int tileY = 0;
-        BufferedImage expResult = null;
+        TileEntry tileset = instance.getTileset();
+        int zoomLevel = tileset.getMaxZoomLevel();
+        int tileX = tileset.getTileMatrix(zoomLevel).getMinCol();
+        int tileY = tileset.getTileMatrix(zoomLevel).getMinRow();
+
         BufferedImage result = instance.readTile(zoomLevel, tileX, tileY);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        //ImageIO.write(result, "png", DataUtilities.urlToFile(getClass().getResource("testReadTile.png")));
+
+        assertNotNull(result);
+        assertEquals(256, result.getWidth());
+        assertEquals(256, result.getHeight());
+        ImageAssert.assertEquals(DataUtilities.urlToFile(getClass().getResource("testReadTile.png")), result, 2);
     }
 
-    @Ignore
     @Test
     public void testRead_params() throws Exception {
         assumeNotNull(source);  // Skip test if not found
         GeoPackageReader instance = new GeoPackageReader(source, null);
-        GeneralParameterValue[] parameters = null;
-        GridCoverage2D expResult = null;
-        GridCoverage2D result = instance.read(parameters);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        GridGeometry2D gg = new GridGeometry2D(LEVEL_12_GRID_RANGE, ZOOMLEVEL_12_BBOX);
+        final Parameter<GridGeometry2D> ggParam = (Parameter<GridGeometry2D>) AbstractGridFormat.READ_GRIDGEOMETRY2D.createValue();
+        ggParam.setValue(gg);
+
+        GridCoverage2D result = instance.read(new GeneralParameterValue[]{ggParam});
+        RenderedImage renderedImage = result.getRenderedImage();
+        //ImageIO.write(renderedImage, "png", DataUtilities.urlToFile(getClass().getResource("testRead_1.png")));
+
+        assertNotNull(result);
+        assertEquals(ZOOMLEVEL_12_BBOX, new ReferencedEnvelope(result.getEnvelope()));
+        ImageAssert.assertEquals(DataUtilities.urlToFile(getClass().getResource("testRead_1.png")), renderedImage, 2);
     }
 
-    @Ignore
     @Test
     public void testRead_coverage_params() throws Exception {
         assumeNotNull(source);  // Skip test if not found
         GeoPackageReader instance = new GeoPackageReader(source, null);
-        GeneralParameterValue[] parameters = null;
-        GridCoverage2D expResult = null;
-        GridCoverage2D result = instance.read(COVERAGE_NAME, parameters);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        GridGeometry2D gg = new GridGeometry2D(LEVEL_12_GRID_RANGE, ZOOMLEVEL_12_BBOX);
+        final Parameter<GridGeometry2D> ggParam = (Parameter<GridGeometry2D>) AbstractGridFormat.READ_GRIDGEOMETRY2D.createValue();
+        ggParam.setValue(gg);
+
+        GridCoverage2D result = instance.read(COVERAGE_NAME, new GeneralParameterValue[]{ggParam});
+        RenderedImage renderedImage = result.getRenderedImage();
+        //ImageIO.write(renderedImage, "png", DataUtilities.urlToFile(getClass().getResource("testRead_1.png")));
+
+        assertNotNull(result);
+        assertEquals(ZOOMLEVEL_12_BBOX, new ReferencedEnvelope(result.getEnvelope()));
+        ImageAssert.assertEquals(DataUtilities.urlToFile(getClass().getResource("testRead_1.png")), renderedImage, 2);
     }
 
-    @Ignore
-    @Test
-    public void testReadTiles_zoom_region_color() throws Exception {
-        assumeNotNull(source);  // Skip test if not found
-        GeoPackageReader instance = new GeoPackageReader(source, null);
-        int zoomLevel = 0;
-        Rectangle region = null;
-        Color inputTransparentColor = null;
-        BufferedImage expResult = null;
-        BufferedImage result = instance.readTiles(zoomLevel, region, inputTransparentColor);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    @Ignore
-    @Test
-    public void testRead_coverage_zoom_region_color() throws Exception {
-        assumeNotNull(source);  // Skip test if not found
-        GeoPackageReader instance = new GeoPackageReader(source, null);
-        int zoomLevel = 0;
-        Rectangle region = null;
-        Color inputTransparentColor = null;
-        BufferedImage expResult = null;
-        BufferedImage result = instance.readTiles(COVERAGE_NAME, zoomLevel, region, inputTransparentColor);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    @Ignore
     @Test
     public void testReadTiles_coverage_zoom_4tileIndices() throws Exception {
         assumeNotNull(source);  // Skip test if not found
         GeoPackageReader instance = new GeoPackageReader(source, null);
-        int zoomLevel = 0;
-        int leftTile = 0;
-        int rightTile = 0;
-        int topTile = 0;
-        int bottomTile = 0;
-        BufferedImage expResult = null;
+
+        TileMatrix tileMatrix = instance.getTileset(COVERAGE_NAME).getTileMatrix(12);
+        int zoomLevel = 12;
+        int leftTile = tileMatrix.getMinCol();
+        int rightTile = leftTile + 1;
+        int topTile = tileMatrix.getMinRow();
+        int bottomTile = topTile + 1;
         BufferedImage result = instance.readTiles(COVERAGE_NAME, zoomLevel, leftTile, rightTile, topTile, bottomTile, null);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+
+        assertNotNull(result);
+        ImageAssert.assertEquals(DataUtilities.urlToFile(getClass().getResource("testRead_1.png")), result, 2);
     }
+    
+    @Test
+    public void testReadTiles_zoom_region_color() throws Exception {
+        assumeNotNull(source);  // Skip test if not found
+        GeoPackageReader instance = new GeoPackageReader(source, null);
+        int zoomLevel = 12;
+        Rectangle region = new Rectangle(0, 0, 512, 512);
+        Color inputTransparentColor = null;
+
+        BufferedImage result = instance.readTiles(zoomLevel, region, inputTransparentColor);
+
+        assertNotNull(result);
+        ImageAssert.assertEquals(DataUtilities.urlToFile(getClass().getResource("testReadTiles.png")), result, 2);
+    }
+
+    @Test
+    public void testRead_coverage_zoom_region_color() throws Exception {
+        assumeNotNull(source);  // Skip test if not found
+        GeoPackageReader instance = new GeoPackageReader(source, null);
+        int zoomLevel = 12;
+        Rectangle region = new Rectangle(0, 0, 512, 512);
+        Color inputTransparentColor = null;
+
+        BufferedImage result = instance.readTiles(COVERAGE_NAME, zoomLevel, region, inputTransparentColor);
+
+        assertNotNull(result);
+        ImageAssert.assertEquals(DataUtilities.urlToFile(getClass().getResource("testReadTiles.png")), result, 2);
+    }
+
 
 }
