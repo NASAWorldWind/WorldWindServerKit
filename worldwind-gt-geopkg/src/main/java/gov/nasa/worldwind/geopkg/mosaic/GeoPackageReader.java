@@ -845,11 +845,7 @@ public final class GeoPackageReader extends AbstractGridCoverage2DReader {
                 yAxis.getMinimumValue(),
                 yAxis.getMaximumValue(),
                 crs1);
-        GridToEnvelopeMapper tileToEnvelopeMapper = new GridToEnvelopeMapper(grid, envelope);
-        tileToEnvelopeMapper.setPixelAnchor(PixelInCell.CELL_CORNER);
-//        MathTransform gridToCrs = tileToEnvelopeMapper.createTransform();
-//        gridToCrs = PixelTranslation.translate(gridToCrs, PixelInCell.CELL_CORNER, PixelInCell.CELL_CENTER);
-//        GridGeometry2D gridGeometry = new GridGeometry2D(grid, gridToCrs, crs1);
+
         GridGeometry2D gridGeometry = new GridGeometry2D(grid, envelope);
         MathTransform gridToUpperLeft = gridGeometry.getGridToCRS(PixelOrientation.UPPER_LEFT);
         DirectPosition2D upperCorner = new DirectPosition2D();
@@ -860,10 +856,6 @@ public final class GeoPackageReader extends AbstractGridCoverage2DReader {
         } catch (TransformException | InvalidGridGeometryException ex) {
             Logger.getLogger(GeoPackageReader.class.getName()).log(Level.SEVERE, null, ex);
         }
-        int startCol2 = (int) Math.floor(lowerCorner.getX());
-        int startRow2 = (int) Math.floor(upperCorner.getY());
-        int endCol2 = (int) Math.ceil(upperCorner.getX()) - 1;
-        int endRow2 = (int) Math.ceil(lowerCorner.getY()) - 1;
 
         // TODO: origin should be gpk_tile_matrix_set values, not CRS values
         final double xOrigin = xAxis.getMinimumValue(); // left
