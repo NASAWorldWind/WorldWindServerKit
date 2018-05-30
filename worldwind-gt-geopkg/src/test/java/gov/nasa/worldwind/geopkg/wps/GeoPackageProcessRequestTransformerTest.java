@@ -45,7 +45,7 @@ public class GeoPackageProcessRequestTransformerTest extends GPKGTestSupport {
      */
     @Test
     public void testTransformTiles() throws URISyntaxException, TransformerException, Exception {
-        System.out.println("Test GeoPackageProcessRequest for tiles");
+        //System.out.println("Test GeoPackageProcessRequest for tiles");
 
         // Assemble the GeoGeoPackageProcessRequest to be transformed to XML
         GeoPackageProcessRequest request = new GeoPackageProcessRequest();
@@ -61,7 +61,7 @@ public class GeoPackageProcessRequestTransformerTest extends GPKGTestSupport {
         // Action to perform the tranform 
         transformer.transform(request, out);
         String xmlResult = out.toString();
-        System.out.println(out.toString());
+        //System.out.println(out.toString());
 
         // Assert the XML is valid by trying to parse it
         buildDocument(xmlResult);

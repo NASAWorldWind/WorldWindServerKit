@@ -16,6 +16,7 @@
  */
 package gov.nasa.worldwind.geopkg.mosaic;
 
+import it.geosolutions.imageio.stream.input.FileImageInputStreamExtImpl;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -43,20 +44,63 @@ import org.opengis.parameter.GeneralParameterDescriptor;
  */
 public class GeoPackageFormat extends AbstractGridFormat {
 
+    public final static String NAME = "GeoPackage (tiles)";
+    public final static String DESC = "GeoPackage format with OGC encoding";
+    public final static String VENDOR = "worldwind.arc.nasa.gov";   // TODO: Change back to GeoTools when this fork is rolled back into community
+    public final static String DOC_URL = "";
+    public final static String VERSION = "1.0";
+    
+    /**
+     * Format names for a GeoPackage.
+     */
+    public static final String[] FORMAT_NAMES = {"geopackage", "geopkg", "gpkg"};
+    
+    /**
+     * The format's MIME type(s).
+     */
+    public static final String[] MIME_TYPES = {"application/x-gpkg"};
+
+    /**
+     * Common file suffixes.
+     */
+    public final static String[] SUFFIXES = {"gpkg"};
+    
+    /**
+     * The input Types that are accepted.
+     */
+    public static final Class[] INPUT_TYPES = new Class[]{
+        File.class, URL.class, String.class, FileImageInputStreamExtImpl.class
+    };
+    
+    
     private final static Logger LOGGER = Logging.getLogger(GeoPackageFormat.class.getPackage().getName());
 
     /**
-     * Creates an instance and sets the metadata.
+     * Creates an instance and sets the metadata and default read parameters.
      */
     public GeoPackageFormat() {
         setInfo();
     }
 
+    /**
+     * Gets a GeoPackageReader object capable of reading the source object.
+     *
+     * @param source A File, filename String, file:// URL or a
+     * FileImageInputStreamExtImpl
+     * @return a new GeoPackageReader object.
+     */
     @Override
     public AbstractGridCoverage2DReader getReader(Object source) {
         return getReader(source, null);
     }
 
+    /**
+     * Gets a GeoPackageReader object capable of reading the source object.
+     *
+     * @param source A File, filename String, file:// URL or a
+     * FileImageInputStreamExtImpl
+     * @return a new GeoPackageReader object.
+     */
     @Override
     public AbstractGridCoverage2DReader getReader(Object source, Hints hints) {
         try {
@@ -67,32 +111,47 @@ public class GeoPackageFormat extends AbstractGridFormat {
         }
     }
 
+    /**
+     * Not implemented.
+     *
+     * @return nothing
+     * @throws UnsupportedOperationException
+     */
     @Override
     public GridCoverageWriter getWriter(Object destination) {
         return getWriter(destination, null);
     }
 
+    /**
+     * Not implemented.
+     *
+     * @return nothing
+     * @throws UnsupportedOperationException
+     */
     @Override
     public GridCoverageWriter getWriter(Object destination, Hints hints) {
         throw new UnsupportedOperationException("Unsupported method: Geopackage format is read-only.");
     }
 
+    /**
+     * Tests if the given source object can be read as a GeoPackage.
+     *
+     * @param source A File, filename String, file:// URL or a
+     * FileImageInputStreamExtImpl
+     * @param hints ignored
+     * @return true if the file exists and is has a .gpkg extension
+     */
     @Override
     public boolean accepts(Object source, Hints hints) {
-        if (source == null) {
-            return false;
-        }
-
-        File sourceFile = getFileFromSource(source);
-
-        if (sourceFile == null) {
-            return false;
-        }
-
-        //TODO: check if it is proper sqlite and geopackage file
-        return sourceFile.getName().endsWith(".gpkg");
+        return isValidGeoPackage(source);
     }
 
+    /**
+     * Not implemented.
+     *
+     * @return nothing
+     * @throws UnsupportedOperationException
+     */
     @Override
     public GeoToolsWriteParams getDefaultImageIOWriteParameters() {
         throw new UnsupportedOperationException("Unsupported method.");
@@ -102,15 +161,16 @@ public class GeoPackageFormat extends AbstractGridFormat {
      * Sets the metadata information.
      */
     private void setInfo() {
-        final HashMap<String, String> info = new HashMap<String, String>();
-        info.put("name", "GeoPackage (tiles)");
-        info.put("description", "GeoPackage format with OGC encoding");
-        info.put("vendor", "Geotools");
-        info.put("docURL", "");
-        info.put("version", "1.0");
+        final HashMap<String, String> info = new HashMap<>();
+        info.put("name", NAME);
+        info.put("description", DESC);
+        info.put("vendor", VENDOR);
+        info.put("docURL", DOC_URL);
+        info.put("version", VERSION);
+        // Update base-class metadata
         mInfo = info;
 
-        // reading parameters
+        // Update base-class default readParameters
         readParameters = new ParameterGroup(
                 new DefaultParameterDescriptorGroup(
                         mInfo,
@@ -135,16 +195,53 @@ public class GeoPackageFormat extends AbstractGridFormat {
         writeParameters = null;
     }
 
+    /**
+     * Tests if the source appears to be a valid GeoPackage file.
+     *
+     * @param source a File, String, URL or FileImageInputStreamExtImpl object
+     * @return true if the source object references an existing GeoPackage file
+     *
+     */
+    public static boolean isValidGeoPackage(Object source) {
+        if (source == null) {
+            return false;
+        }
+
+        // Assert that the source references a valid file object
+        File sourceFile = getFileFromSource(source);
+        if (sourceFile == null) {
+            return false;
+        }
+
+        // Assert the source file appears to be a GeoPackage
+        // TODO: Check if the file is a sqlite database
+        String filename = sourceFile.getName().toLowerCase();
+        for (String suffix : SUFFIXES) {
+            if (filename.endsWith("."+ suffix)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Attempts to return a File object from the input source.
+     *
+     * @param source a File, URL or filename referencing a GeoPackage file
+     * @return a File object or null
+     */
     public static File getFileFromSource(Object source) {
         if (source == null) {
             return null;
         }
 
         File sourceFile = null;
-
         try {
             if (source instanceof File) {
                 sourceFile = (File) source;
+            } else if (source instanceof FileImageInputStreamExtImpl) {
+                // FileImageInputStreamExtImpl is used by image mosaic granules
+                sourceFile = ((FileImageInputStreamExtImpl) source).getFile();
             } else if (source instanceof URL) {
                 if (((URL) source).getProtocol().equals("file")) {
                     sourceFile = DataUtilities.urlToFile((URL) source);
@@ -156,11 +253,11 @@ public class GeoPackageFormat extends AbstractGridFormat {
             if (LOGGER.isLoggable(Level.FINE)) {
                 LOGGER.log(Level.FINE, e.getLocalizedMessage(), e);
             }
-
-            return null;
         }
-
-        return sourceFile;
+        if (sourceFile != null && sourceFile.isFile()) {
+            return sourceFile;
+        }
+        return null;
     }
 
 }

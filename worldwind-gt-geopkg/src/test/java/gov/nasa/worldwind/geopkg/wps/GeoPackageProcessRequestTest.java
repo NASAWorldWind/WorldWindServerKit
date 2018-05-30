@@ -44,7 +44,6 @@ public class GeoPackageProcessRequestTest {
      */
     @Test
     public void testHashCode() throws URISyntaxException {
-        System.out.println("hashCode");
         // Assemble two differnt requests
         GeoPackageProcessRequest request1 = new GeoPackageProcessRequest();
         GeoPackageProcessRequest request2 = new GeoPackageProcessRequest();
@@ -66,7 +65,6 @@ public class GeoPackageProcessRequestTest {
      */
     @Test
     public void testEquals() throws URISyntaxException {
-        System.out.println("equals");
         // Assemble two identical requests
         GeoPackageProcessRequest request1 = new GeoPackageProcessRequest();
         GeoPackageProcessRequest request2 = new GeoPackageProcessRequest();
@@ -78,7 +76,6 @@ public class GeoPackageProcessRequestTest {
 
     @Test
     public void testNotEquals() throws URISyntaxException {
-        System.out.println("not equals");
         // Assemble two different requests
         GeoPackageProcessRequest request1 = new GeoPackageProcessRequest();
         GeoPackageProcessRequest request2 = new GeoPackageProcessRequest();
@@ -120,7 +117,6 @@ public class GeoPackageProcessRequestTest {
     @Test
     @Ignore
     public void testAddLayer() {
-        System.out.println("addLayer");
         GeoPackageProcessRequest.Layer layer = null;
         GeoPackageProcessRequest instance = new GeoPackageProcessRequest();
         instance.addLayer(layer);
@@ -134,7 +130,6 @@ public class GeoPackageProcessRequestTest {
     @Test
     @Ignore
     public void testGetLayer() {
-        System.out.println("getLayer");
         int i = 0;
         GeoPackageProcessRequest instance = new GeoPackageProcessRequest();
         GeoPackageProcessRequest.Layer expResult = null;
@@ -150,7 +145,6 @@ public class GeoPackageProcessRequestTest {
     @Test
     @Ignore
     public void testGetLayerCount() {
-        System.out.println("getLayerCount");
         GeoPackageProcessRequest instance = new GeoPackageProcessRequest();
         int expResult = 0;
         int result = instance.getLayerCount();
@@ -165,7 +159,6 @@ public class GeoPackageProcessRequestTest {
     @Test
     @Ignore
     public void testGetName() {
-        System.out.println("getName");
         GeoPackageProcessRequest instance = new GeoPackageProcessRequest();
         String expResult = "";
         String result = instance.getName();
@@ -180,7 +173,6 @@ public class GeoPackageProcessRequestTest {
     @Test
     @Ignore
     public void testSetName() {
-        System.out.println("setName");
         String name = "";
         GeoPackageProcessRequest instance = new GeoPackageProcessRequest();
         instance.setName(name);
@@ -194,7 +186,6 @@ public class GeoPackageProcessRequestTest {
     @Test
     @Ignore
     public void testGetPath() {
-        System.out.println("getPath");
         GeoPackageProcessRequest instance = new GeoPackageProcessRequest();
         URL expResult = null;
         URL result = instance.getPath();
@@ -209,7 +200,6 @@ public class GeoPackageProcessRequestTest {
     @Test
     @Ignore
     public void testSetPath() {
-        System.out.println("setPath");
         URL path = null;
         GeoPackageProcessRequest instance = new GeoPackageProcessRequest();
         instance.setPath(path);
@@ -223,7 +213,6 @@ public class GeoPackageProcessRequestTest {
     @Test
     @Ignore
     public void testGetRemove() {
-        System.out.println("getRemove");
         GeoPackageProcessRequest instance = new GeoPackageProcessRequest();
         Boolean expResult = null;
         Boolean result = instance.getRemove();
@@ -238,7 +227,6 @@ public class GeoPackageProcessRequestTest {
     @Test
     @Ignore
     public void testSetRemove() {
-        System.out.println("setRemove");
         Boolean remove = null;
         GeoPackageProcessRequest instance = new GeoPackageProcessRequest();
         instance.setRemove(remove);

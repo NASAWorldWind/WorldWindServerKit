@@ -51,10 +51,17 @@ public class Entry {
     protected ReferencedEnvelope bounds;
     protected Integer srid;
 
+    /**
+     * Gets the Tile Pyramid User Data table name
+     * @return the value of table_name column
+     */
     public String getTableName() {
         return tableName;
     }
 
+    /**
+     * Set the value of table_name column
+     */
     public void setTableName(String tableName) {
         this.tableName = tableName;
     }
@@ -91,6 +98,10 @@ public class Entry {
         this.lastChange = lastChange;
     }
 
+    /**
+     * 
+     * @return the geographic bounds
+     */
     public ReferencedEnvelope getBounds() {
         return bounds;
     }
@@ -99,10 +110,18 @@ public class Entry {
         this.bounds = bounds;
     }
 
+    /**
+     * Returns the spatial reference system ID.
+     * @return the value of the src_id field
+     */
     public Integer getSrid() {
         return srid;
     }
 
+    /**
+     * Sets the src_id value
+     * @param srid
+     */
     public void setSrid(Integer srid) {
         this.srid = srid;
     }
