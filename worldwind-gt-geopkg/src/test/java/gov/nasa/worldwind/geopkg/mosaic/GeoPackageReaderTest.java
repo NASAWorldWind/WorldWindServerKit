@@ -622,7 +622,8 @@ public class GeoPackageReaderTest {
         BufferedImage result = instance.readTiles(zoomLevel, region, inputTransparentColor);
 
         assertNotNull(result);
-        ImageAssert.assertEquals(DataUtilities.urlToFile(getClass().getResource("testReadTiles.png")), result, 2);
+//        ImageIO.write(result, "png", DataUtilities.urlToFile(getClass().getResource("testReadTiles_2.png")));
+        ImageAssert.assertEquals(DataUtilities.urlToFile(getClass().getResource("testReadTiles_2.png")), result, 2);
     }
 
     @Test
@@ -636,7 +637,8 @@ public class GeoPackageReaderTest {
         BufferedImage result = instance.readTiles(COVERAGE_NAME, zoomLevel, region, inputTransparentColor);
 
         assertNotNull(result);
-        ImageAssert.assertEquals(DataUtilities.urlToFile(getClass().getResource("testReadTiles.png")), result, 2);
+//        ImageIO.write(result, "png", DataUtilities.urlToFile(getClass().getResource("testReadTiles_2.png")));
+        ImageAssert.assertEquals(DataUtilities.urlToFile(getClass().getResource("testReadTiles_2.png")), result, 2);
     }
 
 
