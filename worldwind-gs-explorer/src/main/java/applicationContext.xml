@@ -22,22 +22,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
     <!-- WebWorldWind Viewer -->
     
-    <bean id="worldwindClasspathPublisherMapping" class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
-        <property name="alwaysUseFullPath" value="true"/>
-        <property name="mappings">
-            <props>
-                <!-- 
-                Use the classpathPublisher bean defined in the GeoServer Main Module 
-                to locate the viewer endpoint resources
-                -->
-                <prop key="/explorer">classpathPublisher</prop>
-                <prop key="/explorer/**">classpathPublisher</prop>
-            </props>
-        </property>
-    </bean>
-    
+   
     <!--    
-    Create a link to the "Explorer" in the WWSK category.
+    Create a link to the "Explorer" page in the WWSK category
     -->
     <bean id="wwskExplorerLink" class="org.geoserver.web.MenuPageInfo">
          <!--An internal identifier for the link component--> 
