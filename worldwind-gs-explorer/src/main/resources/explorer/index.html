@@ -11,13 +11,14 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=0">
         <!-- Bootstrap: The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
 
-        <title>WorldWind Explorer</title>
+        <title>GeoServer Explorer</title>
 
         <meta name="description" content="WorldWind Explorer">
         <meta name="author" content="Bruce Schubert">
 
         <!-- Favicon -->
-        <link rel="icon" type="image/png" href="css/images/nasa-logo_32.png"/>
+        <!--<link rel="icon" type="image/png" href="css/images/nasa-logo_32.png"/>-->
+        <link rel="icon" href="favicon.ico"/>
 
         <!-- JQuery UI provides some UI elements (e.g, a slider) -->
         <link rel="stylesheet" type="text/css" href="css/libs/jquery-ui/v1.11.4/jquery-ui.min.css"/>
@@ -49,9 +50,11 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand"
-                       href="https://worldwind.arc.nasa.gov" target="_blank">
-                        NASA WorldWind
+                    <a class="navbar-brand" href="/geoserver/web/">
+                        <img src='logo.png' width="32" height="32" alt='GeoServer'/>
+                    </a>
+                    <a class="navbar-brand" href="/geoserver/web/">
+                        <i>Explorer</i>
                     </a>
                 </div>
                 <!-- Navigation links, Projections and Search Box -->
