@@ -34,7 +34,7 @@ import org.geoserver.web.GeoServerBasePage;
 public class WWSKExplorerPage extends GeoServerBasePage {
 
     public WWSKExplorerPage() {
-        throw new RedirectToUrlException("/explorer/index.html");
+        throw new RedirectToUrlException("/www/explorer/index.html");
     }
 
 }
