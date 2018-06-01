@@ -1,17 +1,23 @@
 /*
-Copyright (c) 2016, Bruce Schubert.
-The Modified BSD License (3-clause license)
+Copyright (c) 2017, Bruce Schubert.
+The MIT License
 */
 body {
     /*padding-top: 50px;*/
     /* Move the content down because we have a fixed navbar that is 50px tall */
 }
 
+/*.navbar-fixed-top {
+  max-height: 54px;
+}*/
+
+/* Computing height with % instead of vh due to Chrome/Android reporting vh
+   based on total possible size (e.g., address bar hidden), not actual size */
 .container-split {
     /*maximum size, excluding the nav-bar*/
     position: fixed;
     top: 54px;
-    height: calc(100vh - 54px);
+    height: calc(100% - 54px);
     width: 100vw;
 }
 
@@ -44,6 +50,12 @@ body {
     padding-right: 0;
     background-color: rgb(0,0,0);
     /*border:1px solid #000000;*/
+}
+
+ /*Override the default navbar-form padding of 15px*/
+.navbar-form {
+    padding-left: 5px;
+    padding-right: 5px;
 }
 
 /* Controls the style of enabled and disabled layers */
@@ -190,7 +202,7 @@ body {
     /*desktop sidebar*/
     .sidebar-left {
         position: fixed;
-        top: 51px;
+        top: 54px;
         bottom: 0;
         left: 0;
         z-index: 1000;
@@ -204,14 +216,24 @@ body {
         border-right: 1px solid #eee;
     }
     .main {
-        top: 51px;
+        top: 54px;
+        height: calc(100vh - 54px);
         position: fixed;
-        height: calc(100vh - 51px);
     }
     .section-heading .section-toggle:after {
         padding-left: 20px;
         padding-right: 20px;
     }
+    
+    
+    .dl-horizontal dt { 
+        /*text-align: left;*/ 
+        width: 100px;
+    }
+    .dl-horizontal dd { 
+        margin-left: 110px;
+    }
+    
 }
 
 /*Mobile phone or table*/

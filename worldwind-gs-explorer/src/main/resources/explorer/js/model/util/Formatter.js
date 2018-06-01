@@ -183,7 +183,9 @@ define([
                 // Convert from meters to the desired units format.
                 if (units === "km") {
                     altitude /= 1e3;
-                }
+                } else if (units === "ft") {
+                    altitude *= 3.28084;
+                }                
                 // Round to the nearest integer and place a comma every three digits. See the following Stack Overflow thread
                 // for more information:
                 // http://stackoverflow.com/questions/2901102/how-to-print-a-number-with-commas-as-thousands-separators-in-javascript

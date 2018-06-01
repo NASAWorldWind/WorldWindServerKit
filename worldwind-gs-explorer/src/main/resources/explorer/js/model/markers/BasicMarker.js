@@ -55,17 +55,15 @@ define([
                         args = params || {},
                         normalAttributes, highlightAttributes, placemark;
 
-                this.globe = manager.globe;
-                
                 // TODO: assert validitiy of method arguments
 
                 // Add the mix-in capabilites:
 
-                // Make movable by the SelectController: adds the isMovable, latitude and longitude
+                // Make movable by the PickController: adds the isMovable, latitude and longitude
                 // observables. The MarkerManager toggles the isMovable state when a marker is selected.
                 movable.makeMovable(this);
 
-                // Make selectable via picking (see SelectController): adds the "select" method
+                // Make selectable via picking (see PickController): adds the "select" method
                 selectable.makeSelectable(this, function (params) {   // define the callback that selects this marker
                     this.isMovable(params.selected);
                     this.placemark.highlighted = params.selected;
@@ -90,7 +88,7 @@ define([
                     return true;    // return true to fire a EVENT_OBJECT_REMOVED
                 });
 
-                // Make context sensitive by the SelectController: adds the isContextSensitive member
+                // Make context sensitive by the PickController: adds the isContextSensitive member
                 contextSensitive.makeContextSensitive(this, function () {    // define the function that shows the context sentive memnu
                     $.growl({
                         title: self.name(), 
@@ -105,9 +103,9 @@ define([
                 this.name = ko.observable(args.name || "Marker");
                 /** The movable mix-in state */
                 this.isMovable(args.isMovable === undefined ? false : args.isMovable);
-                /** The latitude of this marker -- set be by the Movable interface during pick/drag operations. See SelectController */
+                /** The latitude of this marker -- set be by the Movable interface during pick/drag operations. See PickController */
                 this.latitude(position.latitude)
-                /** The longitude of this marker -- may be set by the Movable interface during pick/drag operations See SelectController */
+                /** The longitude of this marker -- may be set by the Movable interface during pick/drag operations See PickController */
                 this.longitude (position.longitude);
                 /** The lat/lon location string of this marker */
                 this.location = ko.computed(function () {
@@ -139,11 +137,11 @@ define([
 
                 this.placemark = new WorldWind.Placemark(position, true, normalAttributes); // eye distance scaling enabled
                 this.placemark.altitudeMode = WorldWind.RELATIVE_TO_GROUND;
-                this.placemark.eyeDistanceScalingThreshold = 2000000;
+                this.placemark.eyeDistanceScalingThreshold = 4000000;
                 this.placemark.highlightAttributes = highlightAttributes;
                 this.placemark.label = this.name();
                 // Configure the placemark to return this marker object when the placemark is picked, 
-                // See: SelectController
+                // See: PickController
                 this.placemark.pickDelegate = this;
 
                 // Synchronize the placemark to this marker's the observable properties

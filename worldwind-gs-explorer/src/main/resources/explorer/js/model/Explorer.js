@@ -24,6 +24,8 @@ define(['jquery',
     'model/util/Log',
     'model/markers/MarkerManager',
     'model/util/Settings',
+    'url-search-params',
+    'model/weather/WeatherScoutManager',
     'worldwind'],
         function (
                 $,
@@ -31,7 +33,10 @@ define(['jquery',
                 constants,
                 log,
                 MarkerManager,
-                settings) {
+                settings,
+                URLSearchParams,
+                WeatherScoutManager,
+                ww) {
             "use strict";
             /**
              * This is the top-level Explorer singleton.
@@ -56,6 +61,7 @@ define(['jquery',
 
                     // Configure the manager of objects on the globe
                     this.markerManager = new MarkerManager(globe);
+                    this.weatherManager = new WeatherScoutManager(globe);
 
                     // Configure the objects used to animate the globe when performing "go to" operations
                     this.goToAnimator = new WorldWind.GoToAnimator(this.wwd);
@@ -63,7 +69,7 @@ define(['jquery',
 
                     // Internal. Intentionally not documented.
                     this.updateTimeout = null;
-                    this.updateInterval = 50;
+                    this.updateInterval = 200;   // throttle the spatial data updates to 5hz
 
                     // Setup to update each time the World Window is repainted.
                     this.wwd.redrawCallbacks.push(function () {
@@ -149,6 +155,7 @@ define(['jquery',
                 restoreSession: function () {
                     log.info('Explorer', 'restoreSession', 'Restoring the model and view.');
                     this.markerManager.restoreMarkers();
+                    this.weatherManager.restoreScouts();
                     this.restoreSessionView();
                     // Update all time sensitive objects
                     this.globe.updateDateTime(new Date());
@@ -179,14 +186,14 @@ define(['jquery',
                                 log.warning("Explorer", "restoreSessionView", "URL camera values invalid. Ignoring.");
                             } else {
                                 this.wwd.navigator.heading = heading;
-                                this.wwd.navigator.tilt = tilt;     
-                                this.wwd.navigator.roll = roll;     
+                                this.wwd.navigator.tilt = tilt;
+                                this.wwd.navigator.roll = roll;
                                 this.wwd.redraw();
                             }
                             // FIX THIS: viewpoint is not updating!
 //                            this.globe.lookAt(lat, lon, alt);
 //                            this.globe.updateEyePosition(); // update time widget
-                            this.lookAtLatLon(lat,lon,alt);
+                            this.lookAtLatLon(lat, lon, alt);
                             return;
                         }
                     }
@@ -201,6 +208,7 @@ define(['jquery',
                     log.info('Explorer', 'saveSession', 'Saving the model and view.');
                     this.saveSessionView();
                     this.markerManager.saveMarkers();
+                    this.weatherManager.saveScouts();
                     this.globe.layerManager.saveLayers();
                 },
                 // Internal method.
@@ -228,7 +236,8 @@ define(['jquery',
                     }
                 },
                 /**
-                 * handleRedraw updates the spatial view models.
+                 * handleRedraw is a callback used to update the spatial view models.
+                 * when the view is redrawn.
                  */
                 handleRedraw: function () {
                     var self = this;

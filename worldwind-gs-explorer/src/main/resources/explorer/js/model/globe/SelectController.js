@@ -271,6 +271,7 @@ define(['knockout'],
             // Remember the clicked item for dblclick processing
             this.clickedItem = this.pickedItem;
             if (this.clickedItem) {
+                this.doClick(this.clickedItem.userObject);
                 this.doSelect(this.clickedItem.userObject);
             }
             // Release the picked item so mousemove doesn"t act on it
@@ -347,7 +348,15 @@ define(['knockout'],
                 userObject.moveFinished();
             }
         };
-
+               
+        SelectController.prototype.doClick = function (userObject) {
+            if (ko.isObservable(userObject.isClickable) && userObject.isClickable()) {
+                if (userObject.click) {
+                    userObject.click();
+                }
+            }
+        };
+        
         SelectController.prototype.doSelect = function (userObject) {
             if (ko.isObservable(userObject.isSelectable) && userObject.isSelectable()) {
                 if (this.lastSelectedItem() === userObject) {

@@ -20,9 +20,11 @@ define(['model/Constants', 'worldwind'],
          * @param {WorldWindow} worldWindow
          * @constructor
          */
-        var EnhancedViewControlsLayer = function (worldWindow) {
+        var EnhancedViewControlsLayer = function (globe) {
 
-            ww.ViewControlsLayer.call(this, worldWindow);
+            ww.ViewControlsLayer.call(this, globe.wwd);
+            
+            this.displayName = constants.LAYER_NAME_VIEW_CONTROLS;
 
             // Override the default placement at bottom-left and place at top-left
             // Leave room at the top for the Coordinates output
