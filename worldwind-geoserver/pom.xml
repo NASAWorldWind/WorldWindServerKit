@@ -76,6 +76,8 @@
         <data.config.nasa>nasa</data.config.nasa>
         <data.config.test>test</data.config.test>
         <data.config.directory>${project.basedir}/../resources/data</data.config.directory>
+        
+        <explorer.source.directory>${project.basedir}/../worldwind-gs-explorer/src/main/resources/explorer</explorer.source.directory>
     </properties>    
     
     <dependencies>
@@ -195,7 +197,7 @@
             <version>${gs.version}</version>
         </dependency>
 
-        <!--WorldWind GeoServer Viewer module-->
+        <!--WorldWind GeoServer Explorer module-->
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>worldwind-gs-explorer</artifactId>
@@ -367,6 +369,21 @@
                             </target>
                         </configuration>
                     </execution>
+                    <execution>
+                        <id>copy-webapp-explorer</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <target>
+                                <!-- copy the source distribution files to the webapp/data/www/explorer dir -->
+                                <copy todir="${webappSourceDirectory}/data/www/explorer" overwrite="true">
+                                    <fileset dir="${explorer.source.directory}" includes="**/**" />
+                                </copy>
+                            </target>
+                        </configuration>
+                    </execution>
                 </executions>
             </plugin>
             <!--            
@@ -506,8 +523,9 @@
                                  </goals>
                                  <configuration>
                                      <tasks>
-                                         <!-- Clean the test data between test runs-->
-                                         <delete dir="${project.build.directory}/data_dir" />
+                                        <!-- Clean the test data between test runs-->
+                                        <delete dir="${project.build.directory}/data_dir" />
+                                        
                                         <!-- copy the base, nasa and test distribution files -->
                                         <copy todir="${project.build.directory}/data_dir">
                                             <fileset dir="${data.config.directory}/${data.config.base}" includes="**/**" />
@@ -517,6 +535,11 @@
                                         </copy>
                                         <copy todir="${project.build.directory}/data_dir" overwrite="true">
                                             <fileset dir="${data.config.directory}/${data.config.test}" includes="**/**" />
+                                        </copy>
+                                        
+                                        <!-- copy the Explorer files -->
+                                        <copy todir="${project.build.directory}/data_dir/www/explorer" overwrite="true">
+                                            <fileset dir="${explorer.source.directory}" includes="**/**" />
                                         </copy>
                                      </tasks>
                                  </configuration>
@@ -973,6 +996,10 @@
                                         <copy todir="${project.build.directory}/data_dir" overwrite="true">
                                             <fileset dir="${data.config.directory}/${data.config.test}" includes="**/**" />
                                         </copy>
+                                        <!-- copy the Explorer files -->
+                                        <copy todir="${project.build.directory}/data_dir/www/explorer" overwrite="true">
+                                            <fileset dir="${explorer.source.directory}" includes="**/**" />
+                                        </copy>
                                     </tasks>
                                 </configuration>
                             </execution>                                                       
@@ -1272,6 +1299,10 @@
                                         </copy>
                                         <copy todir="${project.build.directory}/data_dir" overwrite="true">
                                             <fileset dir="${data.config.directory}/${data.config.test}" includes="**/**" />
+                                        </copy>
+                                        <!-- copy the Explorer files -->
+                                        <copy todir="${project.build.directory}/data_dir/www/explorer" overwrite="true">
+                                            <fileset dir="${explorer.source.directory}" includes="**/**" />
                                         </copy>
                                     </target>
                                 </configuration>
