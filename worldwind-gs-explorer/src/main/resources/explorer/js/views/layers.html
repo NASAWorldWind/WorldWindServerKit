@@ -146,6 +146,10 @@ This script renders the individual layer view model items in the Layers panel.
               css: { 'glyphicon-menu-down': $data.showDetails(), 'glyphicon-menu-right': !$data.showDetails() }"
                   style="position:absolute; top:0; right:0; margin-top: 5px; margin-right: 2px; cursor: pointer">
             </span>
+            <!--Goto button-->
+            <span class="glyphicon glyphicon-zoom-in"
+                  data-bind="visible: $data.selected, click: $root.onZoomToLayer"
+                  style="position:absolute; top:0; right:30px; margin-top: 5px; margin-right: 2px; cursor: pointer" >&nbsp</span>
             <!--Dragger handle-->
             <span class="drag-handle glyphicon glyphicon-menu-hamburger"
                   data-bind="visible: $data.selected"

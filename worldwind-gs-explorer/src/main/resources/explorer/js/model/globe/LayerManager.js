@@ -459,7 +459,7 @@ define([
              * to provide a view of the layer as complete as possible.
              * @param {Object} layer A layerViewModel that the user selected for zooming
              */
-            LayerManagerHelper.zoomToLayer = function (layer) {
+            LayerManager.prototype.zoomToLayer = function (layer) {
                 LayerManagerHelper.zoomToLayer(layer, this.globe);
             };
 
