@@ -134,7 +134,7 @@ define([
                 // Check if there are layers in the URL search string and enable them
                 this.setWmsLayersFromUrl();
 
-                this.sortLayers();
+                //this.sortLayers();
             };
 
 
@@ -851,6 +851,7 @@ define([
                                 }
                                 // Check if there are layers in the URL search string and enable them
                                 self.setWmsLayersFromUrl();
+                                self.sortLayers();
                             }
                         }
                     }
@@ -932,7 +933,8 @@ define([
                                     // Create a KmlFile object for the feature and add a RenderableLayer 
                                     new WorldWind.KmlFile(wfsFeatureUrl).then(wfsLayerGenerator.addLayer);
                                 }
-
+                                
+                                self.sortLayers();
                             }
                         }
                     }
