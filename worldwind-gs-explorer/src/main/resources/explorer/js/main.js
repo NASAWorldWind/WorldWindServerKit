@@ -20,19 +20,19 @@ requirejs.config({
     // Path mappings for the logical module names
     paths: {
         // Bootstrap responsive layout
-        'bootstrap': window.DEBUG ? 'libs/bootstrap/v3.3.6/bootstrap.min' : 'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min',
+        'bootstrap': window.DEBUG ? 'libs/bootstrap/v3.3.6/bootstrap' : 'libs/bootstrap/v3.3.6/bootstrap.min',
         // RequireJS plugin to wait for DOM ready
         'domReady': 'libs/require/domReady',
         // Dragula drag-n-drop library
         'dragula': 'libs/dragula/dragula',
         // Knockout Model-View-View Model
-        'knockout': window.DEBUG ? 'libs/knockout/knockout-3.4.0.debug' : 'https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.2/knockout-min',
+        'knockout': window.DEBUG ? 'libs/knockout/knockout-3.4.0.debug' : 'libs/knockout/knockout-3.4.0',
         // RequireJS plugin to load 'i18n!' prefixed modules
         'i18n': 'libs/require/i18n',
         // The ubuiqutious JQuery library
-        'jquery': window.DEBUG ? 'libs/jquery/jquery-2.1.3' : 'http://code.jquery.com/jquery-2.2.4.min',
+        'jquery': window.DEBUG ? 'libs/jquery/jquery-2.1.3' : 'libs/jquery/jquery-2.1.3.min',
         // JQuery UI elements
-        'jqueryui': window.DEBUG ? 'libs/jquery-ui/jquery-ui-1.11.4' : 'http://code.jquery.com/ui/1.12.1/jquery-ui.min',
+        'jqueryui': window.DEBUG ? 'libs/jquery-ui/jquery-ui-1.11.4' : 'libs/jquery-ui/jquery-ui-1.11.4.min',
         // JQuery UI based 'growl' messaging
         'jquery-growl': 'libs/jquery-plugins/growl/jquery.growl',
         // JQuery UI touch event support
@@ -40,7 +40,7 @@ requirejs.config({
         // MomentJS date/time library
         'milsymbol': 'libs/milsymbol/1.3.3/milsymbol',
         // MomentJS date/time library
-        'moment': window.DEBUG ? 'libs/moment/moment-2.14.1.min' : 'https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.20.1/moment.min',
+        'moment': window.DEBUG ? 'libs/moment/moment-2.14.1' : 'libs/moment/moment-2.14.1.min',
         // PaceJS progress bar library
         'pace': 'libs/pace/pace.min',
         // URL search param parsing
@@ -48,7 +48,7 @@ requirejs.config({
         // RequireJS plugin to load text/html files using the 'text!' prefixed modules
         'text': 'libs/require/text',
         // NASA WorldWind
-        'worldwind': window.DEBUG ? 'libs/webworldwind/v0.9.0/worldwind' : 'https://files.worldwind.arc.nasa.gov/artifactory/web/0.9.0/worldwind.min'
+        'worldwind': window.DEBUG ? 'libs/webworldwind/v0.9.0/worldwind' : 'libs/webworldwind/v0.9.0/worldwind.min'
     },
     // Increase the time to wait before giving up on loading a script to avoid timeout erros on slow 3G connections (default 7s)
     waitSeconds: 15,
@@ -128,7 +128,7 @@ require([
         // ----------------
         fixes.applyLibraryFixes();
         WorldWind.Logger.setLoggingLevel(WorldWind.Logger.LEVEL_WARNING);
-        if (window.DEBUG) {
+        if (true /*window.DEBUG*/) {
             // Use local resources
             WorldWind.configuration.baseUrl = WorldWind.WWUtil.currentUrlSansFilePart() + "/" + constants.WORLD_WIND_PATH;
         }
