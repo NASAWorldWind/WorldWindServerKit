@@ -16,26 +16,29 @@
  * @author Bruce Schubert
  */
 define([
+    'model/Constants',
     'worldwind'],
     function (
-        ww) {
+        constants) {
         "use strict";
         /**
          * @constructor
-         * @param {WorldWindow} worldWindow
+         * @param {Globe} globe
          * @returns {SkyBackgroundLayer}
          */
-        var SkyBackgroundLayer = function (worldWindow) {
+        var SkyBackgroundLayer = function (globe) {
            
             // Inherits from the basic Layer 
-            WorldWind.Layer.call(this, "Sky");
+            WorldWind.Layer.call(this, constants.LAYER_NAME_SKY);
+            
+            this.pickEnabled = false;
             
             // Store the WorldWindow canvas for doRender 
-            this.globeCanvas = $(worldWindow.canvas);
+            this.globeCanvas = $(globe.wwd.canvas);
             
             this.MIN_ALT = 100000;
             this.MAX_ALT = 1500000;
-            this.SKY_LIGHTNESS_FAR = 30;    // Dark Blue
+            this.SKY_LIGHTNESS_FAR = 25;    // Dark Blue
             this.SKY_LIGHTNESS_NEAR = 70;   // Sky Blue
             this.SKY_HUE = 205;             // Sky Blue
             this.SKY_SATURATION = 47;       // Sky Blue

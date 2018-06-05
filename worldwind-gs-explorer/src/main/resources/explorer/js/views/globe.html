@@ -1,0 +1,115 @@
+<div id="globe-canvas-overlay">
+    <!-- Globe overlay view fragment -->
+    <div id="globe-marker-controls" class="non-interactive" style="position: absolute; top: 0; right: 0;">
+        <!-- 
+        Marker Buttons 
+        -->
+        <div id="globe-buttons" class="interactive"
+             style='float: right; margin-top: 30px; max-width: 100px'>
+            <span class="btn-group" style="float: left">
+                <!-- Add Marker button and palette -->
+                <button type="button"
+                        class="btn btn-primary btn-sm globe-button"
+                        style="padding-top: 0; padding-bottom: 0; padding-right: 0"
+                        data-bind="click: armDropMarker">
+                    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                    <img width="28px" height="28px;"
+                         data-bind="attr:{src: selectedMarkerTemplate().imageSource}"/>
+                </button>
+                <!-- Marker palette dropdown button-->
+                <button type="button"
+                        class="btn btn-primary btn-sm globe-button dropdown-toggle"
+                        data-toggle="dropdown"
+                        aria-haspopup="true">
+                    <span class="caret"></span>
+                    <span class="sr-only">Markers Dropdown</span>
+                </button>
+                <!-- Dropdown list bound the 'markerPalette' observableArray -->
+                <ul id="marker-palette"
+                    class="dropdown-menu"
+                    style="left: initial; right: 0; min-width: 30px"
+                    data-bind="foreach: markerPalette">
+                    <li data-bind="click: $parent.selectedMarkerTemplate">
+                        <a><img width="28px" height="28px;"
+                                data-bind="attr:{src: $data.imageSource}"/></a>
+                    </li>
+                </ul>
+            </span>
+            <span class="btn-group" style="float: left">
+                <!-- Add Tactical Symbol button and palette -->
+                <button type="button"
+                        class="btn btn-primary btn-sm globe-button"
+                        style="padding-top: 0; padding-bottom: 0; padding-right: 0"
+                        data-bind="click: armDropSymbol">
+                    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                    <img width="28px" height="28px;"
+                         data-bind="attr:{src: selectedSymbolTemplate().imageSource}"/>
+                </button>
+                <!-- Tactical Symbol palette dropdown button-->
+                <button type="button"
+                        class="btn btn-primary btn-sm globe-button dropdown-toggle"
+                        data-toggle="dropdown"
+                        aria-haspopup="true">
+                    <span class="caret"></span>
+                    <span class="sr-only">Symbols Dropdown</span>
+                </button>
+                <!-- Tactical Symbol dropdown list bound the 'symbolPalette' observableArray -->
+                <ul id="symbol-palette"
+                    class="dropdown-menu"
+                    style="left: initial; right: 0; min-width: 30px"
+                    data-bind="foreach: symbolPalette">
+                    <li data-bind="click: $parent.selectedSymbolTemplate">
+                        <a><img width="28px" height="28px;"
+                                data-bind="attr:{src: $data.imageSource}"/></a>
+                    </li>
+                </ul>          
+            </span>                           
+        </div>
+    </div>
+    <!--
+    Time Controls
+    -->
+    <div id=globe-time-controls" class="col-xs-12 non-interactive">
+        <div class="row">
+            <!--Create a shallow div along the bottom edge of the globe-->
+            <div class="interactive" style="position: absolute; bottom: 0; width: 100%">
+
+                <!--Date/Time Buttons-->
+                <div id="timeControlButtons"
+                     style="width: 166px; margin-right: auto; margin-left: auto">
+                    <div class="btn-group btn-group-sm interactive" role="group"
+                         style="float:bottom"
+                         aria-label="time controls">
+                        <button id="time-fast-backward" type="button"
+                                class="btn btn-default repeatButton">
+                            <span class="glyphicon glyphicon-fast-backward"
+                                  aria-hidden="true"></span>
+                        </button>
+                        <button id="time-step-backward" type="button"
+                                class="btn btn-default repeatButton">
+                            <span class="glyphicon glyphicon-step-backward"
+                                  aria-hidden="true"></span>
+                        </button>
+                        <button id="time-reset" type="button" class="btn btn-default"
+                                data-bind="click: onTimeReset, css:{active: autoUpdateTime}">
+                            <span class="glyphicon glyphicon-time" aria-hidden="true"></span>
+                        </button>
+                        <button id="time-step-forward" type="button"
+                                class="btn btn-default repeatButton">
+                            <span class="glyphicon glyphicon-step-forward"
+                                  aria-hidden="true"></span>
+                        </button>
+                        <button id="time-fast-forward" type="button"
+                                class="btn btn-default repeatButton">
+                            <span class="glyphicon glyphicon-fast-forward"
+                                  aria-hidden="true"></span>
+                        </button>
+                    </div>
+                </div>
+                <!--Date/Time Slider-->
+                <div id="timeControlSlider"
+                     style="width: 166px; margin-right: auto; margin-left: auto"></div>
+            </div>
+        </div>
+    </div>
+</div>

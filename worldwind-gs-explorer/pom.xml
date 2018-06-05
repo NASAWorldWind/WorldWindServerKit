@@ -154,12 +154,16 @@
             </resource>        
             <resource>
                 <!--
-                Include GeoServerApplication.properties, html and javascript files.
+                Include GeoServerApplication.properties, but not html and javascript files.
                 -->
                 <directory>${basedir}/src/main/resources</directory>
                 <includes>
                     <include>**/*</include>
                 </includes>
+                <excludes>
+                    <!--The Explorer will be copied into the distibution via an assembly-->
+                    <exclude>explorer*/*</exclude>
+                </excludes>
             </resource>
         </resources>
     </build>    

@@ -12,6 +12,7 @@
         <componentDescriptor>src/assembly/gdal-win64.xml</componentDescriptor>
         <componentDescriptor>src/assembly/data-base.xml</componentDescriptor>
         <componentDescriptor>src/assembly/data-nasa.xml</componentDescriptor>
+        <componentDescriptor>src/assembly/explorer.xml</componentDescriptor>
     </componentDescriptors>    
     <fileSets>
         <fileSet>

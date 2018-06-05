@@ -1,0 +1,148 @@
+<div id="info">
+    <!-- Info View (bound to the InfoViewModel) -->
+    <ui id="info-tabs" class="nav nav-tabs" role="tablist">
+        <li class="active"><a data-toggle="tab" href="#info-about" aria-controls="info-about" role="tab">
+                <span class="glyphicon glyphicon-info-sign" aria-hidden="true"
+                      style="padding-top:4px; padding-bottom:4px"></span> About</a></li>
+        <li><a data-toggle="tab" href="#info-location" aria-controls="info-location" role="tab">
+                <span class="glyphicon glyphicon-globe" aria-hidden="true"
+                      style="padding-top:4px; padding-bottom:4px"></span> Location</a></li>
+        <li><a data-toggle="tab" href="#info-selected" aria-controls="info-selected" role="tab">
+                <span class="glyphicon glyphicon-map-marker" aria-hidden="true"
+                      style="padding-top:4px; padding-bottom:4px"></span> Item</a></li>
+    </ui>
+
+    <div class="tab-content">
+        <div id="info-about" class="tab-pane fade in active">
+            <div id="info-about-panel" class="panel panel-default" style="height: 100%;">
+                <div class="row">
+                    <div class="col-md-4 panel panel-default">
+                        <div class="panel-heading">
+                            <h4 class="panel-title">WorldWind Explorer</h4>
+                        </div>
+                        <div class="panel-body">
+                            <!--<div class="panel-body" style="height: calc(100% - 45px); overflow-y: scroll;">-->
+                            <p>The WorldWind Explorer was created by <a href="https://github.com/emxsys" target="_blank">Bruce Schubert</a> and is 
+                                <i><a href="https://worldwind.arc.nasa.gov/web/" target="_blank">powered by ESA-NASA Web WorldWind</a></i> 
+                                which provides the 3D Earth visualization with WMS maps, imagery and terrain. 
+                                You are encouraged to use the Explorer as an online resource or use its 
+                                <a href="https://github.com/NASAWorldWindResearch/WorldWindExplorer" target="_blank">source code</a> 
+                                to build your own 3D globe application. 
+                                The <a href="http://worldwind.earth" target="_blank">User Guide and developer documentation</a> 
+                                are available online.</p>
+                            <p>Copyright © 2016-2018, Bruce Schubert. <a href="https://opensource.org/licenses/MIT" target="_blank">MIT License</a>.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4 panel panel-default">
+                        <div class="panel-heading">
+                            <h4 class="panel-title">Acknowledgments</h4>
+                        </div>
+                        <div class="panel-body">                
+                            <h5>Open Source Libraries</h5>
+                            <ul class="small">
+                                <li><a href="https://worldwind.arc.nasa.gov/web">ESA-NASA WorldWind</a> provides the 3D virtual globe</li>
+                                <li><a href="http://knockoutjs.com">KnockoutJS</a> provides the Model-View-View Model (MVVM) architecture</li>
+                                <li><a href="https://getbootstrap.com/docs/3.3/">Bootstrap</a> provides the responsive styling</li>
+                                <li><a href="https://jquery.com/">JQuery</a> is used to dynamically load DOM view fragments</li>
+                                <li><a href="https://jqueryui.com/">JQuery UI</a> adds UI elements</li>
+                                <li><a href="https://github.com/bevacqua/dragula">Dragula</a> adds drag-n-drop support</li>
+                                <li><a href="https://nathancahill.github.io/Split.js/">SplitJS</a> adds window splitters to the main layout</li>
+                                <li><a href="https://momentjs.com/">Moment</a> provides date/time parsing and manipulation</li>
+                                <li><a href="http://requirejs.org/">RequireJS</a> is a JavaScript file and module loader used improve the speed and quality of the code</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-md-4 panel panel-default">
+                        <div class="panel-heading">
+                            <h4 class="panel-title">Disclaimer</h4>
+                        </div>
+                        <div class="panel-body">                
+                            <p class="small">THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, 
+                                INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR 
+                                PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE 
+                                FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR 
+                                OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
+                                DEALINGS IN THE SOFTWARE.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="info-location" class="tab-pane fade">
+            <div id="info-location-panel" class="panel panel-default" style="height: 100%;">
+                <div class="row">
+                    <div class="col-md-4 col-sm-6 panel panel-default">
+                        <div class="panel-heading">
+                            <h4 class="panel-title">Crosshairs</h4>
+                        </div>
+                        <div class="panel-body">
+                            <dl class="dl-horizontal ">
+                                <dt>Latitude:</dt>
+                                <dd>
+                                    <span data-bind="text: formatter.formatDMSLatitude(globe.viewpoint().target.latitude, 0)"></span>
+                                    &emsp;<i>(<span data-bind="text: formatter.formatDecimalDegreesLat(globe.viewpoint().target.latitude, 4)"></span>)</i>
+                                </dd>
+                                <dt>Longitude:</dt>
+                                <dd>
+                                    <span data-bind="text: formatter.formatDMSLongitude(globe.viewpoint().target.longitude, 0)"></span>
+                                    &emsp;<i>(<span data-bind="text: formatter.formatDecimalDegreesLon(globe.viewpoint().target.longitude, 4)"></span>)</i></dd>
+                                <dt>Elevation</dt>
+                                <dd>
+                                    <span data-bind="text: formatter.formatAltitude(globe.viewpoint().target.elevation, 'm')"></span>
+                                    &emsp;<i>(<span data-bind="text: formatter.formatAltitude(globe.viewpoint().target.elevation, 'ft')"></span>)</i>
+                                </dd>
+                            </dl>  
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-sm-6 panel panel-default">
+                        <div class="panel-heading">
+                            <h4 class="panel-title">Eye/Camera</h4>
+                        </div>
+                        <div class="panel-body">
+                            <dl class="dl-horizontal ">
+                                <dt>Latitude:</dt>
+                                <dd>
+                                    <span data-bind="text: formatter.formatDecimalMinutesLat(globe.viewpoint().eye.latitude, 3)"></span>
+                                    &emsp;<i>(<span data-bind="text: formatter.formatDecimalDegreesLat(globe.viewpoint().eye.latitude, 4)"></span>)</i>
+                                </dd>
+                                <dt>Longitude:</dt>
+                                <dd>
+                                    <span data-bind="text: formatter.formatDecimalMinutesLon(globe.viewpoint().eye.longitude, 3)"></span>
+                                    &emsp;<i>(<span data-bind="text: formatter.formatDecimalDegreesLon(globe.viewpoint().eye.longitude, 4)"></span>)</i></dd>
+                                <dt>Altitude:</dt>
+                                <dd>
+                                    <span data-bind="text: formatter.formatAltitude(globe.viewpoint().eye.altitude, 'm')"></span>
+                                    &emsp;<i>(<span data-bind="text: formatter.formatAltitude(globe.viewpoint().eye.altitude, 'ft')"></span>)</i>
+                                </dd>
+                            </dl>                          
+                        </div>
+                    </div>
+                    <div class="col-md-4  col-sm-6 panel panel-default">
+                        <div class="panel-heading">
+                            <h4 class="panel-title">Terrain</h4>
+                        </div>
+                        <div class="panel-body">
+                            <dl class="dl-horizontal ">
+
+                                <dt>Aspect:</dt>
+                                <dd><span data-bind="text: formatter.formatAngle360(globe.viewpoint().target.aspect, 0)"></span></dd>
+                                <dt>Slope:</dt>
+                                <dd><span data-bind="text: formatter.formatPercentSlope(globe.viewpoint().target.slope, 1)"></span> 
+                                    &emsp;<i>(<span data-bind="text: formatter.formatAngle360(globe.viewpoint().target.slope, 2)"></span>)</i>
+                                </dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="info-selected" class="tab-pane fade">
+            <div class="panel panel-default" style="height: 100%; overflow-y: hidden;" data-bind="template: {
+                                        if: viewTemplateName()!==null,
+                                        name: viewTemplateName,
+                                        data: selectedItem
+                                        }">
+            </div>
+        </div>
+    </div>
+</div>

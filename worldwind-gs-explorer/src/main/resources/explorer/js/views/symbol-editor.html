@@ -1,0 +1,61 @@
+<div id="symbol-editor">
+    <label for="name">Name</label>
+    <input type="text" name="name" id="name" class="text ui-widget-content ui-corner-all"
+           data-bind="value: symbol().name">
+
+    <!--    <div class="dropdown">
+            <select data-bind="options: schemeNames, value: selectedSchemeName"></select>        
+        </div>     -->
+    <div class="dropdown">
+        <select data-bind="options: schemeOptions, 
+                           optionsText: 'name',
+                           value: selectedScheme,
+                           optionsCaption: '- Scheme...'"></select>        
+    </div>     
+    <div class="dropdown">
+        <select data-bind="options: affiliationOptions, 
+                           optionsText: 'name',
+                           value: selectedAffiliation,
+                           optionsCaption: '* Identity...'">
+        </select>        
+    </div>     
+    <div class="dropdown">
+        <select data-bind="options: statusOptions, 
+                           optionsText: 'name',
+                           value: selectedStatus,
+                           optionsCaption: '* Status...'">
+        </select>        
+    </div>     
+    <div class="dropdown">
+        <select data-bind="options: dimensionOptions, 
+                           optionsText: 'name',
+                           value: selectedDimension,
+                           optionsCaption: 'Dimension...'">
+        </select>        
+    </div>     
+    <div class="dropdown">
+        <select data-bind="options: functionOptions, 
+                           optionsText: 'name',
+                           value: selectedFunction,
+                           optionsCaption: 'Function...'">
+
+        </select>        
+    </div>     
+    <div class="dropdown">
+        <select data-bind="options: modifierOptions1, 
+                           optionsText: 'name',
+                           value: selectedModifier1,
+                           optionsCaption: 'Modifier 1...'">
+
+        </select>        
+    </div>     
+    <div class="dropdown">
+        <select data-bind="options: modifierOptions2, 
+                           optionsText: 'name',
+                           value: selectedModifier2,
+                           optionsCaption: 'Modifier 2...'">
+
+        </select>        
+    </div>     
+
+</div>

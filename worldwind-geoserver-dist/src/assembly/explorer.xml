@@ -1,0 +1,12 @@
+<component>
+    <fileSets>
+        <fileSet>
+             <!-- the data directory--> 
+            <directory>../worldwind-gs-explorer/src/main/resources/explorer</directory>
+            <outputDirectory>worldwind-geoserver-${project.version}/data_dir/www/explorer</outputDirectory>
+            <includes>
+                <include>**/*</include>
+            </includes>
+        </fileSet>
+    </fileSets>
+</component>
