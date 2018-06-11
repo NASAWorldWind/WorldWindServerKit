@@ -89,6 +89,14 @@ the test suite to point to the server.
  - The server instance must have the internal [test data and workspaces](https://drive.google.com/drive/folders/0Bxjx1De3fE2KemZQc1NPMmhWaVU) installed.
 
 
+## Debugging
+To allow a debugger to be attached to an instance of WWSK, add or uncomment the following code block 
+in env.sh right after the existing `DEBUG` variable assignment.
+```
+# Allow Java JPDA debugger to be attached to this process via SocketAttach with transport dt_socket on port 8000
+DEBUG=${DEBUG}" -Xdebug -Xrunjdwp:transport=dt_socket,address=8000,server=y,suspend=n "
+```
+
 ## Running
 
 ### Option 1. Deploy a standalone WWSK distribution
