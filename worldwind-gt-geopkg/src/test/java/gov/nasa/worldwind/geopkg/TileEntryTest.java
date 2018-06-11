@@ -124,6 +124,7 @@ public class TileEntryTest {
         assertEquals("Expected size", tileMatricies.size(), instance.tileMatricies.size());
         assertTrue(Arrays.equals(tileMatricies.toArray(), instance.tileMatricies.toArray()));
     }    
+    
     /**
      * Test of getTileMatricies method, of class TileEntry.
      */
@@ -135,7 +136,7 @@ public class TileEntryTest {
         List<TileMatrix> tileMatricies = instance.getTileMatricies();
 
         assertNotNull(tileMatricies);
-        assertEquals("Expected size", MAX_ZOOM_LEVEL + 1, tileMatricies.size());
+        assertTrue("Expected size", tileMatricies.size() > 0);
     }
 
     /**
@@ -145,7 +146,7 @@ public class TileEntryTest {
     public void testGetTileMatrix_for_each_zoom_level() {
         assumeNotNull(reader);  // Skip test if not found
         TileEntry instance = reader.getTileset(COVERAGE_NAME);
-        for (int zoomLevel = 0; zoomLevel <= 16; zoomLevel++) {
+        for (int zoomLevel = MIN_ZOOM_LEVEL; zoomLevel <= MAX_ZOOM_LEVEL; zoomLevel++) {
 
             TileMatrix result = instance.getTileMatrix(zoomLevel);
 

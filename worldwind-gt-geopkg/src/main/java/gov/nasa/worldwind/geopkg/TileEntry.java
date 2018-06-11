@@ -102,17 +102,26 @@ public class TileEntry extends Entry {
      * at that zoom level.
      *
      * @param zoomLevel
-     * @return a TileMatrix for the given zoom level
+     * @return a TileMatrix for the given zoom level or null if not found
      * @throws IllegalArgumentException if the zoom level greater than the
      * tileset's max zoom level
      */
     public TileMatrix getTileMatrix(int zoomLevel) {
-        if (zoomLevel < 0 || zoomLevel >= tileMatricies.size()) {
+        if (zoomLevel < minZoom || zoomLevel > maxZoom) {
             throw new IllegalArgumentException(
-                    String.format("The specified zoom level (%d) is not found in the tileMatricies (size: %d).",
-                            zoomLevel, tileMatricies.size()));
+                    String.format("The specified zoom level (%d) is out of range (min: %d, max: %dd).",
+                            zoomLevel, minZoom, maxZoom));
         }
-        return this.tileMatricies.get(zoomLevel);
+        // The tile matrice can be out of sync with raster data, for example,
+        // for a raster gpkg with a single zoom level, the tile matrix set 
+        // could contain a complete from zero to max zoom, or just the single
+        // zoom level.
+        for (TileMatrix matrix : tileMatricies) {
+            if (matrix.zoomLevel== zoomLevel) {
+                return matrix;
+            }
+        }
+        return null;
     }
 
     /**
