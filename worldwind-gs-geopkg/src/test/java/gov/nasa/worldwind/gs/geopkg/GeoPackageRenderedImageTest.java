@@ -136,7 +136,7 @@ public class GeoPackageRenderedImageTest extends WMSTestSupport {
 
         // Prepare a WMS map request matching the OpenLayers MapPreview at 1:1M scale
         BufferedImage img = getHttpServletResponse(BBOX_1TO1M, MIME_TYPE, JOG);
-        //ImageIO.write(img, "jpg", DataUtilities.urlToFile(getClass().getResource("agc-JOG-new.jpg")));
+        //ImageIO.write(img, "jpg", DataUtilities.urlToFile(getClass().getResource("agc-JOG.jpg")));
         ImageAssert.assertEquals(DataUtilities.urlToFile(getClass().getResource("agc-JOG.jpg")), img, 250);
     }
 
@@ -186,7 +186,8 @@ public class GeoPackageRenderedImageTest extends WMSTestSupport {
     private BufferedImage getHttpServletResponse(ReferencedEnvelope bbox, String mimeType, QName coverageName) throws Exception {
         String layer = getLayerId(coverageName);
         String request = "wms?service=wms&request=GetMap&version=1.1.1"
-                + "&layers=" + layer + "&styles&transparent=true"
+                + "&layers=" + layer 
+                + "&styles&transparent=false"
                 + "&width=" + WIDTH + "&height=" + HEIGHT
                 + "&format=" + mimeType + "&srs=EPSG:4326"
                 + "&bbox=" + bbox.getMinX() + "," + bbox.getMinY() + "," + bbox.getMaxX() + "," + bbox.getMaxY();
