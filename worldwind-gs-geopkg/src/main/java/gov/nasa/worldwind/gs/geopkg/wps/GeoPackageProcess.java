@@ -2,15 +2,15 @@ package gov.nasa.worldwind.gs.geopkg.wps;
 
 import com.vividsolutions.jts.geom.Envelope;
 
-import gov.nasa.worldwind.geopkg.Entry;
-import gov.nasa.worldwind.geopkg.FeatureEntry;
-import gov.nasa.worldwind.geopkg.GeoPackage;
-import gov.nasa.worldwind.geopkg.TileEntry;
-import gov.nasa.worldwind.geopkg.wps.GeoPackageProcessRequest;
-import gov.nasa.worldwind.geopkg.wps.GeoPackageProcessRequest.FeaturesLayer;
-import gov.nasa.worldwind.geopkg.wps.GeoPackageProcessRequest.Layer;
-import gov.nasa.worldwind.geopkg.wps.GeoPackageProcessRequest.LayerType;
-import gov.nasa.worldwind.geopkg.wps.GeoPackageProcessRequest.TilesLayer;
+import org.geotools.geopkg.Entry;
+import org.geotools.geopkg.FeatureEntry;
+import org.geotools.geopkg.GeoPackage;
+import org.geotools.geopkg.TileEntry;
+import org.geotools.geopkg.wps.GeoPackageProcessRequest;
+import org.geotools.geopkg.wps.GeoPackageProcessRequest.FeaturesLayer;
+import org.geotools.geopkg.wps.GeoPackageProcessRequest.Layer;
+import org.geotools.geopkg.wps.GeoPackageProcessRequest.LayerType;
+import org.geotools.geopkg.wps.GeoPackageProcessRequest.TilesLayer;
 
 import gov.nasa.worldwind.gs.geopkg.GeoPackageGetMapOutputFormat;
 

@@ -5,7 +5,7 @@
  */
 package gov.nasa.worldwind.gs.geopkg;
 
-import gov.nasa.worldwind.geopkg.GeoPkgDataStoreFactory;
+import org.geotools.geopkg.GeoPkgDataStoreFactory;
 
 import org.geoserver.data.DataStoreFactoryInitializer;
 import org.geoserver.platform.GeoServerResourceLoader;

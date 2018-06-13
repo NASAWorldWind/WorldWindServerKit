@@ -3,7 +3,7 @@ package gov.nasa.worldwind.gs.geopkg;
 import org.geoserver.data.DataStoreFactoryInitializer;
 import org.geoserver.platform.GeoServerExtensions;
 import org.geoserver.platform.GeoServerResourceLoader;
-import gov.nasa.worldwind.geopkg.GeoPkgDataStoreFactory;
+import org.geotools.geopkg.GeoPkgDataStoreFactory;
 import org.junit.Test;
 import org.springframework.web.context.WebApplicationContext;
 import org.vfny.geoserver.util.DataStoreUtils;

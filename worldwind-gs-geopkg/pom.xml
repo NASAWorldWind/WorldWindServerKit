@@ -127,6 +127,12 @@ application directory.
         <dependency>
             <groupId>org.geoserver.web</groupId>
             <artifactId>gs-web-core</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.geotools</groupId>
+                    <artifactId>gt-geopkg</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency> 
         <dependency>
             <groupId>org.geoserver</groupId>
