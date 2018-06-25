@@ -11,6 +11,10 @@ distribution and implementation.
 
 ## License
 
+Copyright 2004-2006, 2008, 2017, United States Government, as represented by the Administrator of the National Aeronautics and Space Administration. All rights reserved.
+
+The NASA WorldWind Server Kit (WWSK) framework is licensed under the Apache License, Version 2.0 (the "License"); you may not use this application except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0.
+
 GeoServer is licensed under the [GPL Version 2](https://www.gnu.org/licenses/gpl-2.0.html). 
 
 ## Building
