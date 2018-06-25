@@ -11,6 +11,8 @@ distribution and implementation.
 
 ## License
 
+Copyright 2004-2006, 2008, 2017, United States Government, as represented by the Administrator of the National Aeronautics and Space Administration. All rights reserved.
+ 
 GeoServer is licensed under the [GPL Version 2](https://www.gnu.org/licenses/gpl-2.0.html). 
 
 ## Building
