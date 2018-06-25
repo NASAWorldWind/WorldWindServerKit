@@ -4,7 +4,7 @@
     <parent>
         <groupId>gov.nasa.worldwind.server</groupId>
         <artifactId>worldwind-serverkit</artifactId>
-        <version>0.6.0-SNAPSHOT</version>
+        <version>0.6.0</version>
     </parent>    
     <artifactId>worldwind-geoserver</artifactId>
     <packaging>war</packaging>
@@ -84,6 +84,12 @@
         <dependency>
             <groupId>org.geoserver.web</groupId>
             <artifactId>gs-web-core</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.geotools</groupId>
+                    <artifactId>gt-geopkg</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.geoserver.web</groupId>

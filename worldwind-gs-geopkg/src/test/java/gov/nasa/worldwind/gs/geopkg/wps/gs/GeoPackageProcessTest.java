@@ -10,11 +10,11 @@ import org.geoserver.data.test.SystemTestData;
 import org.geoserver.wps.WPSTestSupport;
 import org.geotools.data.DataUtilities;
 import org.geotools.data.simple.SimpleFeatureReader;
-import gov.nasa.worldwind.geopkg.FeatureEntry;
-import gov.nasa.worldwind.geopkg.GeoPackage;
-import gov.nasa.worldwind.geopkg.TileEntry;
-import gov.nasa.worldwind.geopkg.TileMatrix;
-import gov.nasa.worldwind.geopkg.TileReader;
+import org.geotools.geopkg.FeatureEntry;
+import org.geotools.geopkg.GeoPackage;
+import org.geotools.geopkg.TileEntry;
+import org.geotools.geopkg.TileMatrix;
+import org.geotools.geopkg.TileReader;
 import org.junit.Ignore;
 import org.junit.Test;
 

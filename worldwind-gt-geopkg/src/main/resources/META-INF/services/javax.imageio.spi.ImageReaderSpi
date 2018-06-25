@@ -1,1 +1,1 @@
-gov.nasa.worldwind.geopkg.mosaic.GeoPackageImageReaderSpi
+org.geotools.geopkg.mosaic.GeoPackageImageReaderSpi

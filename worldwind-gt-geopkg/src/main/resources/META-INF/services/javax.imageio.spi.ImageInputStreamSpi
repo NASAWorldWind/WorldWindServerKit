@@ -1,1 +1,1 @@
-gov.nasa.worldwind.geopkg.ByteArrayImageInputStreamSpi
+org.geotools.geopkg.ByteArrayImageInputStreamSpi

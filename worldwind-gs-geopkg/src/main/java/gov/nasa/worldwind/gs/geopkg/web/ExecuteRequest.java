@@ -17,7 +17,7 @@
  */
 package gov.nasa.worldwind.gs.geopkg.web;
 
-import gov.nasa.worldwind.geopkg.wps.GeoPackageProcessRequest;
+import org.geotools.geopkg.wps.GeoPackageProcessRequest;
 import java.io.Serializable;
 
 /**
