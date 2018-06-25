@@ -21,7 +21,7 @@ import org.geoserver.wms.WMSMapContent;
 import org.geoserver.wms.WMSTestSupport;
 import org.geoserver.wms.WebMap;
 import org.geoserver.wms.map.RawMap;
-import gov.nasa.worldwind.geopkg.GeoPackage;
+import org.geotools.geopkg.GeoPackage;
 import org.junit.Before;
 import org.junit.Test;
 

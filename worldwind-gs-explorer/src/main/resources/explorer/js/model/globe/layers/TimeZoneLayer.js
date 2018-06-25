@@ -57,13 +57,31 @@ define(['model/Constants',
             // The Open Natural Earth 10m time zones have been simplified to .05deg resolution
             // See: http://www.naturalearthdata.com/downloads/10m-cultural-vectors/timezones/
             ShapefileLayer.call(this,
-                ww.WWUtil.currentUrlSansFilePart() + "/data/timezones/ne_05deg_time_zones.shp",
+                ww.WWUtil.currentUrlSansFilePart() + "/data/timezones/ne_05deg_time_zones_clipped.shp",
                 constants.LAYER_NAME_TIME_ZONES, 
                 shapeConfigurationCallback);
         };
 
         // Inherit the ShapefileLayer methods
         TimeZoneLayer.prototype = Object.create(ShapefileLayer.prototype);
+
+        
+        /**
+         * HACK: This method is a performance hack to mitigate an issue that affects
+         * rendering performance of the timezone shapefile when tilted in a wide canvas.
+         * See issue #39 https://github.com/NASAWorldWindResearch/WorldWindExplorer/issues/39
+         * 
+         * This workaround suppresses the display of the timezones when tilted past 75 degrees.
+         * @param {type} dc
+         * @returns {undefined}
+         */
+        TimeZoneLayer.prototype.render = function(dc) {
+            if (dc.navigatorState.tilt > 75) {
+                return;
+            }
+            ShapefileLayer.prototype.render.call(this, dc);
+        };
+
 
         return TimeZoneLayer;
     }

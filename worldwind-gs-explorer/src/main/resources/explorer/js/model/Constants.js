@@ -23,22 +23,25 @@ define([],
              * Base URL for WMT application images. (Do not use a relative path.)
              */
             IMAGE_PATH: "js/model/images/",
-            /**
-             * Layer categories
-             */
+            //
+            // Layer categories
+            //
             LAYER_CATEGORY_BACKGROUND: "Background",
             LAYER_CATEGORY_BASE: "Base",
             LAYER_CATEGORY_DATA: "Data",
             LAYER_CATEGORY_EFFECT: "Effect",
             LAYER_CATEGORY_OVERLAY: "Overlay",
             LAYER_CATEGORY_WIDGET: "Widget",
-            /**
-             * The display name for the layer that displays markers.
-             */
+            //
+            // Layer Names
+            //
+            LAYER_NAME_ATMOSPHERE: "Atmosphere",
             LAYER_NAME_COMPASS: "Compass",
             LAYER_NAME_MARKERS: "Markers",
+            LAYER_NAME_TACTICAL_SYMBOLS: "Tactical Symbols",
             LAYER_NAME_RETICLE: "Crosshairs",
             LAYER_NAME_SKY: "Sky",
+            LAYER_NAME_STARS: "Stars",
             LAYER_NAME_TIME_ZONES: "Time Zones",
             LAYER_NAME_VIEW_CONTROLS: "Controls",
             LAYER_NAME_WIDGETS: "Widgets",
@@ -48,9 +51,9 @@ define([],
             MARKER_LABEL_PLACE: "markerLabelPlace",
             /**
              * The maximum range that the globe can be zoomed out to.
-             * @default 20,000,000 meters.
+             * @default 40,000,000 meters.
              */
-            NAVIGATOR_MAX_RANGE: 20000000,
+            NAVIGATOR_MAX_RANGE: 40000000,
             PROJECTION_NAME_3D: "3D",
             PROJECTION_NAME_EQ_RECT: "Equirectangular",
             PROJECTION_NAME_MERCATOR: "Mercator",
@@ -64,6 +67,7 @@ define([],
              * The local storage key for markers.
              */
             STORAGE_KEY_MARKERS: "markers",
+            STORAGE_KEY_TACTICAL_SYMBOLS: "tactical_symbols",
 
             /**
              * Base URL for Web World Wind SDK. (Do not use a relative path.)

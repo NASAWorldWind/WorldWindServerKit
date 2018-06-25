@@ -1,1 +1,1 @@
-gov.nasa.worldwind.geopkg.GeoPkgDataStoreFactory
+org.geotools.geopkg.GeoPkgDataStoreFactory

@@ -1,0 +1,69 @@
+<!--
+Weather View (bound to WeatherViewModel)
+-->
+<div id="weather" class="tab-pane" role="tabpanel">
+    <div class="section-heading">
+        <h4 class="sub-header">
+            <span class="glyphicon glyphicon-cloud" aria-hidden="true"
+                  style="padding-right:5px;"></span>
+            Weather
+            <a class="section-toggle" data-toggle="collapse" href="#weather-body"></a>
+        </h4>
+    </div>
+    <div id="weather-body" class="section-body collapse in">
+        <!-- Bind the list to the 'weatherScouts' observableArray -->
+        <div data-bind="template: { name: 'weather-scout-template', foreach: weatherScouts}"></div>
+    </div>
+</div> 
+
+<!--
+Weather Scout Template
+This script renders the individual weather scout view model items in the Weather panel.
+-->
+<script type="text/html" id="weather-scout-template">
+    <div class="btn-group btn-block">
+        <button type="button" class="btn btn-default"
+                style="display: block; width: 70%"
+                data-bind="click: $root.gotoWeatherScout">
+            <span data-bind="text: $data.name"></span>
+            <br/>
+            <span data-bind="text: $data.location"></span>
+        </button>
+        <!-- Edit Button -->
+        <button type="button" class="btn btn-default glyphicon glyphicon-pencil"
+                data-bind="click: $parent.editWeatherScout"></button>
+        <!-- Delete Button -->
+        <button type="button" class="btn btn-default glyphicon glyphicon-trash"
+                data-bind="click: $parent.removeWeatherScout"></button>
+    </div>
+</script>
+
+<!--
+Weather Scout View Template
+This script renders the selected weather scout object the info panel.
+-->
+<script type="text/html" id="weather-scout-view-template">
+    <!-- ko if: $data -->
+    <div id="weather-scout-output" class="panel panel-default" style="height: 100%;">
+        <div class="panel-heading">
+            <h1 class="panel-title">
+                <span class="glyphicon glyphicon-cloud" aria-hidden="true"
+                      style="padding-top:4px; padding-bottom:4px"></span>
+                <span data-bind="text: $data.name()"></span>
+            </h1>
+        </div>
+        <div class="panel-body" style="height: calc(100% - 45px); overflow-y: scroll;">
+            <div>
+                <h5>Air Temperature</h5>
+                <!--Custom knockout binding-->
+                <div data-bind="visualizeTemperature: $data" style="padding-right: 15px"></div>
+            </div>
+            <div>
+                <h5>Relative Humidity</h5>
+                <!--Custom knockout binding-->
+                <div data-bind="visualizeHumidity: $data" style="padding-right: 15px"></div>
+            </div>
+        </div>
+    </div>
+    <!-- /ko -->
+</script>  

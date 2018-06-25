@@ -25,11 +25,14 @@ define([
         "use strict";
         var Removable = {
             remove: function () {
+                var success = false;
                 if (this.isRemovable()) {
-                    if (this.removeMe()) {
+                    success = this.removeMe();
+                    if (success) {
                         this.fire(events.EVENT_OBJECT_REMOVED, this);
                     }
                 }
+                return success;
             },
             /**
              * Adds the the movable capabilities to the given object.

@@ -4,7 +4,7 @@
     <parent>
         <groupId>gov.nasa.worldwind.server</groupId>
         <artifactId>worldwind-serverkit</artifactId>
-        <version>0.5.0</version>
+        <version>0.6.0</version>
     </parent>    
     <artifactId>worldwind-geoserver</artifactId>
     <packaging>war</packaging>
@@ -76,12 +76,20 @@
         <data.config.nasa>nasa</data.config.nasa>
         <data.config.test>test</data.config.test>
         <data.config.directory>${project.basedir}/../resources/data</data.config.directory>
+        
+        <explorer.source.directory>${project.basedir}/../worldwind-gs-explorer/src/main/resources/explorer</explorer.source.directory>
     </properties>    
     
     <dependencies>
         <dependency>
             <groupId>org.geoserver.web</groupId>
             <artifactId>gs-web-core</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.geotools</groupId>
+                    <artifactId>gt-geopkg</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.geoserver.web</groupId>
@@ -171,6 +179,18 @@
             <groupId>org.geoserver.extension</groupId>
             <artifactId>gs-control-flow</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.geoserver.importer</groupId>
+            <artifactId>gs-importer-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.geoserver.importer</groupId>
+            <artifactId>gs-importer-rest</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.geoserver.importer</groupId>
+            <artifactId>gs-importer-web</artifactId>
+        </dependency>
         
         <!--Web Processing Service extension-->
         <dependency>
@@ -183,7 +203,7 @@
             <version>${gs.version}</version>
         </dependency>
 
-        <!--WorldWind GeoServer Viewer module-->
+        <!--WorldWind GeoServer Explorer module-->
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>worldwind-gs-explorer</artifactId>
@@ -355,6 +375,21 @@
                             </target>
                         </configuration>
                     </execution>
+                    <execution>
+                        <id>copy-webapp-explorer</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <target>
+                                <!-- copy the source distribution files to the webapp/data/www/explorer dir -->
+                                <copy todir="${webappSourceDirectory}/data/www/explorer" overwrite="true">
+                                    <fileset dir="${explorer.source.directory}" includes="**/**" />
+                                </copy>
+                            </target>
+                        </configuration>
+                    </execution>
                 </executions>
             </plugin>
             <!--            
@@ -494,8 +529,9 @@
                                  </goals>
                                  <configuration>
                                      <tasks>
-                                         <!-- Clean the test data between test runs-->
-                                         <delete dir="${project.build.directory}/data_dir" />
+                                        <!-- Clean the test data between test runs-->
+                                        <delete dir="${project.build.directory}/data_dir" />
+                                        
                                         <!-- copy the base, nasa and test distribution files -->
                                         <copy todir="${project.build.directory}/data_dir">
                                             <fileset dir="${data.config.directory}/${data.config.base}" includes="**/**" />
@@ -505,6 +541,11 @@
                                         </copy>
                                         <copy todir="${project.build.directory}/data_dir" overwrite="true">
                                             <fileset dir="${data.config.directory}/${data.config.test}" includes="**/**" />
+                                        </copy>
+                                        
+                                        <!-- copy the Explorer files -->
+                                        <copy todir="${project.build.directory}/data_dir/www/explorer" overwrite="true">
+                                            <fileset dir="${explorer.source.directory}" includes="**/**" />
                                         </copy>
                                      </tasks>
                                  </configuration>
@@ -961,6 +1002,10 @@
                                         <copy todir="${project.build.directory}/data_dir" overwrite="true">
                                             <fileset dir="${data.config.directory}/${data.config.test}" includes="**/**" />
                                         </copy>
+                                        <!-- copy the Explorer files -->
+                                        <copy todir="${project.build.directory}/data_dir/www/explorer" overwrite="true">
+                                            <fileset dir="${explorer.source.directory}" includes="**/**" />
+                                        </copy>
                                     </tasks>
                                 </configuration>
                             </execution>                                                       
@@ -1260,6 +1305,10 @@
                                         </copy>
                                         <copy todir="${project.build.directory}/data_dir" overwrite="true">
                                             <fileset dir="${data.config.directory}/${data.config.test}" includes="**/**" />
+                                        </copy>
+                                        <!-- copy the Explorer files -->
+                                        <copy todir="${project.build.directory}/data_dir/www/explorer" overwrite="true">
+                                            <fileset dir="${explorer.source.directory}" includes="**/**" />
                                         </copy>
                                     </target>
                                 </configuration>

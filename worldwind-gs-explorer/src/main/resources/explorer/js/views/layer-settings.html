@@ -1,0 +1,88 @@
+<div id="layer-settings-dialog">
+    <div id="layer-opacity">
+        Opacity
+        <div id="layer-opacity-slider" 
+             data-bind="slider: opacity, sliderOptions: {animate: 'fast', min: 0, max: 1, orientation: 'horizontal', step: 0.05}">
+        </div>
+    </div>
+    <div id="layer-ordering" data-bind="if: sortable">
+        Layer Ordering
+        <div class="btn-group btn-block">
+            <!--Layer ordering buttons-->
+            <button id="layer-move-top-button"
+                    type="button"
+                    class="btn btn-primary"
+                    style="width: 25%;"
+                    data-bind="click: onMoveLayerToTop">
+                <span class="glyphicon glyphicon-circle-arrow-up"></span>
+            </button>
+            <button id="layer-move-up-button" 
+                    type="button"
+                    class="btn btn-primary"
+                    style="width: 25%;"
+                    data-bind="click: onMoveLayerUp">
+                <span class="glyphicon glyphicon-arrow-up"></span>
+            </button>
+            <button id="layer-move-down-button"
+                    type="button"
+                    class="btn btn-primary"
+                    style="width: 25%;"
+                    data-bind="click: onMoveLayerDown">
+                <span class="glyphicon glyphicon-arrow-down"></span>
+            </button>
+            <button id="layer-move-bottom-button"
+                    type="button"
+                    class="btn btn-primary"
+                    style="width: 25%;"
+                    data-bind="click: onMoveLayerToBottom">
+                <span class="glyphicon glyphicon-circle-arrow-down"></span>
+            </button>
+        </div>
+    </div>
+    <div id="layer-timeseries-player" data-bind="if: timeSequence">
+        <span>Time Series</span>
+        <div class="btn-group btn-block">
+            <button id="layer-timeseries-back" 
+                    type="button" 
+                    class="btn btn-sm btn-primary" 
+                    style="width: 25%;"
+                    data-bind="click: onStepBackward">
+                <span class="glyphicon glyphicon-step-backward"></span>
+            </button>
+            <button id="layer-timeseries-play" 
+                    type="button" 
+                    class="btn btn-sm btn-primary" 
+                    style="width: 25%;"
+                    data-bind="click: onPlay">
+                <span class="glyphicon"
+                      data-bind="css: { 'glyphicon-play': !isPlaying(), 'glyphicon-stop': isPlaying }"></span>
+            </button>
+            <button id="layer-timeseries-forward" 
+                    type="button" 
+                    class="btn btn-sm btn-primary" 
+                    style="width: 25%;"
+                    data-bind="click: onStepForward">
+                <span class="glyphicon glyphicon-step-forward"></span>
+            </button>
+            <button id="layer-timeseries-repeat" 
+                    type="button" 
+                    class="btn btn-sm btn-primary" 
+                    style="width: 25%;"
+                    data-bind="click: onRepeat">
+                <span class="glyphicon"
+                      data-bind="css: { 'glyphicon-repeat': !isRepeating(), 'glyphicon-refresh': isRepeating }"></span>
+            </button>
+        </div>
+        <div id="layer-timeseries-slider" 
+             style="margin-top: 10px; margin-left: 10px; margin-bottom: 10px; background: #337ab7;" 
+             class="ui-slider ui-slider-horizontal ui-widget ui-widget-content ui-corner-all"
+             data-bind="slider: currentTimeScale, sliderOptions: {animate: 'fast', min: 0, max: 100, orientation: 'horizontal'}">
+            <span class="ui-slider-handle ui-state-default ui-corner-all" tabindex="0" style="bottom: 100%;"></span>
+        </div>
+        <!--<span id="timeSeriesDisplay" style="position: absolute; width: 300px; color: yellow; text-shadow: black 0px 0px 2px;"></span>-->
+    </div>
+    <div id="layer-settings-legend" data-bind="if: legendUrl">
+        Legend
+        <img data-bind="attr: {src: legendUrl}"/>
+    </div>
+</div>

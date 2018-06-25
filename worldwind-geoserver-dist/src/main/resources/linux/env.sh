@@ -27,6 +27,9 @@ GC="-XX:+UseParNewGC -XX:+UseConcMarkSweepGC"
 # Add some debug tracing: report each GC event.
 DEBUG="-verbose:gc -XX:+PrintTenuringDistribution"
 
+# Allow Java JPDA debugger to be attached to this process via SocketAttach with transport dt_socket on port 8000
+#DEBUG=${DEBUG}"-Xdebug -Xrunjdwp:transport=dt_socket,address=8000,server=y,suspend=n "
+
 # Generate a heap dump on out of memory errors
 DUMP="-XX:+HeapDumpOnOutOfMemoryError"
 

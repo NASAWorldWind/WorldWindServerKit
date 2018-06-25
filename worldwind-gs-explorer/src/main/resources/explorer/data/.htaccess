@@ -1,0 +1,5 @@
+<IfModule mod_headers.c>
+    # 1 Year
+    Header set Cache-Control "max-age=29030400"
+</IfModule>
+

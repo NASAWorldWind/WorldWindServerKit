@@ -29,7 +29,7 @@
     
     <groupId>gov.nasa.worldwind.server</groupId>
     <artifactId>worldwind-serverkit</artifactId>
-    <version>0.5.0</version> 
+    <version>0.6.0</version> 
     <packaging>pom</packaging>
 
     <!--=====================================================================-->
@@ -97,25 +97,25 @@
         <!-- 
         See the geoserver-<version>.pom file in the GeoServer repository for a 
         reference to the version properties used in a particular GeoServer release. E.g.: 
-            https://repo.boundlessgeo.com/main/org/geoserver/geoserver/2.11.1/geoserver-2.11.1.pom
+            https://repo.boundlessgeo.com/main/org/geoserver/geoserver/2.13.0/geoserver-2.13.0.pom
         You can browse the GeoServer repository to view the current GeoServer artifacts:
             https://repo.boundlessgeo.com/main/org/geoserver/geoserver/
         You can browse the GeoServer extensions for this version here:
-            https://sourceforge.net/projects/geoserver/files/GeoServer/2.11.1/extensions/
+            https://sourceforge.net/projects/geoserver/files/GeoServer/2.13.0/extensions/
         You can download the gdal-plugin jars used in the worldwind-geoserver-dist assemblies here:
-            https://sourceforge.net/projects/geoserver/files/GeoServer/2.11.1/extensions/geoserver-2.11.1-gdal-plugin.zip/download
+            https://sourceforge.net/projects/geoserver/files/GeoServer/2.13.0/extensions/geoserver-2.13.0-gdal-plugin.zip/download
         You can download the ImageID-Ext jars and resourses used in the worldwind-geoserver-dist assemblies here:
-            http://demo.geo-solutions.it/share/github/imageio-ext/releases/1.1.X/1.1.17/
+            http://demo.geo-solutions.it/share/github/imageio-ext/releases/1.1.X/1.1.20/
         -->
         
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <!--The GeoServer version used in this build and used for artifacts and assemblies-->
-        <gs.version>2.11.1</gs.version>
+        <gs.version>2.13.0</gs.version>
         <!--The GeoTools version used in this build-->
-        <gt.version>17.1</gt.version>
+        <gt.version>19.0</gt.version>
         <!--The GeoWebCache version-->
-        <gwc.version>1.11.0</gwc.version>
-        <spring.version>4.2.5.RELEASE</spring.version>
+        <gwc.version>1.13.0</gwc.version>
+        <spring.version>4.3.7.RELEASE</spring.version>
         <spring.security.version>4.0.4.RELEASE</spring.security.version> 
         <servlet-api.version>3.0.1</servlet-api.version>
         <jetty.version>9.2.13.v20150730</jetty.version>
@@ -125,9 +125,9 @@
         <wicket.version>7.6.0</wicket.version>
         <ant.version>1.8.4</ant.version>
         <!--The ImageIO-Ext version; used for GDAL artifacts and assemblies-->
-        <imageio-ext.version>1.1.17</imageio-ext.version>
+        <imageio-ext.version>1.1.20</imageio-ext.version>
         <!--JAI version -->
-        <jaiext.version>1.0.13</jaiext.version>
+        <jaiext.version>1.0.22</jaiext.version>
         <java.awt.headless>true</java.awt.headless>
         <jvm.opts />
         <jalopy.phase>disabled</jalopy.phase>
@@ -356,6 +356,21 @@
                 <version>${gs.version}</version>
             </dependency>               
             
+            <dependency>
+                <groupId>org.geoserver.importer</groupId>
+                <artifactId>gs-importer-core</artifactId>
+                <version>${gs.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.geoserver.importer</groupId>
+                <artifactId>gs-importer-rest</artifactId>
+                <version>${gs.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.geoserver.importer</groupId>
+                <artifactId>gs-importer-web</artifactId>
+                <version>${gs.version}</version>
+            </dependency>            
             
             <dependency>
                 <groupId>org.geotools</groupId>
@@ -1516,6 +1531,11 @@
                     <artifactId>versions-maven-plugin</artifactId>
                     <groupId>org.codehaus.mojo</groupId>
                     <version>2.4</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.eclipse.jetty</groupId>
+                    <artifactId>jetty-maven-plugin</artifactId>
+                    <version>9.4.7.v20170914</version>
                 </plugin>
                 <plugin>
                     <artifactId>jmeter-maven-plugin</artifactId>

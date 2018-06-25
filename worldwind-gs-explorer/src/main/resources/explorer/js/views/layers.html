@@ -1,0 +1,261 @@
+<div id="layers" class="tab-pane active" role="tabpanel">
+    <div class="section-heading">
+        <h4 class="sub-header">
+            <span class="glyphicon glyphicon-list" aria-hidden="true" style="padding-right:5px;"></span>
+            Layers
+            <a class="section-toggle" data-toggle="collapse" href="#layers-body">
+            </a>
+        </h4>
+    </div>
+    <div id="layers-body" class="section-body collapse in">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h5 class="panel-title">
+                    <a data-toggle="collapse" href="#data-layers-panel" aria-expanded="false"
+                       aria-controls="data-layers-panel">
+                        Data <span class="badge pull-right"  data-bind="text: dataLayersCount()"></span>
+                    </a>
+                </h5>
+            </div>
+            <div class="panel-collapse collapse" id="data-layers-panel">
+                <ul class="list-group" data-bind="template: { name: 'layer-template', foreach: dataLayers}" id="data-layers-item-container"></ul>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h5 class="panel-title">
+                    <a data-toggle="collapse" href="#overlay-layers-panel" aria-expanded="false"
+                       aria-controls="overlay-layers-panel">
+                        Overlays <span class="badge pull-right" data-bind="text: overlayLayersCount()"></span>
+                    </a>
+                </h5>
+            </div>
+            <div class="panel-collapse collapse in" id="overlay-layers-panel">
+                <ul class="list-group" data-bind="template: { name: 'layer-template', foreach: overlayLayers}" id="overlay-layers-item-container"></ul>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h5 class="panel-title">
+                    <a data-toggle="collapse" href="#base-layers-panel" aria-expanded="false"
+                       aria-controls="base-layers-panel">
+                        Base Maps <span class="badge pull-right" data-bind="text: baseLayersCount()"></span>
+                    </a>
+                </h5>
+            </div>
+            <div class="panel-collapse collapse in" id="base-layers-panel">
+                <ul class="list-group" data-bind="template: { name: 'layer-template', foreach: baseLayers}" id="base-layers-item-container"></ul>
+            </div>
+        </div>
+    </div>                  
+    <!--
+    <div>
+        <button type="button"
+                class="btn btn-primary btn-sm"
+                data-bind="click: onAddLayer">
+            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+            Add Layer
+        </button>
+    </div>
+    -->
+    <div class="section-heading">
+        <h4 class="sub-header">
+            <span class="glyphicon glyphicon-cloud" aria-hidden="true" style="padding-right:5px;"></span>
+            Servers
+        </h4>
+    </div>
+    <!--Display the server address text box, dropdown popup, and the add server button-->
+    <div class="input-group" style="width:100%;">
+        <p>URL
+            <input id="add-server-text" type="text" style="width: calc(100% - 110px); min-width: 120px"
+                   data-bind="value: serverAddress"
+                   placeholder="Add new server URL"/>
+            <!-- servers dropdown button-->
+            <button type="button"
+                    class="btn btn-primary btn-sm dropdown-toggle"
+                    data-toggle="dropdown"
+                    aria-haspopup="true">
+                <span class="caret"></span>
+                <span class="sr-only">Server options</span>
+            </button>
+            <!--servers list-->
+            <select class="dropdown-menu" 
+                    size="3"
+                    data-bind="
+                    options: serverAddresses, 
+                    optionsText: 'name', 
+                    optionsValue: 'url',  
+                    value: serverAddressSelection">
+            </select>
+            <!--add server button-->
+            <button type="button" id="add-server-button"
+                    class="btn btn-primary btn-sm"
+                    data-bind="click: onAddServer">
+                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+            </button>
+        </p>
+    </div>
+    <!--Display the servers and their capabilities-->
+    <div class="panel-group" role="tablist" aria-multiselectable="true" id="servers">
+        <!-- ko template: { name: 'server-template', foreach: servers } -->
+        <!-- /ko -->
+    </div>
+
+    <!--
+    Add Layer Dialog
+    -->
+    <div style="display: none">
+        <div id="add-layer-dialog">
+            Layer Type:
+            <select data-bind="options: optionValues, value: selectedOptionValue"></select>
+            <div>
+                Server Address:
+                <input style="display: block"/>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ================================================================ -->
+
+<!-- 
+Layer Item Template
+This script renders the individual layer view model items in the Layers panel.
+-->
+<script type="text/html" id="layer-template">
+    <li class="list-group-item layer-item" 
+        data-bind="if: $data.showInMenu(),
+                css: { 'list-group-item-primary': $data.selected() }, 
+                click: $root.onSelectLayer, 
+                event: { contextmenu: $parent.onEditSettings}">
+        <div>
+            <!--On/Off button-->
+            <span class="label pull-left" 
+                  style=" cursor: pointer"
+                  data-bind="text: $data.enabled() ? 'on' : 'off',
+                  css: { 'label-success': $data.enabled(), 'label-primary': !$data.enabled() },
+                  click: $root.onToggleLayer">
+            </span>       
+            &nbsp
+            <span class="layer-name" 
+                  data-bind="text: $data.annotatedName(), css: { active: $data.enabled() }">
+            </span>
+            <!--Show Details button-->
+            <span class="glyphicon glyphicon-menu-right"
+                  data-bind="click: $root.onEditSettings, 
+              css: { 'glyphicon-menu-down': $data.showDetails(), 'glyphicon-menu-right': !$data.showDetails() }"
+                  style="position:absolute; top:0; right:0; margin-top: 5px; margin-right: 2px; cursor: pointer">
+            </span>
+            <!--Goto button-->
+            <span class="glyphicon glyphicon-zoom-in"
+                  data-bind="visible: $data.selected, click: $root.onZoomToLayer"
+                  style="position:absolute; top:0; right:30px; margin-top: 5px; margin-right: 2px; cursor: pointer" >&nbsp</span>
+            <!--Dragger handle-->
+            <span class="drag-handle glyphicon glyphicon-menu-hamburger"
+                  data-bind="visible: $data.selected"
+                  style="position:absolute; top:0; right:10px; margin-top: 5px; margin-right: 2px; cursor: ns-resize" >&nbsp</span>
+
+            <!--Legend-->
+            <div data-bind="if: $data.legendUrl() && $data.enabled()">
+                <div>
+                    Legend
+                    <img data-bind="attr: {src: $data.legendUrl}"/>
+                </div>
+            </div>
+
+            <!--Details-->
+            <div data-bind="if: $data.showDetails()" >
+                <div class="well well-sm">
+                    <!--Time controls-->
+                    <div data-bind="if: $data.currentTime()">
+                        <span>Time Series</span>
+                        <div class="btn-group btn-block">
+                            <button type="button" 
+                                    class="btn btn-sm btn-primary" 
+                                    style="width: 25%;"
+                                    data-bind="click: $parent.onStepBackward">
+                                <span class="glyphicon glyphicon-step-backward"></span>
+                            </button>
+                            <button type="button" 
+                                    class="btn btn-sm btn-primary" 
+                                    style="width: 25%;"
+                                    data-bind="click: $parent.onStepForward">
+                                <span class="glyphicon glyphicon-step-forward"></span>
+                            </button>
+                            <button type="button" 
+                                    class="btn btn-sm btn-primary" 
+                                    data-bind="click: $parent.onLinkTimeToGlobe, 
+                                               css: { 'active': $data.linkTimeToGlobe }">
+                                <span class="glyphicon glyphicon-link"></span>
+                            </button>
+                        </div>
+                        <div id="layer-timeseries-slider" 
+                             style="margin-top: 10px; margin-left: 10px; margin-bottom: 10px; background: #337ab7;" 
+                             class="ui-slider ui-slider-horizontal ui-widget ui-widget-content ui-corner-all"
+                             data-bind="slider: $data.currentTimeScale, sliderOptions: {animate: 'fast', min: 0, max: $data.numTimePeriods(), orientation: 'horizontal'}">
+                            <span class="ui-slider-handle ui-state-default ui-corner-all" tabindex="0" style="bottom: 100%;"></span>
+                        </div>
+                    </div>
+                    <!--Opacity slider-->
+                    <div>
+                        Opacity
+                        <div data-bind="slider: $data.opacity, 
+                            sliderOptions: {animate: 'fast', min: 0, max: 1, orientation: 'horizontal', step: 0.05}">
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+    </li>             
+
+</script>
+
+<!-- ================================================================ -->
+
+<!--
+Server Template
+This server-template script renders a server's tab content
+-->
+<script type="text/html" id="server-template">
+    <!-- ko if: layers().length -->
+    <div class="panel panel-default">
+        <div class="panel-heading" role="tab"
+             data-bind=" attr: {id: 'server-panel-' + $index}">
+            <h5 class="panel-title wrap-panel-heading">
+                <a data-toggle="collapse"
+                   aria-expanded="true"
+                   data-bind="text:$data.title,
+                            attr: {'aria-controls': 'server-layers-' + $data.id, href:'#server-layers-' + $data.id}">
+                </a>
+                <a href="#">
+                    <small><span class="pull-right glyphicon glyphicon-remove clickable_space"></span></small>
+                </a>
+            </h5>
+        </div>
+        <div class="panel-collapse collapse in" role="tabpanel"
+             data-bind="attr: {id:'server-layers-' + $data.id, 'aria-labelledby': 'server-panel-' + $index()}">
+            <!-- ko template: { name: 'server-layer-template', foreach: layers } -->
+            <!-- /ko -->
+        </div>
+    </div>
+    <!-- /ko -->
+</script>
+
+<!--
+Server Layer Template
+This server-layer-template script recursively renders a server's layer list items
+-->
+<script type="text/html" id="server-layer-template">
+    <li>
+        <input type="checkbox" data-bind="click: $root.onServerLayerClicked, checked: isChecked, visible: isLayer"/>
+        <span data-bind="text: title"></span>
+        <!-- ko if: layers().length -->
+        <ul>
+            <!-- ko template: { name: 'server-layer-template', foreach: layers } -->
+            <!-- /ko -->
+        </ul>
+        <!-- /ko -->
+    </li>
+</script>

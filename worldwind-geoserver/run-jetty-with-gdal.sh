@@ -25,8 +25,8 @@ popd
 # Run the tests again with GDAL 
 ## --------------------------------------------------
 # Setup
-GEOSERVER_VER=2.11.1
-IMAGEIO_EXT_VER=1.1.17
+GEOSERVER_VER=2.13.0
+IMAGEIO_EXT_VER=1.1.20
 PROJECT_FOLDER=$(pwd)
 OLD_GDAL_LIB_PATH=${GDAL_LIB_PATH}
 OLD_GDAL_DATA_PATH=${GDAL_DATA_PATH}

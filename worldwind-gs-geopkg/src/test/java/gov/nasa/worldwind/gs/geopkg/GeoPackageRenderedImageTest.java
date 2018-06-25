@@ -140,6 +140,7 @@ public class GeoPackageRenderedImageTest extends WMSTestSupport {
         ImageAssert.assertEquals(DataUtilities.urlToFile(getClass().getResource("agc-JOG.jpg")), img, 250);
     }
 
+    
     @Test
     public void testGetMap_1To545K() throws Exception {
         URL gpkg = getClass().getResource(GEOPACKAGE);
@@ -185,7 +186,8 @@ public class GeoPackageRenderedImageTest extends WMSTestSupport {
     private BufferedImage getHttpServletResponse(ReferencedEnvelope bbox, String mimeType, QName coverageName) throws Exception {
         String layer = getLayerId(coverageName);
         String request = "wms?service=wms&request=GetMap&version=1.1.1"
-                + "&layers=" + layer + "&styles&transparent=true"
+                + "&layers=" + layer 
+                + "&styles&transparent=false"
                 + "&width=" + WIDTH + "&height=" + HEIGHT
                 + "&format=" + mimeType + "&srs=EPSG:4326"
                 + "&bbox=" + bbox.getMinX() + "," + bbox.getMinY() + "," + bbox.getMaxX() + "," + bbox.getMaxY();

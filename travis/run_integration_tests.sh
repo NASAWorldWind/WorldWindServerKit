@@ -54,7 +54,7 @@ fi
 ## --------------------------------------------------------
 # Copy resources into the target folder
 ## --------------------------------------------------------
-GEOSERVER_VER=2.11.1
+GEOSERVER_VER=2.13.0
 JDK_MIN_VER="121"
 # Copy Java resources to the target folder
 cp $RESOURCES_FOLDER/java/"server-jre-8u"${JDK_MIN_VER}"-linux-x64.tar.gz" $BUILD_FOLDER

@@ -223,7 +223,8 @@ define(['knockout',
             if (this.dateTime) {
                 localTime = moment(this.timeZoneTime(this.dateTime));
                 this.time.text = localTime.format(this.globe.use24Time() ? "HH:mm" : "h:mm A")
-                this.date.text = localTime.format("MMM D");
+                //this.date.text = localTime.format("MMM D, YY");
+                this.date.text = localTime.format("YYYY-MM-DD");
                 this.timezone.text = this.timeZoneName;
             }
         };

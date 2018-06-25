@@ -17,9 +17,9 @@
  */
 package gov.nasa.worldwind.gs.geopkg.web;
 
-import gov.nasa.worldwind.geopkg.wps.GeoPackageProcessRequestTransformer;
+import org.geotools.geopkg.wps.GeoPackageProcessRequestTransformer;
 import com.vividsolutions.jts.geom.Envelope;
-import gov.nasa.worldwind.geopkg.wps.GeoPackageProcessRequest;
+import org.geotools.geopkg.wps.GeoPackageProcessRequest;
 import java.io.ByteArrayOutputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -51,7 +51,7 @@ import org.geoserver.ows.util.ResponseUtils;
 import org.geoserver.web.GeoServerSecuredPage;
 
 import com.google.common.collect.Lists;
-import gov.nasa.worldwind.geopkg.wps.GeoPackageProcessRequest.TilesLayer.TilesCoverage;
+import org.geotools.geopkg.wps.GeoPackageProcessRequest.TilesLayer.TilesCoverage;
 import java.util.Arrays;
 import java.util.Comparator;
 import javax.xml.namespace.QName;

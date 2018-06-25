@@ -31,6 +31,7 @@ define([],
             EVENT_SURFACEFUEL_CHANGED: "surfaceFuelChanged",
             EVENT_SURFACEFIRE_CHANGED: "surfaceFireChanged",
             EVENT_TERRAIN_CHANGED: "terrainChanged",
+
             /**
              * Publish/subscibe event name for notifcation of changes in the application time.
              * @constant

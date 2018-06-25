@@ -10,6 +10,7 @@
         <componentDescriptor>src/assembly/geoserver.xml</componentDescriptor>
         <componentDescriptor>src/assembly/jetty.xml</componentDescriptor>
         <componentDescriptor>src/assembly/data-nasa.xml</componentDescriptor>
+        <componentDescriptor>src/assembly/explorer.xml</componentDescriptor>
     </componentDescriptors>    
     <fileSets>
         <fileSet>

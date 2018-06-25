@@ -8,10 +8,10 @@ package gov.nasa.worldwind.gs.geopkg;
 import com.google.common.collect.Sets;
 import com.vividsolutions.jts.geom.Envelope;
 
-import gov.nasa.worldwind.geopkg.GeoPackage;
-import gov.nasa.worldwind.geopkg.Tile;
-import gov.nasa.worldwind.geopkg.TileEntry;
-import gov.nasa.worldwind.geopkg.TileMatrix;
+import org.geotools.geopkg.GeoPackage;
+import org.geotools.geopkg.Tile;
+import org.geotools.geopkg.TileEntry;
+import org.geotools.geopkg.TileMatrix;
 import gov.nasa.worldwind.gs.wms.map.MapResponseOutputStreamAdaptor;
 
 import static java.lang.String.format;

@@ -11,8 +11,8 @@ import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
-import gov.nasa.worldwind.geopkg.FeatureEntry;
-import gov.nasa.worldwind.geopkg.GeoPackage;
+import org.geotools.geopkg.FeatureEntry;
+import org.geotools.geopkg.GeoPackage;
 
 import static gov.nasa.worldwind.gs.geopkg.GeoPkg.*;
 

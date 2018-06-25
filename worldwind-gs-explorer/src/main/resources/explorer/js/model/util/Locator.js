@@ -38,9 +38,8 @@
  * @module Locator
  * @author Bruce Schubert
  */
-define(['jquery',
-        'model/Explorer'],
-    function ($, explorer) {
+define(['jquery'],
+    function ($) {
         "use strict";
         var Locator = {
             /**
@@ -48,7 +47,7 @@ define(['jquery',
              * @description Centers the globe on the user's current position.
              * @public
              */
-            locateCurrentPosition: function () {
+            locateCurrentPosition: function (explorer) {
                 // Prerequisite: GeoLocation API
                 if (!window.navigator.geolocation) {
                     $.growl.warning({title: "Locate Not Supported",

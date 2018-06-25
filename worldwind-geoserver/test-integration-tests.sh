@@ -14,7 +14,7 @@ mvn clean install
 ## --------------------------------------------------------
 # Copy resources into the target folder
 ## --------------------------------------------------------
-GEOSERVER_VER=2.11.1
+GEOSERVER_VER=2.13.0
 JDK_MIN_VER="121"
 WWSK_RESOURCES="../resources"
 # Copy Java resources to the target folder

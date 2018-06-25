@@ -64,8 +64,8 @@ define([
          * @param {KeyboardEvent} event
          */
         KeyboardControls.prototype.handleKeyDown = function (event) {
-            Log.info('KeyboardControls', 'handleKeyDown', event.keyCode + ' pressed.');
-            Log.info('KeyboardControls', 'handleKeyDown', "Target: " + event.target);
+            //Log.info('KeyboardControls', 'handleKeyDown', event.keyCode + ' pressed.');
+            //Log.info('KeyboardControls', 'handleKeyDown', "Target: " + event.target);
             
             // TODO: find a way to make this code portable for different keyboard layouts
             if (event.keyCode === 187 || event.keyCode === 61) {        // + key || +/= key
@@ -105,7 +105,7 @@ define([
          * Reset the view to North up and nadir.
          */
         KeyboardControls.prototype.resetHeadingAndTilt = function () {
-            //this.ctrl.resetHeadingAndTilt();
+            this.globe.resetHeadingAndTilt();
         };
 
         /**

@@ -1,0 +1,64 @@
+<div id="basic-markers" class="panel panel-default">
+    <!--This panel is to be appended to markers.html > markers-body element-->
+    <div class="panel-heading">
+        <h5 class="panel-title">
+            <a data-toggle="collapse" href="#basic-markers-panel" aria-expanded="false"
+               aria-controls="basic-markers-panel">
+                Pushpins<span class="badge pull-right" data-bind="text: markerCount"></span>
+            </a>
+        </h5>
+    </div>
+    <div class="panel-collapse collapse in" id="basic-markers-panel">
+        <!-- Bind the list to the 'markers' observableArray -->
+        <div data-bind="template: { name: 'basic-marker-template', foreach: markers}"></div>
+    </div>
+</div>
+
+<script type="text/html" id="basic-marker-template">
+    <!--
+    Marker Item Template
+    This script renders the individual marker view model items in the Markers panel.
+    -->
+    <div class="btn-group btn-block">
+        <button type="button" class="btn btn-default"
+                style="display: block; width: 70%"
+                data-bind="click: $parent.gotoMarker">
+            <span class="pull-left">
+                <img width="16px" 
+                     height="16px"
+                     data-bind="attr:{src: $data.placemark.attributes.imageSource}"/>  </span>
+            <span data-bind="text: $data.name"></span>
+        </button>
+        <!-- Edit Button -->
+        <button type="button" class="btn btn-default glyphicon glyphicon-pencil"
+                data-bind="click: $data.open"></button>
+        <!-- Delete Button -->
+        <button type="button" class="btn btn-default glyphicon glyphicon-trash"
+                data-bind="click: $data.remove"></button>
+    </div>
+</script>
+
+
+<script type="text/html" id="basic-marker-view-template">
+    <!--
+    Marker View Template
+    This script renders the selected marker object the output panel.
+    -->
+    <!-- ko if: $data -->
+    <div id="basic-marker-output" class="panel panel-default" style="height: 100%;">
+        <div class="panel-heading">
+            <h1 class="panel-title">
+                <span class="glyphicon glyphicon-map-marker" aria-hidden="true"
+                      style="padding-top:4px; padding-bottom:4px"></span>
+                <span data-bind="text: $data.name()"></span>
+            </h1>
+        </div>
+        <div class="panel-body" style="height: calc(100% - 45px); overflow-y: scroll;">
+            <h3>Name: <span data-bind="text: $data.name()"></span></h3>
+            <h4>Location: <span data-bind="text: $data.location()"></span></h4>
+            <h4>Nearby Place: <span data-bind="text: $data.toponym()"></span></h4>
+        </div>
+    </div>
+    <!-- /ko -->
+</script>  
+

@@ -93,7 +93,7 @@ define(['model/Config',
                     // preparing the map layers than does setting
                     // the view of the target (below) because it
                     // drills down through the various levels-of detail.
-                    explorer.lookAtLatLon(lat, lon, alt);
+                    explorer.gotoLatLonAlt(lat, lon, alt);
 
                     // Restore view of target
                     // This routine doesn't always load the map level-of-detail

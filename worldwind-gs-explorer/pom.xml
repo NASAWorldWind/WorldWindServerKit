@@ -4,7 +4,7 @@
     <parent>
         <groupId>gov.nasa.worldwind.server</groupId>
         <artifactId>worldwind-serverkit</artifactId>
-        <version>0.5.0</version>
+        <version>0.6.0</version>
     </parent>
     <artifactId>worldwind-gs-explorer</artifactId>
     <packaging>jar</packaging>
@@ -154,12 +154,16 @@
             </resource>        
             <resource>
                 <!--
-                Include GeoServerApplication.properties, html and javascript files.
+                Include GeoServerApplication.properties, but not html and javascript files.
                 -->
                 <directory>${basedir}/src/main/resources</directory>
                 <includes>
                     <include>**/*</include>
                 </includes>
+                <excludes>
+                    <!--The Explorer will be copied into the distibution via an assembly-->
+                    <exclude>explorer*/*</exclude>
+                </excludes>
             </resource>
         </resources>
     </build>    
