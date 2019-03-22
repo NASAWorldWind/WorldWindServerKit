@@ -39,12 +39,12 @@ script:
   - mvn clean install -B -U -P release
   ## Run the JMeter integration tests and output results to the reports folder
   - ./travis/run_integration_tests.sh
-  
-after_success:
-  # Conditionally creates a draft release on GitHub in preparation for deploy
-  - ./travis/create_draft_release.sh
 
 # Deployment has been disabled in preparation for the WorldWind project suspension on April 5, 2019
+# after_success:
+#   # Conditionally creates a draft release on GitHub in preparation for deploy
+#   - ./travis/create_draft_release.sh
+#
 # deploy: 
 #   # Publish WWSK distributions to GitHub releases. Uses undocumented "draft" and 
 #   # "tag_name" settings to deploy without publishing.
