@@ -44,37 +44,38 @@ after_success:
   # Conditionally creates a draft release on GitHub in preparation for deploy
   - ./travis/create_draft_release.sh
 
-deploy: 
-  # Publish WWSK distributions to GitHub releases. Uses undocumented "draft" and 
-  # "tag_name" settings to deploy without publishing.
-  # See: https://github.com/travis-ci/travis-ci/issues/6132 for more info.
-  - provider: releases
-    api_key: $GITHUB_API_KEY
-    file_glob: true
-    file: worldwind-geoserver-dist/target/*.*
-    skip_cleanup: true
-    overwrite: true
-    draft: true
-    tag_name: $TRAVIS_TAG
-    on:
-      tags: true
-  # Upload build artifacts from the master branch to Bintray using Maven. 
-  # Bintray does not allow snapshots; so we restrict the deploy to the master
-  # branch (OR could use tagged builds) which should not have SNAPSHOT versions.
-  # The maven_settings.xml uses the $BINTRAY_USER and $BINTRAY_API_KEY 
-  # enviroment variables to access Bintray. We skip the unit test as 
-  # they were run in the build step.
-  - provider: script
-    script: mvn deploy -Pdeploy -DskipTests=true --batch-mode --settings ./travis/maven_settings.xml 
-    skip_cleanup: true
-    on:
-      branch: master
-      
-  # Upload the integration test report(s) to the GitHub pages branch (gh-pages)
-  - provider: pages
-    github_token: $GITHUB_API_KEY
-    local_dir: worldwind-geoserver/target/reports
-    skip_cleanup: true
-    on:
-        all_branches: true
-        #branch: develop
+# Deployment has been disabled in preparation for the WorldWind project suspension on April 5, 2019
+# deploy: 
+#   # Publish WWSK distributions to GitHub releases. Uses undocumented "draft" and 
+#   # "tag_name" settings to deploy without publishing.
+#   # See: https://github.com/travis-ci/travis-ci/issues/6132 for more info.
+#   - provider: releases
+#     api_key: $GITHUB_API_KEY
+#     file_glob: true
+#     file: worldwind-geoserver-dist/target/*.*
+#     skip_cleanup: true
+#     overwrite: true
+#     draft: true
+#     tag_name: $TRAVIS_TAG
+#     on:
+#       tags: true
+#   # Upload build artifacts from the master branch to Bintray using Maven. 
+#   # Bintray does not allow snapshots; so we restrict the deploy to the master
+#   # branch (OR could use tagged builds) which should not have SNAPSHOT versions.
+#   # The maven_settings.xml uses the $BINTRAY_USER and $BINTRAY_API_KEY 
+#   # enviroment variables to access Bintray. We skip the unit test as 
+#   # they were run in the build step.
+#   - provider: script
+#     script: mvn deploy -Pdeploy -DskipTests=true --batch-mode --settings ./travis/maven_settings.xml 
+#     skip_cleanup: true
+#     on:
+#       branch: master
+#       
+#   # Upload the integration test report(s) to the GitHub pages branch (gh-pages)
+#   - provider: pages
+#     github_token: $GITHUB_API_KEY
+#     local_dir: worldwind-geoserver/target/reports
+#     skip_cleanup: true
+#     on:
+#         all_branches: true
+#         #branch: develop
