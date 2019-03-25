@@ -11,7 +11,7 @@ and/or concerns, please feel free to email at:
 worldwind-info@lists.nasa.gov
 ```
 
-[![Build Status](https://travis-ci.org/NASAWorldWind/WorldWindServerKit.svg?branch=develop)](https://travis-ci.org/NASAWorldWind/WorldWindServerKit)
+[![Build Status](https://travis-ci.com/NASAWorldWind/WorldWindServerKit.svg?branch=develop)](https://travis-ci.com/NASAWorldWind/WorldWindServerKit)
 [![Download](https://api.bintray.com/packages/nasaworldwind/maven/WorldWindServerKit/images/download.svg)](https://bintray.com/nasaworldwind/maven/WorldWindServerKit/_latestVersion)
 
 The [NASA WorldWind](https://worldwind.arc.nasa.gov) Server Kit (WWSK) is an open 
