@@ -8,7 +8,7 @@ language: java
 
 jdk:
   # Define the JDK(s) to build against
-  - oraclejdk8
+  - oraclejdk9
 
 cache:
   # Cache the local maven repository
