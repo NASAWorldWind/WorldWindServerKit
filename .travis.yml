@@ -1,36 +1,36 @@
 ## WorldWindServerKit (WWSK) Travis-CI build script
 
 # Required to install the jq JSON filter used to parse GitHub API results in scripts
-sudo: required
+# sudo: required
 
 # WWSK is a Java project
-language: java
-
-jdk:
-  # Define the JDK(s) to build against
-  - oraclejdk9
-
-cache:
-  # Cache the local maven repository
-  directories:
-    - "$HOME/.m2"
-
-before_install:
-  # Remove any (cached) user-specific maven settings
-  - rm ~/.m2/settings.xml
-  
-# Skip the default install step (mvn install) as our dependency management is done in the build step
-install: true
-  
-before_script:
-  # Install the jq shell filter so we can extract data from GitHub API JSON results
-  # See apt configuration: https://docs.travis-ci.com/user/ci-environment/#apt-configuration
-  - sudo apt-get install -qq jq
-  - jq --version
-  # Ensure scripts can be executed (required if scripts are authored in Windows)
-  - chmod +x ./travis/*.sh
-
-script:
+# language: java
+# 
+# jdk:
+  # # Define the JDK(s) to build against
+  # - oraclejdk9
+# 
+# cache:
+  # # Cache the local maven repository
+  # directories:
+    # - "$HOME/.m2"
+# 
+# before_install:
+  # # Remove any (cached) user-specific maven settings
+  # - rm ~/.m2/settings.xml
+  # 
+# # Skip the default install step (mvn install) as our dependency management is done in the build step
+# install: true
+  # 
+# before_script:
+  # # Install the jq shell filter so we can extract data from GitHub API JSON results
+  # # See apt configuration: https://docs.travis-ci.com/user/ci-environment/#apt-configuration
+  # - sudo apt-get install -qq jq
+  # - jq --version
+  # # Ensure scripts can be executed (required if scripts are authored in Windows)
+  # - chmod +x ./travis/*.sh
+# 
+# script:
   # Build WWSK with Maven using the "release" profile (generates javadoc and sources) 
   ## Maven Commands
   # -B (--batch-mode) Run in non-interactive model
