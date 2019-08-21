@@ -36,9 +36,9 @@ script:
   # -B (--batch-mode) Run in non-interactive model
   # -U (--update-snapshots) Forces a check for missing releases and updated snapshots on remote repos
   # -P (--activate-profiles <arg>) Comma-delimited list of profiles to activate
-  - mvn clean install -B -U -P release
+#   - mvn clean install -B -U -P release
   ## Run the JMeter integration tests and output results to the reports folder
-  - ./travis/run_integration_tests.sh
+#   - ./travis/run_integration_tests.sh
 
 # Deployment has been disabled in preparation for the WorldWind project suspension on April 5, 2019
 # after_success:
