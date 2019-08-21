@@ -4,11 +4,11 @@
 # sudo: required
 
 # WWSK is a Java project
-# language: java
+language: java
 # 
-# jdk:
+jdk:
   # # Define the JDK(s) to build against
-  # - oraclejdk9
+  - oraclejdk9
 # 
 # cache:
   # # Cache the local maven repository
