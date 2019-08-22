@@ -1,44 +1,44 @@
 ## WorldWindServerKit (WWSK) Travis-CI build script
 
 # Required to install the jq JSON filter used to parse GitHub API results in scripts
-sudo: required
+# sudo: required
 
 # WWSK is a Java project
 language: java
-
+# 
 jdk:
-  # Define the JDK(s) to build against
-  - oraclejdk8
-
-cache:
-  # Cache the local maven repository
-  directories:
-    - "$HOME/.m2"
-
-before_install:
-  # Remove any (cached) user-specific maven settings
-  - rm ~/.m2/settings.xml
-  
-# Skip the default install step (mvn install) as our dependency management is done in the build step
-install: true
-  
-before_script:
-  # Install the jq shell filter so we can extract data from GitHub API JSON results
-  # See apt configuration: https://docs.travis-ci.com/user/ci-environment/#apt-configuration
-  - sudo apt-get install -qq jq
-  - jq --version
-  # Ensure scripts can be executed (required if scripts are authored in Windows)
-  - chmod +x ./travis/*.sh
-
-script:
+  # # Define the JDK(s) to build against
+  - oraclejdk9
+# 
+# cache:
+  # # Cache the local maven repository
+  # directories:
+    # - "$HOME/.m2"
+# 
+# before_install:
+  # # Remove any (cached) user-specific maven settings
+  # - rm ~/.m2/settings.xml
+  # 
+# # Skip the default install step (mvn install) as our dependency management is done in the build step
+# install: true
+  # 
+# before_script:
+  # # Install the jq shell filter so we can extract data from GitHub API JSON results
+  # # See apt configuration: https://docs.travis-ci.com/user/ci-environment/#apt-configuration
+  # - sudo apt-get install -qq jq
+  # - jq --version
+  # # Ensure scripts can be executed (required if scripts are authored in Windows)
+  # - chmod +x ./travis/*.sh
+# 
+# script:
   # Build WWSK with Maven using the "release" profile (generates javadoc and sources) 
   ## Maven Commands
   # -B (--batch-mode) Run in non-interactive model
   # -U (--update-snapshots) Forces a check for missing releases and updated snapshots on remote repos
   # -P (--activate-profiles <arg>) Comma-delimited list of profiles to activate
-  - mvn clean install -B -U -P release
+#   - mvn clean install -B -U -P release
   ## Run the JMeter integration tests and output results to the reports folder
-  - ./travis/run_integration_tests.sh
+#   - ./travis/run_integration_tests.sh
 
 # Deployment has been disabled in preparation for the WorldWind project suspension on April 5, 2019
 # after_success:
